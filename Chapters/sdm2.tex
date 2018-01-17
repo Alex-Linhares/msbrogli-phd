@@ -5,7 +5,7 @@ Unlike traditional memory used by computers, SDM performs read and write operati
 The activation of addresses takes place according to their distances from the datum. Suppose one is writing datum $\eta$ at address $\xi$, then all addresses inside a circle with center $\xi$ and radius $r$ are activated. So, $\eta$ will be stored in all these activated addresses, which are around address $\xi$, such as in Figure \ref{fig-addresses-inside-access-radius}.  An address $\xi'$ is inside the circle if its hamming distance to the center $\xi$ is less than or equal to the radius $r$, i.e. $distance(\xi,\xi')\leq r$.
 
 \begin{figure}[h]
-\centering\includegraphics[scale=0.75]{images03/p_circle_r.pdf}
+\centering\includegraphics[scale=0.75]{./images02/p_circle_r.pdf}
 
 \caption{Activated addresses inside access \protect \\
 radius $r$ around center address.\label{fig-addresses-inside-access-radius}}
@@ -23,7 +23,7 @@ In SDM, the data space is the same as the address space, which amounts to a vect
 When reading a cue $\eta_{x}$ that is $x$ bits away of $\eta$, the cue shares many addresses with $\eta$. The number of shared addresses decreases as the cue's distance to $\eta$ increases, in other words, as $x$ increases. This is shown in Figure \ref{fig-shared-addresses}.  The target datum $\eta$ was written in all shared addresses, thus they will bias the read output in the direction of $\eta$. If the cue is sufficiently near the target datum $\eta$, the read output will be closer to $\eta$ than $\eta_{x}$ was. Repeating the read operation increasingly gets results closer to $\eta$, until it is exactly the same. So, it may be necessary to perform more than one read operation in order to converge to the target data $\eta$.
 
 \begin{figure}[h]
-\centering\includegraphics[scale=0.75]{images03/p1_inter_p2.pdf}
+\centering\includegraphics[scale=0.75]{./images02/p1_inter_p2.pdf}
 
 \caption{Shared addresses between the \protect \\
 target datum $\eta$ and the cue $\eta_{x}$. \label{fig-shared-addresses}}
@@ -37,7 +37,7 @@ Using this sample of binary space, our data space does not exist completely.  Th
 Kanerva also suggests the selection of a radius that will activate, on average, one one thousandth of the sample, which is 1,000 hard-locations for a sample of one million addresses. In order to achieve his suggestion, a 1,000-dimension memory uses an access radius $r=451$, and a 256-dimensional memory, $r=103$.
 
 \begin{figure}[h]
-\centering\includegraphics[scale=0.75]{images03/hardlocations.pdf}
+\centering\includegraphics[scale=0.75]{./images02/hardlocations.pdf}
 
 \caption{Hard-locations randomly sampled from binary space.\label{fig-hardlocations}}
 \end{figure}
@@ -46,7 +46,7 @@ Kanerva also suggests the selection of a radius that will activate, on average, 
 Since a cue $\eta_{x}$ near the target bitstring $\eta$ shares many hard-locations with $\eta$, SDM can retrieve data from imprecise cues. Despite this feature, it is very important to know how imprecise this cue could be while still giving accurate results. What is the maximum distance from our cue to the original data that still retrieves the right answer? An interesting approach is to perform a read operation with a cue $\eta_{x}$, that is $x$ bits away from the target $\eta$.  Then measure the distance from the read output and $\eta$. If this distance is smaller than $x$ we are converging. Convergence is simple to handle, just read again and again, until it converges to the target $\eta$. If this distance is greater than $x$ we are diverging. Finally, if this distance equals $x$ we are in a tip-of-the-tongue process.  A tip-of-the-tongue psychologically happens when you know that you know, but you can't say what exactly it is. In SDM mathematical model, a tip-of-the-tongue process takes infinite time to converge. \citet{Kanerva1988} called this $x$ distance, where the read's output averages $x$, the critical distance. Intuitively, it is the distance from which smaller distances converge and greater distances diverge. In Figure \ref{fig-p1-p2-iterative-read}, the circle has radius equal to the critical distance and every $\eta_{x}$ inside the circle should converge.  The figure also shows a convergence in four readings.
 
 \begin{figure}[h]
-\centering\includegraphics[scale=0.75]{images03/p1_p2_iter_read.pdf}
+\centering\includegraphics[scale=0.75]{./images02/p1_p2_iter_read.pdf}
 
 \caption{In this example, four iterative readings were\protect \\
 required to converge from $\eta_{x}$ to $\eta$.\label{fig-p1-p2-iterative-read}}
@@ -87,7 +87,7 @@ The read is performed polling each activated hard-location and statistically cho
 One interesting view is that neurons in SDM work like pointers. As we write bitstrings in memory, the hard-locations' counters are updated and some bits are flipped. Thus, the activated hard-locations do not necessarily point individually to the bitstring that activated it, but together they point correctly. In other words, the read operation depends on many hard-locations to be successful. This effect is represented in Figure \ref{fig-p1-pointers}: where all hard-locations inside the circle are activated and they, individually, don't point to $\eta$.  But, like vectors, adding them up points to $\eta$. If another datum $\nu$ is written into the memory near $\eta$, the shared hard-locations will have information from both of them and wouldn't point to either.  All hard-locations outside of the circle are also pointing somewhere (possibly other data points). This is not shown, however, in order to keep the picture clean and easily understandable.
 
 \begin{figure}[h]
-\centering\includegraphics[scale=0.75]{images03/p1_after_write.pdf}
+\centering\includegraphics[scale=0.75]{./images02/p1_after_write.pdf}
 
 \caption{Hard-locations pointing, approximately, to the target bitstring.\label{fig-p1-pointers}}
 \end{figure}
