@@ -1,5 +1,141 @@
-%*****************************************
-%\chapter{Examples}\label{ch:examples}
-%*****************************************
+\chapter{Introduction}
 
-\subimport{../sdm-framework-paper/}{content}
+Sparse Distributed Memory (SDM) \citep{Kanerva1988} is a mathematical model of long-term memory that has a number of neuroscientific and psychologically plausible dynamics. It has been applied in many different fields, like pattern recognition \citep{norman2003modeling, rao1995natural}, noise reduction \citep{Meng2009}, handwriting recognition \citep{fan1997genetic}, robot automation \citep{Rajesh1998, mendes2008robot}, and so forth. Despite all those applications, there is not a reference implementation which would allow one to replicate the results published in a paper, to check the source code for details, and to improve it. Thus, even though great results have been achieved using SDM, it requires great effort of researchers to improve someone's work.
+
+It is our belief that this tool could bring orders of magnitude more researchers and attention if they were able to use the model, at zero cost, with an easy to use high-level language such as python. Neuroscientists interested in long-term memory storage should not have to worry about high-bandwidth vector parallel computation.  This new tool provides a ready to use system in which experiments can be executed almost as soon as they are designed.  
+
+Our motivation was our own effort in order to run our models. As there is no reference implementation, we had to implement our own and run several simulations to ensure that our implementation was correct and bug free. Thus, we had to deviate from our main goal --- which was to test our models --- and to focus in the implementation itself. Furthermore, new members in our research group had to go through different source codes developed by former members.
+
+The main contribution of this work is a reference implementation which yields (i) orders of magnitude gains in performance, (ii) has several backends and operations, (iii) has automatic tests, (iv) is cross-platform, and (v) is easily extended to fulfill other research models. Our reference implementation may, hopefully, accelerate research into the model's dynamics and make it easier to readers to replicate any previous results and easily understand the source-code of the model.  
+
+
+\chapter{Sparse Distributed Memory}
+
+\input{sdm2.tex}
+
+
+\chapter{Framework Architecture}
+
+The framework implements the basic operations in a Sparse Distributed Memory which may be used to create more complex operations. It is developed in C language --- which may be loaded in many platforms and programming languages --- with a wrapper in Python. The Python module makes it easy to create and execute operations in a Sparse Distributed Memory.
+
+We split the SDM memory in two parts: the hard-location address space and the hard-location counters. Thus, the addresses (bitstrings) of the hard-locations are stored in one array, while their counters in another. This may be useful to create multiple SDMs using the same address space, which would save computational effort to scan a bitstring in all the SDMs --- since they share the same address space, the activated hard-locations will be same in all of them. As the slowest part of reading and writing operations is scanning the address space, the performance benefits are high.
+
+Each part may be stored either in the RAM memory or in a file. The RAM memory is interesting for quick experiments, automated tests, and others scenarios in which the SDM may be lost. The file is interesting for a long-term SDM --- one may create an SDM file with 10,000 random writes, which will be copied over and over to run multiple experiments. The file may also be sent to another researcher or may be published with the paper to let others run their own checks and verify the results. In summary, the framework fits many different uses and necessities.
+
+There are some other advantages splitting the address space and the counters. When the scanner is run in the CPU, the accessed addresses in the RAM are continuous which improves considerably performance. When the scanner is run in the GPU, only the address space must be uploaded to the GPU, reducing the required memory.
+
+Let a SDM memory with $N$ dimensions and $H$ hard-locations. Then, in a 64-bit computer, the array of hard-location addresses will use $H \cdot 8 \cdot \lceil N/64 \rceil$ bytes of memory, and there will be $H \cdot N$ hard-location counters. For example, in a SDM memory with 1,000 dimensions and 1,000,000 hard-locations, using 16-bit integers for the counters, the array of addresses will use 122MB of memory and the counters will use 1.9 GB of memory.
+
+Basic operations were grouped in four sets: (i) for bitstrings, (ii) for addresses, (iii) for counters, and (iv) for memories (SDMs). Operations include creating new bitstrings, flipping bits, generating bitstring with a specific distance from a given bitstring, scan the address space using different algorithms, write a bitstring to a counter, write in an SDM, read from an SDM, and iteratively read from an SDM until convergence.
+
+The reading and writing operations are executed in two steps: first, the address space is swept looking for the activated addresses; then, the operation is performed in the counter. Reading operation assemblies the bitstring according to the counters of the activated addresses, while the writing operation changes the counters.
+
+The framework implements three main scanner algorithms: linear scanner, thread scanner, and OpenCL scanner. The linear scanner runs in a single core and is the slowest one. It was developed only for testing purposes. The thread scanner runs at the CPU in multiple threads (and our recommendation is to use the number of threads equals to twice the number of cores). The OpenCL scanner runs at the GPUs and support multiple devices. The speed of a scan depends on the processors and GPU devices, thus the best approach to choose which scanner is best for one's setup is to run a benchmark test. 
+
+The hamming distance between two bitstrings is calculated counting the number of ones in the XOR of the bitstrings, i.e., $d(x, y) = \text{number of ones in} x \oplus y$. In order to count the number of ones of the XOR, the framework uses a pre-calculated table of distances --- by default, it is used a 16-bit table which uses 65MB of RAM, but one may increase to a 32-bit table which uses 4GB of RAM. Finally, to calculate the distance between to bitstrings, it sums the distance of each 16-bit part of the bitstrings, i.e., $d(x[0:N-1], y[0:N-1]) = d(x[0:15], y[0:15]) + d(x[16:31], y[16:31]) + \dots$. As each distance is calculated in O(1), this algorithm runs in O($\lceil bits/16 \rceil$).
+
+Internally, the address space is stored in an array of addresses, which, in turn, is stored in an array of 64-bit integers (Fig. \ref{tab:hl-addresses-detail}). As the addresses and their 64-bit integers are contiguous in RAM or file, there is a performance gain since they are loaded in chunks.
+
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[
+mycell/.style={draw, minimum size=7mm},
+matrixA/.style={matrix of nodes,
+    nodes={mycell, anchor=center},
+    column sep=-\pgflinewidth, 
+    row sep=-\pgflinewidth, 
+    },
+matrixB/.style={matrix of nodes,
+    nodes={mycell, anchor=center},
+    column sep=-\pgflinewidth, 
+    row sep=-\pgflinewidth, 
+}]
+
+\matrix[matrixA] (A) { addr$_1$ & addr$_2$ & addr$_3$ & $\cdots$ & addr$_H$ \\ };
+
+\matrix[matrixB, below=of A] (B) {
+addr$_{k, 1}$ & addr$_{k, 2}$ & addr$_{k, 3}$ & $\cdots$ & addr$_{k, 8 \cdot \lceil N/64 \rceil}$ \\
+};
+
+\draw[dashed] (A-1-1.south west)--(B-1-1.north west);
+\draw[dashed] (A-1-1.south east)--(B-1-5.north east);
+\draw [
+	thick,
+    decoration={
+        brace,
+        mirror,
+		amplitude=0.2cm,
+        raise=0.2cm
+    },
+    decorate
+] (B-1-1.south west) -- (B-1-5.south east)
+node [pos=0.5,anchor=north,yshift=-0.5cm] {N bits};
+
+\end{tikzpicture}
+
+\caption{Hard-location addresses are stored in a contiguous array. In a 64-bit computer, each hard-location address is stored in a sub-array of 64-bit integers, with length $8 \cdot \lceil N/64 \rceil$.\label{tab:hl-addresses-detail}}
+\end{figure}
+
+\section{Proposal:  Framework Validation}
+
+In order to check whether the framework works as expected and according to the model proposed by \citep{Kanerva1988}, we run simulations which were compared to the theoretical analysis conducted some decades ago.
+
+The objective here is twofold: (i) a single command will install the framework, and (ii) another single command will run (and display) the desired figures obtained the simulation. This will allow potential users to become familiarized with the system and its underlying code with barely any learning curve. 
+
+One particular analysis of interest is that of the distance read at a point $\alpha$. Suppose an SDM is trying to read an item written at $\alpha$, but the cues received so far lead to a point of distance $d$ from $\alpha$.  As one reads at $\alpha+d$, a new bitstring $\beta$ is obtained, leading to our question: what is the new distance from $\alpha$ to $\beta$? Is it smaller or larger than $d$? That, of course, depends on the ratio between $d$ and the number of dimensions of the memory.  As we have found out, there are some deviations from Kanerva's original theoretical analysis and the results obtained by simulation.
+
+\subsection{Some initial anomalous results}
+
+As we ran the simulations reflecting some of Kanerva's graphs, one in particular struck our attention:  The new distances obtained after a read operation were not perfectly predicted by the theoretical model, and we propose that this is due to interaction effects between different attractors.
+
+\citet{Kanerva1988} originally predicted a \textasciitilde 500-bit distance after a point (Fig. \ref{kanerva-table-7-2}). The original prediction considered that the read distance would decline when inside the critical distance in increase afterwards, converging to a \textasciitilde 500-bit distance.  At this point, each read would lead to a different, orthogonal, \textasciitilde 500-bit distance point.
+
+\begin{figure}[h]
+\centering\includegraphics[width=0.5\textwidth]{images/kanerva-table-7-2-original.png}
+\caption{Kanerva's original Figure 7.3 (p. 70) predicting a \textasciitilde 500-bit distance after a point.
+\label{kanerva-table-7-2}}
+\end{figure}
+
+Our preliminary results show that the theoretical prediction is not accurate.  There are interaction effects from one or more of the attractors created by the 10,000 writes, and these attractors seem to raise the distance beyond \textasciitilde 500 bits (Fig. \ref{sdm-10000w-table-7-2}). Our results were obtained using a 1,000 bit, 1,000,000 hard-location SDM with exactly 10,000 random bitstrings written into it, the same used by Kanerva.
+
+\begin{figure}[h]
+\centering\includegraphics[width=0.5\textwidth]{images/sdm-10000w-table-7-2.png}
+\caption{Results generated by the framework diverging from Kanerva's original Table 7.2. Here we had a 1,000 bit, 1,000,000 hard-location SDM with exactly 10,000 random bitstrings written into it, which was also Kanerva's configuration.
+\label{sdm-10000w-table-7-2}}
+\end{figure}
+
+But, when we reduced the number of random bitstrings written in the SDM from 10,000 to only 100, the results reflected very well the Kanerva's theoretical expectation (Fig. \ref{sdm-100w-table-7-2}). This result strengthen our theory that the disparities in the computational results are due to the interaction effect of different attractors.
+
+\begin{figure}[h]
+\centering\includegraphics[width=0.5\textwidth]{images/sdm-100w-table-7-2.png}
+\caption{Results generated by the framework similar from Kanerva's original Table 7.2. It was a 1,000 bit, 1,000,000 hard-location SDM with exactly 100 random bitstrings written into it.
+\label{sdm-100w-table-7-2}}
+\end{figure}
+
+To obtain the results from Fig. \ref{sdm-10000w-table-7-2} and \ref{sdm-100w-table-7-2}, we had to write 10,000 random bitstrings to an SDM, and then randomly choose one of those bitstrings to be our origin. Finally, we randomly flipped some bits from the origin bitstring and executed a reading operation in the SDM. Thereby, in order to show the interaction effects more clearly, we wrote a handmade bitstring to the SDM which had all bits inverted in relation to the origin bitstring --- their hamming distance was equal to 1,000. Our handmade bitstring was acting as an opposite attractor, and one can see the accelerating effects towards convergence to both attractors: the origin and the handmade bitstrings (Fig. \ref{sdm-10000w-notX-table-7-2}). Here we had the exact same configuration of Figure \ref{sdm-10000w-table-7-2}, with the addition of the single opposite attractor.
+
+\begin{figure}[h]
+\centering\includegraphics[width=0.5\textwidth]{images/sdm-10000w-notX-table-7-2.png}
+\caption{This graph shows the interaction effects more clearly.  As we include an opposite bitstring, one can see the accelerating effects towards convergence to both attractors: the origin and the opposite. Here we have the exact same configuration of Figure \ref{sdm-10000w-table-7-2}, with the addition of the single opposite attractor. 
+\label{sdm-10000w-notX-table-7-2}}
+\end{figure}
+
+Obviously, these small deviations from Kanerva's original theoretical predictions deserve a qualification.  Kanerva was working in the 1980s and the 1990s, and had no access to the immense computational power that we do today. It is no surprise that some small interaction effects should exist as machines allow us to explore the ideas of his monumental work.
+
+\section{Proposal: Performance Results}
+
+Our intention is to provide comparative performance metrics under different computation engines (CPU, GPU, etc) and different operating systems (Linux, MacOs, Windows, etc). Performance can be measured as the average number of scans of all hard locations per second, reads per second, writes per second, etc.
+
+Our first device is a personal MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU.  We also intend to test on machines such as the iMac with dedicated GPU, MacPro with dedicated GPU, and personal computers under Linux with dedicated GPUs.
+
+Beyond that, we are running as state-of-the-art devices: (i) an Amazon EC2 p3.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU, and (ii) an Amazon EC2 p3.8xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and 8x NVIDIA K80 GPU.
+
+
+\chapter{Conclusion}
+Sparse Distributed Memory is a viable model of human memory, yet it does require researchers to (re-)implement a number of parallel algorithms in different architectures.  
+
+We propose to provide a new, open-source, cross-platform, highly parallel framework in which researchers may be able to create hypothesis and test them computationally through minimal effort. Though the framework is not well-documented for public release at this time, it has already served as the backbone of Chada's Ph.D. thesis. The single-line command ``pip install sdm'' will install the framework on posix-like systems, and single-line commands will let users test the framework, generate some of the figures from Kanerva's theoretical predictions in their own machines, and --- if interested enough ---, test their own theories and improve the framework in an open-source fashion. It is our belief that such work is a necessary component towards accelerating research in this promising field.
+
+% TODO Include in the to do list simulations based on the suggestion of Murilinho.
+

@@ -1,6 +1,349 @@
-%************************************************
-%\chapter{Math Test Chapter}\label{ch:mathtest} % $\mathbb{ZNR}$
-%************************************************
+% TODO Model 4: Linear analysis
+% TODO Facebook vs Princeton
 
-\subimport{../bass-extension/}{content2}
+\chapter{Introduction}
+
+The way innovations diffuse in the market is an important and useful topic in marketing, which was made popular through Rogers' work \citep{rogers1962diffusion} and has influenced many marketing researchers. Within innovation diffusion, \citet{bass1969} proposed a model which forecasts how many people will have adopted new products or technologies by a given point in time. INFORMS members have voted this model as one of the Top 10 Most Influential Papers published in the 50-year history of Management Science in connection with the 50th anniversary of the journal \citep{bass2004comments}.
+
+The \citet{bass1969} model was designed to forecast only innovation adoption, which is the first time one consumes the innovation. In the model, either the consumer has or has not consumed the innovation by a given point in time. Thus, recurrent customers are considered only once, because they have already consumed the innovation before. The model has only three parameters, which are estimated through the number of adoptors of the innovation. Though very simple, it is considered very robust.
+
+Although it is clear that the marketing investment, the product prices, the economy itself, and many other variables affect the diffusion process, the \citet{bass1969} model does not contemplate these variables and yet it is still able to describe the empirical adoption curve of a large number of new products and technological innovations. In order to explain the robustness of the model, \citet{bass1994bass} developed a general model including these variables, and they showed that this general model reduces to the Bass model as a special case. They also showed that the shape of the diffusion of innovation process is always the same, an S-curve. \citet{norton1987diffusion} analyzed the diffusion of innovation for product substitution, explaining some unexpected changes in innovation adoption which were still unclear.
+
+The motivation behind the present work is that there may be people who reject a particular innovation. Such people do not recommend the innovation, on the contrary, they may publicly complain about it and bad-mouth it. This negative word-of-mouth effect of rejection has always existed \citep{richins1983negative, bone1995word, smith1995effects, buttle1998word} but it is becoming more and more important as information can spread more easily and faster among people through the usage of new technologies \citep{jansen2009twitter, godes2004using, babic2015effect}. Nowadays, before making a decision, people may search the internet for reviews and feedbacks about the innovation, and what they find affects their decision \citep{chen2004impact, dellarocas2003digitization, duan2008online, dellarocas2007exploring, lee2009electronic, pfeffer2014understanding}. A number of firms have already perceived this change caused in large part by the social media and have adapted to this new condition, like Starbucks \citep{gallaugher2010social}, for example.
+%Quali east2008measuring, 
+
+There is an extensive literature on innovation diffusion. Numerous extensions to the \citet{bass1969} model have been proposed (for reviews, see \citet{meade2006modelling} and \citet{peres2010innovation}), among which Mahajan and colleagues were the first to propose a model that includes the negative word-of-mouth \citep{mahajan1984introduction}. The latter and other extensions that include negative word-of-mouth are much more complex than the \citet{bass1969} model, and their parameters must be estimated using the number of people who have already adopted the innovation at a given time. A problem is that most recent innovations, like Facebook, Twitter, and Netflix do not disclose their total number of users. Actually, they deem this number confidential. They only disclose the number of active users, not including the number of users who have rejected them.
+
+In this work, I propose an extension to the Bass model which (i) includes the negative effect of the rejections, (ii) is as simple as the \citet{bass1969} model, and (iii) its parameters can be estimated using the number of people who have adopted and have not posteriorly rejected the innovation, i.e., the number of \textit{active adopters}. An important difference between the number of \textit{active adopters} and the \textit{total adopters} is that first may decrease over time, while the latter cannot. First, I discuss the \citet{bass1969} model and its parameters; then I describe the model extension and analyze four models of rejection; next I detail the estimation method; after that I estimate the models by using Facebook's active users dataset; and finally, I discuss the results and conclude.
+
+The main contribution of this work is that the proposed extension is the first to include the effect of the rejections that can be estimated using the number of \textit{active adopters} instead of the number of \textit{total adopters}. The model can be applied to forecast the number of active adopters of these companies in the next quarters, which becomes an important tool for analysts, investors, and the companies themselves. As the number of active adopters is related to the market cap of these companies, these forecasts may be useful to estimate the future value of the firms. At the time of this writing, Facebook's market cap is \$222.69B, Twitter's is \$23.18B, and Netflix's is \$20.49B\footnote{Data obtained from Yahoo! Finance website at December 1\textsuperscript{st}, 2016.}.
+
+
+\chapter{The Bass model}
+
+The \citet{bass1969} model is a simplification of the diffusion of innovation process proposed by \citet{rogers1962diffusion}. The Rogers' classification of adopters has five classes: (i) innovators; (ii) early adopters; (iii) early majority; (iv) late majority; and (v) laggards. Bass simplified them to only two classes: innovators and imitators. The innovators are the ones who start using an innovation regardless of who else and how many other people are already using it. The imitators are the ones who concern themselves about who is using the innovation and, as long as many other people are using it, they are more inclined to adopt it. Thus, at the beginning of the diffusion of innovation, the majority of adopters are innovators. As more and more people adopt the innovation, the majority of new adopters shift to imitators.
+
+Mathematically, the model presents itself with the following set of equations:
+
+\begin{align}
+S(t) &= mf(t) \\
+Y(t) &= mF(t) \\
+\frac{f(t)}{1-F(t)} &= p + qF(t), F(0)=0 \label{eq:bass:ode}
+\end{align}
+
+Both $S(t)$ and $Y(t)$ are related to the absolute amount of adopters; while $S(t)$ is the number of new adopters at time $t$, $Y(t)$ is the number of people who had already adopted the innovation by time $t$, thus $S(t) = \frac{d}{dt} Y(t)$. The model also has three positive parameters: (i) the potential market size $m$; (ii) the innovators parameter $p$; and (iii) the imitators parameter $q$. There are also $f(t)$ and $F(t)$ which are related to the percentage of the potential market: $f(t)$ is the percentage of the potential market which is adopting the innovation at time $t$, while $F(t)$ is the percentage of the potential market which had already adopted it at time $t$, thus $f(t) = \frac{d}{dt} F(t)$.
+
+Therefore, $S(t)$ and $f(t)$ are related to the adoption rate at time $t$, while $Y(t)$ and $F(t)$ are related to the accumulated adopters at time $t$. In the beginning of the diffusion of innovation, there are no adopters at all, thus $Y(0) = F(0) = 0$. As the number of adopters can only increase over time, both $Y(t)$ and $F(t)$ are monotonically increasing functions, and both $S(t)$ and $f(t)$ are always greater or equal to zero.
+
+The non-linear ordinary differential equation \ref{eq:bass:ode} is the main equation in the Bass model. Its left side is known as the hazard function and it expresses the probability of someone adopting the innovation, provided that he/she has not chosen to adopt it yet, i.e., the rate of adoption. Its right side means that this probability is at least $p$ and increases linearly with the percentage of people who have already adopted the innovation, i.e., $F(t)$.
+
+Solving the differential equation, Bass found a closed formula for the diffusion, which is $F(t) = \frac{ 1 - e^{-(p+q)t} }{ 1 + \frac{q}{p} e^{-(p+q)t} }$. This closed formula always has the famous shape of the S-curve, regardless of the values of $p > 0$ and $q > 0$. From the closed formula of $F(t)$, it is trivial to obtain the equations of $S(t)$, $Y(t)$, and $f(t)$.
+
+The potential market size $m$ is the unknown number of people who will have adopted the innovation after a very long time. It is not exactly the target market of the innovation, but a subset of it, as no product difuses over its entire target market. If a company estimates and updates the model more than once for their product, the change in $m$ is a change in the potential market and could help the company to understand whether their decisions in the meantime have increased or decreased the number of future adopters. As, $\lim_{t \rightarrow \infty} Y(t) = m$, the whole potential market will have adopted the innovation at some point.
+
+The innovator parameter $p$ is related to the proportion of people in the potential market who adopt the innovation regardless the others. In other words, their decision to adopt is not influenced by the social system, but by other external factors. The bigger the $p$, the larger the number of innovators, thus the faster the diffusion at the beginning.
+
+The imitator parameter $q$ is related to the influence of those actually using the innovation on those who are not using it yet. This is why this parameter multiplies $F(t)$, which is the proportion of the market which had already adopted it. This influence is mainly understood as a result of the word-of-mouth recommendation. In other words, the more people use the innovation, the more other people will adopt it. The bigger the $q$, the larger the imitator effect, thus, the faster the diffusion.
+
+Practitioners have been using this model to forecast future demand. First, they measure the number of adopters over time. Then, they estimate the parameters $m$, $p$, and $q$. Finally, they extrapolate $S(t)$ out of the measured time window and use its value as the forecast demand. They also calculate $m - Y(t)$ as a forecast of how many people have not adopted the innovation yet.
+
+
+\chapter{The extended model}
+
+I propose adding a new term in the differential equation \ref{eq:bass:ode} in order to include the effect of rejection, as in equation \ref{eq:mymodel}. Hereafter I will refer to: (i) the people who have adopted the innovation as \textit{total users}; (ii) the people who have adopted the innovation and remain using it as \textit{active users}; and (iii) the people who rejected the innovation as \textit{inactive users}. Clearly, the function $Y(t)$ is the number of \textit{total users}, which is equal to the sum of the number of \textit{active users} with the number of \textit{inactive users}.
+
+\begin{align}
+\frac{f(t)}{1-F(t)} &= p + qF(t) - wR(t), F(0)=0, R(0)=0 \label{eq:mymodel}
+\end{align}
+
+The function $R(t)$ is the percentage of accumulated \textit{inactive users} at time $t$. Thus, $A(t) = F(t) - R(t)$ is the percentage of accumulated \textit{active users} at time $t$. Multiplying by $m$, $mA(t) = Y(t) - mR(t)$ is the number of \textit{active users} at time $t$. Since $A(t) \ge 0$, $F(t) \ge R(t)$, which makes sense because it is not possible to have more \textit{inactive users} than \textit{total users}.
+
+The negative word-of-mouth parameter $w$ is related to how much the \textit{inactive users} really affect the new adopters decision in the diffusion process. The bigger the $w$, the greater the negative influence of these \textit{inactive users} on the new adopters. Another possible understanding is that $w$ is related to how much the \textit{inactive users} are bad-mouthing the innovation. The bigger the $w$, the more they bad-mouth the innovation.
+
+Equation \ref{eq:mymodel} could be rewritten as $\frac{f(t)}{1-F(t)} = p + qA(t) + (q-w)R(t)$. This form is useful in order to understand the impact of \textit{active users} and \textit{inactive users} on the rate of adoption at time $t$.
+
+If $w = q$, then the rate of adoption increases linearly with the \textit{active users}, since $\frac{f(t)}{1-F(t)} = p + qA(t)$. In other words, the positive word-of-mouth has exactly the same influence as the negative word-of-mouth on the new adopters. It also means that the rate of adoption is always greater than zero, thus the whole potential market will have adopted the innovation sooner or later.
+
+If $w < q$, then the new adopters are more influenced by the number of \textit{total users} than by the number of \textit{inactive users}. It is just as if the \textit{inactive users} do not bad-mouth the innovation so much, or at all. Again, the rate of adoption is always greater than zero, thus the whole potential market will have adopted the innovation sooner or later.
+
+If $w > q$, then the proposed extension really differs from the Bass model. In this case, the influence of the \textit{inactive users} is greater than the influence of \textit{total users}. So, if the rate of adoption were equal to zero ($wR(t) = p + qF(t)$), the innovation might not be adopted by the whole potential market, i.e., $\lim_{t \rightarrow \infty} F(t) < 1$.
+
+The main contribution of this work is to have the choice to use the number of \textit{active users}, which is the information that most of the companies disclose, in order to estimate the parameters of the proposed extension model. With that, both the number of \textit{inactive users} and \textit{total users} could be forecast. It is important to notice that the number of \textit{active users} ($mA(t)$) could decrease over time. In fact, forecasting when this is going to happen may be crucial for corporations.
+
+
+\chapter{Models for $R(t)$}
+
+The proposed extended model already includes the effect of rejection through the $R(t)$ function and the $w$ parameter. In order to complete the model, $R(t)$ has to be well defined. Let $r(t) = \frac{d}{dt} R(t)$ be the rate of new \textit{inactive users} at time $t$. The proposed differential equations for $R(t)$ are the following:
+
+% XXX
+% Model 1: r(t) = \nu [f(t) - r(t)] ???
+% Model 2: r(t)/[1-R(t)] = \nu [f(t) - r(t)] ???
+% I guess solving both equations is easy and the conclusions would be the same.
+
+\begin{align}
+	\text{Model 1: }& r(t) = \nu f(t) \label{eq:model1} \\
+	\text{Model 2: }& \frac{r(t)}{1-R(t)} = \nu f(t) \label{eq:model2} \\
+	\text{Model 3: }& r(t) = \nu [F(t) - R(t)] \label{eq:model3} \\
+	\text{Model 4: }& \frac{r(t)}{1-R(t)} = \nu [F(t) - R(t)] \label{eq:model4}
+\end{align}
+
+% TODO Discuss why it does not make sense to have a constant in the models.
+% TODO Include the state diagram (1-F(t)), A(t), and R(t) with the transitions.
+
+These four models can be grouped in two families, one for the equations \ref{eq:model1} and \ref{eq:model2}, and another for the equations \ref{eq:model3} and \ref{eq:model4}. The former relates the rejection to the rate of new people adopting the innovation, as if people decide whether they will use or reject the innovation when they try it. Then, they do not change their position anymore. The latter assumption relates the rejection to the number of \textit{active users}, as if the \textit{active users} first adopt the innovation and then they continuously reject it.
+
+The rejection parameter $\nu$ has a different interpretation in each family. In equations \ref{eq:model1} and \ref{eq:model2}, it is the proportion of new adopters who will reject the innovation. In equations \ref{eq:model3} and \ref{eq:model4}, it is the proportion of active users who are continuously rejecting the innovation.
+
+Therefore, for all these models of rejection, the complete diffusion of innovation model has five parameters to be estimated, namely $m$, $p$, $q$, $w$, and $\nu$.
+
+
+\section{Model 1}
+
+In this model, the rate of new \textit{inactive users} at time $t$ is proportional to the percentage of people adopting the innovation at time $t$, as if people decide whether they will use or reject the innovation when they are adopting it.
+
+The differential equation \ref{eq:model1} can be easily solved integrating both sides. Thus, $R(t) = \nu F(t)$, $A(t) = (1 - \nu) F(t)$, and $f(t) / [1 - F(t)] = p + (q - w \nu) F(t)$. As the imitator coefficient must be positive, we must have $w \nu < q$.
+
+The solution shows that this model has exactly the same explanatory power as the Bass model, neither better nor worse. This happens because the model's solution has exactly the same equation after the linear transformation $q^* = q - w \nu$.
+
+As $\lim_{t \rightarrow \infty} F(t) = 1$, thus $\lim_{t \rightarrow \infty} R(t) = \nu$. Hence, the proportion of \textit{inactive users} is exactly equal to the rejection parameter.
+
+Solving the differential equation for $F(t)$, it gets $F(t) = (1 - e^{-(p+q-w\nu)t})/(1 + \frac{(q-w\nu)}{p} e^{-(p+q-w\nu)t})$. Finally, as $R(t) = \nu F(t)$, thus $R(t) = \nu (1 - e^{-(p+q-w\nu)t})/(1 + \frac{(q-w\nu)}{p} e^{-(p+q-w\nu)t})$.
+
+Unfortunately, it is not possible to estimate this model. The problem is that $\forall \nu \in \mathbb{R}^+$, $\exists \hat{\nu} \in \mathbb{R}^+$ such as the set of parameters $(m, p, q, w, \nu)$ and $(m, p, q, w\nu/\hat{\nu}, \hat{\nu})$ have exactly the same residuals when estimated. That is, the model can be estimated for any value arbitrarily set for $\nu$. Intuitively, as both $F(t)$, $A(t)$, and $R(t)$ have the same shape, the parameters can be estimated with an empirical \textit{active users} dataset and then you can slide up or down $F(t)$ just changing the values of $\nu$ and $w$.
+
+This result is interesting because it shows that the Bass model can already explain the diffusion of innovations which follows this model of rejection. Hence, it just confirms the robustness of the Bass model.
+
+
+\section{Model 2}
+
+The right side of the differential equation \ref{eq:model2} is the rate of rejection, i.e., the probability of someone who rejecting the innovation, provided that he/she has not rejected it yet. Thus, in this model, the rate of rejection is proportional to the percentage of people adopting the innovation at time $t$, i.e., the more people adopt the innovation, the more they reject it. But if no one is adopting, there would be no rejection also, which would hold the number of \textit{active users} the same.
+
+The differential equation \ref{eq:model2} can also be solved for $R(t)$ algebrically. Using the fact that $-\frac{d}{dt} \log[1 - R(t)] = r(t) / [1 - R(t)] = \nu f(t)$, and integrating both sides of this equation yields:
+
+\begin{align}
+	- \frac{d}{dt} \int_0^t \log[1 - R(\tau)] d\tau &= \nu \int_0^t f(\tau) d\tau \\
+	- \log[1 - R(t)] &= \nu F(t) \\
+	1 - R(t) &= e^{-\nu F(t)} \\
+	R(t) &= 1 - e^{-\nu F(t)}
+\end{align}
+
+Finally, $f(t) / [1 - F(t)] = p + qF(t) - w[1 - e^{-\nu F(t)}]$ and $\lim_{t \rightarrow \infty} R(t) = 1 - e^{-\nu}$.
+
+As $0 \leq F(t) \leq 1 \Rightarrow 0 \leq \nu F(t) \leq \nu$, we can do a good approximation of $e^{-\nu F(t)}$ using a Taylor series around the point $\nu/2$ for small values of $\nu$.
+
+From the Taylor series centered around $\nu/2$, we know that $e^{-x} \approx e^{-\nu/2} (1 + \nu/2 - x)$. Thus, we have $1 - e^{-\nu F(t)} \approx 1 - e^{-\nu/2} (1 + \nu/2) + e^{-\nu/2} \nu F(t)$, and, finally, $f(t) / [1 - F(t)] = [p - w - w e^{-\nu/2} (1 + \nu/2)] + (q - w e^{-\nu/2} \nu)F(t)$.
+
+Therefore, for small values of $\nu$, this model has approximately the same explanation power as the Bass model and we can write $f(t) = p^* + q^*F(t)$, where $p^* = p-w-we^{-\nu/2}(1+\nu/2)$ and $q^* = q - we^{-\nu/2}\nu$.
+
+In contrast to model 1, no parameter could be arbitrarily set in this model, thus it can be estimated using an empirical \textit{active users} dataset.
+
+%This result is interesting because, although it is possible to estimate the parameters using the number \textit{active users}, it has approximately the same explanation power as 
+
+% XXX TODO Discuss the inequalities that make sure f(t) >= 0.
+
+
+\section{Model 3}
+
+In this model, the rate of new \textit{inactive users} increases linearly with the number of \textit{active users}, since $A(t) = F(t) - R(t)$. Thus, while there are \textit{active users}, a fraction $\nu$ of them will be rejecting the innovation. Hence, everyone will have reject the innovation sooner or later.
+
+The differential equation \ref{eq:model3} can be rewritten as the following first order linear differential equation, which has to be solved:
+
+\begin{align}
+	\frac{d}{dt}R(t) + \nu R(t) = \nu F(t)
+\end{align}
+
+The solution to this differential equation is:
+
+\begin{align}
+	R(t) &= \nu e^{-\nu t} \int_0^t e^{\nu \tau} F(\tau) d\tau \label{eq:model3:R-1} \\
+	     &= \nu \left[ F(u) * e^{-\nu u} \right](t)
+\end{align}
+
+Or, as $\frac{d}{dt} \left( e^{\nu t} F(t) \right) = \nu e^{\nu t} F(t) + e^{\nu t} f(t)$, $R(t)$ can be rewritten as:
+
+\begin{align}
+	R(t) &= F(t) - e^{-\nu t} \int_0^t e^{\nu \tau} f(\tau) d\tau \label{eq:model3:R-2} \\
+	     &= F(t) - \left[ f(u) * e^{-\nu u} \right](t)
+\end{align}
+
+As $F(t) = \int_0^t f(\tau) d\tau$ and $e^{\nu \tau} \geq 1$, we have that:
+
+\begin{align}
+	\int_0^t e^{\nu \tau} f(\tau) d\tau &\geq F(t) \\
+	-e^{-\nu t} \int_0^t e^{\nu \tau} f(\tau) d\tau &\leq -e^{-\nu t} F(t) \\
+	F(t)-e^{-\nu t} \int_0^t e^{\nu \tau} f(\tau) d\tau &\leq F(t) - e^{-\nu t} F(t)
+\end{align}
+
+From equation \ref{eq:model3:R-2}:
+
+\begin{align}
+	R(t) &\leq F(t) - e^{-\nu t} F(t) \\
+	R(t) &\leq F(t)(1 - e^{-\nu t})
+\end{align}
+
+Finally, $R(t) < F(t)$, $r(t) > 0$, and $\lim_{t \rightarrow \infty} R(t) \leq 1$.
+
+I did not manage to prove that $\lim_{t \rightarrow \infty} R(t) = 1$, but this result appeared in all performed simulations. If that is true, then all people will reject the innovation at some point in time - a fact that makes sense.
+
+Unfortunately, it seems that there is no closed formula for $F(t)$. Using equation \ref{eq:model3:R-1}, the final differential equation is:
+
+\begin{align}
+\frac{f(t)}{1-F(t)} = p + qF(t) - w\nu e^{-\nu t} \int_0^t e^{\nu \tau} F(\tau) d\tau
+\end{align}
+
+Or, using \ref{eq:model3:R-2}, it becomes:
+
+\begin{align}
+\frac{f(t)}{1-F(t)} = p + (q-w)F(t) + w e^{-\nu t} \int_0^t e^{\nu \tau} f(\tau) d\tau
+\end{align}
+
+The condition $w \leq p+q$ is sufficient to ensure $f(t) \geq 0$, since $w \leq p+q \Rightarrow wR(t) \leq pR(t) + qR(t) \leq p + qR(t) \leq p + qF(t) \Rightarrow p + qF(t) - wR(t) = f(t) / [1 - F(t)] \geq 0 \Rightarrow f(t) \geq 0$. Assuming that $\lim_{t \rightarrow \infty} R(t) = 1$, then it is easy to prove that this condition is also necessary.
+
+
+\section{Model 4}
+
+In this model, the rate of rejection increases linearly with the number of \textit{active users}. Thus, while there are \textit{active users}, the rate of rejection will be greater than zero. Hence, everyone will have reject the innovation sooner or later.
+
+Although equation \ref{eq:model4} is a Ricatti equation \citep{bittanti1991riccati}, none of the available techniques could solve the differential equation and it seems that there is no closed formula for $F(t)$. Hence, the equation will be analyzed through a linearization around the fixed points.
+
+\begin{align}
+\begin{cases}
+f(F, R) = (p + qF - wR)(1 - F) \\
+r(F, R) = \nu (F-R) (1-R)
+\end{cases}
+\end{align}
+
+Solving the system $f(F, R) = r(F, R) = 0$, the following solutions are found:
+
+\begin{align}
+u_1^* &= (1, 1) \\
+u_2^* &= \left( \frac{p}{w-q}, \frac{p}{w-q} \right) \\
+u_3^* &= \left( \frac{w-p}{q}, 1 \right)
+\end{align}
+
+The only valid solutions are $u_1^*$ and $u_2^*$. The solution $u_3^*$ is not valid because $p+q-w > 0 \Rightarrow (w-p)/q < 1 \Rightarrow F < R$ which is not possible because it would imply a negative number of \textit{active users}.
+
+Finally, the linearization around $u^*$ is:
+
+\begin{align}
+\begin{bmatrix}
+	f(R, T) - f(u^*) \\
+	r(R, T) - r(u^*)
+\end{bmatrix} = J|_{u^*} \left( \begin{bmatrix} R \\ T \end{bmatrix}-u^* \right)
+\end{align}
+
+\begin{align}
+J =
+\begin{bmatrix}
+	q(1-F)-(p+qF-wR) & -w(1-F) \\
+	\nu (1-R) & -\nu [(1-R) + (F-R)]
+\end{bmatrix}
+\end{align}
+
+Now, let's analyze the jacobian matrices and their eigenvalue for each valid solution.
+
+\begin{align}
+J|_{u_1^*} =
+\begin{bmatrix}
+	-(p+q-w) & 0 \\
+	0 & 0
+\end{bmatrix}
+\end{align}
+
+As the eigenvalues of $J|_{u_1^*}$ are $0$ and $-(p+q-w) < 0$, the point $u_1^* = (1, 1)$ is a sink, i.e., the neighborhood converges to $u_1^*$ when $t \rightarrow \infty$. It may be interpreted that all users will have rejected the innovation after a long time.
+
+%\begin{align}
+%J|_{u_2^*} =
+%\begin{bmatrix}
+%	\frac{q(w-p-q)}{w-q} & \frac{-w(w-p-q)}{w-q} \\
+%	\frac{\nu(w-p-q)}{w-q} & \frac{-\nu(w-p-q)}{w-q}
+%\end{bmatrix}
+%\end{align}
+
+%The eigenvalues of $J|_{u_2^*}$ are $\left( \frac{w-p-q}{2(w-q)} \right) \left( q-\nu \pm \sqrt{(\nu+q)^2 - 4w\nu} \right)$.
+
+% XXX TODO Discuss the inequalities that make sure f(t) >= 0.
+
+
+\chapter{Estimation method}
+
+The parameters of the model should be estimated using empirical data in order to check the explanation power of the model. \citet{bass1969} used a discrete version of his differential equation with ordinary least squares. While it worked well for him, it has not in the present work. There are several well known problems in the estimation of parameters, most of them related to approximation of derivatives and instability of the estimators. These problems have been noticed by many authors \citep{schmittlein1982maximum, srinivasan1986technical, xie1997kalman}.
+
+In the present work, the parameters of the models were estimated using a maximum likelihood function on the residuals between $A(t) = F(t) - R(t)$ from the model and the empirical values from the dataset. The residuals were assumed to be normally distributed with $\mu=0$, which leads to the same results as the ordinary least square method. In order to calculate the residuals, $F(t)$ and $R(t)$ were calculated based on their differential equations using the 4th order Runge Kutta (RK4) numerical method \citep{butcher1987numerical} with $\Delta t = 0.01$.
+
+The empirical data format was $(t_i, x_i)$, where $t_i$ is the time and $x_i$ is the value, and the measurements were not equally spaced over time. The following Log Likelihood equation was used:
+
+\begin{align}
+\text{residual}(t_i, x_i \mid m, p, q, w, \nu) &= x_i - m \cdot \left[ F(t_i \mid p, q, w) - R(t_i \mid \nu) \right] \\
+\text{Log Likelihood}(\vec{t}, \vec{x} \mid m, p, q, w, \nu) &= -\sum_{i=1}^{N} [\text{residual}(t_i, x_i \mid m, p, q, w, \nu)]^2
+\end{align}
+
+During the evaluation of $F(t)$ and $R(t)$ using the Runge Kutta numerical method, sometimes the exact value of $t_i$ was not reached because of the chosen $\Delta t$. In these cases, the value of $x_i$ was calculated using a linear approximation with the nearest points. Let $(\hat{t}_k, \hat{x}_k)$ and $(\hat{t}_{k+1}, \hat{x}_{k+1})$ be values calculated from the Runge Kutta method, such that $\hat{t}_k < t_i < \hat{t}_{k+1}$. Then, the calculated value at $t_i$ was $\hat{x}_k + \left( \frac{\hat{x}_{k+1} - \hat{x}_k}{\hat{t}_{k+1} - \hat{t}_k} \right) \cdot (t_i - \hat{t}_k)$.
+
+Since there is no explicit solution for the parameters $m$, $p$, $q$, $w$, and $\nu$ which maximize the LogLikelihood function, the parameters were estimated using the Truncated Newton Constrained (TNC) method \citep{dembo1983truncated, nash2000survey, nash1984newton} from the SciPy Python Library \citep{scipy}. The constrains were $m > 0$, $p > 0$, $q > 0$, $w \geq 0$, and $\nu \geq 0$ for all models. The initial guess for the TNC method was the same for all models estimation. Sometimes, the method did not converge and another initial guess had to be used.
+
+Even though it has not been done yet, the confidence interval, estimator average and estimator variance for each parameter will be calculated using the bootstrap method.
+
+% XXX TODO Make explicit the inequalities specific to each model.
+
+
+\chapter{Preliminary results}
+% Data source: http://news.yahoo.com/number-active-users-facebook-over-230449748.html
+% https://www.statista.com/statistics/264810/number-of-monthly-active-facebook-users-worldwide/
+
+The models parameters were estimated using the number of Facebook's \textit{active users} from December 2004 to March 2013 \citep{facebookdata}. In the dataset, $x_i$ was the number of Facebook's \textit{active users} at time $t_i$. The dataset had 23 non-equally time spaced measures. The users who have accessed Facebook at least once in each month were counted in the number of \textit{active users} in that month.
+
+The model 1 has not been estimated because it is not possible to estimate it.
+
+% TODO Discuss about the validity of Facebook being an "innovation".
+
+The estimated models can be seen at figures \ref{fig:model2fit}, \ref{fig:model3fit}, and \ref{fig:model4fit}. These figures also have forecasts for the number of \textit{active users}, \textit{inactive users}, and \textit{total users} of Facebook for the next 4 years (from $t=100$ to $t=140$).
+
+In spite of the favorable goodness of fit using model 2 (see figure \ref{fig:model2fit}), the model does not seem to provide a plausible forecast, because it would mean that Facebook is reaching a stable number of \textit{active users} and the rejections are near the end.
+
+Models 3 and 4 have very similar outcomes (see figures \ref{fig:model3fit} and \ref{fig:model4fit}). Their Bayesian Information Criterion (BIC) are also close, but model 4 has a better fit with the data. Their forecast makes more sense than the forecast of model 2. It predicts that Facebook is very close to the peak of \textit{active users} and, in approximately 3 years, it is going to decline. It is also interesting to notice that, according to these outcomes, Facebook may not reach its total potential market.
+
+The difference between the outcomes of model 2 and models 3 and 4 could be explained by the fact that they have different rationales behind their models of rejection. While differential equation of the model 2 uses the rate of new \textit{total users}, the differential equations of the models 2 and 3 use the proportion of \textit{active users}.
+
+\begin{figure}
+	\centering
+	{\includegraphics*[scale=0.9,width=0.65\textwidth]{images/fb-model2-1.eps}}
+	\caption{Fit of Model 2 with Facebook's active users dataset.\label{fig:model2fit}
+		{$mF(t)$ is the total users, $mR(t)$ is the inactive users, and $mA(t)$ is the active users. The unit of these functions are thousands of people. The parameters are $m=1,497.50$, $p=0.000331$, $q=0.100088$, $w=0.140595$, and $\nu=0.187188$. The goodness of fit are $R^2=99.84\%$ and BIC=10,566.52.}}
+\end{figure}
+
+\begin{figure}
+	\centering
+	{\includegraphics*[scale=0.9,width=0.65\textwidth]{images/fb-model3-1.eps}}
+	\caption{Fit of Model 3 with Facebook's active users dataset.\label{fig:model3fit}
+		{$mF(t)$ is the total users, $mR(t)$ is the inactive users, and $mA(t)$ is the active users. The unit of these functions are thousands of people. The parameters are $m=1,967.64$, $p=0.000184$, $q=0.097867$, $w=0.330511$, and $\nu=0.006912$. The goodness of fit are $R^2=99.83\%$ and BIC=11,485.68}}
+\end{figure}
+
+\begin{figure}
+	\centering
+	{\includegraphics*[scale=0.9,width=0.65\textwidth]{images/fb-model4-1.eps}}
+	\caption{Fit of Model 4 with Facebook's active users dataset.\label{fig:model4fit}
+		{$mF(t)$ is the total users, $mR(t)$ is the inactive users, and $mA(t)$ is the active users. The unit of these functions are thousands of people. The parameters are $m=1,854.85$, $p=0.000183$, $q=0.099738$, $w=0.334454$, and $\nu=0.007007$. The goodness of fit are $R^2=99.84\%$ and BIC=10,724.55}}
+\end{figure}
+
+
+\chapter{Conclusion}
+
+The main contribution of this work is the parameter estimation through the empirical number of \textit{active users} dataset, forecasting the number of \textit{total users}, the number of \textit{active users}, and the number of \textit{inactive users}.
+
+If the adopters who have rejected the innovation follow the equations of model 1 and 2, then the proposed extended model is transformed into the Bass model through a linear transformation of the parameters. This confirms the Bass model robustness.
+
+Model 2 does not seem to be a good model of rejection, since the number of \textit{active users} never decreases which does not seem to be plausible.
+
+Models 3 and 4 had very similar results when fitting the Facebook dataset. The lack of analytical solutions for them, however, is a barrier to better understand their behavior, and to know whether they will always have similar outcomes or they will diverge depending on the data. Model 3 seems to be more analytically manageable.
+
+It is important to notice that, in models 3 and 4, the innovation may not be adopted by the whole potential market, but it would in the Bass model. Whether it will be adopted by the whole potential market or not depends on the parameters $w$ and $\nu$. For instance, it seems that $mF(t)$ is not converging to $m$ at figures \ref{fig:model3fit} and \ref{fig:model4fit}. It is a major difference between the proposed extended model and the Bass model.
+
+As this is a working paper, it is also intended to include the analyses of other datasets, like either Twitter's number of \textit{active users}, or WhatsApp's, or Netflix's, or Reddit's, or Dropbox's, or Waze's. This would enhance the proposed model power of forecasting.
+
+It is also intended to run a back test with the available data. First, the parameters of the model is estimated using a subset of the dataset. Then, through extrapolation, the number of \textit{active uses} is forecast. Finally, it is compared to this part of the dataset - which must not have been used in the estimation.
+
+The main limitation of this work is that it has no theory to support which of the models of rejection best fit with empirical data. Although there is an extensive literature on negative word-of-mouth, this literature does not predict which model would be the best. But, if any of these companies discloses the number of \textit{total users} and \textit{active users}, the estimation method could be adapted to estimate the parameters using both pieces of information at the same time, which would make possible to verify which of the models of rejection is the best.
+
+Future work could explore other models of rejection and also other estimation methods, like nonlinear least squares \citep{srinivasan1986technical} and Kalman filter \citep{xie1997kalman}.
 
