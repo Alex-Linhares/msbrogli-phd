@@ -302,7 +302,7 @@ $\mathbf{E}[T]$ is ploted for $a \in (0, 0.1]$ at Figure \ref{fig-bitcoin-H-incr
 \textcolor{red}{I do not know how to interpret this.}
 
 \begin{figure}[ht]
-\centering\includegraphics[width=\textwidth]{images/bitcoin-H-increasing.png}
+\centering\includegraphics[width=\textwidth]{./images01/bitcoin-H-increasing.png}
 \caption{$\mathbf{E}[T]$ when H increases linearly with $u(t) = 1 + at$.\label{fig-bitcoin-H-increase}}
 \end{figure}
 
@@ -462,7 +462,7 @@ For $k=6$, $p=0.9$, $\mathbf{P}(\text{successful attack}) = 0.000591412160000026
 For $k=6$, $p=0.7$, $\mathbf{P}(\text{successful attack}) = 0.15644958192000014$.
 
 \begin{figure}[ht]
-\centering\includegraphics[width=\textwidth]{images/fig-bitcoin-attack.png}
+\centering\includegraphics[width=\textwidth]{./images01/fig-bitcoin-attack.png}
 \caption{Probability of a successful attack according to the network's hash rate of the attacker ($\beta$).\label{fig-bitcoin-attack}}
 \end{figure}
 
@@ -501,7 +501,7 @@ The transactions may be either confirmed or unconfirmed. The confirmed transacti
 Transactions may have any format, including Bitcoin-like transactions---with inputs, outputs, and scripts. But it also may be completely different, just like in the cryptocurrency Iota \citep{tangle2016}. This work will not discuss details of the transactions' format, because we understand that it does not affect exactly the network scalability and security.
 
 \begin{figure}[ht]
-\centering\includegraphics[width=\textwidth]{images/fig-tangle-example.pdf}
+\centering\includegraphics[width=\textwidth]{./images01/fig-tangle-example.pdf}
 \caption{White nodes represent transactions that have been confirmed at least once. Green circles represent unconfirmed transactions (tips). Gray and dashed nodes are the transactions currently solving the proof-of-work in order to be propagated.\label{fig-tangle-example}}
 \end{figure}
 
@@ -518,7 +518,7 @@ An important factor of DAG model is how the new transactions choose which transa
 The higher the volume of new transactions, the more unconfirmed transactions will appear. In Fig. \ref{fig-tangle-swarm}, the reader can notice that the number of new transactions was increased for a while, and then decreased back to the original value. The DAG has behaved well when exposed to a high load scenario, since it reduced the number of tips to only three. It is like a moving swarm which gets wider when the number of new transactions increases and gets thinner when the number of new transactions decreases.
 
 \begin{figure}[ht]
-\centering\includegraphics[width=\textwidth]{images/fig-tangle-swarm.pdf}
+\centering\includegraphics[width=\textwidth]{./images01/fig-tangle-swarm.pdf}
 \caption{Suddenly the number of transactions per second increases and the width of the swarm grows. After a while, the number of transactions per second decreases and the width of the swarm shrinks.\label{fig-tangle-swarm}}
 \end{figure}
 
@@ -527,7 +527,7 @@ Conflicting transactions may happen when two or more transactions try to spend t
 Intuitively, when there is a conflict, the network should accept the transaction which has greater accumulated weight, invalidating the others (see Fig. \ref{fig-tangle-conflict}). But it may be not enough to prevent a nuclear submarine attack.
 
 \begin{figure}[ht]
-\centering\includegraphics[width=\textwidth]{images/fig-tangle-conflict.pdf}
+\centering\includegraphics[width=\textwidth]{./images01/fig-tangle-conflict.pdf}
 \caption{The red nodes are transactions which had some conflict with previous transaction and were invalidated by the network. Notice that none of them have been confirmed.\label{fig-tangle-conflict}}
 \end{figure}
 
@@ -548,12 +548,12 @@ In this paper, we will analyze the network scaling and security. How a DAG netwo
 We are interested in how the rate of new transactions affects how long it takes to a new transaction to be confirmed for the first time. We had already run some simulations under normal load (Fig. \ref{fig-tangle-hist}) and high load (Fig. \ref{fig-tangle-hist-2}).
 
 \begin{figure}[ht]
-\centering\includegraphics[width=\textwidth]{images/fig-tangle-hist.png}
+\centering\includegraphics[width=\textwidth]{./images01/fig-tangle-hist.png}
 \caption{Histogram of how long has been a transaction waiting until its first confirmation. It was a simulation of 15 minutes with new transactions rate changing between 1 and 15 tx/s.\label{fig-tangle-hist}}
 \end{figure}
 
 \begin{figure}[ht]
-\centering\includegraphics[width=\textwidth]{images/fig-tangle-hist-2.png}
+\centering\includegraphics[width=\textwidth]{./images01/fig-tangle-hist-2.png}
 \caption{Histogram of how long has been a transaction waiting until its first confirmation. It was a simulation of 5 minutes with new transactions rate of 50 tx/s, i.e., very high load.\label{fig-tangle-hist-2}}
 \end{figure}
 
