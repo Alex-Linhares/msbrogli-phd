@@ -155,6 +155,11 @@ Let $T_1, T_2, T_3, \dots, T_n$ be the time to find the first block ($T_1$), the
 
 Many exchanges require at least six confirmations in order to accept a deposit in Bitcoin. So, for $n=6$, $\mathbf{P}(Y_6 < 1 \text{ hour}) = \mathbf{P}(Y_6 < 3600) = 0.5543$. The symmetrical confidence interval with $\alpha=10\%$ is $[27, 105]$ in minutes. Thus, 90\% of the times, it will take between 27 minutes and 1 hour and 45 minutes to have your deposit accepted --- assuming that your transaction will be confirmed in the very next block.
 
+\begin{figure}[ht]
+\centering\includegraphics[width=\textwidth]{./images01/time-6-blocks.svg}
+\caption{Probability density function of $Y_6$, i.e., probability of finding 6 blocks after time $t$\label{fig-bitcoin-time-6-blocks}}
+\end{figure}
+
 Let's analyze the probability of finding a new block for a miner who has $\alpha$ percent of the network's total hash rate. Let $T_\alpha = \frac{X}{\alpha H}$ be the time required for the miner to find a new block. As $T_\alpha = \left( \frac{1}{\alpha} \right) T$, when $H \rightarrow +\infty$, $T_\alpha$ also follows an exponential with parameter $\lambda_\alpha = \frac{\alpha}{\tau}$. Hence, we confirm the intuition that the miner with $\alpha$ percent of the network's total hash power will find $\alpha$ percent of the blocks.
 
 \begin{theorem}
