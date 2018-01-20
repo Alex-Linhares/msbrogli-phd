@@ -4,30 +4,32 @@
 
 \chapter{Introduction}
 
-The main problem when one is trying to create a digital money is how to prevent double spending. As the money is digital, what would prevent counterfeiting? That is, what would prevent users from sending copies of the same money to two (or more) people? That is exactly the problem solved by Bitcoin and its underlying blockchain technology. The current solution behind fiat money is having a single issuer, a central bank, and trusting the financial institutions.
+The main problem when one is trying to create a digital money is how to prevent double spending. As the money is digital, and copies can be made \textit{ad nauseam}, what can prevent counterfeiting? That is, what would prevent users from sending copies of the same money to two (or more) people? That is exactly the problem solved by Bitcoin and its underlying blockchain technology. The current solution behind fiat money is having a single issuer, a central bank, and trusting the financial institutions.
 
-Bitcoin (BTC) is the first digital currency, also known as digital money, internet money and cryptocurrency. It is the first currency based on cryptography techniques, distributed and decentralized, and with no central bank. Bitcoin is distributed since its ledger is public and is stored in thousands of computers. It is decentralized because there is no authority (or government) who decides its future --- any decision must be accepted by its community. The security of Bitcoin relies on digital signature technology and network agreement. While digital signature ensures ownership, i.e., the funds may only be spend by their owners, and nobody else; the network agreement both prevents double spending and ensures funds. In short, every transaction must spend only unspent funds, must have enough funds available, and must be signed by its owners, authorizing its execution. When all these requirements are met, the funds are transfered.
+Bitcoin (BTC) is the first digital currency, also known as digital money, internet money and cryptocurrency. It is the first currency based on cryptography techniques, distributed and decentralized, and with no central bank. Bitcoin is distributed since its ledger is public and is stored in thousands of computers. It is decentralized because there is no authority (or government) who decides its future --- any decision must be accepted by its community. The security of Bitcoin relies on digital signature technology and network agreement. While digital signature ensures ownership, i.e., the funds may only be spend by their owners, and nobody else; the network agreement both prevents double spending and ensures that all processed transactions have sufficient funds. In short, every transaction must spend only unspent funds, must have enough funds available, and must be signed by its owners, authorizing its execution. When all these requirements are met, the funds are transfered.
 
-According to \citet{barber2012bitter}, despite the 30-year literature on e-cash, most of the proposed schemes requires a central authority which controls the currency issuance and prevents double spending. The no central point of trust and predictable money supply together with a clever solution to the double spending problem is what separates Bitcoin from the e-cash literature.
+According to \citet{barber2012bitter}, despite the 30-year literature on e-cash, most of the proposed schemes requires a central authority which controls the currency issuance and prevents double spending. The no central point of trust and predictable money supply together with a clever solution to the double spending problem is what separates Bitcoin from the previous e-cash philosophies. % literature
 
-Bitcoin provides interesting incentives to all players. On one hand, users have incentive to use Bitcoin because of the following: (i) the fees are small and does not depend on the amount being transfered -- but only in the size in bytes of the transaction --; (ii) the transfers will be confirmed in a well-known period; (iii) it is not possible to revert an already confirmed transfer, not even with a judicial order; and (iv) and the currency issuance rate is well-known and preset in Bitcoin's rules, which makes the Bitcoin supply predictable and trustworthy, different from fiat currencies which depends on decisions of their central banks -- i.e., it would be virtually impossible to face a hyper inflation in Bitcoin due to currency issuance. On the other hand, miners have incentive to mine Bitcoin because 
+Bitcoin provides interesting incentives to all players, namely the users and the miners. On one hand, users may have incentives to use Bitcoin because of the following: (i) the fees are small and does not depend on the amount being transfered -- but only in the size (in bytes) of the transaction --; (ii) the transfers will be confirmed in a well-known period; (iii) it is not possible to revert an already confirmed transfer, not even with a judicial order; and (iv) and the currency issuance rate is well-known and preset in Bitcoin's rules, which makes the Bitcoin supply predictable and trustworthy, different from fiat currencies which depends on decisions of their central banks -- i.e., it would be virtually impossible to face a hyper inflation in Bitcoin due to currency issuance. On the other hand, miners have incentive to mine Bitcoin because new Bitcoins are found every ten minutes and they may also receive the fees of unconfirmed transactions. These incentives have kept the Bitcoin network up and running since 2009 with barely no interruptions (99.99\% uptime).
 
-Since 2009, Bitcoin has been growing and becoming widely used all around the world. It started as an experiment based in a seminal work by \citet{nakamoto2008bitcoin} and expanded to the most important and successful cryptocurrency with a highly volatile \$192 billion market capitalization, as of this writing \citep{coinmarketcapbtc}. There are hundreds of companies investing in different uses of the technology, from exchanges to debit cards, and billions of dollars being invested in the new markets based on Bitcoin's technology.
+Since 2009, Bitcoin has been growing and becoming more and more used all around the world. It started as an experiment based in a seminal work by \citet{nakamoto2008bitcoin} and expanded to the most important and successful cryptocurrency with a highly volatile \$192 billion market capitalization, as of this writing \citep{coinmarketcapbtc}. There are hundreds of companies investing in different uses of the technology, from exchanges to debit cards, and billions of dollars being invested in the new markets based on Bitcoin's technology.
 
-Despite Bitcoin's huge success, there are still many challenges to be overcome. The network must scale to support hundreds of transactions per second, but, as we will see, today its capacity is close to 8 transactions per second. Another important challenge is to reduce the size of the ledger (or blockchain), which today is around 125GB and is growing at a rate of 4.5GB per month \citep{blockchaininfosize}.
+Despite Bitcoin's huge success, there are still many challenges to be overcome. We will focus on a specific subset of those challenges, namely the scaling, decentralization, and spam challenges. One important challenge that we will skip is to reduce the size of the ledger (or blockchain), which today is around 125GB and is growing at a rate of 4.5GB per month \citep{blockchaininfosize}.
 
+The network must scale to support hundreds of transactions per second, while its capacity is around only eight transactions per second. Thus, the more Bitcoin becomes popular, the more saturated the network is. Network saturation has many side effects and may affect the players incentive to keep the network running. The transaction fees have to be increased to compete for faster confirmation. The pool of unconfirmed transactions grows indefinitely, which may cause some transactions to be discarded due to low memory space available, as the previously predictable confirmation time of transactions becomes unpredictable.
 
-% TODO Include incentives.
+Bitcoin seems to have the most decentralized network between the cryptocurrencies, even so there are few miners and mining pools which together control over 50\% of the network’s computing (hash)power. Thus, they have an oversized influence when it comes to changes in the Bitcoin protocol's behaviour, and it is also seen as a problem to be solved. The more decentralized, the more trustworthy Bitcoin is.
 
-Bitcoin has the most decentralized network between the cryptocurrencies, even so there are few miners and mining pools which together control over 50\% of the network’s computing (hash)power. Thus, they have an oversized influence when it comes to changes in the Bitcoin protocol's behaviour, and it is seen as a problem to be solved.
+Generating new transactions in Bitcoin has a tiny cost, because one only has to generate the transaction itself, digitally sign it, and propagate in the Bitcoin network. On one hand, it means that any device is capable of generating new transactions, but, on the other hand, it makes Bitcoin susceptible to spam attacks. One may generate hundreds of thousands of new valid transactions, overloading the unconfirmed transactions pool and saturating the network.
 
-The number of ideas and publications focusing in improving Bitcoin's design is increasing every day. Many of these proposals are organized into BIPs (Bitcoin Improvement Proposals) which are discussed and implemented by the community; while others come in the form of whitepapers and alternative software forks (which would include the need of a protocol upgrade). Other scaling proposals are published in blogs and forums, describing new cryptocurrencies. Bitcoin's community hardly ever publishes their ideas in academic journals.
+The number of ideas and publications focusing in improving Bitcoin's design and overcoming those challenges is increasing every day. Many of these proposals are organized into BIPs (Bitcoin Improvement Proposals) which are discussed and implemented by the community; while others come in the form of whitepapers and alternative software forks (which would include the need of a protocol upgrade). Other proposals are published in blogs and forums, describing new cryptocurrencies. Bitcoin's community hardly ever publishes their ideas in academic journals, preferring instead, of BIPs, white papers, and web discussions.
 
-% Spam problem.
+After the launch of Bitcoin, more than 1,000 other cryptocurrencies has been created (REF). In general, they are Bitcoin-like, which means they use similar technologies, including the blockchain. Some cryptocurrencies differs a lot from Bitcoin, like the ones which use the DAG model \citep{dagdiscussion2014, tangle2016, dagcoin2015, sompolinsky2013, lewenberg2015, vorick2015}. We are specially interested in one of them: Iota.
 
-%The DAG model \citep{dagdiscussion2014, tangle2016, dagcoin2015, sompolinsky2013, lewenberg2015, vorick2015} has a different design which has neither mining nor confirmation blocks and transaction fees. Each transaction has its own proof-of-work, and is used to confirm other transactions in a directed acyclic graph. Although this design has been used by a few cryptocurrencies, none of them has enough users and would strengthen that the problems have been solved.
+Iota uses a DAG model, called tangle, which has a different design than Bitcoin's blockchain. It has neither mining nor confirmation blocks and transaction fees. Each transaction has its own proof-of-work, and is used to confirm other transactions forming a directed acyclic graph. In Iota, as transactions confirm transactions, the network benefits from a high volume of new transactions. Hence, theoretically, it scales to any large number of transactions per second. The scaling problem of tangle is exactly the opposite of Bitcoin's. It must have at least a given number of transaction per seconds, otherwise the transactions are not confirmed and the cryptocurrency does not work.
 
-The DAG model \citep{dagdiscussion2014, tangle2016, dagcoin2015, sompolinsky2013, lewenberg2015, vorick2015} has different design which has neither mining nor confirmation blocks and transaction fees. Each transaction has its own proof-of-work, and is used to confirm other transactions in a directed acyclic graph. The present work intends to analyze whether the DAG model may be a viable solution to both Bitcoin's scaling problem and Bitcoin's oversized influence of a few miners and mining pools.
+The present work intends to analyze a new architecture which lies between Bitcoin and Iota and may be a viable solution to both Bitcoin's scaling, centralization, and spam problems. We also present a mathematical analysis of Bitcoin's mining, forking, and safety.
+
 
 \chapter{Bitcoin \& Blockchain}
 
@@ -39,9 +41,7 @@ The blockchain technology works through the creation of new blocks. Each new blo
 
 The proof-of-work is a mathematical problem with the following characteristics: (i) it is hard to find a solution; (ii) this difficulty level may be adjusted; and (iii) it is fast to check whether the proposed solution is correct.
 
-% Describe the basics of SHA-256 algorithm.
-
-Bitcoin's blockchain uses the mathematical problem of finding a random number which, after being applied to the hash function SHA-256 twice, results in a number smaller than a given number. As SHA-256 is a pseudo-random function, its output is uniformly distributed between 0 and $2^{256}-1$ \citep{gilbert2003security}. Thus, if the given number is $2^{255}$, one has probability 50\% of finding a solution (just the most significant bit of the hash needs to be zero). But if the given number is $2^{240}$, one has probability 0.0015\% of finding a solution (as the ~16 most significant bits of the hash must equal zero). Hence, finding a solution is a hard problem which difficulty depends on the given number. The lesser the given number, the higher the difficulty. On the other side, checking whether a solution is correct is fast, one just has to apply the SHA-256 twice and compare.
+Bitcoin's blockchain uses the mathematical problem of finding a random number which, after being applied to the hash function SHA-256 twice, results in a number smaller than a given number $A$. As SHA-256 is a pseudo-random function, its output is uniformly distributed between 0 and $2^{256}-1$ \citep{gilbert2003security}. Thus, if the given number is $A = 2^{255}$, one has probability 50\% of finding a solution (just the most significant bit of the hash needs to be zero). But if the given number is $A = 2^{240}$, one has probability 0.0015\% of finding a solution (as the ~16 most significant bits of the hash must equal zero). Hence, finding a solution is a hard problem which difficulty depends on the given number $A$. The lesser the given number $A$, the higher the difficulty. On the other side, checking whether a solution is correct is fast, one just has to apply the SHA-256 twice and compare.
 
 By design, Bitcoin's blockchain proof-of-work difficulty is dynamically adjusted every 2016 blocks to keep an average pace of 10 minutes between block creation. Thus, the goal is to adjust the difficulty every 14 days. If it takes less than 14 days to find 2016 blocks, that means the network's hash power has increased, thus the difficulty is increased. If it takes more than 14 days to find 2016 blocks, it means the network's hash power has decreased, thus the difficulty is decreased.
 
@@ -57,7 +57,7 @@ The digital signature scheme used by Bitcoin is based on a pair of private and p
 
 Bitcoins (BTCs) owned by someone are, in fact, unspent outputs in one or more transactions. For instance, one may have 6 BTCs spread between three transactions' unspent output: the first with 1 BTC, the second with 2 BTCs, and the third with 3 BTCs.
 
-In a transaction, the inputs are pointers to other transactions' outputs (which they are spending). A transaction output may only be spent once and thus may not be partially spent. For instance, when one has 3 BTCs in one transaction output and would like to send 1 BTC to a friend, they have to create a transaction with one input spending the 3 BTCs and two outputs, one for the friend with 1 BTC and one's change with 2 BTCs. This enables $O(1)$ unspent transaction lookup. % Improve explanation of O(1).
+In a transaction, the inputs are pointers to other transactions' outputs (which they are spending). A transaction output may only be spent once and thus may not be partially spent. For instance, when one has 3 BTCs in one transaction output and would like to send 1 BTC to a friend, they have to create a transaction with one input spending the 3 BTCs and two outputs, one for the friend with 1 BTC and one's change with 2 BTCs. This enables $O(1)$ unspent transaction lookup.
 
 Each transaction's output has a script that is executed by the miners to check whether one has or has not permission to spend that output. In other words, whether one has the ownership of that output. In order to execute these scripts, the miners also need some data. This data is given by the transaction which is spending the output.
 
@@ -69,11 +69,13 @@ Those users accustomed to block explorers may have been misled by the transactio
 
 After lookup, the miner knows how many BTC tokens are available at that unspent output.  But, in order to certify ownership of that output, the miner receives instructions in the form of a script with the rules that lead to the desired unspent output address (and this one is displayed as the input address by those websites). Because this process requires a digital signature, only the holder of the corresponding private key is able to sign such a transaction.
 
+Next we will do a mathematical analysis of Bitcoin in order to deeply understand its minings properties, how a fork would affect the network, and its security against attackers.
+
 \chapter{Analysis of Bitcoin}
 
 \section{Hash function}
 
-A hash function $h: \{0, 1\}^\infty \rightarrow \{0, 1\}^{n}$ has the following properties:
+Hash functions has been widely studied in computer science. In short, a hash function $h: \{0, 1\}^\infty \rightarrow \{0, 1\}^{n}$ has the following properties:
 
 \begin{enumerate}
 	\item $x = y \Rightarrow h(x) = h(y)$
@@ -82,13 +84,15 @@ A hash function $h: \{0, 1\}^\infty \rightarrow \{0, 1\}^{n}$ has the following 
 
 In other words, when two inputs are the same, they have the same output. But, when the inputs are different, their outputs are uniformly distributed. Clearly, the hash functions are surjective but not injective. They are not injective because the image of $h$ has only $2^n$ elements and the domain has infinite elements. When $x \ne y$ and $h(x) = h(y)$, we say that $x$ and $y$ are a collision. A hash function is considered to be safe when it is unknown how to find a collision of a given hash.
 
+Bitcoin uses two hash functions: HASH-160 and HASH-256. The first has $n=160$ and consists of the composition of \textit{SHA-256} and \textit{RIPEMD-160}. The latter, has $n=256$ and applies \textit{SHA-256} twice.
+
+For further information, see \citet{gilbert2003security, dobbertin1996ripemd}.
+
 \section{Bitcoin mining}
 
-Let $\mathbb{B}$ be the set of Bitcoin blocks and $h: \mathbb{B} \rightarrow \{0, 1\}^{256}$ be the Bitcoin hash function. The mining process consists of finding $x \in \mathbb{B}$ such as $h(x) < A$, where $A$ is a given number. The lesser the $A$, the harder to find a new block. In fact, $\mathbf{P}(h(x) < A) = \frac{A}{2^{256}}$.
+Let $\mathbb{B}$ be the set of Bitcoin blocks and $h: \mathbb{B} \rightarrow \{0, 1\}^{256}$ be the Bitcoin \textit{HASH-256} function. The mining process consists of finding $x \in \mathbb{B}$ such as $h(x) < A$, where $A$ is a given number. The lesser the $A$, the harder to find a new block. In fact, $\mathbf{P}(h(x) < A) = \frac{A}{2^{256}}$.
 
 Hence, in order to find a new block, one must try different inputs ($x_1, x_2, \dots, x_k$) until they find a solution, i.e., all attempts will fail ($h(x_i) \geq A$ for $i < k$) but the last ($h(x_k) < A$). The probability of finding a solution exactly in the $k^{th}$ attempt follows a geometric distribution. Let $X$ be the number of attempts until a success, then $\mathbf{P}(X = k) = (1-p)^{k-1} p$, where $p = \frac{A}{2^{256}}$. Also, we have $\mathbf{P}(X \leq k) = 1 - (1-p)^k$. The average number of attempts is $\mathbf{E}(X) = 1/p$ and the variance is $\mathbf{V}(X) = \frac{1-p}{p^2}$.
-
-%As one may fail many times until they find a solution, the probability of finding a solution in the $K$ trial follows a geometric distribution. Let $X$ be the number of trials until a success, then $\mathbf{P}(X = k) = (1-p)^{k-1} p$, where $p = \mathbf{P}(a < A)$, i.e., there would be $k-1$ failures until a success in the $k-th$ trial. The average number of trials is $\mathbf{E}(X) = 1/p$ and the variance is $\mathbf{V}(X) = (1-p)/p^2$.
 
 In the Bitcoin's protocol, the given number $A$ is adjusted so that the network would find a new a block every 10 minutes, on average. Suppose that the Bitcoin's network is able to calculate $H$ hashes per second -- $H$ is the total hash rate of the network. The time required to find a solution would be $T=X/H$, and $\mathbf{E}(T) = \mathbf{E}(X)/H$ would be the average number of seconds to find a new block. So, the rule of finding a new block every 10 minutes (600 seconds) -- on average -- leads to the following equation: $\mathbf{E}(T) = 600$. So, $\mathbf{E}(T) = \mathbf{E}(X)/H = \frac{1}{pH} = 600 \Rightarrow p = \frac{1}{600H}$. Finally, $\mathbf{E}(X) = 600H$, $\mathbf{E}(T) = 600$, $\mathbf{V}(X) = (600H)^2 - 600H$, and $\mathbf{V}(T) = 600^2 - 600/H$.
 
@@ -109,7 +113,8 @@ The cumulative distribution function (CDF) of $T$ is $\mathbf{P}(T \leq t) = \ma
 \end{align*}
 \end{proof}
 
-% A partir de qual valor de H é razoável dizer que T segue uma distribuição exponencial?
+Now, we would like to understand from which value of $H$ it is reasonable to assume that $T$ follows an exponential distribution.
+
 \begin{theorem}
 	$x > M \Rightarrow |(1+1/x)^x - e| < e/M$.
 \end{theorem}
@@ -139,6 +144,14 @@ The cumulative distribution function (CDF) of $T$ is $\mathbf{P}(T \leq t) = \ma
 
 We may consider $H$ big enough to say that $T$ follows an exponential distribution when $e/H < \epsilon$, where $\epsilon$ is the maximum approximation error. When $\epsilon = 10^{-6} \Rightarrow H > e \cdot 10^6$. So, when $H > 2.6 \text{Mh/s}$, our approximation is good enough.
 
+The symmetrical confidence interval with level $\alpha$ would be $[t_0, t_1]$, where $\mathbf{P}(t_0 < T < t_1) = 1-\alpha$, $\mathbf{P}(T<t_0) = \alpha/2$, and $\mathbf{P}(T>t_1) = \alpha/2$. These conditions give the following equations: $1 - e^{-t_0/600} = \alpha/2$, and $e^{-t_1/600} = \alpha/2$. Solving these equations, we have $t_0 = -600 \ln{(1 - \alpha/2)}$, and $t_1 = -600 \ln{(\alpha/2)}$.
+
+For instance, if $\alpha = 10\%$, then $t_0 = 30.77$ and $t_1 = 1797.44$ -- or $[0.51, 30.76]$ in minutes. Thus, 90\% of the time between blocks blocks are between 30 seconds and 31 minutes.
+
+Let $T_1, T_2, T_3, \dots, T_n$ be the time to find the first block ($T_1$), then the time to find the second block ($T_2$), and so on. Let's analyze the distribution of $Y_n = \sum_{i=1}^{n} T_i$. As $Y_n$ is the sum of random variables which follow an exponential distribution with same $\lambda = \frac{1}{600}$, then $Y_n \sim \text{Erlang}(n, \frac{1}{600})$. Thus, the CDF of $Y$ would be $\mathbf{P}(Y_n < t) = 1 - \sum_{k=0}^{n-1} \frac{1}{k!} e^{-\lambda t} (\lambda t)^k$.
+
+Many exchanges require at least six confirmations in order to accept a deposit in Bitcoin. So, for $n=6$, $\mathbf{P}(Y_6 < 1 \text{ hour}) = \mathbf{P}(Y_6 < 3600) = 0.5543$. The symmetrical confidence interval with $\alpha=10\%$ is $[27, 105]$ in minutes. Thus, 90\% of the times, it will take between 27 minutes and 1 hour and 45 minutes to have your deposit accepted -- assuming that your transaction will be confirmed in the very next block.
+
 Let's analyze the probability of finding a new block for a miner who has $\alpha$ percent of the network's total hash rate. Let $T_\alpha = \frac{X}{\alpha H}$ be the time required for the miner to find a new block. As $T_\alpha = \left( \frac{1}{\alpha} \right) T$, when $H \rightarrow +\infty$, $T_\alpha$ also follows an exponential with parameter $\lambda_\alpha = \frac{\alpha}{600}$. Hence, we confirm the intuition that the miner with $\alpha$ percent of the network's total hash power will find $\alpha$ percent of the blocks.
 
 \begin{theorem}
@@ -155,7 +168,7 @@ Let's analyze the probability of finding a new block for a miner who has $\alpha
 \end{proof}
 
 \begin{theorem}
-	When one miner with $\alpha$ percent of the network's total hash rate multiplies their hash rate by $m$, the probability of finding the next block is multiplied by $\frac{m}{m \alpha + 1 - \alpha}$.
+	When one miner with $\alpha$ percent of the network's total hash rate multiplies their hash rate by $m$, the probability of this miner find the next block is multiplied by $\frac{m}{m \alpha + 1 - \alpha}$.
 	\label{thm-miner-multiply}
 \end{theorem}
 \begin{proof}
@@ -176,33 +189,25 @@ Let's analyze the probability of finding a new block for a miner who has $\alpha
 	$$\lim_{\alpha \rightarrow 0} \mathbf{P}(\text{next block is from $T_{m \alpha}$}) = \lim_{\alpha \rightarrow 0} \frac{m}{m \alpha + 1 - \alpha} = m.$$
 \end{proof}
 
-That way, it is not exacly correct to say that when one doubles their hash rate, their probability will double as well. It is only true for small miners.
+That way, it is not exactly correct to say that when one doubles their hash rate, their probability will double as well. It is only true for small miners.
 
 %Then, $\mathbf{P}(t_0 < T < t_1) = \mathbf{P}(t_0 < X/H < t_1) = \mathbf{P}(t_0 H < X < t_1 H) = [1 - (1-p)^{t_1 H}] - [1 - (1-p)^{t_0 H}] = (1-p)^{t_0 H} - (1-p)^{t_1 H}$.
 
-The symmetrical confidence interval with level $\alpha$ would be $[t_0, t_1]$, i.e., $\mathbf{P}(t_0 < T < t_1) = 1-\alpha$, where $\mathbf{P}(T<t_0) = \alpha/2$, and $\mathbf{P}(T>t_1) = \alpha/2$. These conditions give the following equations: $1 - e^{-t_0/600} = \alpha/2$, and $e^{-t_1/600} = \alpha/2$. Solving these equations, we have $t_0 = -600 \ln{(1 - \alpha/2)}$, and $t_1 = -600 \ln{(\alpha/2)}$.
-
-For $\alpha = 10\%$, $t_0 = 30.77$ and $t_1 = 1797.44$, or $[0.51, 30.76]$ in minutes.
-
-Let $T_1, T_2, T_3, \dots, T_n$ be the time to find the first block ($T_1$), then the time to find the second block ($T_2$), and so on. Let's analyze the distribution of $Y_n = \sum_{i=1}^{n} T_i \sim \text{Erlang}(n, \frac{1}{600})$. Thus, the CDF of $Y$ would be $\mathbf{P}(Y_n < t) = 1 - \sum_{k=0}^{n-1} \frac{1}{k!} e^{-\lambda t} (\lambda t)^k$.
-
-Many exchanges use the rule of 6 confirmations. So, for $n=6$, we have: $\mathbf{P}(Y_6 < 1 \text{ hour}) = \mathbf{P}(Y_6 < 3600) = 0.5543$. The symmetrical confidence interval with level $\alpha=10\%$ is $[27, 105]$ in minutes.
-
 % Probabilidade de orfão
-An orphan block would be created if a new block is found during the propagation time of a new block. Let $\alpha$ be the percentage of the total hash rate of the node which is outdated, and $\Delta t$ the propagation time in seconds. Thus, $\mathbf{P}(\text{new orphan}) = \mathbf{P}(T < \Delta t) = 1 - e^{-\frac{\alpha \Delta t}{600}}$. For instance, if a node has 10\% of the total hash rate and it takes 30 seconds to receive the update, than $\mathbf{P}(\text{new orphan}) = 1 - e^{-\frac{0.1 \cdot 30}{600}} = 0.004987$.
+An orphan block would be created if a new block is found during the propagation time of a new block. Let $\alpha$ be the percentage of the total hash rate of the node which is outdated, and $\Delta t$ the propagation time in seconds. Thus, $\mathbf{P}(\text{new orphan}) = \mathbf{P}(T < \Delta t) = 1 - e^{-\frac{\alpha \Delta t}{600}}$. For instance, if a node has 10\% of the total hash rate and it takes 30 seconds to receive the update, then $\mathbf{P}(\text{new orphan}) = 1 - e^{-\frac{0.1 \cdot 30}{600}} = 0.004987$.
 
 \section{Analysis of network's hash rate change}
 % Análise: Mudança no network's hash rate antes de atualizar o $A$.
 
-The given number $A$ is adjusted every 2016 blocks. So, let's analyze what happens when the network's hash rate changes before the adjustment. First, $\mathbf{P}(13 \text{ days} < Y_{2016} < 15 \text{ days}) = \mathbf{P}(13 \cdot 24 \cdot 3600 < Y_{2016} < 14 \cdot 24 \cdot 3600) = 0.9986$, i.e., it will mostly happen between 13 and 15 days, assuming that the network's hash rate remains constant. But, as the network's total hash rate remained constant, the adjusted $A$ will not be changed.
+The difficulty, given by the number $A$, is adjusted every 2016 blocks. As, $\mathbf{P}(13 \text{ days} < Y_{2016} < 15 \text{ days}) = \mathbf{P}(13 \cdot 24 \cdot 3600 < Y_{2016} < 14 \cdot 24 \cdot 3600) = 0.9986$, it is expected that the total time to find 2016 blocks will be between 13 and 15 days, assuming that the network's hash rate remains constant. If it takes less than the expected time, it means that the network's total hash rate has increased. While if it takes more than the expected time, it means that the network's total hash rate has decreased. So, let's analyze what happens when the network's hash rate changes significantly.
 
 %Let's assume that the network's total hash rate will change only once, from $H$ to $\alpha H$ -- so, if $\alpha = 1$, there would be no change, if $\alpha > 1$, there would be an increase, and if $\alpha < 1$, there would be a decrease. As the time required to find a new block would be $T_\alpha = \frac{X}{\alpha H}$, we got the same random variable as we have gotten when analyzing a miner with $\alpha$ percent of the network's total hash rate. But, the analysis will be different because here $\alpha$ may be greater than one.
 
 Let $H \cdot u(t)$ be the network's total hash rate over time. So, the number of hashes calculated in $t$ seconds is $H \int_0^t u(t) dt$. Hence, $\mathbf{P}(T \leq t) = \mathbf{P}(X \leq H \int_0^t u(t)dt)$. When $H \rightarrow +\infty$, $\mathbf{P}(T \leq t) = 1 - e^{-\frac{1}{600} \int_0^t u(t) dt}$, and the pdf of $T$ is $\frac{u(t)}{600} \cdot e^{-\frac{1}{600} \int_0^t u(t)dt}$.
 
-Let's say that the network's total hash rate has suddenly multiplied by $\alpha$. So, $u(t) = \alpha$, $\int_0^t u(t) dt = \alpha t$, and $T$ follows an exponential distribution with $\lambda = \frac{\alpha}{600}$. Thus, $Y_n^\alpha = \sum_{i=1}^{n} T_i^\alpha$ follows an Erlang distribution. The time required to find 2016 blocks will be divided by $\alpha$, and the variance will be divided by $\alpha^2$. When the network's hash rate increases ($\alpha > 1$), the variance decreases. When the network's hash rate decreases ($\alpha < 1$), the variance increases.
+Let's say that the network's total hash rate has suddenly multiplied by $\alpha$. So, $u(t) = \alpha$, $\int_0^t u(t) dt = \alpha t$, and $T$ also follows an exponential distribution, but with $\lambda = \frac{\alpha}{600}$. Thus, $Y_n^\alpha = \sum_{i=1}^{n} T_i^\alpha \sim \text{Erlang}(n, \frac{\alpha}{600})$. Thus, $\mathbf{E}[Y_{n}^\alpha] = \frac{\mathbf{E}[Y_{n}]}{\alpha}$, i.e., the average total time required to find $n$ blocks will be divided by $\alpha$, while $\mathbf{V}[Y_{n}^\alpha] = \frac{\mathbf{V}[Y_n]}{\alpha^2}$ and the variance will be divided by $\alpha^2$. Hence, on one hand, when the network's hash rate increases ($\alpha > 1$), the 2016 blocks will be found earlier. On the other hand, when the network's hash rate decreases ($\alpha < 1$), the 2016 blocks will be found later.
 
-For example, if $\alpha = 2$, $\mathbf{P}(6.5 \text{ days} < Y_{2016} < 7.5 \text{ days}) = 0.9986$, and the time required to find 2016 blocks halved. If $\alpha = 0.5$, $\mathbf{P}(27 \text{ days} < Y_{2016} < 29 \text{ days}) = 0.9469$, and the time required to find 2016 blocks doubled. So, even if half of the network stops mining, it will take at most 29 days to get back to normal.
+For example, if the network's total hash rate suddenly doubles ($\alpha = 2$), then $\mathbf{P}(6.5 \text{ days} < Y_{2016} < 7.5 \text{ days}) = 0.9986$, and the time required to find 2016 blocks halved. On the other side, if the network's total hash rate suddenly halves ($\alpha = 0.5$), then $\mathbf{P}(27 \text{ days} < Y_{2016} < 29 \text{ days}) = 0.9469$, and the time required to find 2016 blocks doubled. It is an important conclusion, since it shows that even if half of the network stops mining, it will only double the time to the next difficulty adjustment, i.e., the time between blocks will be 20 minutes for, at most, the next 29 days, and then the adjustment will occur and everything will be back to the normal 10 minutes between blocks.
 
 % TODO Step-wise analysis
 
@@ -258,7 +263,7 @@ Let's check this equation for already known scenarios. When $a=1$, then $n=0$ an
 $x > M \Rightarrow \frac{1}{1+bx} < \frac{1}{1+bM}$. As $1-a<0$, $\frac{1-a}{1+bx} > \frac{1-a}{1+bM}$. Thus, $\frac{1-a}{1+bM} < \frac{1-a}{1+bx} + a - a = \frac{1+abx}{1+bx} - a < 0 < \frac{a-1}{1+bM}$. Hence, $-\frac{a-1}{1+bM} < \frac{1+abx}{1+bx} - a < \frac{a-1}{1+bM}$.
 \end{proof}
 
-For instance, if we would like to know the impact of smoothly double the hash rate in the next week, $\lambda = 1/600$, $a=2$ and $M=1\text{ week}=3600\cdot24\cdot7 = 604,800$. $b$ can be calculated using $\epsilon = \frac{a-1}{1+bM} < 0.01$. So, $b > 0.000163690$ and $n<10.1818$. So, for $n=10$, $b=0.000166666$, and $\epsilon = 0.009823 < 0.01$, as expected. Finally, $\mathbf{E}[T] = 557.65$. If the hash rate had suddenly doubled, the average time between blocks would be 300.
+For instance, if we would like to know the impact of smoothly double the hash rate in the next week, then the parameters would be $\lambda = 1/600$, $a=2$, $M=1\text{ week}=3600\cdot24\cdot7 = 604,800$, $b$ can be calculated using $\epsilon = \frac{a-1}{1+bM} < 0.01 \Leftarrow b > 0.000163690 \Leftarrow n < 10.1818$. So, for $n=10$, then $b=0.000166666$ and $\epsilon = 0.009823 < 0.01$, as expected. Finally, $\mathbf{E}[T] = 557.65$. In other words, during the next week, the average time between blocks will be 9 minutes and 17 seconds, instead of the normal 10 minutes. If the hash rate had suddenly doubled, the average time between blocks would be 300.
 
 %$$\mathbf{E}[T] = -\mathcal{L}\{f_T(t)\}|_{s=0} = \frac{b^n n! 600^{n+1}}{a^{n+1}} e^{\frac{a}{600b}} \text{, where $n = \frac{a-1}{600b}$}$$
 
