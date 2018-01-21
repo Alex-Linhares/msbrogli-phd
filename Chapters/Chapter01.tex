@@ -156,7 +156,7 @@ Let $T_1, T_2, T_3, \dots, T_n$ be the time to find the first block ($T_1$), the
 Many exchanges require at least six confirmations in order to accept a deposit in Bitcoin. So, for $n=6$, $\mathbf{P}(Y_6 < 1 \text{ hour}) = \mathbf{P}(Y_6 < 3600) = 0.5543$. The symmetrical confidence interval with $\alpha=10\%$ is $[27, 105]$ in minutes. Thus, 90\% of the times, it will take between 27 minutes and 1 hour and 45 minutes to have your deposit accepted --- assuming that your transaction will be confirmed in the very next block. The pdf of $Y_6$ is shown in Figure \ref{fig-bitcoin-time-6-blocks}. The 10\% symmetrical confidence interval is shown in the white area.
 
 \begin{figure}[ht]
-\centering\includegraphics[height=5cm]{./images01/time-6-blocks.pdf}
+\centering\includegraphics[width=\textwidth]{./images01/time-6-blocks.pdf}
 \caption{Probability density function of $Y_6$, i.e., probability of finding 6 blocks after time $t$. The shaded areas shows the lower 5\% and upper 5\% of the pdf.\label{fig-bitcoin-time-6-blocks}}
 \end{figure}
 
@@ -198,8 +198,6 @@ Let's analyze the probability of finding a new block for a miner who has $\alpha
 \end{proof}
 
 That way, it is not exactly correct to say that when one doubles their hash rate, their probability will double as well. It is only true for small miners.
-
-%Then, $\mathbf{P}(t_0 < T < t_1) = \mathbf{P}(t_0 < X/H < t_1) = \mathbf{P}(t_0 H < X < t_1 H) = [1 - (1-p)^{t_1 H}] - [1 - (1-p)^{t_0 H}] = (1-p)^{t_0 H} - (1-p)^{t_1 H}$.
 
 % Probabilidade de orfão
 An orphan block would be created if a new block is found during the propagation time of a new block. Let $\alpha$ be the percentage of the total hash rate of the node which is outdated, and $\Delta t$ the propagation time in seconds. Thus, $\mathbf{P}(\text{new orphan}) = \mathbf{P}(T < \Delta t) = 1 - e^{-\frac{\alpha \Delta t}{\tau}}$. For instance, if a node has 10\% of the total hash rate and it takes 30 seconds to receive the update, then $\mathbf{P}(\text{new orphan}) = 1 - e^{-\frac{0.1 \cdot 30}{600}} = 0.004987$.
@@ -271,7 +269,7 @@ Let's check this equation for already known scenarios. When $a=1$, then $n=0$ an
 $x > M \Rightarrow \frac{1}{1+bx} < \frac{1}{1+bM}$. As $1-a<0$, $\frac{1-a}{1+bx} > \frac{1-a}{1+bM}$. Thus, $\frac{1-a}{1+bM} < \frac{1-a}{1+bx} + a - a = \frac{1+abx}{1+bx} - a < 0 < \frac{a-1}{1+bM}$. Hence, $-\frac{a-1}{1+bM} < \frac{1+abx}{1+bx} - a < \frac{a-1}{1+bM}$.
 \end{proof}
 
-For instance, if we would like to know the impact of smoothly double the hash rate in the next week, then the parameters would be $\lambda = 1/600$, $a=2$, $M=1\text{ week}=3600\cdot24\cdot7 = 604,800$, $b$ can be calculated using $\epsilon = \frac{a-1}{1+bM} < 0.01 \Leftarrow b > 0.000163690 \Leftarrow n < 10.1818$. So, for $n=10$, then $b=0.000166666$ and $\epsilon = 0.009823 < 0.01$, as expected. Finally, $\mathbf{E}[T] = 557.65$. In other words, during the next week, the average time between blocks will be 9 minutes and 17 seconds, instead of the normal 10 minutes. If the hash rate had suddenly doubled, the average time between blocks would be 300.
+For instance, if we would like to know the impact of smoothly double the hash rate in the next week, then the parameters would be $\lambda = 1/600$, $a=2$, $M=1\text{ week}=3600\cdot24\cdot7 = 604,800$, $b$ can be calculated using $\epsilon = \frac{a-1}{1+bM} < 0.01 \Leftarrow b > 0.000163690 \Leftarrow n < 10.1818$. So, for $n=10$, then $b=0.000166666$ and $\epsilon = 0.009823 < 0.01$, as expected. Finally, $\mathbf{E}[T] = 557.65$. In other words, during the next week, the average time between blocks will be 9 minutes and 17 seconds, instead of the normal 10 minutes. If the hash rate had suddenly doubled, the average time between blocks would be 5 minutes.
 
 %$$\mathbf{E}[T] = -\mathcal{L}\{f_T(t)\}|_{s=0} = \frac{b^n n! 600^{n+1}}{a^{n+1}} e^{\frac{a}{600b}} \text{, where $n = \frac{a-1}{600b}$}$$
 
