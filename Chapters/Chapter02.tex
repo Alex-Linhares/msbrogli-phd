@@ -28,14 +28,20 @@ Let a SDM memory with $N$ dimensions and $H$ hard-locations. Then, in a 64-bit c
 
 Basic operations were grouped in four sets: (i) for bitstrings, (ii) for addresses, (iii) for counters, and (iv) for memories (SDMs). Operations include creating new bitstrings, flipping bits, generating bitstring with a specific distance from a given bitstring, scan the address space using different algorithms, write a bitstring to a counter, write in an SDM, read from an SDM, and iteratively read from an SDM until convergence.
 
+\section{Read and write operations}
+
 The reading and writing operations are executed in two steps: first, the address space is swept looking for the activated addresses; then, the operation is performed in the counter. Reading operation assemblies the bitstring according to the counters of the activated addresses, while the writing operation changes the counters.
 
-The framework implements three main scanner algorithms: linear scanner, thread scanner, and OpenCL scanner. The linear scanner runs in a single core and is the slowest one. It was developed only for testing purposes. The thread scanner runs at the CPU in multiple threads (and our recommendation is to use the number of threads equals to twice the number of cores). The OpenCL scanner runs at the GPUs and support multiple devices. The speed of a scan depends on the processors and GPU devices, thus the best approach to choose which scanner is best for one's setup is to run a benchmark test. 
+Counters may have overflow protection depending on compiling options. By default, there is no overflow check in the counters, since each counter is a signed 32-bit integer --- which can store any number integer -2,147,483,648 and 2,147,483,647 --- and they will not overflow with less than $2^31-1$ divided by the number of activated hard-locations. When $N=1,000$, $H=1,000,000$, and $r=451$, the average number of activated hard-locations is 1,000 and it would require at least one million writes to overflow a counter.
 
-The hamming distance between two bitstrings is calculated counting the number of ones in the XOR of the bitstrings, i.e., $d(x, y) = \text{number of ones in} x \oplus y$. In order to count the number of ones of the XOR, the framework uses a pre-calculated table of distances --- by default, it is used a 16-bit table which uses 65MB of RAM, but one may increase to a 32-bit table which uses 4GB of RAM. Finally, to calculate the distance between to bitstrings, it sums the distance of each 16-bit part of the bitstrings, i.e., $d(x[0:N-1], y[0:N-1]) = d(x[0:15], y[0:15]) + d(x[16:31], y[16:31]) + \dots$. As each distance is calculated in O(1), this algorithm runs in O($\lceil bits/16 \rceil$).
 
-Internally, the address space is stored in an array of addresses, which, in turn, is stored in an array of 64-bit integers (Fig. \ref{tab:hl-addresses-detail}). As the addresses and their 64-bit integers are contiguous in RAM or file, there is a performance gain since they are loaded in chunks.
+\section{Implementation details}
 
+\subsection{The distace between two bitstrings}
+
+The hamming distance between two bitstrings is calculated counting the number of ones in the XOR of the bitstrings, i.e., $d(x, y) = \text{number of ones in} x \oplus y$. In order to count the number of ones of the XOR, the framework uses a pre-calculated table of distances --- by default, it is used a 16-bit table which uses 65MB of RAM, but one may increase to a 32-bit table which uses 4GB of RAM. Finally, to calculate the distance between two bitstrings, it sums the distance of each 16-bit part of the bitstrings, i.e., $d(x[0:N-1], y[0:N-1]) = d(x[0:15], y[0:15]) + d(x[16:31], y[16:31]) + \dots$. As each distance is calculated in O(1), this algorithm runs in O($\lceil bits/16 \rceil$).
+
+The address space is stored in an array of addresses, which, in turn, is stored in arrays of 64-bit integers (Fig. \ref{tab:hl-addresses-detail}). As the addresses and their 64-bit integers are contiguous in RAM or file, there is a performance gain because processors load them in chunks.
 
 \begin{figure}
 \centering
@@ -77,9 +83,27 @@ node [pos=0.5,anchor=north,yshift=-0.5cm] {N bits};
 \caption{Hard-location addresses are stored in a contiguous array. In a 64-bit computer, each hard-location address is stored in a sub-array of 64-bit integers, with length $8 \cdot \lceil N/64 \rceil$.\label{tab:hl-addresses-detail}}
 \end{figure}
 
-\section{Proposal:  Framework Validation}
 
-In order to check whether the framework works as expected and according to the model proposed by \citep{Kanerva1988}, we run simulations which were compared to the theoretical analysis conducted some decades ago.
+\subsection{Scanning for activated hard-locations}
+
+Scanning for the activated hard-locations is a problem similar to well-known problems in computation geometry called ``range reporting in higher dimensions''. In this case, none of the known algorithms is able to solve our problem faster than $O(n)$. The algorithm which seems to best fit in our problem consumes $O(n)$ space and runs in $O(\log^d(n))$ \citep{chazelle1988functional}, which is really slower than $O(n)$ when, for instance, $n=1,000,000$ and $d=1,000$. For a review of the algorithms, see \citet{chan2011orthogonal}.
+
+In 2014, there was published a solution to fast search in hamming space which seems applicable to our problem \citet{norouzi2014fast}.
+
+It is intriguing that none of those algorithms is able to solve our scanning problem. The idea behind those algorithms is roughly to split the search space in half each step, which would take $O(\log(n))$ to go through the whole space. But this approach does not work in our case because of the high number of dimensions (i.e., 1,000) and because the hardlocations' addresses are randomly sampled from the ${0, 1}^d$ space. So, each addresses' bit itself splits the hardlocations in half, but it does not split the search space in half since both halves still must be convered. For instance, let's say we have 1,000 dimensions with 1,000,000 hardlocations, and we are scanning within a circle with radius 451, then after checking the first bit we have two cases: (i) for the half with the same first bit, we must keep scanning with radius 451; and (ii) for the half with a different first bit, we must keep scanning with radius 450. The search space has not been split in half because both halves have been covered (and one of them should have been skipped).
+
+Hence, as our best approach approach seems to be scanning through all hardlocations, we may distribute the scan into many tasks which will be executed independently. The tasks may be executed in different processes, threads, or even computers. They may also run in the CPU or in the GPU. In this case, we may take into account both the time required to distribute the tasks and the time to receive their results.
+
+The framework implements three main scanner algorithms: linear scanner, thread scanner, and OpenCL scanner. The linear scanner runs in a single core, is the slowest one, and was developed only for testing purposes; the thread scanner runs at the CPU in multiple threads sharing memory (and our recommendation is to use the number of threads equals to twice the number of CPU cores); and the OpenCL scanner runs in multiple GPU cores and support multiple devices. The speed of a scan depends on the CPU and GPU devices, thus the best approach to choose which scanner is best for one's setup is to run a benchmark. 
+
+The OpenCL must be initialized, which just copies the hardlocations' addresses to the GPU's memory. Then, many scans may be executed with no necessity to upload the addresses again.
+
+
+\section{Framework Validation}
+
+The framework has been validated comparing its results with the expected results from \citet{Kanerva1988}. Thus, we run simulations which were then compared to the theoretical analysis conducted some decades ago.
+
+SHOW THE RESULTS --- Kanerva's tables/figures vs Simulation.
 
 The objective here is twofold: (i) a single command will install the framework, and (ii) another single command will run (and display) the desired figures obtained the simulation. This will allow potential users to become familiarized with the system and its underlying code with barely any learning curve. 
 
@@ -87,7 +111,7 @@ One particular analysis of interest is that of the distance read at a point $\al
 
 \subsection{Some initial anomalous results}
 
-As we ran the simulations reflecting some of Kanerva's graphs, one in particular struck our attention:  The new distances obtained after a read operation were not perfectly predicted by the theoretical model, and we propose that this is due to interaction effects between different attractors.
+As we ran the simulations reflecting some of Kanerva's graphs, one in particular struck our attention: The new distances obtained after a read operation were not perfectly predicted by the theoretical model, and we propose that this is due to interaction effects between different attractors.
 
 \citet{Kanerva1988} originally predicted a \textasciitilde 500-bit distance after a point (Fig. \ref{kanerva-table-7-2}). The original prediction considered that the read distance would decline when inside the critical distance in increase afterwards, converging to a \textasciitilde 500-bit distance.  At this point, each read would lead to a different, orthogonal, \textasciitilde 500-bit distance point.
 
@@ -123,7 +147,17 @@ To obtain the results from Fig. \ref{sdm-10000w-table-7-2} and \ref{sdm-100w-tab
 
 Obviously, these small deviations from Kanerva's original theoretical predictions deserve a qualification.  Kanerva was working in the 1980s and the 1990s, and had no access to the immense computational power that we do today. It is no surprise that some small interaction effects should exist as machines allow us to explore the ideas of his monumental work.
 
-\section{Proposal: Performance Results}
+\section{Applications}
+
+\subsection{Noise filter}
+
+We developed a noise filter using a SDM.
+
+
+\subsection{Classification filter}
+
+
+\section{Performance Results}
 
 Our intention is to provide comparative performance metrics under different computation engines (CPU, GPU, etc) and different operating systems (Linux, MacOs, Windows, etc). Performance can be measured as the average number of scans of all hard locations per second, reads per second, writes per second, etc.
 
@@ -133,7 +167,8 @@ Beyond that, we are running as state-of-the-art devices: (i) an Amazon EC2 p3.xl
 
 
 \chapter{Conclusion}
-Sparse Distributed Memory is a viable model of human memory, yet it does require researchers to (re-)implement a number of parallel algorithms in different architectures.  
+
+Sparse Distributed Memory is a viable model of human memory, yet it does require researchers to (re-)implement a number of parallel algorithms in different architectures.
 
 We propose to provide a new, open-source, cross-platform, highly parallel framework in which researchers may be able to create hypothesis and test them computationally through minimal effort. Though the framework is not well-documented for public release at this time, it has already served as the backbone of Chada's Ph.D. thesis. The single-line command ``pip install sdm'' will install the framework on posix-like systems, and single-line commands will let users test the framework, generate some of the figures from Kanerva's theoretical predictions in their own machines, and --- if interested enough ---, test their own theories and improve the framework in an open-source fashion. It is our belief that such work is a necessary component towards accelerating research in this promising field.
 

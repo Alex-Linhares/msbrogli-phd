@@ -9,7 +9,7 @@
 
 The main problem when one is trying to create a digital money is how to prevent double spending. As the money is digital, and copies can be made \textit{ad nauseam}, what can prevent counterfeiting? That is, what would prevent users from sending copies of the same money to two (or more) people? That is exactly the problem solved by Bitcoin and its underlying blockchain technology. The current solution behind fiat money is having a single issuer, a central bank, and trusting the financial institutions.
 
-Bitcoin (BTC) is the first digital currency, also known as digital money, internet money and cryptocurrency. It is the first currency based on cryptography techniques, distributed and decentralized, and with no central bank. Bitcoin is distributed since its ledger is public and is stored in thousands of computers. It is decentralized because there is no authority (or government) who decides its future --- any decision must be accepted by its community. The security of Bitcoin relies on digital signature technology and network agreement. While digital signature ensures ownership, i.e., the funds may only be spend by their owners, and nobody else; the network agreement both prevents double spending and ensures that all processed transactions have sufficient funds. In short, every transaction must spend only unspent funds, must have enough funds available, and must be signed by its owners, authorizing its execution. When all these requirements are met, the funds are transfered.
+Bitcoin (BTC) is the first digital currency, also known as digital money, internet money, and cryptocurrency. It is the first currency based on cryptography techniques, distributed and decentralized, and with no central bank. Bitcoin is distributed since its ledger is public and is stored in thousands of computers. It is decentralized because there is no authority (or government) who decides its future --- any decision must be accepted by its community. The security of Bitcoin relies on digital signature technology and network agreement. While digital signature ensures ownership, i.e., the funds may only be spend by their owners, and nobody else; the network agreement both prevents double spending and ensures that all processed transactions have sufficient funds. In short, every transaction must spend only unspent funds, must have enough funds available, and must be signed by its owners, authorizing its execution. When all these requirements are met, the funds are transfered.
 
 According to \citet{barber2012bitter}, despite the 30-year literature on e-cash, most of the proposed schemes requires a central authority which controls the currency issuance and prevents double spending. The no central point of trust and predictable money supply together with a clever solution to the double spending problem is what separates Bitcoin from the previous e-cash philosophies. % literature
 
@@ -311,45 +311,43 @@ The function $\mathbf{E}(T)|_{t_1}^{t_2}$ may be used to a piecewise linear anal
 
 For each point $t_i$, let $g_i(t) = [H(t-t_i) - H(t-604800)] u(t) + 2 H(t-604800)$, then $\mathbf{E}(T) = \mathbf{E}(T)|_{t_i}^{t_{i+1}} + 1 - e^{\frac{t}{\eta}}$. The result is presented in Figure .
 
----
-
-In order to obtain $\mathbf{E}(T)$, we will use the formula $\frac{d}{ds}T^*(s)|_{s=0} = -\mathbf{E}(T)$, where $T^*$ is the Laplace transform of the pdf of T.
-
-Let $f_T(x)$ be the pdf of T and $F_T(x)$ be the cdf of T, i.e., $F_T(x) = \int_0^x f_T(t) dt$. Thus, $\mathcal{L}\{F_T(x)\} = \frac{T^*(s)}{s}$.
-
-\begin{align*}
-	\mathcal{L}\{F_T(x)\} &= \int_0^\infty e^{-sx} F_T(x) dx \\
-		&= \int_0^\infty e^{-sx} \left( 1 - e^{-\frac{x + a^2x^2/2}{\eta}} \right) dx \\
-		&= \int_0^\infty e^{-sx} dx - \int_0^\infty e^{-sx} e^{-\frac{x + a^2x^2/2}{\eta}} dx \\
-		&= \frac{1}{s} - \int_0^\infty e^{-sx -\frac{x + a^2x^2/2}{\eta}} dx \\
-\end{align*}
-
-Let $b=\frac{a}{\sqrt(2 \eta)}$ and $c = \frac{\sqrt(2 \eta)}{2a} \left( s + \frac{1}{\eta} \right)$, then $sx + \frac{x+a^2x^2/2}{\eta} = (bx + c)^2 - c^2$.
-Let $y = bx+c \Rightarrow dy = bdx$.
-
-\begin{align*}
-	\int_0^\infty e^{-sx -\frac{x + a^2x^2/2}{\eta}} dx &= \int_0^\infty e^{-(bx+c)^2 + c^2} dx \\
-		&= \int_c^\infty e^{-y^2 + c^2} \frac{dy}{b} \\
-		&= \frac{e^{c^2}}{b} \int_c^\infty e^{-y^2} dy \\
-		&= \frac{\sqrt{\pi}e^{c^2}}{2b} \erfc(c)
-\end{align*}
-
-$$ \mathcal{L}\{F_T(x)\} = \frac{1}{s} - \frac{\sqrt{\pi}e^{c^2}}{2b} \erfc(c) $$
-
-Hence,
-$$ T^*(s) = s \mathcal{L}\{F_T(x)\} = 1 - \frac{s\sqrt{\pi}e^{c^2}}{2b} \erfc(c) $$
-
-As $\frac{d}{ds}c = \frac{\sqrt{2 \eta}}{2a}$,
-
-\begin{align*}
-\frac{d}{ds} T^*(s) &= - \frac{\sqrt{\pi}e^{c^2}}{2b} \erfc(c) - \frac{\sqrt{2 \eta \pi} sc e^{c^2}}{2ab} \erfc(c) + \frac{\sqrt{2 \eta \pi}s}{4ab} \\
-\frac{d}{ds} T^*(s)|_{s=0} &= - \frac{\sqrt{2 \eta \pi}}{2a} e^{\frac{1}{2 \eta a^2}} \erfc\left(\frac{1}{a \sqrt{2 \eta}}\right) \\
-\mathbf{E}[T] &= \frac{\sqrt{2 \eta \pi}}{2a} e^{\frac{1}{2 \eta a^2}} \erfc\left(\frac{1}{a \sqrt{2 \eta}}\right) \\
-\end{align*}
-
-$\mathbf{E}[T]$ is ploted for $a \in (0, 0.1]$ at Figure \ref{fig-bitcoin-H-increase}. The plot interval is really small because $a=1$ would imply doubling the hash rate after 1 second.
-
-\textcolor{red}{I do not know how to interpret this.}
+%In order to obtain $\mathbf{E}(T)$, we will use the formula $\frac{d}{ds}T^*(s)|_{s=0} = -\mathbf{E}(T)$, where $T^*$ is the Laplace transform of the pdf of T.
+%
+%Let $f_T(x)$ be the pdf of T and $F_T(x)$ be the cdf of T, i.e., $F_T(x) = \int_0^x f_T(t) dt$. Thus, $\mathcal{L}\{F_T(x)\} = \frac{T^*(s)}{s}$.
+%
+%\begin{align*}
+%	\mathcal{L}\{F_T(x)\} &= \int_0^\infty e^{-sx} F_T(x) dx \\
+%		&= \int_0^\infty e^{-sx} \left( 1 - e^{-\frac{x + a^2x^2/2}{\tau}} \right) dx \\
+%		&= \int_0^\infty e^{-sx} dx - \int_0^\infty e^{-sx} e^{-\frac{x + a^2x^2/2}{\tau}} dx \\
+%		&= \frac{1}{s} - \int_0^\infty e^{-sx -\frac{x + a^2x^2/2}{\tau}} dx \\
+%\end{align*}
+%
+%Let $b=\frac{a}{\sqrt(2 \tau)}$ and $c = \frac{\sqrt(2 \tau)}{2a} \left( s + \frac{1}{\tau} \right)$, then $sx + \frac{x+a^2x^2/2}{\tau} = (bx + c)^2 - c^2$.
+%Let $y = bx+c \Rightarrow dy = bdx$.
+%
+%\begin{align*}
+%	\int_0^\infty e^{-sx -\frac{x + a^2x^2/2}{\tau}} dx &= \int_0^\infty e^{-(bx+c)^2 + c^2} dx \\
+%		&= \int_c^\infty e^{-y^2 + c^2} \frac{dy}{b} \\
+%		&= \frac{e^{c^2}}{b} \int_c^\infty e^{-y^2} dy \\
+%		&= \frac{\sqrt{\pi}e^{c^2}}{2b} \erfc(c)
+%\end{align*}
+%
+%$$ \mathcal{L}\{F_T(x)\} = \frac{1}{s} - \frac{\sqrt{\pi}e^{c^2}}{2b} \erfc(c) $$
+%
+%Hence,
+%$$ T^*(s) = s \mathcal{L}\{F_T(x)\} = 1 - \frac{s\sqrt{\pi}e^{c^2}}{2b} \erfc(c) $$
+%
+%As $\frac{d}{ds}c = \frac{\sqrt{2 \tau}}{2a}$,
+%
+%\begin{align*}
+%\frac{d}{ds} T^*(s) &= - \frac{\sqrt{\pi}e^{c^2}}{2b} \erfc(c) - \frac{\sqrt{2 \tau \pi} sc e^{c^2}}{2ab} \erfc(c) + \frac{\sqrt{2 \tau \pi}s}{4ab} \\
+%\frac{d}{ds} T^*(s)|_{s=0} &= - \frac{\sqrt{2 \tau \pi}}{2a} e^{\frac{1}{2 \tau a^2}} \erfc\left(\frac{1}{a \sqrt{2 \tau}}\right) \\
+%\mathbf{E}[T] &= \frac{\sqrt{2 \tau \pi}}{2a} e^{\frac{1}{2 \tau a^2}} \erfc\left(\frac{1}{a \sqrt{2 \tau}}\right) \\
+%\end{align*}
+%
+%$\mathbf{E}[T]$ is ploted for $a \in (0, 0.1]$ at Figure \ref{fig-bitcoin-H-increase}. The plot interval is really small because $a=1$ would imply doubling the hash rate after 1 second.
+%
+%\textcolor{red}{I do not know how to interpret this.}
 
 \begin{figure}[ht]
 \centering\includegraphics[width=\textwidth]{./images01/bitcoin-H-increasing.png}
@@ -361,11 +359,11 @@ $\mathbf{E}[T]$ is ploted for $a \in (0, 0.1]$ at Figure \ref{fig-bitcoin-H-incr
 % Ataque submarino
 % Probabilidade de "correr por fora"
 
-There are many possible ways to attack the Bitcoin (REF). In this section, we are interested in a particular attack: the submarine attack. 
+There are many possible ways to attack the Bitcoin (REF). In this section, we are interested in a particular attack: the double spending attack. 
 
-In the submarine attack, the attacker's goal is to spend some Bitcoins and, after a while, get their Bitcoins back. Thus, the attacker sends some funds to the victim, they wait 6 confirmations, and, finally, the victim confirms the funds. But, then, the attacker get their funds back propagating new blocks which accept a double spending transaction. In order to work, the attacker must propagate more blocks than the network has mined in the same period, becoming the longest chain. Hence, we would like to understand what the odds are that the attacker will be successful.
+In the double spending attack, the attacker's send some funds to the victim, let's say a merchant. They wait for $k$ confirmations of the transaction, and the victim delivers the good or the service to the attacker. Then, the attacker mine enough blocks with a conflicting transaction, double spending the funds which was sent to the victim. If the attacker is successful, the original transaction will be \textit{erased} and the victim will be left with no funds at all. In order to be successful, the attacker must propagate more blocks than the network in the same period, propagating a chain longer than the main chain. Hence, we would like to understand what the odds are that the attacker will be successful. This attack was originally discussed by \citet{nakamoto2008bitcoin}.
 
-In order to maximize their odds, the attacker must start to mine the new blocks as soon as they send the funds to the victim. In this moment, it starts to mine in the head of the blockchain, just like the rest of the network. So, the attacker and the network are in exactly the same point.
+In order to maximize their odds, the attacker must start to mine the new blocks as soon as they send the funds to the victim. In this moment, it starts to mine in the head of the blockchain, just like the rest of the network. So, in the beginning, the attacker and the network are in exactly the same point.
 
 Let $\beta H$ be the hash rate of the attackers, and $\gamma H$ be the network's hash rate without the attackers. Thus, when $H \rightarrow +\infty$, we already know that $T_{\text{attackers}}$ and $T_{\text{network}}$ follow exponential distributions with parameters $\lambda_{\text{attacker}} = \frac{\beta}{\eta}$ and $\lambda_{\text{network}} = \frac{\gamma}{\eta}$, respectively.
 
@@ -533,6 +531,22 @@ Finally, we conclude that the Bitcoin's network capacity is $\lambda_{\text{bloc
 
 
 \section{Fork analysis}
+
+When a disagreement between miners' rules happens, that is referred as either a hard-fork or a soft-fork. It is said to be a soft-fork when the rules are backward compatible, and a hard-fork when the rules are not backward compatible. In general, a hard-fork relaxes the constraints, while the latter hardens them.
+
+Suppose that the miners' are split in two groups, $G_1$ and $G_2$, with different rules. Let's say $H_1$ and $H_2$ are their hash rate, respectively. We have two different scenarios to analyze: (i) when neither of them accepts other's blocks; and (ii) when $G_2$ accepts $G_1$'s blocks, but not the other way around.
+
+Scenario (i) is easy to analyze, because the network would just split and, after a while, both difficulties will be adjusted. Then, they will be just like two different Bitcoin networks.
+
+Scenario (ii) is more trick. As $G_2$ accepts $G_1$ blocks, their hashrate will matter. If $H_1 > H_2$, then $G_2$ will frequently skip their blockchain, because $G_1$'s blockchain will be longer most of the time. If $H_1 < H_2$, then $G_2$ may have its own blockchain after a while --- a true fork. But what would happen if $H_1$ keeps increasing and eventually gets larger than $H_2$? It if happens for sufficient time, the whole $G_2$'s blockchain may be discarded in order to move to $G_1$'s blockchain when $G_1$'s gets longer.
+
+\begin{theorem}
+	When $H_1 > H_2$, the 
+\end{theorem}
+
+
+
+%What would happen if, after a while, the groups agree again. How would the blockchain merge?
 
 
 \chapter{DAG model}
