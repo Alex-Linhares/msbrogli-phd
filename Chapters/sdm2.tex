@@ -1,3 +1,5 @@
+% !TEX root = ../partial-sdm.tex
+
 Sparse Distributed Memory (SDM) is a mathematical model for cognitive memory published by \citet{Kanerva1988}. It introduces many interesting mathematical properties of $n$-dimensional binary space that, in a memory model, are psychologically plausible.  Most notable among these are the tip-of-the-tongue phenomenon, conformity to Miller's magic number \citep{Linhares2011} and robustness against loss of neurons.
 
 Unlike traditional memory used by computers, SDM performs read and write operations in a multitude of addresses, also called neurons.  That is, the data is not written, or it is not read in a single address spot, but in many addresses. These are called activated addresses, or activated neurons.
@@ -32,7 +34,7 @@ target datum $\eta$ and the cue $\eta_{x}$. \label{fig-shared-addresses}}
 
 The addresses of the $\{0,1\}^{n}$ space grows exponentially with the number of dimensions $n$, i.e. $N=2^{n}$. For $n=100$ we have $N\approx10^{30}$, which is incredibly big when related to a computer memory. Furthermore, \citet{Kanerva1988} suggests $n$ between 100 and 10,000. Recently he has postulated 10,000 as a desirable minimum $N$ (personal communication). To solve the feasibility problem of implementing this memory, Kanerva made a random sample of $\{0,1\}^{n}$, in his work, having $N'$ elements. All these addresses in the sample are called hard-locations. Other elements of $\{0,1\}^{n}$, not in $N'$, are called virtual neurons. This is represented in Figure \ref{fig-hardlocations}.  All properties of read and write operations presented before remain valid, but limited to hard-locations. Kanerva suggests taking a sample of about one million hard-locations.
 
-Using this sample of binary space, our data space does not exist completely.  That is, the binary space has $2^{n}$ addresses, but the memory is far away from having these addresses available. In fact, only a fraction of this vectorial space is actually instantiated. Following Kanerva's suggestion of one million hard-locations, for $n=100$, only $100\cdot10^{6}/2^{100}=7\cdot10^{-23}$ percent of the whole space exists, and for $n=1,000$ only $100\cdot10^{6}/2^{1000}=7\cdot10^{-294}$ percent. 
+Using this sample of binary space, our data space does not exist completely.  That is, the binary space has $2^{n}$ addresses, but the memory is far away from having these addresses available. In fact, only a fraction of this vectorial space is actually instantiated. Following Kanerva's suggestion of one million hard-locations, for $n=100$, only $100\cdot10^{6}/2^{100}=7\cdot10^{-23}$ percent of the whole space exists, and for $n=1,000$ only $100\cdot10^{6}/2^{1000}=7\cdot10^{-294}$ percent.
 
 Kanerva also suggests the selection of a radius that will activate, on average, one one thousandth of the sample, which is 1,000 hard-locations for a sample of one million addresses. In order to achieve his suggestion, a 1,000-dimension memory uses an access radius $r=451$, and a 256-dimensional memory, $r=103$. We think that a 256-dimensional memory may be important because it presents conformity to Miller's magic number \citep{Linhares2011}.
 
@@ -55,21 +57,21 @@ required to converge from $\eta_{x}$ to $\eta$.\label{fig-p1-p2-iterative-read}}
 
 The $\{0,1\}^{n}$ space has $N=2^{n}$ locations from which we instantiate $N'$ samples. Each location in our sample is called a hard-location.  On these hard-locations we do operations of read and write. One of the insights of SDM is exactly the way we read and write: using data as addresses in a distributed fashion. Each datum $\eta$ is written in every activated hard-location inside the access radius centered on the address, that equals datum, $\xi=\eta$. Kanerva suggested using an access radius $r$ having about one one thousandth of $N'$.  As an imprecise cue $\eta_{x}$ shares hard-locations with the target bitstring $\eta,$ it is possible to retrieve $\eta$ correctly. (Actually, probably more than one read is necessary to retrieve exactly $\eta.)$.  Moreover, if some neurons are lost, only a fraction of the datum is lost and it is possible that the memory can still retrieve the right datum.
 
-A random bitstring is generated with equal probability of $0$'s and $1$'s in each bit. One can readily see that the average distance between two random bitstrings has binomial distribution with mean $n/2$ and standard deviation $\sqrt{n/4}$. For a large $n$, most of the space lies close to the mean and has fewer shared hard-locations.  As two bitstrings with distance far from $n/2$ are very improbable, \citet{Kanerva1988} defined that two bitstrings are orthogonal when their distance is $n/2$. 
+A random bitstring is generated with equal probability of $0$'s and $1$'s in each bit. One can readily see that the average distance between two random bitstrings has binomial distribution with mean $n/2$ and standard deviation $\sqrt{n/4}$. For a large $n$, most of the space lies close to the mean and has fewer shared hard-locations.  As two bitstrings with distance far from $n/2$ are very improbable, \citet{Kanerva1988} defined that two bitstrings are orthogonal when their distance is $n/2$.
 
 The write operation needs to store, for each dimension bit which happened more ($0$'s or $1$'s). This way, each hard-location has $n$ counters, one for each dimension. The counter is incremented for each bit $1$ and decremented for each bit $0$. Thus, if the counter is positive, there have been more $1$'s than $0$'s, if the counter is negative, there have been more $0$'s than $1$'s, and if the counter is zero, there have been an equal number of $1$'s and $0$'s. Table \ref{tab:write operation} shows an example of a write operation being performed in a 7-dimensional memory.
 
 \begin{table}
 \begin{tabular}{c|c|c|c|c|c|c|c|}
-\cline{2-8} 
+\cline{2-8}
 $\eta$ & 0 & 1 & 1 & 0 & 1 & 0 & 0\tabularnewline
-\cline{2-8} 
+\cline{2-8}
 $\xi_{\textit{before}}$ & 6 & -3 & 12 & -1 & 0 & 2 & 4\tabularnewline
-\cline{2-8} 
+\cline{2-8}
 \multicolumn{1}{c}{} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ -1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ +1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ +1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ -1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ +1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ -1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ -1}}\tabularnewline
-\cline{2-8} 
+\cline{2-8}
 $\xi_{\textit{\textit{after}}}$ & \textbf{5} & \textbf{-2} & \textbf{13} & \textbf{-2} & \textbf{1} & \textbf{1} & \textbf{3}\tabularnewline
-\cline{2-8} 
+\cline{2-8}
 \end{tabular}
 
 \caption{Write operation example in a 7-dimensional memory of data $\eta$
@@ -92,13 +94,6 @@ One interesting view is that neurons in SDM work like pointers. As we write bits
 \caption{Hard-locations pointing, approximately, to the target bitstring.\label{fig-p1-pointers}}
 \end{figure}
 
-
-
-\section{Applications}
-
-SDM memory or an extension of it has been used in many applications, helping to solve specific problems. \citet{Snaider2011} extended SDM to efficiently store sequences of vectors and trees.  \citet{Rajesh1998} used SDM in an autonomous robot. \citet{Meng2009} modified SDM to clean patterns from noisy inputs.
-
-\citet{Linhares2011} showed that SDM respects the limits of short-term memory discussed by \citet{Miller1955} and \citet{Cowan2001}. This is the only work, to the author's knowledge, that explores some of intrinsic properties of SDM.
 
 
 \section{Concepts}
@@ -126,21 +121,21 @@ A member of my Master's committee, professor Paulo Murilo, has proposed a genera
 \begin{minipage}[t]{0.5\columnwidth}%
 \subfloat[Kanerva's read example\label{tab:kanerva-read}]{%
 \begin{tabular}{c|c|c|c|c|c|}
-\cline{2-6} 
+\cline{2-6}
 $\xi_{1}$ & -2 & 12 & 4 & 0 & -3\tabularnewline
-\cline{2-6} 
+\cline{2-6}
 $\xi_{2}$ & -5 & -4 & 2 & 8 & -2\tabularnewline
-\cline{2-6} 
+\cline{2-6}
 $\xi_{3}$ & -1 & 0 & -1 & -2 & -1\tabularnewline
-\cline{2-6} 
+\cline{2-6}
 $\xi_{4}$ & 3 & 2 & -1 & 3 & 1\tabularnewline
-\hline 
+\hline
 \multicolumn{1}{|c|}{\textbf{$\sum$}} & \textbf{-5} & \textbf{10} & \textbf{4} & \textbf{3} & \textbf{-5}\tabularnewline
-\hline 
+\hline
 \multicolumn{1}{c}{} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$}}\tabularnewline
-\cline{2-6} 
+\cline{2-6}
  & 0 & 1 & 1 & 1 & 0\tabularnewline
-\cline{2-6} 
+\cline{2-6}
 \end{tabular}
 
 }%
@@ -148,21 +143,21 @@ $\xi_{4}$ & 3 & 2 & -1 & 3 & 1\tabularnewline
 \begin{minipage}[t]{0.5\columnwidth}%
 \subfloat[Chada's read example\label{tab:chada-read}]{%
 \begin{tabular}{c|c|c|c|c|c|}
-\cline{2-6} 
+\cline{2-6}
 $\xi_{1}$ & -1 & 1 & 1 & \cellcolor{lightgray}1 & -3\tabularnewline
-\cline{2-6} 
+\cline{2-6}
 $\xi_{2}$ & -1 & -1 & 1 & 1 & -1\tabularnewline
-\cline{2-6} 
+\cline{2-6}
 $\xi_{3}$ & -1 & \cellcolor{lightgray}1 & -1 & -1 & -1\tabularnewline
-\cline{2-6} 
+\cline{2-6}
 $\xi_{4}$ & 1 & 1 & -1 & -1 & 1\tabularnewline
-\hline 
+\hline
 \multicolumn{1}{|c|}{\textbf{$\sum$}} & \textbf{-2} & \textbf{1} & \textbf{0} & \textbf{0} & \textbf{-2}\tabularnewline
-\hline 
+\hline
 \multicolumn{1}{c}{} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$}}\tabularnewline
-\cline{2-6} 
+\cline{2-6}
  & 0 & 1 & \cellcolor{lightgray}1 & \cellcolor{lightgray}1 & 0\tabularnewline
-\cline{2-6} 
+\cline{2-6}
 \end{tabular}
 
 }%
@@ -171,6 +166,7 @@ an activated hard-location and the values come from their counters.
 Gray cells' value is obtained randomly with probability 50\%.\label{tab:read-operation}}
 \end{table}
 
+My advisor, professor Alexandre Linhares, has proposed another read operation: the weighted reading. In it, the sum of the counter's value is weighted based on the distance between the hard-location's address and the reading address. The logic behind it is to change the importance of each hard-location inside the circle. We have tested how SDM behaves when the weight is calculated using the information given by each bitstring, i.e., $w(d) = -\log_2 \left( 2^{-N} \binom{N}{d} \right) = N - \log_2 \binom{N}{d}$, as in information theory \citep{cover2012elements}.
 
 
 \section{Critical Distance}
@@ -179,4 +175,4 @@ Kanerva describes the critical distance as the threshold of convergence of a seq
 
 In his book, Kanerva analyzed a specific situation with $n=1000$ ($N=2^{1000}$), 10 million hard-locations, an access-radius of 451 (within 1000 hard-locations in each circle) and 10 thousand writes of random bitstrings in the memory. As computer resources were very poor those days, Kanerva couldn't make a more generic analysis.
 
-Starting from the premise of SDM as a faithful model of human short-term memory, a better understanding of the critical distance may shed light on our understanding of the thresholds that bind our own memory.
+For further information about critical distance behavior, see \citet{Brogliato2011} and \citet{brogliato2014sparse}.
