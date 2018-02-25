@@ -1,3 +1,5 @@
+% !TEX root = ../partial-sdm.tex
+
 Sparse Distributed Memory (SDM) is a mathematical model for cognitive memory published by \citet{Kanerva1988}. It introduces many interesting mathematical properties of $n$-dimensional binary space that, in a memory model, are psychologically plausible.  Most notable among these are the tip-of-the-tongue phenomenon, conformity to Miller's magic number \citep{Linhares2011} and robustness against loss of neurons.
 
 Unlike traditional memory used by computers, SDM performs read and write operations in a multitude of addresses, also called neurons.  That is, the data is not written, or it is not read in a single address spot, but in many addresses. These are called activated addresses, or activated neurons.
@@ -94,13 +96,6 @@ One interesting view is that neurons in SDM work like pointers. As we write bits
 
 
 
-\section{Applications}
-
-SDM memory or an extension of it has been used in many applications, helping to solve specific problems. \citet{Snaider2011} extended SDM to efficiently store sequences of vectors and trees.  \citet{Rajesh1998} used SDM in an autonomous robot. \citet{Meng2009} modified SDM to clean patterns from noisy inputs.
-
-\citet{Linhares2011} showed that SDM respects the limits of short-term memory discussed by \citet{Miller1955} and \citet{Cowan2001}. This is the only work, to the author's knowledge, that explores some of intrinsic properties of SDM.
-
-
 \section{Concepts}
 
 Although Kanerva does not mention concepts directly in his book \citep{Kanerva1988}, the author's interpretation is that each bitstring may be mapped to a concept. Thus, unrelated concepts are orthogonal and concepts could be linked through a bitstring near both of them. For example, ``beauty'' and ``woman'' have distance $n/2$, but a bitstring that means ``beautiful woman'' could have distance $n/4$ to both of them. As a bitstring with distance $n/4$ is very improbable, it is linking those concepts together. \citet{Linhares2011} approached this concept via ``chunking through averaging''.
@@ -171,6 +166,7 @@ an activated hard-location and the values come from their counters.
 Gray cells' value is obtained randomly with probability 50\%.\label{tab:read-operation}}
 \end{table}
 
+My advisor, professor Alexandre Linhares, has proposed another read operation: the weighted reading. In it, the sum of the counter's value is weighted based on the distance between the hard-location's address and the reading address. The logic behind it is to change the importance of each hard-location inside the circle. We have tested how SDM behaves when the weight is calculated using the information given by each bitstring, i.e., $w(d) = -\log_2 \left( 2^{-N} \binom{N}{d} \right) = N - \log_2 \binom{N}{d}$, as in information theory \citep{cover2012elements}.
 
 
 \section{Critical Distance}
@@ -193,4 +189,4 @@ Starting from the premise of SDM as a faithful model of human short-term memory,
 
 \end{figure}
 
-Figure \ref{fig:crit-dist-10k-writes} compares the critical distance behavior under different scenarios.  This replicates our previous results and is a first part of the process of framework validation, to which we throw our attention next.
+Figure \ref{fig:crit-dist-10k-writes} compares the critical distance behavior under different scenarios.  This replicates our previous results \citet{Brogliato2011} and \citet{brogliato2014sparse} and is a first part of the process of framework validation, to which we throw our attention next.
