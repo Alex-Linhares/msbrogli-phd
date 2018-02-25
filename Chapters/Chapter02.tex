@@ -2,11 +2,11 @@
 
 Sparse Distributed Memory (SDM) \citep{Kanerva1988} is a mathematical model of long-term memory that has a number of neuroscientific and psychologically plausible dynamics. It has been applied in many different fields, like pattern recognition \citep{norman2003modeling, rao1995natural}, noise reduction \citep{Meng2009}, handwriting recognition \citep{fan1997genetic}, robot automation \citep{Rajesh1998, mendes2008robot}, and so forth. Despite all those applications, there is not a reference implementation which would allow one to replicate the results published in a paper, to check the source code for details, and to improve it. Thus, even though great results have been achieved using SDM, it requires great effort of researchers to improve someone's work.
 
-It is our belief that this tool could bring orders of magnitude more researchers and attention if they were able to use the model, at zero cost, with an easy to use high-level language such as python. Neuroscientists interested in long-term memory storage should not have to worry about high-bandwidth vector parallel computation.  This new tool provides a ready to use system in which experiments can be executed almost as soon as they are designed.  
+It is our belief that this tool could bring orders of magnitude more researchers and attention if they were able to use the model, at zero cost, with an easy to use high-level language such as python. Neuroscientists interested in long-term memory storage should not have to worry about high-bandwidth vector parallel computation.  This new tool provides a ready to use system in which experiments can be executed almost as soon as they are designed.
 
 Our motivation was our own effort in order to run our models. As there is no reference implementation, we had to implement our own and run several simulations to ensure that our implementation was correct and bug free. Thus, we had to deviate from our main goal --- which was to test our models --- and to focus in the implementation itself. Furthermore, new members in our research group had to go through different source codes developed by former members.
 
-The main contribution of this work is a reference implementation which yields (i) orders of magnitude gains in performance, (ii) has several backends and operations, (iii) has automatic tests, (iv) is cross-platform, and (v) is easily extended to fulfill other research models. Our reference implementation may, hopefully, accelerate research into the model's dynamics and make it easier to readers to replicate any previous results and easily understand the source-code of the model.  
+The main contribution of this work is a reference implementation which yields (i) orders of magnitude gains in performance, (ii) has several backends and operations, (iii) has automatic tests, (iv) is cross-platform, and (v) is easily extended to fulfill other research models. Our reference implementation may, hopefully, accelerate research into the model's dynamics and make it easier to readers to replicate any previous results and easily understand the source-code of the model.
 
 
 \chapter{Sparse Distributed Memory}
@@ -49,13 +49,13 @@ The address space is stored in an array of addresses, which, in turn, is stored 
 mycell/.style={draw, minimum size=7mm},
 matrixA/.style={matrix of nodes,
     nodes={mycell, anchor=center},
-    column sep=-\pgflinewidth, 
-    row sep=-\pgflinewidth, 
+    column sep=-\pgflinewidth,
+    row sep=-\pgflinewidth,
     },
 matrixB/.style={matrix of nodes,
     nodes={mycell, anchor=center},
-    column sep=-\pgflinewidth, 
-    row sep=-\pgflinewidth, 
+    column sep=-\pgflinewidth,
+    row sep=-\pgflinewidth,
 }]
 
 \matrix[matrixA] (A) { addr$_1$ & addr$_2$ & addr$_3$ & $\cdots$ & addr$_H$ \\ };
@@ -94,7 +94,7 @@ It is intriguing that none of those algorithms is able to solve our scanning pro
 
 Hence, as our best approach approach seems to be scanning through all hardlocations, we may distribute the scan into many tasks which will be executed independently. The tasks may be executed in different processes, threads, or even computers. They may also run in the CPU or in the GPU. In this case, we may take into account both the time required to distribute the tasks and the time to receive their results.
 
-The framework implements three main scanner algorithms: linear scanner, thread scanner, and OpenCL scanner. The linear scanner runs in a single core, is the slowest one, and was developed only for testing purposes; the thread scanner runs at the CPU in multiple threads sharing memory (and our recommendation is to use the number of threads equals to twice the number of CPU cores); and the OpenCL scanner runs in multiple GPU cores and support multiple devices. The speed of a scan depends on the CPU and GPU devices, thus the best approach to choose which scanner is best for one's setup is to run a benchmark. 
+The framework implements three main scanner algorithms: linear scanner, thread scanner, and OpenCL scanner. The linear scanner runs in a single core, is the slowest one, and was developed only for testing purposes; the thread scanner runs at the CPU in multiple threads sharing memory (and our recommendation is to use the number of threads equals to twice the number of CPU cores); and the OpenCL scanner runs in multiple GPU cores and support multiple devices. The speed of a scan depends on the CPU and GPU devices, thus the best approach to choose which scanner is best for one's setup is to run a benchmark.
 
 The OpenCL must be initialized, which just copies the hardlocations' addresses to the GPU's memory. Then, many scans may be executed with no necessity to upload the addresses again.
 
@@ -105,7 +105,7 @@ The framework has been validated comparing its results with the expected results
 
 SHOW THE RESULTS --- Kanerva's tables/figures vs Simulation.
 
-The objective here is twofold: (i) a single command will install the framework, and (ii) another single command will run (and display) the desired figures obtained the simulation. This will allow potential users to become familiarized with the system and its underlying code with barely any learning curve. 
+The objective here is twofold: (i) a single command will install the framework, and (ii) another single command will run (and display) the desired figures obtained the simulation. This will allow potential users to become familiarized with the system and its underlying code with barely any learning curve.
 
 One particular analysis of interest is that of the distance read at a point $\alpha$. Suppose an SDM is trying to read an item written at $\alpha$, but the cues received so far lead to a point of distance $d$ from $\alpha$.  As one reads at $\alpha+d$, a new bitstring $\beta$ is obtained, leading to our question: what is the new distance from $\alpha$ to $\beta$? Is it smaller or larger than $d$? That, of course, depends on the ratio between $d$ and the number of dimensions of the memory.  As we have found out, there are some deviations from Kanerva's original theoretical analysis and the results obtained by simulation.
 
@@ -141,11 +141,27 @@ To obtain the results from Fig. \ref{sdm-10000w-table-7-2} and \ref{sdm-100w-tab
 
 \begin{figure}[h]
 \centering\includegraphics[width=0.5\textwidth]{images02/sdm-10000w-notX-table-7-2.png}
-\caption{This graph shows the interaction effects more clearly.  As we include an opposite bitstring, one can see the accelerating effects towards convergence to both attractors: the origin and the opposite. Here we have the exact same configuration of Figure \ref{sdm-10000w-table-7-2}, with the addition of the single opposite attractor. 
+\caption{This graph shows the interaction effects more clearly.  As we include an opposite bitstring, one can see the accelerating effects towards convergence to both attractors: the origin and the opposite. Here we have the exact same configuration of Figure \ref{sdm-10000w-table-7-2}, with the addition of the single opposite attractor.
 \label{sdm-10000w-notX-table-7-2}}
 \end{figure}
 
 Obviously, these small deviations from Kanerva's original theoretical predictions deserve a qualification.  Kanerva was working in the 1980s and the 1990s, and had no access to the immense computational power that we do today. It is no surprise that some small interaction effects should exist as machines allow us to explore the ideas of his monumental work.
+
+\begin{figure}[h!]
+  \centering
+  \subfloat[$z \in \{.1, .2, .3, .4, .5, 1\}$]{\includegraphics[width=2.9in]{./images02/new-images/iter_z_01-05.png}}
+  \subfloat[$z \in \{1.5, 3, 4.5, 6\}$]{\includegraphics[width=2.9in]{./images02/new-images/z_15_3_45_6.png}}
+
+  \subfloat[$z \in \{0, 1\}$]{\includegraphics[width=2.9in]{./images02/new-images/z_0_1.png}}
+  \subfloat[$z \in \{0, 0.5, 1, 1.5, 3, 4.5, 6\}$]{\includegraphics[width=2.9in]{./images02/new-images/iter_z_all_2.png}}
+
+  \caption{(a) and (b) show the behavior of a single read; (c) and (d) present the effects of 6 iterative reads. As stated previously, we can see a deterioration of convergence, with lower critical distance as $z>1$.  Another observation can be made here, concerning the discrepancy of Kanerva's Fig 7.3 and our data.  It seems that Kanerva did not consider that a single read would only `clean' a small number of dimensions \emph{after the critical distance}. What we observe clearly is that with a single read, as the distance grows, the system only `cleans' towards the orthoghonal distance 500 after a number of iterative readings.}
+  \label{fig:murillo-generalization-experiments}
+\end{figure}
+
+Physicist Paulo Murilo observed that the models of Kanerva-read ($z=1$) and Chada-read ($z=0$) were simple variations of the exponent $z$, which suggests experimenting with different values. The results, however, have not yielded performance improvements.  Though for $z \leq 1$ results are comparable to $z=1$, for $z>1$, the system shows a clear deterioration, with a smaller distance to convergence and higher divergence at large-distance reads. This is shown in Figure \ref{fig:murillo-generalization-experiments}. 
+
+
 
 \section{Applications}
 
