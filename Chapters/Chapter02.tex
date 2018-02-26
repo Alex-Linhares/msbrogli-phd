@@ -134,7 +134,7 @@ There is also another special read operation: the weighted reading. The weight i
 
 
 
-\section{Framework Validation}
+\section{Results (i): Framework Validation}
 
 The framework has been validated comparing its results with the expected results from \citet{Kanerva1988}. Thus, we run simulations which were then compared to the theoretical analysis conducted some decades ago.
 
@@ -190,7 +190,7 @@ Obviously, these small deviations from Kanerva's original theoretical prediction
   \subfloat[$z \in \{0, 1\}$]{\includegraphics[width=2.9in]{./images02/new-images/z_0_1.png}}
   \subfloat[$z \in \{0, 0.5, 1, 1.5, 3, 4.5, 6\}$]{\includegraphics[width=2.9in]{./images02/new-images/iter_z_all_2.png}}
 
-  \caption{(a) and (b) show the behavior of a single read; (c) and (d) present the effects of 6 iterative reads. As stated previously, we can see a deterioration of convergence, with lower critical distance as $z>1$.  Another observation can be made here, concerning the discrepancy of Kanerva's Fig 7.3 and our data.  It seems that Kanerva did not consider that a single read would only `clean' a small number of dimensions \emph{after the critical distance}. What we observe clearly is that with a single read, as the distance grows, the system only `cleans' towards the orthoghonal distance 500 after a number of iterative readings.}
+  \caption{(a) and (b) show the behavior of a single read; (c) and (d) present the effects of 6 iterative reads. As stated previously, we can see a deterioration of convergence, with lower critical distance as $z>1$.  Another observation can be made here, concerning the discrepancy of Kanerva's Fig 7.3 and our data.  It seems that Kanerva may not have considered that a single read would only `clean' a small number of dimensions \emph{after the critical distance}. What we observe clearly is that with a single read, as the distance grows, the system only `cleans' towards the orthoghonal distance 500 after a number of iterative readings.}
   \label{fig:murillo-generalization-experiments}
 \end{figure}
 
@@ -198,23 +198,27 @@ Physicist Paulo Murilo observed that the models of Kanerva-read ($z=1$) and Chad
 
 
 
-\section{Applications}
-
-\subsection{Noise filter}
-
-We developed a noise filter using a SDM.
-
-
-\subsection{Classification filter}
-
-
-\section{Performance Results}
+\section{Results (ii): Performance}
 
 Our intention is to provide comparative performance metrics under different computation engines (CPU, GPU, etc) and different operating systems (Linux, MacOs, Windows, etc). Performance can be measured as the average number of scans of all hard locations per second, reads per second, writes per second, etc.
 
 Our first device is a personal MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU.  We also intend to test on machines such as the iMac with dedicated GPU, MacPro with dedicated GPU, and personal computers under Linux with dedicated GPUs.
 
 Beyond that, we are running as state-of-the-art devices: (i) an Amazon EC2 p3.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU, and (ii) an Amazon EC2 p3.8xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and 8x NVIDIA K80 GPU.
+
+
+
+\section{Results (iii): Noise filtering application}
+
+We developed a noise filter using a SDM.
+
+
+\section{Results (iv): Supervised classification application}
+
+
+
+\section{Results (v): The possibility of unsupervised reinforcement learning}
+
 
 
 \chapter{Conclusion}
