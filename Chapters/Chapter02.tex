@@ -2,18 +2,15 @@
 
 \chapter{Introduction}
 
-Sparse Distributed Memory (SDM) \citep{Kanerva1988} is a mathematical model of long-term memory that has a number of neuroscientific and psychologically plausible dynamics. It has been applied in many different fields, like pattern recognition \citep{norman2003modeling, rao1995natural}, noise reduction \citep{Meng2009}, handwriting recognition \citep{fan1997genetic}, robot automation \citep{Rajesh1998, mendes2008robot}, and so forth. Despite all those applications, there is not a reference implementation which would allow one to replicate the results published in a paper, to check the source code for details, and to improve it. Thus, even though great results have been achieved using SDM, it requires great effort of researchers to improve someone's work.
+Sparse Distributed Memory (SDM) \citep{Kanerva1988} is a mathematical model of long-term memory that has a number of neuroscientific and psychologically plausible dynamics. It has been applied in many different fields, like pattern recognition \citep{norman2003modeling, rao1995natural}, noise reduction \citep{Meng2009}, handwriting recognition \citep{fan1997genetic}, robot automation \citep{Rajesh1998, mendes2008robot}, and so forth. Despite all those applications, there is not a reference implementation which would allow one to replicate the results published in a paper, to check the source code for details, and to improve it. Thus, even though intriguing results have been achieved using SDM, it requires great effort of researchers to improve someone's work.
 
-It is our belief that this tool could bring orders of magnitude more researchers and attention if they were able to use the model, at zero cost, with an easy to use high-level language such as python. Neuroscientists interested in long-term memory storage should not have to worry about high-bandwidth vector parallel computation.  This new tool provides a ready to use system in which experiments can be executed almost as soon as they are designed.
+It is our belief that such a tool could bring orders of magnitude more researchers and attention if they were able to use the model, at zero cost, with an easy to use high-level language such as python. Neuroscientists interested in long-term memory storage should not have to worry about high-bandwidth vector parallel computation.  This new tool provides a ready to use system in which experiments can be executed almost as soon as they are designed.
 
 Our motivation was our own effort in order to run our models. As there is no reference implementation, we had to implement our own and run several simulations to ensure that our implementation was correct and bug free. Thus, we had to deviate from our main goal --- which was to test our models --- and to focus in the implementation itself. Furthermore, new members in our research group had to go through different source codes developed by former members.
 
-The main contribution of this work is a reference implementation which yields (i) orders of magnitude gains in performance, (ii) has several backends and operations, (iii) has automatic tests, (iv) is cross-platform, and (v) is easily extended to fulfill other research models. Our reference implementation may, hopefully, accelerate research into the model's dynamics and make it easier to readers to replicate any previous results and easily understand the source-code of the model.
+The main contribution of this work is a reference implementation which yields (i) orders of magnitude gains in performance, (ii) has several backends and operations, (iii) has automatic tests, (iv) is cross-platform, and (v) is easily extended to fulfill other research models. Our reference implementation may, hopefully, accelerate research into the model's dynamics and make it easier for readers to replicate any previous results and easily understand the source-code of the model.  Moreover, new machanisms and applications are also introduced.
 
-SDM memory or an extension of it has been used in many applications, helping to solve specific problems. \citet{Snaider2011} extended SDM to efficiently store sequences of vectors and trees.  \citet{Rajesh1998} used SDM in an autonomous robot. \citet{Meng2009} modified SDM to clean patterns from noisy inputs.
-
-\citet{Linhares2011} showed that SDM respects the limits of short-term memory discussed by \citet{Miller1955} and \citet{Cowan2001}. This is the only work, to the author's knowledge, that explores some of intrinsic properties of SDM.
-
+SDM, extensions of it, has been used in many applications. For example, \citet{Snaider2011} extended SDM to efficiently store sequences of vectors and trees.  \citet{Rajesh1998} used SDM in an autonomous robot. \citet{Meng2009} modified SDM to clean patterns from noisy inputs. \citet{Linhares2011} showed that SDM respects the limits of short-term memory discussed by \citet{Miller1955} and \citet{Cowan2001}.
 
 \chapter{Sparse Distributed Memory}
 
@@ -22,7 +19,7 @@ SDM memory or an extension of it has been used in many applications, helping to 
 
 \chapter{Framework Architecture}
 
-The framework implements the basic operations in a Sparse Distributed Memory which may be used to create more complex operations. It is developed in C language --- which may be loaded in many platforms and programming languages --- with a wrapper in Python. The Python module makes it easy to create and execute simulations in a Sparse Distributed Memory and works properly in Jupyter Notebook \citep{kluyver2016jupyter}. It works in both Python 2 and Python 3.
+The framework implements the basic operations in a Sparse Distributed Memory which may be used to create more complex operations. It is developed in C language and the OpenCL parallel framework --- which may be loaded in many platforms and programming languages --- with a wrapper in Python. The Python module makes it easy to create and execute simulations in a Sparse Distributed Memory and works properly in Jupyter Notebook \citep{kluyver2016jupyter}. It works in both Python 2 and Python 3.
 
 We split the SDM memory in two parts: the hard-location addresses and the hard-location counters. Thus, the addresses (bitstrings) of the hard-locations are stored in one array, while their counters in another. This makes possible to create multiple SDMs using the same address space, which would save computational effort to scan a bitstring in all the SDMs --- since they share the same address space, the activated hard-locations will be same in all of them. As the slowest part of reading and writing operations is scanning the address space, the performance benefits are high.
 
@@ -30,7 +27,7 @@ Each part may be stored either in the RAM memory or in a file. The RAM memory is
 
 Let a SDM memory with $N$ dimensions and $H$ hard-locations. Then, in a 64-bit computer, the array of hard-location addresses will use $H \cdot 8 \cdot \lceil N/64 \rceil$ bytes of memory, and there will be $H \cdot N$ hard-location counters. For example, in a SDM memory with 1,000 dimensions and 1,000,000 hard-locations, using 32-bit integers for the counters, the array of addresses will use 122MB of memory and the counters will use 3.8 GB of memory.
 
-Basic operations were grouped in four sets: (i) for bitstrings, (ii) for addresses, (iii) for counters, and (iv) for memories (SDMs). Operations include creating new bitstrings, flipping bits, generating bitstring with a specific distance from a given bitstring, scanning the address space using different algorithms, writing a bitstring to a counter, writing in an SDM, reading from an SDM, and iteratively reading from an SDM until convergence.
+Basic operations were grouped in four sets: (i) for bitstrings, (ii) for addresses, (iii) for counters, and (iv) for memories (SDMs). Operations include creating new bitstrings, flipping bits, generating a bitstring with a specific distance from a given bitstring, scanning the address space using different algorithms, writing a bitstring to a counter, writing in an SDM, reading from an SDM, and iteratively reading from an SDM until convergence.
 
 
 \section{Bitstring}
@@ -40,11 +37,11 @@ Bitstrings are the main structure of SDM. The addresses are represented in bitst
 For instance, a 1,000-bit bitstring will have $\lceil 1000/64 \rceil = 16$ integers. These integers will have a total of $16 \cdot 64 = 1,024$ bits. The remaining 24 bits are always zero, so they do not affect the result of any operation. Bitstrings store neither how many bits they have nor the array length. These pieces of information are only stored in the address space.
 
 
-\subsection{The distace between two bitstrings}
+\subsection{The distance between two bitstrings}
 
 The distance between two bitstrings is calculated by the hamming distance, which is the number of different bits between them.
 
-It is calculated counting the number of ones in the exclusive or (xor) between the bitstrings, i.e., $d(x, y) = \text{number of ones in} x \oplus y$. There are several algorithms to calculate the number of ones \citep{warren2013hacker}, but the performance depends on the processor. So, we have implemented three different algorithms and one may be selected through compiling flags. The default algorithm is to use a builtin instruction from the compiler.
+It is calculated counting the number of ones in the exclusive or (xor) between the bitstrings, i.e., $d(x, y) = \text{number of ones in } x \oplus y$. There are several algorithms to calculate the number of ones \citep{warren2013hacker}, but the performance depends on the processor. So, we have implemented three different algorithms and one may be selected through compiling flags. The default algorithm is to use a builtin instruction from the compiler.
 
 An alternative algorithm available is the lookup. It pre-calculates a table of distances --- by default, it is a 16-bit table which uses 65MB of RAM, but one may increase to a 32-bit table which uses 4GB of RAM ---, which is accessed a few times. Finally, to calculate the distance between two bitstrings, it sums the distance of each 16-bit part of the bitstrings, i.e., $d(x[0:N-1], y[0:N-1]) = d(x[0:15], y[0:15]) + d(x[16:31], y[16:31]) + \dots$. As each distance is calculated in O(1), this algorithm runs in O($\lceil bits/16 \rceil$).
 
@@ -53,7 +50,7 @@ An alternative algorithm available is the lookup. It pre-calculates a table of d
 
 An address space is a fixed collection of bitstrings, and each bitstring represents a hard-location address. They store the number of bitstrings, as well as the number of bits, number of integers per bitstring, and the number of remaining bits.
 
-Bitstrings are stored in a contiguous array of 64-bit integers, as shown in Figure \ref{tab:hl-addresses-detail}. Hence, there is some performance improvement when they are accessed \citep{pai2004linux}.
+Bitstrings are stored in a contiguous array of 64-bit integers, as shown in Figure \ref{tab:hl-addresses-detail}. Hence, basic pointer arithmetic provides us with performance improvements in their access, as processors realize fechts of contiguous chunks of memory  \citep{pai2004linux}.
 
 \begin{figure}
 \centering
@@ -95,16 +92,15 @@ node [pos=0.5,anchor=north,yshift=-0.5cm] {N bits};
 \caption{Address space's bitstrings are stored in a contiguous array. In a 64-bit computer, each bitstring is stored in a sub-array of 64-bit integers, with length $8 \cdot \lceil N/64 \rceil$.\label{tab:hl-addresses-detail}}
 \end{figure}
 
-
-The scan for activated hard-locations is performed in an address space. It returns the indexes of the bitstrings which were inside the circle. Then, each operation uses these index in a different way.
+The scan for activated hard-locations is performed in an address space. It returns the indexes of the bitstrings which were inside the circle. Then, each operation uses this index in a different way.
 
 \subsection{Scanning for activated hard-locations}
 
-Scanning for the activated hard-locations is a problem similar to well-known problems in computation geometry called ``range reporting in higher dimensions''. In this case, none of the known algorithms is able to solve our problem faster than $O(n)$. The algorithm which seems to best fit in our problem consumes $O(n)$ space and runs in $O(\log^d(n))$ \citep{chazelle1988functional}, which is really slower than $O(n)$ when, for instance, $n=1,000,000$ and $d=1,000$. For a review of the algorithms, see \citet{chan2011orthogonal}.
+Scanning for the activated hard-locations is a problem similar to well-known problems in computational geometry called ``range reporting in higher dimensions''. In this case, none of the known algorithms is able to solve our problem faster than $O(n)$. The algorithm which seems to best fit in our problem consumes $O(n)$ space and runs in $O(\log^d(n))$ \citep{chazelle1988functional}, which is really slower than $O(n)$ when, for instance, $n=1,000,000$ and $d=1,000$. For a review of the algorithms, see \citet{chan2011orthogonal}.
 
 In 2014, there was published a solution to fast search in hamming space which seems applicable to our problem \citet{norouzi2014fast}. It provides a fast search when $r/b < 0.11$ or $r/b < 0.06$, where $r$ is the radius and $b$ is the number of bits. But, in our case, for a 1,000 bits SDM, $r/b = 0.451$, which changes the runtime to $O(n^{0.993})$. This is really close to $O(n)$, but with a larger constant. Hence, $O(n)$ is still faster.
 
-It is intriguing that none of those algorithms is able to solve our scanning problem. The idea behind those computation geometry algorithms is roughly to split the search space in half each step, which would take $O(\log(n))$ to go through the whole space. But this approach does not work because of the high number of dimensions (i.e., 1,000) and because the hardlocations' addresses are randomly sampled from the ${0, 1}^d$ space. So, each addresses' bit itself splits the hardlocations in half, but it does not split the search space in half since both halves still must be convered by the algorithm. For instance, let's say we have 1,000 dimensions with 1,000,000 hardlocations, and we are scanning within a circle with radius 451, then after checking the first bit we have two cases: (i) for the half with the same first bit, we must keep scanning with radius 451; and (ii) for the half with a different first bit, we must keep scanning with radius 450. The search space has not been split in half because both halves have been covered (and one of them should have been skipped).
+It is intriguing that none of those algorithms is able to solve our scanning problem. The idea behind those computational geometry algorithms is roughly to split the search space in half each step, which would take $O(\log(n))$ to go through the whole space. But this approach does not work because of the high number of dimensions (i.e., 1,000) and because the hardlocations' addresses are randomly sampled from the $\{0, 1\}^d$ space. So, each addresses' bit itself splits the hardlocations in half, but it does not split the search space in half since both halves still must be convered by the algorithm. For instance, let's say we have 1,000 dimensions with 1,000,000 hardlocations, and we are scanning within a circle with radius 451, then after checking the first bit we have two cases: (i) for the half with the same first bit, we must keep scanning with radius 451; and (ii) for the half with a different first bit, we must keep scanning with radius 450. The search space has not been split in half because both halves have been covered (and one of them should have been skipped).
 
 Hence, as our best approach is to scan through all hardlocations, we may distribute the scan into many tasks which will be executed independently. The tasks may be executed in different processes, threads, or even computers. They may also run in the CPU or in the GPU. In this case, we may take into account both the time required to distribute the tasks and the time to receive their results.
 
@@ -119,7 +115,7 @@ Each hard-location has one integer of data per bit. For instance, each hard-loca
 
 A counter is an array of integers which stores the data of all hard-locations. So, the counter's array has $N \cdot H$ integers.
 
-When two counters are added in a third counter, there may occur an overflow. Counters may have overflow protection depending on compiling options. By default, there is no overflow check for performance reasons. It is not supposed to be a problem because each counter is a signed 32-bit integer which can store any number between -2,147,483,648 and 2,147,483,647 (and they will not overflow with less than $2^{31}-1$ divided by the number of activated hard-locations). For instance, when $N=1,000$, $H=1,000,000$, and $r=451$, the average number of activated hard-locations is 1,000 and it would require at least one million writes to be possible to overflow a counter.
+When two counters are added in a third counter, there may occur an overflow. Counters may have overflow protection depending on compiling options. By default, there is no overflow check for performance reasons. It is not supposed to be a problem because each counter is a signed 32-bit integer which can store any number between -2,147,483,648 and 2,147,483,647 (and they will not overflow with less than $2^{31}-1$ divided by the number of activated hard-locations). For instance, when $N=1,000$, $H=1,000,000$, and $r=451$, the average number of activated hard-locations is 1,000 and it would require at least one million writes to be possible to overflow a counter.  Note also that it would be improbable for a hard location dimension to be this biased before the complete saturation of the memory.
 
 
 \section{Read and write operations}
@@ -128,7 +124,7 @@ The reading and writing operations are executed in two steps: first, the address
 
 The iterated reading keeps reading until it gets exactly the same bitstring (or the number of maximum interations has been reached), i.e., it performs $\eta_{i+1} = \text{read}(\eta_i)$ and stops when $\eta_{k+1} = \eta_{k}$. If the initial bitstring is inside the critical distance of $\eta$, it will converge to $\eta$, but, if it is not, it will diverge and reach the maximum number of iterations.
 
-It is available both Kanerva's read and Chada's read. The latter was implemented according to a generalization proposed by professor Paulo Murilo (personal communication). The generalization has a $z$ parameters, which is the expoent of the counter. In this case, the results are floating point instead of integer, which reduces considerably the performance. When $z=1$, it is exactly as the Kanerva's read. When $z=0$, it is the Chada's read. We also explored how SDM would behave for different values of $z$.
+The framework is available both Kanerva's read and Chada's read. The latter was implemented according to a generalization proposed by physics professor Paulo Murilo of UFF during the discussion of my master's defense. The generalization brings a parameter $z$, which is the exponent of the counter. In this case, the results are floating point instead of integer, which considerably reduces performance. When $z=1$, it is exactly as the Kanerva's read. When $z=0$, it is the Chada's read. We also explored how SDM would behave for different values of $z$.
 
 There is also another special read operation: the weighted reading. The weight is retrieved from a lookup table of integers based on the distance between the hard-location's address and the reading address. The weight is multiplied by the counter's value and summed. The rest of the read operation is exactly the same.
 
@@ -138,9 +134,7 @@ There is also another special read operation: the weighted reading. The weight i
 
 The framework has been validated comparing its results with the expected results from \citet{Kanerva1988}. Thus, we run simulations which were then compared to the theoretical analysis conducted some decades ago.
 
-SHOW THE RESULTS --- Kanerva's tables/figures vs Simulation.
-
-The objective here is twofold: (i) a single command will install the framework, and (ii) another single command will run (and display) the desired figures obtained the simulation. This will allow potential users to become familiarized with the system and its underlying code with barely any learning curve.
+The objective here is twofold: (i) a single command will install the framework, and (ii) another single command will run (and display) the desired figures obtained the simulation. This will allow potential users to become familiarized with the system and its underlying code with barely any learning curve beyond scientific python and jupyter notebooks.
 
 One particular analysis of interest is that of the distance read at a point $\alpha$. Suppose an SDM is trying to read an item written at $\alpha$, but the cues received so far lead to a point of distance $d$ from $\alpha$.  As one reads at $\alpha+d$, a new bitstring $\beta$ is obtained, leading to our question: what is the new distance from $\alpha$ to $\beta$? Is it smaller or larger than $d$? That, of course, depends on the ratio between $d$ and the number of dimensions of the memory.  As we have found out, there are some deviations from Kanerva's original theoretical analysis and the results obtained by simulation.
 
@@ -151,7 +145,7 @@ As we ran the simulations reflecting some of Kanerva's graphs, one in particular
 \citet{Kanerva1988} originally predicted a \textasciitilde 500-bit distance after a point (Fig. \ref{kanerva-table-7-2}). The original prediction considered that the read distance would decline when inside the critical distance in increase afterwards, converging to a \textasciitilde 500-bit distance.  At this point, each read would lead to a different, orthogonal, \textasciitilde 500-bit distance point.
 
 \begin{figure}[h]
-\centering\includegraphics[width=0.5\textwidth]{images02/kanerva-table-7-2-original.png}
+\centering\includegraphics[width=0.8\textwidth]{images02/kanerva-table-7-2-original.png}
 \caption{Kanerva's original Figure 7.3 (p. 70) predicting a \textasciitilde 500-bit distance after a point.
 \label{kanerva-table-7-2}}
 \end{figure}
@@ -159,15 +153,15 @@ As we ran the simulations reflecting some of Kanerva's graphs, one in particular
 Our preliminary results show that the theoretical prediction is not accurate.  There are interaction effects from one or more of the attractors created by the 10,000 writes, and these attractors seem to raise the distance beyond \textasciitilde 500 bits (Fig. \ref{sdm-10000w-table-7-2}). Our results were obtained using a 1,000 bit, 1,000,000 hard-location SDM with exactly 10,000 random bitstrings written into it, the same used by Kanerva.
 
 \begin{figure}[h]
-\centering\includegraphics[width=0.5\textwidth]{images02/sdm-10000w-table-7-2.png}
+\centering\includegraphics[width=0.8\textwidth]{images02/sdm-10000w-table-7-2.png}
 \caption{Results generated by the framework diverging from Kanerva's original Table 7.2. Here we had a 1,000 bit, 1,000,000 hard-location SDM with exactly 10,000 random bitstrings written into it, which was also Kanerva's configuration.
 \label{sdm-10000w-table-7-2}}
 \end{figure}
 
-But, when we reduced the number of random bitstrings written in the SDM from 10,000 to only 100, the results reflected very well the Kanerva's theoretical expectation (Fig. \ref{sdm-100w-table-7-2}). This result strengthen our theory that the disparities in the computational results are due to the interaction effect of different attractors.
+But, when we reduced the number of random bitstrings written in the SDM from 10,000 to only 100, the results reflected very well the Kanerva's theoretical expectation (Fig. \ref{sdm-100w-table-7-2}). This result strengthens our hypothesis that the disparities in the computational results are due to the interaction effect of high numbers of different attractors.
 
 \begin{figure}[h]
-\centering\includegraphics[width=0.5\textwidth]{images02/sdm-100w-table-7-2.png}
+\centering\includegraphics[width=0.8\textwidth]{images02/sdm-100w-table-7-2.png}
 \caption{Results generated by the framework similar from Kanerva's original Table 7.2. It was a 1,000 bit, 1,000,000 hard-location SDM with exactly 100 random bitstrings written into it.
 \label{sdm-100w-table-7-2}}
 \end{figure}
@@ -175,7 +169,7 @@ But, when we reduced the number of random bitstrings written in the SDM from 10,
 To obtain the results from Fig. \ref{sdm-10000w-table-7-2} and \ref{sdm-100w-table-7-2}, we had to write 10,000 random bitstrings to an SDM, and then randomly choose one of those bitstrings to be our origin. Finally, we randomly flipped some bits from the origin bitstring and executed a reading operation in the SDM. Thereby, in order to show the interaction effects more clearly, we wrote a handmade bitstring to the SDM which had all bits inverted in relation to the origin bitstring --- their hamming distance was equal to 1,000. Our handmade bitstring was acting as an opposite attractor, and one can see the accelerating effects towards convergence to both attractors: the origin and the handmade bitstrings (Fig. \ref{sdm-10000w-notX-table-7-2}). Here we had the exact same configuration of Figure \ref{sdm-10000w-table-7-2}, with the addition of the single opposite attractor.
 
 \begin{figure}[h]
-\centering\includegraphics[width=0.5\textwidth]{images02/sdm-10000w-notX-table-7-2.png}
+\centering\includegraphics[width=0.8\textwidth]{images02/sdm-10000w-notX-table-7-2.png}
 \caption{This graph shows the interaction effects more clearly.  As we include an opposite bitstring, one can see the accelerating effects towards convergence to both attractors: the origin and the opposite. Here we have the exact same configuration of Figure \ref{sdm-10000w-table-7-2}, with the addition of the single opposite attractor.
 \label{sdm-10000w-notX-table-7-2}}
 \end{figure}
@@ -220,14 +214,32 @@ We developed a noise filter using a SDM.
 \section{Results (v): The possibility of unsupervised reinforcement learning}
 
 
+\section{Results (vi): Information theoretical write operation}
+
+\begin{figure}[h!]
+  \centering
+  \subfloat[Kanerva's model]{\includegraphics[width=\linewidth]{./images02/new-images/kanerva-15iter-reads.jpeg}}
+
+  \subfloat[Write process weighted by the amount of information contained in the distance between the written bitstring and each hard location]{\includegraphics[width=\linewidth]{./images02/new-images/info-theory-15iter-reads.jpeg}}
+
+
+  \caption{(a) and (b) show the behavior of the critical distance under Kanerva's model and the information-theoretic one, respectively.}
+  \label{fig:info-theory-experiments}
+\end{figure}
+
+
+My advisor, Alexandre Linhares, has proposed another read operation: the weighted reading. In it, the sum of the counter's value is weighted based on the distance between the hard-location's address and the reading address. The logic behind it is to vary the importance of each hard-location inside the circle.  It is only natural that one encodes an item in near hard locations with a stronger signal, and a natural candidate for this signal function is the amount of information contained in the distance between the item and each hard location.  Closer hard locations have lower probabilies and therefore should encode more information. We know that the probability of a distance $d$ is $\binom{N}{d}/2^N$, and, acordingly, we have tested how SDM behaves when write weights are calculated using the amount of information given by each bitstring, i.e., $w(d) = -\log_2 \left( 2^{-N} \binom{N}{d} \right) = N - \log_2 \binom{N}{d}$, as in information theory \citep{cover2012elements}.
+
+The results can be seen in Figure \ref{fig:info-theory-experiments} and seem promising. It seems that the critical distance increases by a number of bits.  Note that 10 additional bits imply an attractor $2^{10}$ of the size of the original. Another point to keep in mind is that, since the modulus of the vectors are not uniform in this approach, that the shape of the attractor may have large asymmetries.
+
 
 \chapter{Conclusion}
 
 Sparse Distributed Memory is a viable model of human memory, yet it does require researchers to (re-)implement a number of parallel algorithms in different architectures.
 
-We propose to provide a new, open-source, cross-platform, highly parallel framework in which researchers may be able to create hypothesis and test them computationally through minimal effort. Though the framework is not well-documented for public release at this time, it has already served as the backbone of Chada's Ph.D. thesis. The single-line command ``pip install sdm'' will install the framework on posix-like systems, and single-line commands will let users test the framework, generate some of the figures from Kanerva's theoretical predictions in their own machines, and --- if interested enough ---, test their own theories and improve the framework in an open-source fashion. It is our belief that such work is a necessary component towards accelerating research in this promising field.
+We propose to provide a new, open-source, cross-platform, highly parallel framework in which researchers may be able to create hypotheses and test them computationally through minimal effort. The framework is well-documented for public release at this time (http://sdm-framework.readthedocs.io), it has already served as the backbone of Chada's Ph.D. thesis. The single-line command ``pip install sdm'' will install the framework on posix-like systems, and single-line commands will let users test the framework, generate some of the figures from Kanerva's theoretical predictions in their own machines, and --- if interested enough ---, test their own theories and improve the framework, and the benchmarks used to evaluate the framework, in open-source fashion. It is our belief that such work is a necessary component towards accelerating research in this promising field.
 
-We have generated a Docker image, which makes it even easier to explore the framework. After running the container, a Jupyter Notebook is avaiable with sdm-framework and other tools already installed. The simulations run in this thesis are promptly available to be re-executed and explored. We invite the reader to take a look and explore a little bit.
+We have generated a Docker image, which makes it even easier to explore the framework. After running the container, a Jupyter Notebook is available with sdm-framework and other tools already installed. The simulations run in this thesis are promptly available to be re-executed and explored. We invite the reader to take a look and explore a little bit.
 
 % TODO Include in the to do list simulations based on the suggestion of Murilinho.
 
