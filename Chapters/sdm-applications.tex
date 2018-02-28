@@ -177,7 +177,45 @@ We have done some experiments with an SDM as a memory for a TicTacToe player. Ba
 
 Our algorithm to decide what should be player is very simples: it read the current board from SDM. If the reading converges to another board, it chooses the movement which would bring the current board to the one read from SDM. If the reading does not converge, it just play randomly.
 
-After a game has finished, it is time to learn from its decisions. Thus, if SDM wins the game, it will write the whole sequence of boards to SDM. Let $b_0, b_1, b_2, \dots, b_n$ be the board sequence of the game. Then it will write $b_0 \rightarrow b_1 \rightarrow b_2 \rightarrow \cdots \rightarrow b_n$, with possibly different weights for each transition. If it loses, it will reverse the board (replace X by O and vice versa), and will act as if it had won. Hence, it will learn which sequences lead to victory. When a new board appears, it may have already seen that situation and will decide according to the sequences which goes towards victory. This is our positive reward learning.
+After a game has finished, it is time to learn from its decisions. Thus, if SDM wins the game, it will write the whole sequence of boards to SDM. Let $b_0, b_1, b_2, \dots, b_n$ be the board sequence of the game (see Figure \ref{fig-ttt-example}). Then it will write $b_0 \rightarrow b_1 \rightarrow b_2 \rightarrow \cdots \rightarrow b_n$, with possibly different weights for each transition. If it loses, it will reverse the board (replace X by O and vice versa), and will act as if it had won. Hence, it will learn which sequences lead to victory. When a new board appears, it may have already seen that situation and will decide according to the sequences which goes towards victory. This is our positive reward learning.
+
+\begin{figure}
+    \captionsetup[subfigure]{labelformat=empty}
+
+    \subfloat[$b0$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+     & & \\\hline  & & \\\hline  & &
+    \end{tabular}}
+    $\rightarrow$
+    \subfloat[$b1$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+     & & \\\hline  &x& \\\hline  & &
+    \end{tabular}}
+    $\rightarrow$
+    \subfloat[$b2$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+     & & \\\hline o&x& \\\hline  & &
+    \end{tabular}}
+    $\rightarrow$
+    \subfloat[$b3$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+    x& & \\\hline o&x& \\\hline  & &
+    \end{tabular}}
+    $\rightarrow$
+    \subfloat[$b4$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+    x& & \\\hline o&x& \\\hline  & &o
+    \end{tabular}}
+    $\rightarrow$
+    \subfloat[$b5$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+    x&x& \\\hline o&x& \\\hline  & &o
+    \end{tabular}}
+    $\rightarrow$
+    \subfloat[$b6$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+    x&x&o\\\hline o&x& \\\hline  & &o
+    \end{tabular}}
+    $\rightarrow$
+    \subfloat[$b7$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+    x&x&o\\\hline o&x& \\\hline  &x&o
+    \end{tabular}}
+
+    \caption{Example of a game with 7 movements in which X wins.\label{fig-ttt-example}}
+\end{figure}
 
 It is also important to learn when a draw happens --- after all, it is better to tie than to lose, right? In this case, the sequence of boards is also written to SDM, but with no weight at all. So, if the board has appeared both in a tie sequence and in a winning sequence, it would be more likely to choose the winning one because it was written with greater weight. This is our neutral reward learning.
 
@@ -200,6 +238,7 @@ The weight used when writing a winning sequence is calculated using ...
 It is an unsupervised algorithm because SDM learns playing against an opponent, who may be another SDM player, a human, or a player whose movements are always aleatory.
 
 Thus, in order to train a SDM player, we just have to keep it playing over and over.
+
 
 \begin{forest}
   TTT/.style args={#1:#2}{
