@@ -1,6 +1,6 @@
 % !TEX root = ../partial-sdm.tex
 
-\section{Results (iv): Supervised classification application}
+\chapter{Results (iv): Supervised classification application}
 
 Supervised classification problem consists of categorize data into groups after seeing some samples from each group. First, it is presented pieces of data with their categories. The algorithm learns from these data, which is known as learning phase. Then, new pieces of data are presented and the algorithm must classify them into the already known groups. It is named supervised because  the algorithm will not create the groups itself. It will learn the groups from during the learning phase, in which the groups have already been defined and the pieces of data have already been classified into them.
 
@@ -149,7 +149,7 @@ The critical distance plays an important role in the classification error. As we
 These results show that the SDM may be used as a supervised classification algorithm. Although we do not believe that the mapping between images and bitstrings are even close to the way human cognition deals with images, we believe the results are interesting and useful to many possible real world problems.
 
 
-\section{Results (iii): Supervised image noise filtering application}
+\chapter{Results (iii): Supervised image noise filtering application}
 
 Image noise filtering consists in removing the noise from an input, in out case an image. Our images are black \& white images and the noise is generated randomly flipping some of their pixels from black to while and vice versa. In Figure \ref{fig-filter-progressive-noise}, we may see an image with different levels of noise, from 0\% to 45\% in steps of 5\%. It makes no sense to apply 50\% of noise because it would absolutely randomize the image.
 
@@ -167,7 +167,7 @@ Finally, in order to remove the noise of a new image, first we have to classify 
 
 
 
-\section{Results (v): The possibility of unsupervised reinforcement learning}
+\chapter{Results (v): The possibility of unsupervised reinforcement learning}
 
 Reinforcement learning has increasing prominence in the media after AlphaZero has won all games from both the best chess grandmasters in the world and the best chess engines. What is incredible about these victories is that AlphaZero has almost no knowledge about chess game and has learned all its movement playing against itself for 4 hours. Basically, it knowns only the valid movements and had to learn everything from scratch, which it did using a reinforcement learning algorithm.
 
@@ -177,7 +177,46 @@ We have done some experiments with an SDM as a memory for a TicTacToe player. Ba
 
 Our algorithm to decide what should be player is very simples: it read the current board from SDM. If the reading converges to another board, it chooses the movement which would bring the current board to the one read from SDM. If the reading does not converge, it just play randomly.
 
-After a game has finished, it is time to learn from its decisions. Thus, if SDM wins the game, it will write the whole sequence of boards to SDM. Let $b_0, b_1, b_2, \dots, b_n$ be the board sequence of the game. Then it will write $b_0 \rightarrow b_1 \rightarrow b_2 \rightarrow \cdots \rightarrow b_n$, with possibly different weights for each transition. If it loses, it will reverse the board (replace X by O and vice versa), and will act as if it had won. Hence, it will learn which sequences lead to victory. When a new board appears, it may have already seen that situation and will decide according to the sequences which goes towards victory. This is our positive reward learning.
+After a game has finished, it is time to learn from its decisions. Thus, if SDM wins the game, it will write the whole sequence of boards to SDM. Let $b_0, b_1, b_2, \dots, b_n$ be the board sequence of the game (see Figure \ref{fig-ttt-example}). Then it will write $b_0 \rightarrow b_1 \rightarrow b_2 \rightarrow \cdots \rightarrow b_n$, with possibly different weights for each transition. If it loses, it will reverse the board (replace X by O and vice versa), and will act as if it had won. Hence, it will learn which sequences lead to victory. When a new board appears, it may have already seen that situation and will decide according to the sequences which goes towards victory. This is our positive reward learning.
+
+\begin{figure}
+    \captionsetup[subfigure]{labelformat=empty}
+    %\centering
+
+    \subfloat[$b0$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+     & & \\\hline  & & \\\hline  & &
+    \end{tabular}}
+    {$\xrightarrow{w_0}$}
+    \subfloat[$b1$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+     & & \\\hline  &x& \\\hline  & &
+    \end{tabular}}
+    {$\xrightarrow{w_1}$}
+    \subfloat[$b2$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+     & & \\\hline o&x& \\\hline  & &
+    \end{tabular}}
+    {$\xrightarrow{w_2}$}
+    \subfloat[$b3$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+    x& & \\\hline o&x& \\\hline  & &
+    \end{tabular}}
+    {$\xrightarrow{w_3}$}
+    \subfloat[$b4$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+    x& & \\\hline o&x& \\\hline  & &o
+    \end{tabular}}
+    {$\xrightarrow{w_4}$}
+    \subfloat[$b5$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+    x&x& \\\hline o&x& \\\hline  & &o
+    \end{tabular}}
+    {$\xrightarrow{w_5}$}
+    \subfloat[$b6$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+    x&x&o\\\hline o&x& \\\hline  & &o
+    \end{tabular}}
+    {$\xrightarrow{w_6}$}
+    \subfloat[$b7$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
+    x&x&o\\\hline o&x& \\\hline  &x&o
+    \end{tabular}}
+
+    \caption{Example of a game with 7 movements in which X wins.\label{fig-ttt-example}}
+\end{figure}
 
 It is also important to learn when a draw happens --- after all, it is better to tie than to lose, right? In this case, the sequence of boards is also written to SDM, but with no weight at all. So, if the board has appeared both in a tie sequence and in a winning sequence, it would be more likely to choose the winning one because it was written with greater weight. This is our neutral reward learning.
 
@@ -200,5 +239,32 @@ The weight used when writing a winning sequence is calculated using ...
 It is an unsupervised algorithm because SDM learns playing against an opponent, who may be another SDM player, a human, or a player whose movements are always aleatory.
 
 Thus, in order to train a SDM player, we just have to keep it playing over and over.
+
+
+\begin{forest}
+  TTT/.style args={#1:#2}{
+    make tab/.expanded=\forestove{content},
+    label={\pgfkeysvalueof{/forest/label position #1}:$#2$}
+  },
+  TTT*/.style={
+    make tab=::/::/::,
+    content/.expand once=%
+    \expandafter\vphantom\expandafter{\romannumeral-`0\forestov{content}},
+    draw=none,
+    append after command={(\tikzlastnode.north) edge (\tikzlastnode.south)},
+    for descendants={before computing xy={l*=1.2}},
+  },
+  th/.style=thick,
+  for tree={node options=draw, inner sep=+0pt, parent anchor=south, child anchor=north}
+%
+[::/::/::, TTT=r:1
+  [x::/::/::, TTT=r:-1
+    [x::/::/::, TTT=r:-1
+      [x::/::/::, TTT=r:-1
+      ]
+    ]
+  ]
+]
+\end{forest}
 
 \subsection{Results}
