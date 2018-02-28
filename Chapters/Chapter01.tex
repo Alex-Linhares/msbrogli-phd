@@ -5,6 +5,8 @@
 % TODO Include mining-pool proof of hashpower statistics.
 % TODO A transaction must confirm the outputs which it is spending (?)
 
+% TODO Lightning network, é uma solução de scaling? Parece que não.
+
 \chapter{Introduction}
 
 The main problem when one is trying to create a digital money is how to prevent double spending. As the money is digital, and copies can be made \textit{ad nauseam}, what can prevent counterfeiting? That is, what would prevent users from sending copies of the same money to two (or more) people? That is exactly the problem solved by Bitcoin and its underlying blockchain technology. The current solution behind fiat money is having a single issuer, a central bank, and trusting the financial institutions.
@@ -60,7 +62,7 @@ The digital signature scheme used by Bitcoin is based on a pair of private and p
 
 Bitcoins (BTCs) owned by someone are, in fact, unspent outputs in one or more transactions. For instance, one may have 6 BTCs spread between three transactions' unspent output: the first with 1 BTC, the second with 2 BTCs, and the third with 3 BTCs.
 
-In a transaction, the inputs are pointers to other transactions' outputs (which they are spending). A transaction output may only be spent once and thus may not be partially spent. For instance, when one has 3 BTCs in one transaction output and would like to send 1 BTC to a friend, they have to create a transaction with one input spending the 3 BTCs and two outputs, one for the friend with 1 BTC and one's change with 2 BTCs. 
+In a transaction, the inputs are pointers to other transactions' outputs (which they are spending). A transaction output may only be spent once and thus may not be partially spent. For instance, when one has 3 BTCs in one transaction output and would like to send 1 BTC to a friend, they have to create a transaction with one input spending the 3 BTCs and two outputs, one for the friend with 1 BTC and one's change with 2 BTCs.
 
 Each transaction's output has a script that is executed by the miners to check whether one has or has not permission to spend that output. In other words, whether one has the ownership of that output. In order to execute these scripts, the miners also need some data. This data is given by the transaction which is spending the output.
 
@@ -68,7 +70,7 @@ The output's scripts usually checks whether the public key is valid and whether 
 
 The input contains the data which prove that the sender is the owner of the referred outputs, i.e., the input which must be accepted by the output scripts being spent. Usually, each input has the public key of the sender and a digital signature.
 
-Those users accustomed to block explorers may have been misled by the transaction information that these websites provide.  For example, suppose a miner receives a transaction with ``one input from address A1''.  This ``one input'' actually consists of a pointer to a previous unspent output (i.e., there is no ``input'' address, as is displayed, but only a pointer). This pointer reference allows lookup to be executed in $O(1)$ time. 
+Those users accustomed to block explorers may have been misled by the transaction information that these websites provide.  For example, suppose a miner receives a transaction with ``one input from address A1''.  This ``one input'' actually consists of a pointer to a previous unspent output (i.e., there is no ``input'' address, as is displayed, but only a pointer). This pointer reference allows lookup to be executed in $O(1)$ time.
 
 After lookup, the miner knows how many BTC tokens are available at that unspent output.  But, in order to certify ownership of that output, the miner receives instructions in the form of a script with the rules that lead to the desired unspent output address (and this one is displayed as the input address by those websites). Because this process requires a digital signature, only the holder of the corresponding private key is able to sign such a transaction.
 
@@ -253,10 +255,10 @@ $$\mathcal{L}\{f_T(t)\} = 1 - \sum_{k=0}^n \binom{n}{k} \frac{s b^k k!}{(s+\lamb
 Then,
 
 \begin{align*}
-\frac{d}{ds} \mathcal{L}\{f_T(t)\} 
+\frac{d}{ds} \mathcal{L}\{f_T(t)\}
 	&= - \sum_{k=0}^n \binom{n}{k} b^k k! \frac{d}{ds} \frac{s}{(s+\lambda a)^{k+1}} \\
 	&= - \sum_{k=0}^n \binom{n}{k} b^k k! \left[ \frac{1}{(s+a\lambda)^{k+1}} - \frac{s(k+1)}{(s+a \lambda)^{k+1}} \right] \\
-\frac{d}{ds} \mathcal{L}\{f_T(t)\}|_{s=0} 
+\frac{d}{ds} \mathcal{L}\{f_T(t)\}|_{s=0}
 	&= - \sum_{k=0}^n \binom{n}{k} b^k k! \frac{1}{(\lambda a)^{k+1}} \\
 	&= - \frac{1}{a\lambda} \sum_{k=0}^n \binom{n}{k} k! \left( \frac{b}{\lambda a} \right)^k \\
 	&= - \frac{1}{a\lambda} \sum_{k=0}^n \frac{n!}{(n-k)!} \left( \frac{b}{\lambda a} \right)^k \\
@@ -359,7 +361,7 @@ For each point $t_i$, let $g_i(t) = [H(t-t_i) - H(t-604800)] u(t) + 2 H(t-604800
 % Ataque submarino
 % Probabilidade de "correr por fora"
 
-There are many possible ways to attack the Bitcoin (REF). In this section, we are interested in a particular attack: the double spending attack. 
+There are many possible ways to attack the Bitcoin (REF). In this section, we are interested in a particular attack: the double spending attack.
 
 In the double spending attack, the attacker's send some funds to the victim, let's say a merchant. They wait for $k$ confirmations of the transaction, and the victim delivers the good or the service to the attacker. Then, the attacker mine enough blocks with a conflicting transaction, double spending the funds which was sent to the victim. If the attacker is successful, the original transaction will be \textit{erased} and the victim will be left with no funds at all. In order to be successful, the attacker must propagate more blocks than the network in the same period, propagating a chain longer than the main chain. Hence, we would like to understand what the odds are that the attacker will be successful. This attack was originally discussed by \citet{nakamoto2008bitcoin}.
 
@@ -428,7 +430,7 @@ Finally, the probability is $\binom{k+s-1}{s} (1-p)^{s} p^{k}$.
           %\filldraw[fill=gray, fill opacity=0.3, draw=black] (0,0) rectangle (2,2);
               % Puts the shaded rectangle
     \foreach \x in {0,1,...,10}{% Two indices running over each
-      \foreach \y in {0,1,...,6}{% node on the grid we have drawn 
+      \foreach \y in {0,1,...,6}{% node on the grid we have drawn
         \node[draw,circle,inner sep=1pt,fill] at (\x,\y) {};
             % Places a dot at those points
       }
@@ -543,7 +545,7 @@ Scenario (i) is easy to analyze, because the network would just split and, after
 Scenario (ii) is more trick. As $G_2$ accepts $G_1$ blocks, their hashrate will matter. If $H_1 > H_2$, then $G_2$ will frequently skip their blockchain, because $G_1$'s blockchain will be longer most of the time. If $H_1 < H_2$, then $G_2$ may have its own blockchain after a while --- a true fork. But what would happen if $H_1$ keeps increasing and eventually gets larger than $H_2$? It if happens for sufficient time, the whole $G_2$'s blockchain may be discarded in order to move to $G_1$'s blockchain when $G_1$'s gets longer.
 
 \begin{theorem}
-	When $H_1 > H_2$, the 
+	When $H_1 > H_2$, the
 \end{theorem}
 
 
