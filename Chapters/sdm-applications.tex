@@ -1,6 +1,6 @@
 % !TEX root = ../partial-sdm.tex
 
-\section{Results (iv): Supervised classification application}
+\chapter{Results (iv): Supervised classification application}
 
 Supervised classification problem consists of categorize data into groups after seeing some samples from each group. First, it is presented pieces of data with their categories. The algorithm learns from these data, which is known as learning phase. Then, new pieces of data are presented and the algorithm must classify them into the already known groups. It is named supervised because  the algorithm will not create the groups itself. It will learn the groups from during the learning phase, in which the groups have already been defined and the pieces of data have already been classified into them.
 
@@ -149,7 +149,7 @@ The critical distance plays an important role in the classification error. As we
 These results show that the SDM may be used as a supervised classification algorithm. Although we do not believe that the mapping between images and bitstrings are even close to the way human cognition deals with images, we believe the results are interesting and useful to many possible real world problems.
 
 
-\section{Results (iii): Supervised image noise filtering application}
+\chapter{Results (iii): Supervised image noise filtering application}
 
 Image noise filtering consists in removing the noise from an input, in out case an image. Our images are black \& white images and the noise is generated randomly flipping some of their pixels from black to while and vice versa. In Figure \ref{fig-filter-progressive-noise}, we may see an image with different levels of noise, from 0\% to 45\% in steps of 5\%. It makes no sense to apply 50\% of noise because it would absolutely randomize the image.
 
@@ -167,7 +167,7 @@ Finally, in order to remove the noise of a new image, first we have to classify 
 
 
 
-\section{Results (v): The possibility of unsupervised reinforcement learning}
+\chapter{Results (v): The possibility of unsupervised reinforcement learning}
 
 Reinforcement learning has increasing prominence in the media after AlphaZero has won all games from both the best chess grandmasters in the world and the best chess engines. What is incredible about these victories is that AlphaZero has almost no knowledge about chess game and has learned all its movement playing against itself for 4 hours. Basically, it knowns only the valid movements and had to learn everything from scratch, which it did using a reinforcement learning algorithm.
 
@@ -181,35 +181,36 @@ After a game has finished, it is time to learn from its decisions. Thus, if SDM 
 
 \begin{figure}
     \captionsetup[subfigure]{labelformat=empty}
+    %\centering
 
     \subfloat[$b0$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
      & & \\\hline  & & \\\hline  & &
     \end{tabular}}
-    $\rightarrow$
+    {$\xrightarrow{w_0}$}
     \subfloat[$b1$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
      & & \\\hline  &x& \\\hline  & &
     \end{tabular}}
-    $\rightarrow$
+    {$\xrightarrow{w_1}$}
     \subfloat[$b2$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
      & & \\\hline o&x& \\\hline  & &
     \end{tabular}}
-    $\rightarrow$
+    {$\xrightarrow{w_2}$}
     \subfloat[$b3$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
     x& & \\\hline o&x& \\\hline  & &
     \end{tabular}}
-    $\rightarrow$
+    {$\xrightarrow{w_3}$}
     \subfloat[$b4$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
     x& & \\\hline o&x& \\\hline  & &o
     \end{tabular}}
-    $\rightarrow$
+    {$\xrightarrow{w_4}$}
     \subfloat[$b5$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
     x&x& \\\hline o&x& \\\hline  & &o
     \end{tabular}}
-    $\rightarrow$
+    {$\xrightarrow{w_5}$}
     \subfloat[$b6$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
     x&x&o\\\hline o&x& \\\hline  & &o
     \end{tabular}}
-    $\rightarrow$
+    {$\xrightarrow{w_6}$}
     \subfloat[$b7$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
     x&x&o\\\hline o&x& \\\hline  &x&o
     \end{tabular}}
