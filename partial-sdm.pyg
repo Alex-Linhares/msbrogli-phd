@@ -1,1 +1,0 @@
-write(addr=bs_image ^ bs_label, datum=bs_image)
