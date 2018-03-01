@@ -2,6 +2,39 @@
 
 Sparse Distributed Memory (SDM) is a mathematical model for cognitive memory published by \citet{Kanerva1988}. It introduces many interesting mathematical properties of $n$-dimensional binary space that, in a memory model, are psychologically plausible.  Most notable among these are the tip-of-the-tongue phenomenon, conformity to Miller's magic number \citep{Linhares2011} and robustness against loss of neurons.
 
+The data and address space belong to binary space and are represented by a sequence of bits, called bitstrings. The distance between two bitstrings is calculated using the Hamming distance. It is defined for two bitstrings of equal length as the number of positions at which the bits are different. For example, $00110_{b}$ and $01100_{b}$ are bitstrings of length 5 and their Hamming distance is 2. One has to be careful when thinking intuitively about distance in SDM because the Hamming distance does not have the same properties of, say, the Euclidean distance.
+
+\begin{figure}[ht!]
+  \centering
+  \subfloat[]{\includegraphics[width=2.4in]{./images02/new-images/qn3.png}}
+  \subfloat[]{\includegraphics[width=2.4in]{./images02/new-images/qn7.png}}
+
+  \subfloat[]{\includegraphics[width=4.2in]{./images02/new-images/qn10.png}}
+
+
+  \caption{Graph $Q_n$, for $n \in$ \{3, 7, 10\}. Each node represents a possible bitstring in $\{0,1\}^N$, and two nodes are linked if the bitstrings differ by a single dimension.  A number of observations can be made here. First, the number of nodes grows as $2^N$ as N grows; which makes use of the entire space infeasible as $N>>20$. Another interesting observation, better seen in the figures below, is that most of the space lies at the center, at a distance of around 500 from any given vantage point. Though Kanerva has derived many combinatorial properties of the space, I believe that this is a aesthetically appealing object on its own, and beautiful results can be found in the graph-theoretical literature.\label{The hypercube is also studied in graph theory.}}
+  \end{figure}
+
+
+
+%FOOTNOTE:
+
+Here is an interesting question that I leave for further research: A hypercube with n dimensions can be divided by two hypercubes with $n-1$ dimensions. Is there an algorithm that separates the area of each hard-location in such a form that there exists a function mapping each bitstring in $\{0,1\}^N$ to the set of hard locations it belongs to?  In other words… though this would break Kanerva's assumption of a uniformly distributed set of hard locations for a perfectly symmetrical set of hard locations, there could be large performance gains if such a mapping function from a bitstring to its corresponding set of nearest hard locations exists.
+
+%  (See \cite{@article{harary1988survey,
+%    title={A survey of the theory of hypercube graphs},
+%    author={Harary, Frank and Hayes, John P and Wu, Horng-Jyh},
+%    journal={Computers \& Mathematics with Applications},
+%    volume={15},
+%    number={4},
+%    pages={277--289},
+%    year={1988},
+%    publisher={Elsevier}
+%  }}
+
+
+
+
 Unlike traditional memory used by computers, SDM performs read and write operations in a multitude of addresses, also called neurons.  That is, the data is not written, or it is not read in a single address spot, but in many addresses. These are called activated addresses, or activated neurons.
 
 The activation of addresses takes place according to their distances from the datum. Suppose one is writing datum $\eta$ at address $\xi$, then all addresses inside a circle with center $\xi$ and radius $r$ are activated. So, $\eta$ will be stored in all these activated addresses, which are around address $\xi$, such as in Figure \ref{fig-addresses-inside-access-radius}.  An address $\xi'$ is inside the circle if its hamming distance to the center $\xi$ is less than or equal to the radius $r$, i.e. $distance(\xi,\xi')\leq r$.
@@ -14,7 +47,6 @@ radius $r$ around center address.\label{fig-addresses-inside-access-radius}}
 \end{figure}
 
 
-The data and address space belong to binary space and are represented by a sequence of bits, called bitstrings. The distance between two bitstrings is calculated using the Hamming distance. It is defined for two bitstrings of equal length as the number of positions at which the bits are different. For example, $00110_{b}$ and $01100_{b}$ are bitstrings of length 5 and their Hamming distance is 2. One has to be careful when thinking intuitively about distance in SDM because the Hamming distance does not have the same properties of, say, the Euclidean distance.
 
 Every time write or read in SDM memory activates a number of addresses with close distance.  The data is written in these activated addresses or read from them.  These issues will be addressed in due detail further on, but a major difference from a traditional computer memory is that the data are always stored and retrieved in a multitude of addresses. This way SDM memory has robustness against loss of addresses (e.g., death of a neuron).
 
@@ -167,7 +199,7 @@ $\xi_{4}$ & 1 & 1 & -1 & -1 & 1\tabularnewline
 an activated hard-location and the values come from their counters.
 Gray cells' value is obtained randomly with probability 50\%.\label{tab:read-operation}}
 \end{table}
- 
+
 
 \section{Critical Distance}
 
