@@ -23,8 +23,9 @@ Finally, we have found an anomaly in one of Kanerva's prediction, which we belie
 \begin{tabular}{cp{\textwidth}}
   $n$ & Number of dimensions, i.e., $n=1,000$ \\
   $N$ & Length of the binary space --- $|\{0, 1\}^n| = 2^n$ \\
-  $N'$ & Number of hard-locations samples from $\{0, 1\}^n$ \\
+  $N'$ & Number of hard-locations samples from $\{0, 1\}^n$. It typical value is 1,000,000. \\
   $H$ & The same as $N'$ \\
+  $r$ & Access radius, i.e., when $n=1,000$ and $N'=1,000,000$, it typical value is $451$. This value is calculated to activate, on average, one thousand of $N'$. \\
   $\eta$ & A bitstring \\
   $\eta_x$ & A clue $x$ bits away from $\eta$, i.e., $\text{dist}(\eta, \eta_x) = x$ \\
   $\xi$ & A bitstring \\
@@ -53,23 +54,25 @@ Basic operations were grouped in four sets: (i) for bitstrings, (ii) for address
 
 Bitstrings are the main structure of SDM. The addresses are represented in bitstrings, as well as the data. A bitstring is stored as an array of integers. Each integer may be 16-bit, 32-bit, or 64-bit long, depending on the configuration. By default, each integer is 64-bit long.
 
-For instance, a 1,000-bit bitstring will have $\lceil 1000/64 \rceil = 16$ integers. These integers will have a total of $16 \cdot 64 = 1,024$ bits. The remaining 24 bits are always zero, so they do not affect the result of any operation. Bitstrings store neither how many bits they have nor the array length. These pieces of information are only stored in the address space.
+For instance, a 1,000-bit bitstring will have $\lceil 1000/64 \rceil = 16$ integers. These integers will have a total of $16 \cdot 64 = 1,024$ bits. The remaining 24 bits are always zero, so they do not affect the result of any operation. The memory usage efficiency is $1 - 24/1024 = 97.65\%$. Bitstrings store neither how many bits they have nor the array length. These pieces of information are only stored in the address space.
 
 
 \subsection{The distance between two bitstrings}
 
-The distance between two bitstrings is calculated by the hamming distance, which is the number of different bits between them.
+The distance between two bitstrings is calculated by the hamming distance, which is the number of different bits between them. It is calculated counting the number of ones in the exclusive or (xor) between the bitstrings, i.e., $d(x, y) = \text{number of ones in } x \oplus y$.
 
-It is calculated counting the number of ones in the exclusive or (xor) between the bitstrings, i.e., $d(x, y) = \text{number of ones in } x \oplus y$. There are several algorithms to calculate the number of ones \citep{warren2013hacker}, but the performance depends on the processor. So, we have implemented three different algorithms and one may be selected through compiling flags. The default algorithm is to use a builtin instruction from the compiler.
+There are several algorithms to calculate the number of ones \citep{warren2013hacker}, but the performance depends on the processor. So, we have implemented three different algorithms and one may be selected through compiling flags. The default algorithm is to use a builtin instruction from the compiler.
 
-An alternative algorithm available is the lookup. It pre-calculates a table of distances --- by default, it is a 16-bit table which uses 65MB of RAM, but one may increase to a 32-bit table which uses 4GB of RAM ---, which is accessed a few times. Finally, to calculate the distance between two bitstrings, it sums the distance of each 16-bit part of the bitstrings, i.e., $d(x[0:N-1], y[0:N-1]) = d(x[0:15], y[0:15]) + d(x[16:31], y[16:31]) + \dots$. As each distance is calculated in O(1), this algorithm runs in O($\lceil bits/16 \rceil$).
+There is also the naive algorithm, which really counts the number of ones checking bit by bit. It is available only to testing purposes and should never be used.
+
+The other algorithm available is the lookup. It pre-calculates a table with the number of ones of all possible 16-bit integers. This table is accessed a few times to calculate the number of ones of a 64-bit integer, i.e., to calculate the distance between two bitstrings, it sums the distance of each 16-bit part of the bitstrings, i.e., $d(x[0:63], y[0:63]) = d(x[0:15], y[0:15]) + d(x[16:31], y[16:31]) + d(x[32:47], y[32:47]) + d(x[48:63], y[48:63])$ where $x[i:i+15]$ and $y[i, i+15]$ are the 16-bit integers formed by the bits between $i$ and $i+15$ of $x$ and $y$, respectivelly. Each 16-bit distance is calculated through a single table access. As each distance is calculated in O(1), this algorithm runs in O($\lceil bits/16 \rceil$). This table uses 65MB of RAM. One may change the table from 16-bit integers to 32-bit integers, which would halve the number of accesses but would use 4GB of RAM (instead of 65MB).
 
 
 \section{Address space}
 
 An address space is a fixed collection of bitstrings, and each bitstring represents a hard-location address. They store the number of bitstrings, as well as the number of bits, number of integers per bitstring, and the number of remaining bits.
 
-Bitstrings are stored in a contiguous array of 64-bit integers, as shown in Figure \ref{tab:hl-addresses-detail}. Hence, basic pointer arithmetic provides us with performance improvements in their access, as processors realize fechts of contiguous chunks of memory  \citep{pai2004linux}.
+Bitstrings are stored in a contiguous array of 64-bit integers, as shown in Figure \ref{tab:hl-addresses-detail}. Hence, basic pointer arithmetic provides us with performance improvements in their access, as processors realize fetches of contiguous chunks of memory  \citep{pai2004linux}.
 
 \begin{figure}
 \centering
@@ -111,31 +114,32 @@ node [pos=0.5,anchor=north,yshift=-0.5cm] {N bits};
 \caption{Address space's bitstrings are stored in a contiguous array. In a 64-bit computer, each bitstring is stored in a sub-array of 64-bit integers, with length $8 \cdot \lceil N/64 \rceil$.\label{tab:hl-addresses-detail}}
 \end{figure}
 
-The scan for activated hard-locations is performed in an address space. It returns the indexes of the bitstrings which were inside the circle. Then, each operation uses this index in a different way.
+The scan for activated hard-locations is performed in an address space. It returns the indexes of the bitstrings which were inside the circle (and their distances). Then, each operation uses these pieces of information in a different way.
 
 \subsection{Scanning for activated hard-locations}
 
-Scanning for the activated hard-locations is a problem similar to well-known problems in computational geometry called ``range reporting in higher dimensions''. In this case, none of the known algorithms is able to solve our problem faster than $O(n)$. The algorithm which seems to best fit in our problem consumes $O(n)$ space and runs in $O(\log^d(n))$ \citep{chazelle1988functional}, which is really slower than $O(n)$ when, for instance, $n=1,000,000$ and $d=1,000$. For a review of the algorithms, see \citet{chan2011orthogonal}.
+Scanning for the activated hard-locations is a problem similar to well-known problems in computational geometry called ``range reporting in higher dimensions''. In this case, none of the known algorithms is able to solve our problem faster than $O(H)$. The algorithm which seems to best fit in our problem consumes $O(H)$ space and runs in $O(\log^n(H))$ \citep{chazelle1988functional}, which is really slower than $O(H)$ when, for instance, $H=1,000,000$ and $n=1,000$. For a review of the range reporting algorithms, see \citet{chan2011orthogonal}.
 
-In 2014, there was published a solution to fast search in hamming space which seems applicable to our problem \citet{norouzi2014fast}. It provides a fast search when $r/b < 0.11$ or $r/b < 0.06$, where $r$ is the radius and $b$ is the number of bits. But, in our case, for a 1,000 bits SDM, $r/b = 0.451$, which changes the runtime to $O(n^{0.993})$. This is really close to $O(n)$, but with a larger constant. Hence, $O(n)$ is still faster.
+In 2014, there was published a solution to fast search in hamming space which seems applicable to our problem \citet{norouzi2014fast}. It provides a fast search when $r/n < 0.11$ or $r/n < 0.06$, where $r$ is the radius and $n$ is the number of bits. But, in our case, for a 1,000 bits SDM, $r/n = 0.451$, which changes the runtime to $O(H^{0.993})$. This is really close to $O(H)$, but with a larger constant. Unfortunately, $O(H)$ is still faster.
 
-It is intriguing that none of those algorithms is able to solve our scanning problem. The idea behind those computational geometry algorithms is roughly to split the search space in half each step, which would take $O(\log(n))$ to go through the whole space. But this approach does not work because of the high number of dimensions (i.e., 1,000) and because the hardlocations' addresses are randomly sampled from the $\{0, 1\}^d$ space. So, each addresses' bit itself splits the hardlocations in half, but it does not split the search space in half since both halves still must be convered by the algorithm. For instance, let's say we have 1,000 dimensions with 1,000,000 hardlocations, and we are scanning within a circle with radius 451, then after checking the first bit we have two cases: (i) for the half with the same first bit, we must keep scanning with radius 451; and (ii) for the half with a different first bit, we must keep scanning with radius 450. The search space has not been split in half because both halves have been covered (and one of them should have been skipped).
+It is intriguing that none of those algorithms is able to solve our scanning problem. The idea behind those computational geometry algorithms is roughly to split the search space in half each step, which would take $O(\log(H))$ to go through the whole space. But this approach does not work because of the high number of dimensions (i.e., 1,000) and because the hard-locations' addresses are randomly sampled from the $\{0, 1\}^n$ space. Although each addresses' bit itself splits the hardlocations in half, it does not split the search space in half since both halves still must be convered by the algorithm. For instance, let's say we have $n=1,000$ dimensions with $H=1,000,000$ hard-locations, and we are scanning within a circle with radius $r=451$, then after checking the first bit we have two cases: (i) for the half with the same first bit, we must keep scanning with radius 451; and (ii) for the half with a different first bit, we must keep scanning with radius 450. Hence, the search space has not been split in half because both halves have been covered (and one of them should have been skipped).
 
-Hence, as our best approach is to scan through all hardlocations, we may distribute the scan into many tasks which will be executed independently. The tasks may be executed in different processes, threads, or even computers. They may also run in the CPU or in the GPU. In this case, we may take into account both the time required to distribute the tasks and the time to receive their results.
+Finally, as our best approach is to scan through all hard-locations, we may distribute the scan into many tasks which will be executed independently. The tasks may be executed in different processes, threads, or even computers. They may also run in the CPU or in the GPU. In this case, we may take into account both the time required to distribute the tasks and the time to receive their results.
 
 The framework implements three main scanner algorithms: linear scanner, thread scanner, and OpenCL scanner. The linear scanner runs in a single core, is the slowest one, and was developed only for testing purposes; the thread scanner runs at the CPU in multiple threads sharing memory (and our recommendation is to use the number of threads equals to twice the number of CPU cores); and the OpenCL scanner runs in multiple GPU cores and support multiple devices. The speed of a scan depends on the CPU and GPU devices, thus the best approach to choose which scanner is best for one's setup is to run a benchmark.
 
-The OpenCL must be initialized, which just copies the address space's bitstrings to the GPU's memory. Then, many scans may be executed with no necessity to upload the bitstrings again.
+The OpenCL must be initialized, which just copies the address space's bitstrings to the GPU's memory. Then, many scans may be executed with no necessity to upload the bitstrings again. The OpenCL scanner supports running into multiple devices.
 
 
 \section{Counters}
 
-Each hard-location has one integer of data per bit. For instance, each hard-location of a 1,000 bits SDM has 1,000 bits. Those integers are stores in a counter.
+Each hard-location has one integer of data per bit. For instance, each hard-location of a 1,000 bits SDM has 1,000 bits. Those integers are stored in a counter.
 
-A counter is an array of integers which stores the data of all hard-locations. So, the counter's array has $N \cdot H$ integers.
+A counter is an array of integers which stores the data of all hard-locations. So, the counter's array has $n \cdot H$ integers.
 
-When two counters are added in a third counter, there may occur an overflow. Counters may have overflow protection depending on compiling options. By default, there is no overflow check for performance reasons. It is not supposed to be a problem because each counter is a signed 32-bit integer which can store any number between -2,147,483,648 and 2,147,483,647 (and they will not overflow with less than $2^{31}-1$ divided by the number of activated hard-locations). For instance, when $N=1,000$, $H=1,000,000$, and $r=451$, the average number of activated hard-locations is 1,000 and it would require at least one million writes to be possible to overflow a counter.  Note also that it would be improbable for a hard location dimension to be this biased before the complete saturation of the memory.
+When two counters are added in a third counter, there may occur an overflow. It is not supposed to be a problem because, by default, each counter is a signed 32-bit integer that can store any number between -2,147,483,648 and 2,147,483,647, which means they will not overflow with less writes than $2^{31}-1$ divided by the average number of activated hard-locations. For instance, when $n=1,000$, $H=1,000,000$, and $r=451$, the average number of activated hard-locations is 1,000 and it would require at least one million writes before being possible to a counter to overflow.  Note also that it would be more likely to saturate the memory before any overflow.
 
+Anyway, counters may have overflow protection depending on compiling options. By default, there is no overflow check for performance reasons (and because it does not seem necessary).
 
 \section{Read and write operations}
 
@@ -143,9 +147,12 @@ The reading and writing operations are executed in two steps: first, the address
 
 The iterated reading keeps reading until it gets exactly the same bitstring (or the number of maximum interations has been reached), i.e., it performs $\eta_{i+1} = \text{read}(\eta_i)$ and stops when $\eta_{k+1} = \eta_{k}$. If the initial bitstring is inside the critical distance of $\eta$, it will converge to $\eta$, but, if it is not, it will diverge and reach the maximum number of iterations.
 
-The framework is available both Kanerva's read and Chada's read. The latter was implemented according to a generalization proposed by physics professor Paulo Murilo of UFF during the discussion of my master's defense. The generalization brings a parameter $z$, which is the exponent of the counter. In this case, the results are floating point instead of integer, which considerably reduces performance. When $z=1$, it is exactly as the Kanerva's read. When $z=0$, it is the Chada's read. We also explored how SDM would behave for different values of $z$.
+The framework has both Kanerva's read and the generalized read. The latter was implemented according to the generalization proposed by professor Paulo Murilo. The generalization brings a parameter $z$, which is the exponent. In this case, the results are floating point instead of integer, which considerably reduces performance. When $z=1$, it is exactly as the Kanerva's read. When $z=0$, it is the Chada's read. We also explored how SDM would behave for different values of $z$.
 
-There is also another special read operation: the weighted reading. The weight is retrieved from a lookup table of integers based on the distance between the hard-location's address and the reading address. The weight is multiplied by the counter's value and summed. The rest of the read operation is exactly the same.
+There is another special read operation: the weighted reading. In the weighted reading, the value of the counters are multiplied by a weight which depends only on the distance between the reading address and the hard-location address. The weight is retrieved from a lookup table of integers indexed by the distance. The rest of the read operation is exactly the same.
+
+There is also a weighted writing operation. In this case, the weight is applied when the counters are updated, i.e., if the weight is 2, the counters are increased twice when bits are 1, and decreased twice when bits are 0. Just as in the weighted reading, the weights depend only on the distance between the writing address and the hard-location address. The weights are retrieved from a lookup table of integers indexed by the distance.
+
 
 \chapter{Results (i): Framework Validation}
 
