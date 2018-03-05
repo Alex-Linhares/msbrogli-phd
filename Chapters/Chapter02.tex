@@ -222,9 +222,40 @@ Beyond that, we are running as state-of-the-art devices: (i) an Amazon EC2 p3.xl
 \end{figure}
 
 
-My advisor, Alexandre Linhares, has proposed another read operation: the weighted reading. In it, the sum of the counter's value is weighted based on the distance between the hard-location's address and the reading address. The logic behind it is to vary the importance of each hard-location inside the circle.  It is only natural that one encodes an item in near hard locations with a stronger signal, and a natural candidate for this signal function is the amount of information contained in the distance between the item and each hard location.  Closer hard locations have lower probabilies and therefore should encode more information. We know that the probability of a distance $d$ is $\binom{N}{d}/2^N$, and, acordingly, we have tested how SDM behaves when write weights are calculated using the amount of information given by each bitstring, i.e., $w(d) = -\log_2 \left( 2^{-N} \binom{N}{d} \right) = N - \log_2 \binom{N}{d}$, as in information theory \citep{cover2012elements}.
 
-The results can be seen in Figure \ref{fig:info-theory-experiments} and seem promising. It seems that the critical distance increases by a number of bits.  Note that 10 additional bits imply an attractor $2^{10}$ of the size of the original. Another point to keep in mind is that, since the modulus of the vectors are not uniform in this approach, that the shape of the attractor may have large asymmetries.
+
+
+
+
+My advisor, Alexandre Linhares, has proposed another read operation: an information-theoretical weighted reading. In it, the sum of the counter's value is weighted based on the distance between each hard-location's address and the reading address. The logic behind it is to vary the importance of each hard-location inside the circle.  It is only natural that one encodes an item in near hard locations with a stronger signal, and a natural candidate for this signal function is the amount of information contained in the distance between the item and each hard location.  Closer hard locations have lower probabilies and therefore should encode more information.
+
+Consider the following. Given any two $n$-sized bitstrings, the probability of a Hamming distance $d$ is given by,
+
+%\begin{align*}
+
+$p(H=d)=\frac{ \binom{n}{d} }{ 2^n },$ \\
+
+$p(H\leq d)={\frac{1}{2^n}}{\displaystyle\sum_{i=0}^{d}{\binom{n}{i}}  }$, \\
+
+%\end{align}
+
+and, consequently,
+
+$p(H\geq n-d)={\frac{1}{2^n}}{\displaystyle\sum_{i=n-d}^{n}{\binom{n}{i}}  }$, \\
+$p(d+1 \leq H \leq n-d-1)=2^n - {\frac{1}{2^{n-1}}}{\displaystyle\sum_{i=0}^{d}{\binom{n}{i}}  .}$ \\
+
+accordingly, we have tested how SDM behaves when write weights are calculated using the amount of information given by each bitstring, i.e., $w(d) = -\log_2 \left( 2^{-n} \binom{n}{d} \right) = n - \log_2 \binom{n}{d}$, as in information theory \citep{cover2012elements}.
+
+
+
+The results can be seen in Figure \ref{fig:info-theory-experiments} and seem promising. It seems that the critical distance increases by a number of bits.  Note that 10 additional bits imply an attractor $2^{10}$ of the size of the original. Another point to keep in mind is that, since the modulus of the vectors are not uniform in this approach, that the shape of the attractor may have asymmetries.
+
+
+
+
+
+
+
 
 
 \chapter{Conclusion}
