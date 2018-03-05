@@ -4,18 +4,31 @@ Sparse Distributed Memory (SDM) is a mathematical model for cognitive memory pub
 
 The data and address space belong to binary space and are represented by a sequence of bits, called bitstrings. The distance between two bitstrings is calculated using the Hamming distance. It is defined for two bitstrings of equal length as the number of positions at which the bits are different. For example, $00110_{b}$ and $01100_{b}$ are bitstrings of length 5 and their Hamming distance is 2. One has to be careful when thinking intuitively about distance in SDM because the Hamming distance does not have the same properties of, say, the Euclidean distance.
 
+
+
+
+
+
+
+
 \begin{figure}[p!]
   \centering
   \subfloat[$Q_3$]{\includegraphics[width=2.2in]{./images02/new-images/qn3.png}}
   \subfloat[$Q_7$]{\includegraphics[width=2.2in]{./images02/new-images/qn7.png}}
 
   \subfloat[$Q_{10}$]{\includegraphics[width=4.0in]{./images02/new-images/qn10.png}}
-  \caption{Here we have $Q_n$, for $n \in$ \{3, 7, 10\}. Each node represents a possible bitstring in $\{0,1\}^n$, and two nodes are linked if the bitstrings differ by a single dimension.  A number of observations can be made here. First, the number of nodes grows as $2^n$ as $n$ grows; which makes the  space intractable as $n>>20$. Another interesting observation, better seen in the figures below, is that most of the space lies `at the center', at a distance of around 500 from any given vantage point.\label{hypercubes}}
+  \caption{Here we have $Q_n$, for $n \in$ \{3, 7, 10\}. Each node corresponds to a bitstring in $\{0,1\}^n$, and two nodes are linked iff the bitstrings differ by a single dimension.  A number of observations can be made here. First, the number of nodes grows as $2^n$ as $n$ grows; which makes the  space intractable as $n>>20$. Another interesting observation, better seen in the figures below, is that most of the space lies `at the center', at a distance of around 500 from any given vantage point.\label{hypercubes}}
 \end{figure}
 
+The space studied by Kanerva is also called the \emph{hypercube graph}, or $Q_n$, as in Figure \ref{hypercubes}. For a fixed $n \in \mathbb{Z}$, the graph $G = (V, E)$, in which $v \in V$ iff there is a bijective function $b: V\to \{0,1\}^n$ and $(v_i, v_j) \in E$ iff $H(b(v_i), b(v_j))=1$, where $H$ is the Hamming distance. That is, $n$-sized bitstrings correspond to nodes and edges exist between nodes $iff$ they flip a single bit.  Though Kanerva has derived many combinatorial properties of the space, additional results have been found in the graph-theoretical literature. A good survey is provided by \citet{harary1988survey}.
 
 
-The graph composed of $\{0,1\}^n$ nodes and links between nodes $iff$ their Hamming distance is one is called the \emph{hypercube graph}, or $Q_n$, as in Figure \ref{hypercubes}.  Though Kanerva has derived many combinatorial properties of the space, I believe that this is a aesthetically appealing object on its own, and beautiful results can be found in the graph-theoretical literature. A good survey is found in \citet{harary1988survey}.
+
+
+
+
+
+
 
 
 Unlike traditional memory used by computers, SDM performs read and write operations in a multitude of addresses, also called neurons.  That is, the data is not written, or it is not read in a single address spot, but in many addresses. These are called activated addresses, or activated neurons.
