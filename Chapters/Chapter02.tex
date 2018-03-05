@@ -159,7 +159,24 @@ There is also a weighted writing operation. In this case, the weight is applied 
 
 The framework has been validated comparing its results with the expected results from \citet{Kanerva1988}. Thus, we run simulations which were then compared to the theoretical analysis conducted some decades ago.
 
-The objective here is twofold: (i) a single command will install the framework, and (ii) another single command will run (and display) the desired figures obtained the simulation. This will allow potential users to become familiarized with the system and its underlying code with barely any learning curve beyond scientific python and jupyter notebooks.
+\section{Distance between random bitstrings}
+
+As predicted by Kanerva, the distance between two bitstrings follows a binomial distribution with mean $\mu = n/2$ and standard deviation $\sigma = \sqrt{n}/2$. For large values of $n$, it may be approximated by a normal distribution with the same mean and standard deviation.
+
+In order to validate our random bitstring generation algorithm, we have calculated 10,000 distances between two random bitstrings with 1,000 bits. In total, 20,000 bitstrings have been generated. The code is available in the ``Distance between bitstrings'' notebook.
+
+In figure \ref{fig:validation-distance}, we can notice that the theoretical model and the simulation matches. Hence, it seems the random bitstring generation algorithm works properly.
+
+\begin{figure}[h!]
+  \centering
+  \subfloat[Full histogram ]{\includegraphics[width=0.5\textwidth]{./images02/new-images/bs-hist-full.png}}
+  \subfloat[{Zoom in the interval $[400, 600]$} ]{\includegraphics[width=0.5\textwidth]{./images02/new-images/bs-hist-zoom.png}}
+
+  \caption{Histogram of 10,000 distances between two random bitstrings with 1,000 bits. The curve in red is the theoretical normal distribution with $\mu = 500$ and $\sigma = \sqrt{500}/2$.}
+  \label{fig:validation-distance}
+\end{figure}
+
+
 
 One particular analysis of interest is that of the distance read at a point $\alpha$. Suppose an SDM is trying to read an item written at $\alpha$, but the cues received so far lead to a point of distance $d$ from $\alpha$.  As one reads at $\alpha+d$, a new bitstring $\beta$ is obtained, leading to our question: what is the new distance from $\alpha$ to $\beta$? Is it smaller or larger than $d$? That, of course, depends on the ratio between $d$ and the number of dimensions of the memory.  As we have found out, there are some deviations from Kanerva's original theoretical analysis and the results obtained by simulation.
 
@@ -359,6 +376,8 @@ Here is an interesting question that I leave for further research: A hypercube w
 
 
 We have generated a Docker image, which makes it even easier to explore the framework. After running the container, a Jupyter Notebook is available with sdm-framework and other tools already installed. The simulations run in this thesis are promptly available to be re-executed and explored. We invite readers to take a look and explore a little bit.
+
+The objective here is twofold: (i) a single command will install the framework, and (ii) another single command will run (and display) the desired figures obtained the simulation. This will allow potential users to become familiarized with the system and its underlying code with barely any learning curve beyond scientific python and jupyter notebooks.
 
 % TODO Include in the to do list simulations based on the suggestion of Murilinho.
 
