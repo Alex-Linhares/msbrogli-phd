@@ -21,15 +21,16 @@ Finally, we have found an anomaly in one of Kanerva's prediction, which we belie
 \chapter{Notation}
 
 \begin{tabular}{cp{\textwidth}}
-  $n$ & Number of dimensions, i.e., $n=1,000$ \\
-  $N$ & Length of the binary space --- $|\{0, 1\}^n| = 2^n$ \\
-  $N'$ & Number of hard-locations samples from $\{0, 1\}^n$. It typical value is 1,000,000. \\
-  $H$ & The same as $N'$ \\
-  $r$ & Access radius, i.e., when $n=1,000$ and $N'=1,000,000$, it typical value is $451$. This value is calculated to activate, on average, one thousand of $N'$. \\
-  $\eta$ & A bitstring \\
-  $\eta_x$ & A clue $x$ bits away from $\eta$, i.e., $\text{dist}(\eta, \eta_x) = x$ \\
-  $\xi$ & A bitstring \\
-  $\text{dist}(x, y)$ & Hamming distance between $x$ and $y$
+  $n$ & Number of dimensions, i.e., $n=1,000$. \\
+  $N$ & Length of the binary space --- $|\{0, 1\}^n| = 2^n$. \\
+  $N'$ & Number of hard-locations samples from $\{0, 1\}^n$. Its typical value is 1,000,000, as suggested by \citet{Kanerva1988}. \\
+  $H$ & Same as $N'$. \\
+  $r$ & Access radius, i.e., when $n=1,000$ and $N'=1,000,000$, its typical value is $451$. This value is calculated to activate, on average, one thousand of $N'$. \\
+  $\eta$ & A bitstring, usually a datum. \\
+  $\eta_x$ & A clue $x$ bits away from $\eta$, i.e., $\text{dist}(\eta, \eta_x) = x$. \\
+  $\xi$ & A bitstring, usually an address. \\
+  $\text{dist}(x, y)$ & Hamming distance between $x$ and $y$ \\
+  $\text{d}(x, y)$ & Same as $\text{dist}(x, y)$
 \end{tabular}\\
 
 \chapter{Sparse Distributed Memory}
