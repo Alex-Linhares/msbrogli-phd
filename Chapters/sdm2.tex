@@ -2,7 +2,7 @@
 
 Sparse Distributed Memory (SDM) is a mathematical model for cognitive memory published by \citet{Kanerva1988}. It introduces many interesting mathematical properties of $n$-dimensional binary space that, in a memory model, are psychologically plausible.  Most notable among these are the tip-of-the-tongue phenomenon, conformity to Miller's magic number \citep{Linhares2011} and robustness against loss of neurons.
 
-The data and address space belong to binary space and are represented by a sequence of bits, called bitstrings. The distance between two bitstrings is calculated using the Hamming distance. It is defined for two bitstrings of equal length as the number of positions at which the bits are different. For example, $00110_{b}$ and $01100_{b}$ are bitstrings of length 5 and their Hamming distance is 2. One has to be careful when thinking intuitively about distance in SDM because the Hamming distance does not have the same properties of, say, the Euclidean distance.
+The data and address space belong to binary space and are represented by a sequence of bits, called bitstrings. The distance between two bitstrings is calculated using the Hamming distance. It is defined for two bitstrings of equal length as the number of positions at which the bits are different. For example, $00110_{b}$ and $01100_{b}$ are bitstrings of length 5 and their Hamming distance is 2. One has to be careful when thinking intuitively about distance in SDM because the Hamming distance does not have the same properties of, say, the Euclidean distance in 3 dimensions, i.e., both follow triangle inequality ($d(A, B) \le d(A, C) + d(B, C)$), which Euclidean distance in 3 dimensions may be interpreted as ``if A is close to B, and B is close to C, then A is also close to C'' --- $d(A, B) \le r \text{and} d(B, C) \le r \Rightarrow d(A, C) \le 2r$ ---, but in SDM, although the inequality is also valid, two bitstrings would be close when, for instance, $r = 430$, so $2r = 860$ would cover all other bitstrings. Hence, it makes no sense to say that $A$ is also close to $C$. This difference in intuition may trick even experienced researchers when analyzing some situations.
 
 
 
@@ -143,9 +143,27 @@ In his work, Kanerva proposed and analyzed a read algorithm called here Kanerva'
 
 Daniel Chada, one member of our research group, proposed another way to read in SDM, in this work called Chada's read. Instead of summing all hard-location counters, each hard-location evaluates its resulting bitstring individually. Then, all resulting bitstrings are summed again, and the same rule as Kanerva applies. Table \ref{tab:chada-read} shows an example of Chada's read result bitstring. The counter's values are normalized to 1, for positive ones, or -1, for negative ones, and the original values are the same as in Table \ref{tab:kanerva-read}.
 
-The main change between Kanerva's read and Chada's read is that, in the former, a hard-location that has more bitstrings written has a greater weight in the decision of each bit. In the latter, all hard-locations have the same weight, because they can contribute to the sum with only one bitstring.
+The main difference between Kanerva's read and Chada's is that, in the former, a hard-location that has more bitstrings written has a greater weight in the decision of each bit. In the latter, all hard-locations have the same weight, because they can contribute to the sum with only one bitstring.
 
-A member of my Master's committee, professor Paulo Murilo, has proposed a generalized reading operation (personal communication), which covers both Kanerva's and Chada's read --- and opens a new venue of potential discoveries. He proposed summing all hard-location counters raised to the power of $z$ while holding the original sign of the counter (positive or negative). Thus, Kanerva's read would be the same as $z=1$, while Chada's would be the same as $z=0$. Hence, we will here explore how SDM would behave with other values of $z$, such as 0.5, 2, and 3.
+It is important to say that Chada's read came from \citet{anwar2003sparse} which gave a misguided description of the read operation. The original description is the following:
+
+\begin{samepage}
+\begin{quote}
+Similar to writing, retrieving from SDM involves the same concept of access sphere --- you read all the hardlocations within the access sphere of location Y, pool the bit vectors read from all these hard locations and let each of the kth bits of those locations participate in a majority vote for the kth bit of Y. \hfill --- \citet{anwar2003sparse}
+\end{quote}
+\end{samepage}
+
+This fact just highlihts how important it is to have a reference implementation that one may read the code to clarify one's understanding about the details of each operation.
+
+\subsection{Generalized read operation}
+
+A member of my Master's committee, professor Paulo Murilo, has proposed a generalized reading operation (personal communication), which covers both Kanerva's and Chada's read --- and opens a new venue of potential discoveries. He proposed summing all hard-location counters raised to the power of $z$ while holding the original sign of the counter (positive or negative). Thus, Kanerva's read would be the same as $z=1$, while Chada's would be the same as $z=0$. Hence, we will here explore how SDM would behave with other values of $z$, such as 0.5, 2, and 3. Mathematically, let $A$ be the set of the counters of the activated hardlocation, and $c_i$ be the counter of the $i$-th bit. Then,
+
+$$
+s_i = \sum_{c \in A} \frac{c_i}{|c_i|} |c_i|^z
+$$
+
+Finally, the $i$-th bit of the resulting bitstring is 1 if $s_i > 0$, or 0 if $s_i < 0$, or random if $s_i = 0$. Notice that when $z=1$, then $s_i = \sum_{c \in A} c_i$, which is the Kanerva's read; and when $z=0$, then $s_i = \frac{c_i}{|c_i|} = \text{sign}(c_i)$, which is the Chada's read.
 
 \begin{table}
 \begin{minipage}[t]{0.5\columnwidth}%
@@ -201,7 +219,7 @@ Gray cells' value is obtained randomly with probability 50\%.\label{tab:read-ope
 
 Kanerva describes the critical distance as the threshold of convergence of a sequence of read words. It is ``the distance beyond which divergence is more likely than convergence''\citep{Kanerva1988}. Furthermore, Kanerva explains that ``a very good estimate of the critical distance can be obtained by finding the distance at which the arithmetic mean of the new distance to the target equals the old distance to the target''\citep{Kanerva1988}.  In other words, the critical distance can be equated as the edge to our memory, the limit of human recollection.
 
-In his book, Kanerva analyzed a specific situation with $n=1000$ ($N=2^{1000}$), 10 million hard-locations, an access-radius of 451 (within 1000 hard-locations in each circle) and 10 thousand writes of random bitstrings in the memory. As computer resources were very poor those days, Kanerva couldn't make a more generic analysis.
+In his book, Kanerva analyzed a specific situation with $n=1000$ ($N=2^{1000}$), 1 million hard-locations $N'=1,000,000$, an access-radius of 451 (within 1,000 hard-locations in each circle) and 10 thousand writes of random bitstrings in the memory. As computer resources were very poor those days, Kanerva couldn't make a more generic analysis.
 
 Starting from the premise of SDM as a faithful model of human short-term memory, a better understanding of the critical distance may shed light on our understanding of the thresholds that bind our own memory.
 
@@ -217,4 +235,4 @@ Starting from the premise of SDM as a faithful model of human short-term memory,
 
 \end{figure}
 
-Figure \ref{fig:crit-dist-10k-writes} compares the critical distance behavior under different scenarios.  This replicates our previous results \citet{Brogliato2011} and \citet{brogliato2014sparse} and is a first part of the process of framework validation, to which we throw our attention next.
+Figure \ref{fig:crit-dist-10k-writes} compares the critical distance behavior under different scenarios.  This replicates our previous results \citep{Brogliato2011, brogliato2014sparse} and is a first part of the process of framework validation, to which we throw our attention next.
