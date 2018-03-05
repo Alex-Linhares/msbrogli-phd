@@ -303,7 +303,9 @@ $I(p)= -log_2(p).$ \\
 Now, given any two $n$-sized bitstrings, the probability of their Hamming distance being $d$ is given by,
 
 
-$p(H=d)= {2^{-n} \binom{n}{d} } ,$ \\
+$p(H=d)= {2^{-n} \binom{n}{d} }$ \\
+
+And the probability of it being at most $d$ is \\
 
 $p(H\leq d)= 2^{-n} {\displaystyle\sum_{i=0}^{d}{\binom{n}{i}}}  $, \\
 
@@ -319,19 +321,16 @@ $w(d) = -\log_2 \left( 2^{-n} \binom{n}{d} \right) = n - \log_2 \binom{n}{d}$, a
 
 It is easy to interpret this data though a binary tree approach.  How many binary questions would be needed to precisely define a bitstring?
 
+Another possibility would be to use the sum of all distances closer (and less likely) locations within the weighting function $w(d)$,
 
-  INTERPRET PLUS FIG
-
-
-
-Another possibility would be to use the sum of all distances closer (and less likely) locations within $w(d)$,
-
-$w(d) = -\log_2 \left( 2^{-n} \displaystyle\sum_{i=0}^{d}{\binom{n}{i}} \right) = n - \log_2 \displaystyle\sum_{i=0}^{d}{\binom{n}{i}}$, \\
+$w(d) = -\log_2 \left( 2^{-n} \displaystyle\sum_{i=0}^{d}{\binom{n}{i}} \right) = n - \log_2 \displaystyle\sum_{i=0}^{d}{\binom{n}{i}}$. \\
 
 This can be seen in \ref{fig:info-theory-sum-hypothesis}.
 
 
 The results can be seen in Figure \ref{fig:info-theory-experiments} and seem promising. It seems that the critical distance increases by a number of bits.  Note that 10 additional bits imply an attractor $2^{10}$ of the size of the original. Another point to keep in mind is that, since the modulus of the vectors are not uniform in this approach, that the shape of the attractor may have asymmetries.
+
+Note, finally, that this is not the first time in which a weighted function has been applied to writing in SDM --- \citet{hely1997new} suggest a rather complex spreading model based on floating point signals in the interval [0.05, 1.0] --- they were, however, only able to test their model with 1,000 hard locations.
 
 
 
@@ -348,10 +347,23 @@ We propose to provide a new, open-source, cross-platform, highly parallel framew
 
 \section{Future work}
 
-Here are some ideas that have been considered during this work, but have had to be left for future research.
+Here is an interesting questions that have been considered during this work, but have had to be left for future research.
 
 \subsection{Multiple levels}
 
+
+\subsection{i versus l}
+
+
+\subsection{Magic numbers}
+
+Kanerva suggests, in his book, the use of 1,000 dimensions and 1,000,000 hard locations.  More recently, he suggested the use of 10,000 dimensions.
+
+Each parameter set choice like this will lead to particular numbers --- many of them emergent---, such as the access radius size, critical distance, and so forth.
+
+One intriguing question here is:  is there a `better' number of dimensions and of hard locations?  If so, can such numbers better studied analitically, or numerically?
+
+How should these parameters be compared?  What are the tradeoffs that should be considered?  What are the `best' benchmarks possible?
 
 \subsection{Classification with context using sequences --- for words instead of only letters}
 
@@ -364,20 +376,32 @@ Here are some ideas that have been considered during this work, but have had to 
 
 
 
-\subsection{Symmetrical Hard Locations}
+\subsection{Symmetrical, rapidly accessible, Hard Locations}
 
-Here is an interesting question that I leave for further research: A hypercube with n dimensions can be divided by two hypercubes with $n-1$ dimensions. Is there an algorithm that separates the area of each hard-location in such a form that there exists a function mapping each bitstring in $\{0,1\}^n$ to the set of hard locations it `belongs to'?  In other words… though this would break Kanerva's assumption of a uniformly distributed set of hard locations for a perfectly symmetrical set of hard locations, there could be large performance gains if such a mapping function from a bitstring to its corresponding set of nearest hard locations exists.
+A hypercube with n dimensions can be divided by two hypercubes with $n-1$ dimensions. Is there an algorithm that separates the area of each hard-location in such a form that there exists a function mapping each bitstring in $\{0,1\}^n$ to the set of hard locations it `belongs to'?  Though this would break Kanerva's assumption of a randomly yet uniformly distributed set of hard locations --- for a perfectly symmetrical set of hard locations ---, there could be large performance gains if such a mapping function from a bitstring to its corresponding set of nearest hard locations exists.
 
-
-
-
+$\forall b \in \{ 0,1\} ^n$, we want an algorithm $A$ that yields the particular list of hard locations for $b$ and all hard locations respect the desired properties of the memory.
 
 
 
+
+
+
+
+\subsection{Docker image and jupyter notebooks}
 
 We have generated a Docker image, which makes it even easier to explore the framework. After running the container, a Jupyter Notebook is available with sdm-framework and other tools already installed. The simulations run in this thesis are promptly available to be re-executed and explored. We invite readers to take a look and explore a little bit.
 
 The objective here is twofold: (i) a single command will install the framework, and (ii) another single command will run (and display) the desired figures obtained the simulation. This will allow potential users to become familiarized with the system and its underlying code with barely any learning curve beyond scientific python and jupyter notebooks.
+
+\subsection{From theory to a platform.}
+
+
+Platforms in the history of computing.
+
+
+Opens 10 doors.
+
 
 % TODO Include in the to do list simulations based on the suggestion of Murilinho.
 
