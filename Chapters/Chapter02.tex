@@ -208,7 +208,37 @@ Beyond that, we are running as state-of-the-art devices: (i) an Amazon EC2 p3.xl
 \input{./Chapters/sdm-applications.tex}
 
 
-\chapter{Results (vi): Information theoretical write operation}
+\chapter{Results (vi): Information-theoretical write operation}
+
+
+\begin{figure}[h!]
+  \centering
+  \subfloat[$w(d), d \in \{ 1, 2, ..., n\}.$]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-a-global.jpeg}}
+
+  \subfloat[$w(d)$ for the desired range. ]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-b-to-500.jpeg}}
+
+  \subfloat[stepwise $\left \lfloor{w(d)}\right \rfloor$ for fast integer computation.]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-c-stepwise.jpeg}}
+
+  \caption{Computing the amount of information of a signal to each hard location in its access radius. (a) entirety of the space; (b) region of interest; (c) Fast computation is possible through a stepwise function. }
+  \label{fig:info-theory-hypothesis}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+  \centering
+  \subfloat[$w(d), d \in \{ 1, 2, ..., n\}.$]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-a-sum.jpeg}}
+
+  \subfloat[$w(d)$ for the desired range. ]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-b-sum-range.jpeg}}
+
+  \subfloat[stepwise $\left \lfloor{w(d)}\right \rfloor$ for fast integer computation.]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-c-sum-stepwise.jpeg}}
+
+  \caption{Computing the sum of low-likelihood signals. (a) entirety of the space; (b) region of interest; (c) Fast computation through a stepwise function. }
+  \label{fig:info-theory-sum-hypothesis}
+\end{figure}
+
+
+
 
 \begin{figure}[h!]
   \centering
@@ -229,27 +259,42 @@ Beyond that, we are running as state-of-the-art devices: (i) an Amazon EC2 p3.xl
 
 My advisor, Alexandre Linhares, has proposed another read operation: an information-theoretical weighted reading. In it, the sum of the counter's value is weighted based on the distance between each hard-location's address and the reading address. The logic behind it is to vary the importance of each hard-location inside the circle.  It is only natural that one encodes an item in near hard locations with a stronger signal, and a natural candidate for this signal function is the amount of information contained in the distance between the item and each hard location.  Closer hard locations have lower probabilies and therefore should encode more information.
 
-Consider the following. Given any two $n$-sized bitstrings, the probability of a Hamming distance $d$ is given by,
+Consider the following. Information Theory \citep{cover2012elements} let us compute the precise amount of information in an event, when given its probability $p$, through the measure of \emph{self-information}:\\
 
-%\begin{align*}
+$I(p)= -log_2(p).$ \\
 
-$p(H=d)=\frac{ \binom{n}{d} }{ 2^n },$ \\
+Now, given any two $n$-sized bitstrings, the probability of their Hamming distance being $d$ is given by,
 
-$p(H\leq d)={\frac{1}{2^n}}{\displaystyle\sum_{i=0}^{d}{\binom{n}{i}}  }$, \\
 
-%\end{align}
+$p(H=d)= {2^{-n} \binom{n}{d} } ,$ \\
+
+$p(H\leq d)= 2^{-n} {\displaystyle\sum_{i=0}^{d}{\binom{n}{i}}}  $, \\
 
 and, consequently,
 
-$p(H\geq n-d)={\frac{1}{2^n}}{\displaystyle\sum_{i=n-d}^{n}{\binom{n}{i}}  }$, \\
-$p(d+1 \leq H \leq n-d-1)=2^n - {\frac{1}{2^{n-1}}}{\displaystyle\sum_{i=0}^{d}{\binom{n}{i}}  .}$ \\
+$p(H\geq n-d)=2^{-n}{\displaystyle\sum_{i=n-d}^{n}{\binom{n}{i}}  }$, \\
 
-accordingly, we have tested how SDM behaves when write weights are calculated using the amount of information given by each bitstring, i.e., $w(d) = -\log_2 \left( 2^{-n} \binom{n}{d} \right) = n - \log_2 \binom{n}{d}$, as in information theory \citep{cover2012elements}.
+$p(d+1 \leq H \leq n-d-1)=2^n - 2^{1-n}{\displaystyle\sum_{i=0}^{d}{\binom{n}{i}}, \forall d<n/2}$. \\
 
+Hence the weighted write would, on each hard location, sum (or subtract) the following:  \\
+
+$w(d) = -\log_2 \left( 2^{-n} \binom{n}{d} \right) = n - \log_2 \binom{n}{d}$, as seen in Figure \ref{fig:info-theory-hypothesis}.
+
+It is easy to interpret this data though a binary tree approach.  How many binary questions would be needed to precisely define a bitstring?
+
+
+  INTERPRET PLUS FIG
+
+
+
+Another possibility would be to use the sum of all distances closer (and less likely) locations within $w(d)$,
+
+$w(d) = -\log_2 \left( 2^{-n} \displaystyle\sum_{i=0}^{d}{\binom{n}{i}} \right) = n - \log_2 \displaystyle\sum_{i=0}^{d}{\binom{n}{i}}$, \\
+
+This can be seen in \ref{fig:info-theory-sum-hypothesis}.
 
 
 The results can be seen in Figure \ref{fig:info-theory-experiments} and seem promising. It seems that the critical distance increases by a number of bits.  Note that 10 additional bits imply an attractor $2^{10}$ of the size of the original. Another point to keep in mind is that, since the modulus of the vectors are not uniform in this approach, that the shape of the attractor may have asymmetries.
-
 
 
 
