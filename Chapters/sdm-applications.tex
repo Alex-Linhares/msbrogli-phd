@@ -226,9 +226,9 @@ Internally, every board is mapped into a random bitstring and passed to SDM. Thu
 
 After all, SDM knowns nothing about the boards themselves and yet it may learn how to play TicTacToe.
 
-In order to properly run the discussed algorithms, it is necessary to have two SDMs: a 0-fold and a 1-fold SDM. In the 0-fold SDM, every bitstring is written to its own address. In the 1-fold SDM, every bitstring points somewhere else. So, the transitions are written in the 1-fold SDM, while the boards themselves are written to the 0-fold SDM. The boards are written only once in the 0-fold, no matter how many times they appear. The transitions may be written more than once in the 1-fold SDM, because it would reinforce that transition.
+In order to properly run the discussed algorithms, it is necessary to have two SDMs: a 0-fold and a 1-fold SDM. In the 0-fold SDM, every bitstring is written to its own address. In the 1-fold SDM, every bitstring points to another one. So, the transitions are written in the 1-fold SDM, while the boards themselves are written to the 0-fold SDM. The boards are written only once in the 0-fold, no matter how many times they appear. The transitions may be written more than once in the 1-fold SDM, because it would reinforce that transition.
 
-In more details, the next movement decision consists in one read from the 1-fold SDM, resulting in a bitstring. Then this bitstring is used in an interative reading from the 0-fold SDM, which will converge to the bitstring associated with the next board. If it does not converge to any board, than SDM will choose a random movement and learn from it.
+In more details, the next movement decision consists in one read from the 1-fold SDM, resulting in a bitstring. Then this bitstring is used in an interative reading from the 0-fold SDM, which will converge to the bitstring associated with the next board. If it does not converge to any board, than SDM will choose a random movement and learn from it. Eventually it may converge to a board which is not a sequence of the current board. In this case, SDM will also choose a random movement.
 
 The weight used when writing a winning sequence is calculated using ...
 
@@ -236,9 +236,13 @@ The weight used when writing a winning sequence is calculated using ...
 
 \subsection{Training}
 
-It is an unsupervised algorithm because SDM learns playing against an opponent, who may be another SDM player, a human, or a player whose movements are always aleatory.
+It is an unsupervised algorithm because SDM learns playing against an opponent, who may be another SDM player, a human, or a player whose movements are always random.
 
 Thus, in order to train a SDM player, we just have to keep it playing over and over.
+
+
+\subsection{Results}
+
 
 
 \begin{forest}
