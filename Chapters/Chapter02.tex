@@ -307,14 +307,14 @@ But, when we reduced the number of random bitstrings written in the SDM from 10,
 \label{fig:sdm-100w-table-7-2}}
 \end{figure}
 
-To obtain the results from Figures \ref{fig:sdm-10000w-table-7-2} and \ref{fig:sdm-100w-table-7-2}, we had to write 10,000 random bitstrings to an SDM, and then randomly choose one of those bitstrings to be our origin. Finally, we randomly flipped some bits from the origin bitstring and executed a reading operation in the SDM. Thereby, in order to show the interaction effects more clearly, we changed the single read for an 6-iterative read. As we can see in Figure \ref{sdm-10000w-table-7-2-6iter}, after a distance of 500 bits, all bitstrings converged to 500-bit distance bitstrings, just as described by Kanerva.
+To obtain the results from Figures \ref{fig:sdm-10000w-table-7-2} and \ref{fig:sdm-100w-table-7-2}, we had to write 10,000 random bitstrings to an SDM, and then randomly choose one of those bitstrings to be our origin. Finally, we randomly flipped some bits from the origin bitstring and executed a reading operation in the SDM. Thereby, in order to show the interaction effects more clearly, we changed the single read for an 15-iterative read. As we can see in Figure \ref{sdm-10000w-table-7-2-15iter}, after a distance of 500 bits, all bitstrings converged to 500-bit distance bitstrings, just as described by Kanerva.
 
 Hence, our understanding is that the attractors are just preventing the bitstrings to converge directly to 500-bit distance bitstrings, requiring more reading steps to do so. They are in other orthogonal bitstrings' critical distance, but sufficiently far not to converge in a single read.
 
 \begin{figure}[h]
-\centering\includegraphics[width=\textwidth]{images02/sdm-10000w-table-7-2-6iter.png}
+\centering\includegraphics[width=\textwidth]{images02/sdm-10000w-table-7-2-15iter.png}
 \caption{This graph shows the interaction effects more clearly.  As we change the single read to a 6-iterative read, the effect has vanished and all bitstrings above $x=500$ have converged to 500-bit distance bitstrings. Here we have the exact same configuration of Figure \ref{sdm-10000w-table-7-2}, except for the iterative read.
-\label{sdm-10000w-table-7-2-6iter}}
+\label{sdm-10000w-table-7-2-15iter}}
 \end{figure}
 
 %To obtain the results from Figures \ref{fig:sdm-10000w-table-7-2} and \ref{fig:sdm-100w-table-7-2}, we had to write 10,000 random bitstrings to an SDM, and then randomly choose one of those bitstrings to be our origin. Finally, we randomly flipped some bits from the origin bitstring and executed a reading operation in the SDM. Thereby, in order to show the interaction effects more clearly, we wrote a handmade bitstring to the SDM which had all bits inverted in relation to the origin bitstring --- their hamming distance was equal to 1,000. Our handmade bitstring was acting as an opposite attractor, and one can see the accelerating effects towards convergence to both attractors: the origin and the handmade bitstrings (Fig. \ref{sdm-10000w-notX-table-7-2}). Here we had the exact same configuration of Figure \ref{sdm-10000w-table-7-2}, with the addition of the single opposite attractor.
@@ -328,6 +328,38 @@ Hence, our understanding is that the attractors are just preventing the bitstrin
 
 
 \chapter{Results (ii): Loss of neurons}
+
+In SDM, the data is written distributed among millions of hard-locations, which gives SDM robustness against loss of neurons. In other words, SDM should keep convering correctly even when some neurons are dead. The question is: how robust it really is? How many neurons may die before it starts to forget things.
+
+Looking for answers to those questions, we run a simulation in which we kept killing some neurons and checking whether SDM remained converging to a given bitstring. In this simulation, 10,000 random bitstrings were written to a 1,000-bit SDM.
+
+When we say that we killed a neuron, it means that its hard-location's counters have been zeroed and a new random bitstring address has been given to its hard-location. As no other bitstring is written into the memory, it is exactly like ignoring this hard-location in the next reading operations, i.e., the hard-location does not affect the next reading.
+
+In Figure \ref{fig:sdm-neuron-death-50k}, we can notice that SDM is absolutely robust up to 50,000 neuron deaths which is 5\% of the all hard-locations.
+
+\begin{figure}[h]
+\centering\includegraphics[width=\textwidth]{./images02/new-images/sdm-neuron-death-50k.png}
+\caption{This graph shows the SDM's robustness against loss of neurons. It shows from 0 to 50,000 neuron deaths.
+\label{fig:sdm-neuron-death-50k}}
+\end{figure}
+
+In fact, SDM begins to be affected by loss of neurons after 600,000 deaths (Figure \ref{fig:sdm-neuron-death-1m}), and obviously forgets everything when all neurons are dead.
+
+It is interesting that 500,000 deaths have almost no effect in SDM's recall. It is analogous to do an hemispherectomy in a person and, after the procedure, the person is able to recall exactly like before.
+
+\begin{figure}[h]
+\centering\includegraphics[width=\textwidth]{./images02/new-images/sdm-neuron-death-1m.png}
+\caption{This graph shows the SDM's robustness against loss of neurons.
+\label{fig:sdm-neuron-death-1m}}
+\end{figure}
+
+Although there is some decrease in SDM after 600,000, it is curious that there is a sudden change between 900,000 (90\%) and 1,000,000 (100\%). In Figure \ref{fig:sdm-neuron-death-details} we can see the details of this non-linear change.
+
+\begin{figure}[h]
+\centering\includegraphics[width=\textwidth]{images02/new-images/sdm-neuron-death.png}
+\caption{This graph shows the SDM's robustness against loss of neurons. In each color, a given amount of neurons have been killed.
+\label{fig:sdm-neuron-death-details}}
+\end{figure}
 
 
 \chapter{Results (iii): Generalized read operation}
