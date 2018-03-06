@@ -14,7 +14,7 @@ Extensions of SDM has been used in many applications. For example, \citet{Snaide
 
 The main contribution of this work is a reference implementation which yields (i) orders of magnitude gains in performance, (ii) has several backends and operations, (iii) has been validated against the mathematical model, (iv) is cross-platform, and (v) is easily extended to fulfill other research models. Our reference implementation may, hopefully, accelerate research into the model's dynamics and make it easier for readers to replicate any previous results and easily understand the source-code of the model.  Moreover, it is compatible with jupyter notebook and researchers may share their notebooks possibly accelerating the advances in their fields \citep{shen2014interactive}.
 
-Other contributions has also been introduced, which include (i) a noise filtering approach, (ii) a supervised classification algorithm, (iii) and a reiforcement learning algorithm, all of them using only the original SDM proposed by Kanerva, i.e., with no addons. Although our applications have already been explored in previous work \citep{Meng2009, fan1997genetic, rao1995natural}, all of them has done it adapting SDM to better fit their problems. We have presented different approaches with no adaptations at all.
+Other contributions have also been introduced, which include (i) a noise filtering approach, (ii) a supervised classification algorithm, (iii) and a reinforcement learning algorithm, all of them using only the original SDM proposed by Kanerva, i.e., with no additional mechanisms, algorithms, data structures, etc. Although some of our applications have already been explored in previous work \citep{Meng2009, fan1997genetic, rao1995natural}, all of them have done some adapting of SDM to their problems, and none of them have used just the ideas introduced by Kanerva. We have presented different approaches with no adaptations at all.
 
 Finally, we have found an anomaly in one of Kanerva's prediction, which we believe is related to SDM capacity. We have also tested a generic reading operation proposed by professor Paulo Murilo (personal communication).
 
@@ -22,7 +22,7 @@ Finally, we have found an anomaly in one of Kanerva's prediction, which we belie
 
 \begin{tabular}{cp{\textwidth}}
   $n$ & Number of dimensions, i.e., $n=1,000$. \\
-  $N$ & Length of the binary space --- $|\{0, 1\}^n| = 2^n$. \\
+  $N$ & Size of the binary space --- $|\{0, 1\}^n| = 2^n$. \\
   $N'$ & Number of hard-locations samples from $\{0, 1\}^n$. Its typical value is 1,000,000, as suggested by \citet{Kanerva1988}. \\
   $H$ & Same as $N'$. \\
   $r$ & Access radius, i.e., when $n=1,000$ and $N'=1,000,000$, its typical value is $451$. This value is calculated to activate, on average, one thousand of $N'$. \\
@@ -62,11 +62,11 @@ For instance, a 1,000-bit bitstring will have $\lceil 1000/64 \rceil = 16$ integ
 
 The distance between two bitstrings is calculated by the hamming distance, which is the number of different bits between them. It is calculated counting the number of ones in the exclusive or (xor) between the bitstrings, i.e., $d(x, y) = \text{number of ones in } x \oplus y$.
 
-There are several algorithms to calculate the number of ones \citep{warren2013hacker}, but the performance depends on the processor. So, we have implemented three different algorithms and one may be selected through compiling flags. The default algorithm is to use a builtin instruction from the compiler.
+There are several algorithms to calculate the number of ones \citep{warren2013hacker}, but the performance depends on the processor. So, we have implemented three different algorithms and one may be selected through compiling flags. The default algorithm is to use a built-in \_\_popcnt() instruction from the compiler.
 
 There is also the naive algorithm, which really counts the number of ones checking bit by bit. It is available only to testing purposes and should never be used.
 
-The other algorithm available is the lookup. It pre-calculates a table with the number of ones of all possible 16-bit integers. This table is accessed a few times to calculate the number of ones of a 64-bit integer, i.e., to calculate the distance between two bitstrings, it sums the distance of each 16-bit part of the bitstrings, i.e., $d(x[0:63], y[0:63]) = d(x[0:15], y[0:15]) + d(x[16:31], y[16:31]) + d(x[32:47], y[32:47]) + d(x[48:63], y[48:63])$ where $x[i:i+15]$ and $y[i, i+15]$ are the 16-bit integers formed by the bits between $i$ and $i+15$ of $x$ and $y$, respectivelly. Each 16-bit distance is calculated through a single table access. As each distance is calculated in O(1), this algorithm runs in O($\lceil bits/16 \rceil$). This table uses 65MB of RAM. One may change the table from 16-bit integers to 32-bit integers, which would halve the number of accesses but would use 4GB of RAM (instead of 65MB).
+The other algorithm available is the lookup. It pre-calculates a table with the number of ones of all possible 16-bit integers. This table is accessed a few times to calculate the number of ones of a 64-bit integer, i.e., to calculate the distance between two bitstrings, it sums the distance of each 16-bit part of the bitstrings, i.e., $d(x[0:63], y[0:63]) = d(x[0:15], y[0:15]) + d(x[16:31], y[16:31]) + d(x[32:47], y[32:47]) + d(x[48:63], y[48:63])$ where $x[i:i+15]$ and $y[i, i+15]$ are the 16-bit integers formed by the bits between $i$ and $i+15$ of $x$ and $y$, respectivelly. Each 16-bit distance is calculated through a single table access. As each distance is calculated in O(1), this algorithm runs in O($\lceil bits/16 \rceil$). This table uses 65MB of RAM. One may change the table from 16-bit integers to 32-bit integers, which would halve the number of accesses at the expense of 4GB of RAM (instead of 65MB).
 
 
 \section{Address space}
@@ -159,24 +159,7 @@ There is also a weighted writing operation. In this case, the weight is applied 
 
 The framework has been validated comparing its results with the expected results from \citet{Kanerva1988}. Thus, we run simulations which were then compared to the theoretical analysis conducted some decades ago.
 
-\section{Distance between random bitstrings}
-
-As predicted by Kanerva, the distance between two bitstrings follows a binomial distribution with mean $\mu = n/2$ and standard deviation $\sigma = \sqrt{n}/2$. For large values of $n$, it may be approximated by a normal distribution with the same mean and standard deviation.
-
-In order to validate our random bitstring generation algorithm, we have calculated 10,000 distances between two random bitstrings with 1,000 bits. In total, 20,000 bitstrings have been generated. The code is available in the ``Distance between bitstrings'' notebook.
-
-In figure \ref{fig:validation-distance}, we can notice that the theoretical model and the simulation matches. Hence, it seems the random bitstring generation algorithm works properly.
-
-\begin{figure}[h!]
-  \centering
-  \subfloat[Full histogram ]{\includegraphics[width=0.5\textwidth]{./images02/new-images/bs-hist-full.png}}
-  \subfloat[{Zoom in the interval $[400, 600]$} ]{\includegraphics[width=0.5\textwidth]{./images02/new-images/bs-hist-zoom.png}}
-
-  \caption{Histogram of 10,000 distances between two random bitstrings with 1,000 bits. The curve in red is the theoretical normal distribution with $\mu = 500$ and $\sigma = \sqrt{500}/2$.}
-  \label{fig:validation-distance}
-\end{figure}
-
-
+The objective here is twofold: (i) a single command will install the framework, and (ii) another single command will run (and display) the desired figures obtained the simulation. This will allow potential users to become familiarized with the system and its underlying code with barely any learning curve beyond scientific python and jupyter notebooks.
 
 One particular analysis of interest is that of the distance read at a point $\alpha$. Suppose an SDM is trying to read an item written at $\alpha$, but the cues received so far lead to a point of distance $d$ from $\alpha$.  As one reads at $\alpha+d$, a new bitstring $\beta$ is obtained, leading to our question: what is the new distance from $\alpha$ to $\beta$? Is it smaller or larger than $d$? That, of course, depends on the ratio between $d$ and the number of dimensions of the memory.  As we have found out, there are some deviations from Kanerva's original theoretical analysis and the results obtained by simulation.
 
@@ -347,7 +330,7 @@ We propose to provide a new, open-source, cross-platform, highly parallel framew
 
 \section{Future work}
 
-Here is an interesting questions that have been considered during this work, but have had to be left for future research.
+Here are interesting questions that have been considered during this work, but have had to be left for future research.
 
 \subsection{Multiple levels}
 
@@ -391,8 +374,6 @@ $\forall b \in \{ 0,1\} ^n$, we want an algorithm $A$ that yields the particular
 \subsection{Docker image and jupyter notebooks}
 
 We have generated a Docker image, which makes it even easier to explore the framework. After running the container, a Jupyter Notebook is available with sdm-framework and other tools already installed. The simulations run in this thesis are promptly available to be re-executed and explored. We invite readers to take a look and explore a little bit.
-
-The objective here is twofold: (i) a single command will install the framework, and (ii) another single command will run (and display) the desired figures obtained the simulation. This will allow potential users to become familiarized with the system and its underlying code with barely any learning curve beyond scientific python and jupyter notebooks.
 
 \subsection{From theory to a platform.}
 
