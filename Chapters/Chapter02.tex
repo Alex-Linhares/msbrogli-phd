@@ -201,7 +201,7 @@ In figure \ref{fig:validation-activated-hls}, we can notice that the theoretical
 Besides the number of activated hard-locations, we have also extended Kanerva's results to calculate the distribution of distances between the center of the circle and the activated hard-locations. Let $A$ be the set of activated hard-locations, $\xi$ be the center of the circle, and $r$ be the access radius, then:
 
 \begin{align}
-P(\text{d}(a, \xi)=x | a \in A) &= \frac{P(\text{d}(a, \xi)=x)}{P(d \in A)} \\
+P(\text{d}(a, \xi)=x | a \in A) &= \frac{P(\text{d}(a, \xi)=x)}{P(a \in A)} \\
     &= \frac{\binom{n}{x}}{\sum_{k=0}^r \binom{n}{k}} \label{eq:prob-d-inside-circle}
 \end{align}
 
@@ -233,11 +233,43 @@ In Figure \ref{fig:validation-intersection}, we can notice that we have obtained
   \label{fig:validation-intersection}
 \end{figure}
 
+<<<<<<< HEAD
 ---
+=======
+
+\section{Storage and retrieval of sequences}
+
+\citet[Ch.8]{Kanerva1988} presented an approach to store and retrieve sequences using $k$ different SDMs, namely $\text{sdm}_1$, $\text{sdm}_2$, $dots$, $\text{sdm}_k$.
+
+Let $a_0, a_1, a_2, \dots, a_n$ be a sequence to be stored in a $k$-fold memory. So, all pointers of the form $a_i \rightarrow a_{i+k}$ will be written to $\text{sdm}_k$ memory, i.e., in $\text{sdm}_1$, the following pointers will be written: $a_0 \rightarrow a_1$, $a_1 \rightarrow a_2$, $\dots$, $a_{n-1} \rightarrow a_n$; while in $\text{sdm}_2$, the following pointers will be written: $a_0 \rightarrow a_2$, $a_2 \rightarrow a_3$, $\dots$, $a_{n-2} \rightarrow a_n$; and so forth.
+
+We have tested exactly the same example presented in \citet{Kanerva1988}, p.85. We wrote two sequences to a $3$-fold memory: $<A, B, C, D>$ and $<E, B, C, F>$. Then, after reading the sequences $<A, B, C>$ and $<E, B, C>$, we have obtained $D$ and $F$, respectively.
+
+Each reading operation was performed summing the counters of all activated hard-locations from all three memories. For instance, to read the sequence $<A, B, C>$, we have activated the hard-locations around $C$ in $\text{sdm}_1$, we have also activated the hard-locations around $D$ in $\text{sdm}_2$, and, finally, we have also activated the hard-locations around $A$ in $\text{sdm}_3$. After summing the counters of all those hard-locations, we evaluate the resulting bitstring just as in the original read operation.
+
+The code is available in the ``Sequences (Kanerva Ch 8)'' notebook \citep{sdmframework}.
+
+The logic behind how it works is that, when reading the sequence $<A, B, C>$, we have $A$ pointing to $D$, while both $B$ and $C$ point to $D$ and $F$. Thus, $D$ appears more often than $F$ and ended up being the result.
+
+Hence, as we have replicated the theoretical results from Kanerva, we have one more evidence that our framework works properly.
+
+\subsection{$k$-fold memory using only one SDM}
+
+We have extended Kanerva's ideas to be able to store and retrieve sequences in $k$-fold memories using only one SDM (instead of $k$ SDMs).
+
+Our idea was to create $k$ random bitstrings, one for each fold. We have performed writing and reading exactly as Kanerva's original idea, but, instead of writing to $\text{sdm}_k$, we have written $a_{i+k}$ into the address $a_i \oplus \text{tag}_k$, and, instead of reading from $\text{sdm}_k$, we have read from address $a_i \oplus \text{tag}_k$, where $\oplus$ is the exclusive or (XOR) operator.
+
+It worked as if we had splitted SDM into $k$ regions with low intersection between two of them. So, as the interference is minimal, they work like independent SDMs. The major disadvantage of this approach is that memory capacity may be reached faster.
+
+Splitting the memory into regions may be an interesting strategy to other sorts of problems, mostly the ones which would need many SDMs and, consequently, would use a lot of RAM.
+
+
+\section{Convergence }
+>>>>>>> 60e735ce87a5bf7917c20065d9ecc7a5372be660
 
 One particular analysis of interest is that of the distance read at a point $\alpha$. Suppose an SDM is trying to read an item written at $\alpha$, but the cues received so far lead to a point of distance $d$ from $\alpha$.  As one reads at $\alpha+d$, a new bitstring $\beta$ is obtained, leading to our question: what is the new distance from $\alpha$ to $\beta$? Is it smaller or larger than $d$? That, of course, depends on the ratio between $d$ and the number of dimensions of the memory.  As we have found out, there are some deviations from Kanerva's original theoretical analysis and the results obtained by simulation.
 
-\section{Some initial anomalous results}
+\subsection{Some initial anomalous results}
 
 As we ran the simulations reflecting some of Kanerva's graphs, one in particular struck our attention: The new distances obtained after a read operation were not perfectly predicted by the theoretical model, and we propose that this is due to interaction effects between different attractors.
 
