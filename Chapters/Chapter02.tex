@@ -566,6 +566,21 @@ We have generated a Docker image, which makes it even easier to explore the fram
 
 All the simulations and graphics generated in this thesis are promptly available to be re-executed and explored by those interested. We invite readers to take a look and explore a little bit.
 
+It is no coincidence that a scientific journal such as Neurocomputing states that “software is scientific method by machine”.  Indeed, recently, Nature analysed the top-100 cited papers in history, to find
+
+\begin{quote}
+... some surprises, not least that it takes a staggering 12,119 citations to rank in the top 100 — and that many of the world’s most famous papers do not make the cut. A few that do, such as the first observation of carbon nanotubes (number 36) are indeed classic discoveries. But the vast majority describe experimental methods or software that have become essential in their fields. [...] The list reveals just how powerfully research has been affected by computation and the analysis of large data sets. \\
+\hfill --- \citet{van2014top}
+\end{quote}
+
+
+The overarching intention here is to not only provide a starting point, but to provide the Framework in which SDM research can be conducted.  Consider, for example, having the ability to compare the results of a new (‘forked’) model to the previous best, under a particular benchmark set.  For example, some of the benchmarks that we plan to develop for future research is: how fast is convergence through iterative reading?  How large is the attractor of the critical distance?  How well does the system filter noise?  How well does the system work under the aforementioned supervised learning task?  And other authors may be able to improve this benchmark set themselves, as is usual in open source development.  It is perhaps this facility of ease to build on top of previous work that seems most exciting at this stage.
+
+Consider the misunderstanding concerning the SDM read operation:  Dr Stan Franklin describes Kanerva's read operation in a way that each hard location, at each dimension, provides only a single bit of information to the read operation (instead of Kanerva's full counter).  We have referred to this modified read operation as Chada read.  Having an open, testable, codebase reduces the possibilities of such misunderstandings in the long run.
+
+Of course, there is also new work here.  The mathematics of the model has been to be correct (with a single exception); we have shown how to execute unsupervised learning with nothing besides operations originally proposed by Kanerva; and finally, we have reproduced
+
+
 \subsection{From theory to a platform.}
 
 
