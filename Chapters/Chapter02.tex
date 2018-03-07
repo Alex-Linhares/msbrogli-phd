@@ -364,11 +364,15 @@ Although there is some decrease in SDM after 600,000, it is curious that there i
 
 \chapter{Results (iii): Generalized read operation}
 
+In this chapter we will explore how the generalized read operation works and whether it may improve SDM behavior. In this case, we understand that SDM behavior will have been improved when the critical distance increases, which means it is able to recognize things with even less clues than before.
+
+In Figure
+
 \begin{figure}[h!]
   \centering
-  \subfloat[$z \in \{.1, .2, .3, .4, .5, 1\}$]{\includegraphics[width=3.2in]{./images02/new-images/iter_z_01-05.png}}
+  \subfloat[SDM behavior when $z \in \{0.1, 0.2, 0.3, 0.4, 0.5, 1\}$ ]{\includegraphics[width=\textwidth]{./images02/new-images/iter_z_01-05.png}}
 
-  \subfloat[$z \in \{1.5, 3, 4.5, 6\}$]{\includegraphics[width=3.2in]{./images02/new-images/z_15_3_45_6.png}}
+  \subfloat[SDM behavior when $z \in \{1.5, 3, 4.5, 6\}$ ]{\includegraphics[width=\textwidth]{./images02/new-images/z_15_3_45_6.png}}
 
   \caption{(a) and (b) show the behavior of a single read; As stated previously, we can see a deterioration of convergence, with lower critical distance as $z>1$.  Another observation can be made here, concerning the discrepancy of Kanerva's Fig 7.3 and our data.  It seems that Kanerva may not have considered that a single read would only `clean' a small number of dimensions \emph{after the critical distance}. What we observe clearly is that with a single read, as the distance grows, the system only `cleans' towards the orthoghonal distance 500 after a number of iterative readings.}
   \label{fig:murillo-generalization-experiments}
