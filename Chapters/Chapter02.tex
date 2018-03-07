@@ -131,6 +131,12 @@ The framework implements three main scanner algorithms: linear scanner, thread s
 
 The OpenCL must be initialized, which just copies the address space's bitstrings to the GPU's memory. Then, many scans may be executed with no necessity to upload the bitstrings again. The OpenCL scanner supports running into multiple devices.
 
+\subsection{OpenCL kernel}
+
+The OpenCL kernel explores the GPU architecture to improve performance. Each work group calculates the distance of several bitstrings. During the distance calculation, each worker calculates the exclusive OR (XOR) between two 64-bit integers and use the built-in popcount function to count the number of ones. Then, they update an array of intermediate distances with their partial distances. This array is stored in the local memory and is shared with all workers of the same group. This whole step happens simultaneously in the GPU. Then, we used a reduction algorithm to sum the intermediate distances array in order to calculate the correct distance. This reduction algorithm is also distributed between the workers and runs in $O(\log_2(\text{bs\_step}))$. Finally, one of the workers checks whether the distance is less than or equal to the radius to include the bitstring index into the resulting array.
+
+The number of workers in each group is the closest power of two above bs\_len (which is the number of 64-integers that forms a bitstring).
+
 
 \section{Counters}
 
