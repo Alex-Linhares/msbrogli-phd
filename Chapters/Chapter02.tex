@@ -157,7 +157,7 @@ The reading and writing operations are executed in two steps: first, the address
 
 The iterated reading keeps reading until it gets exactly the same bitstring (or the number of maximum interations has been reached), i.e., it performs $\eta_{i+1} = \text{read}(\eta_i)$ and stops when $\eta_{k+1} = \eta_{k}$. If the initial bitstring is inside the critical distance of $\eta$, it will converge to $\eta$, but, if it is not, it will diverge and reach the maximum number of iterations.
 
-The framework has both Kanerva's read and the generalized read. The latter was implemented according to the generalization proposed by professor Paulo Murilo. The generalization brings a parameter $z$, which is the exponent. In this case, the results are floating point instead of integer, which considerably reduces performance. When $z=1$, it is exactly as the Kanerva's read. When $z=0$, it is the Chada's read. We also explored how SDM would behave for different values of $z$.
+The framework has both Kanerva's read and Murilo's generalized read. The generalization brings a parameter $z$, which is the exponent. In this case, the results are floating point instead of integer, which considerably reduces performance. When $z=1$, it is exactly as the Kanerva's read. When $z=0$, it is the Chada's read. We also explored how SDM would behave for different values of $z$.
 
 There is another special read operation: the weighted reading. In the weighted reading, the value of the counters are multiplied by a weight which depends only on the distance between the reading address and the hard-location address. The weight is retrieved from a lookup table of integers indexed by the distance. The rest of the read operation is exactly the same.
 
@@ -393,7 +393,11 @@ We run exactly the same simulation for a 256-bit SDM with 1,000,000 hard-locatio
 
 \chapter{Results (iii): Generalized read operation}
 
+<<<<<<< HEAD
 In this chapter we will explore how the generalized read operation works and whether it may improve SDM behavior or not. In this case, we are specifically interested into the impact in the critical distance. An increase in , which means it is able to recognize things with even less clues than before.
+=======
+In this chapter we will explore how Murilo's generalized read operation works and whether it may improve SDM behavior. In this case, we understand that SDM behavior will have been improved when the critical distance increases, which means it is able to recognize things with even less clues than before.
+>>>>>>> 33f007965c4cd8e6a41989ecfed9fb02fb364633
 
 In Figure
 
@@ -419,7 +423,7 @@ In Figure
 
 
 
-Physicist Paulo Murilo observed that the models of Kanerva-read ($z=1$) and Chada-read ($z=0$) were simple variations of the exponent $z$, which suggests experimenting with different values. The results, however, have not yielded performance improvements.  Though for $z \leq 1$ results are comparable to $z=1$, for $z>1$, the system shows a clear deterioration, with a smaller distance to convergence and higher divergence at large-distance reads. This is shown in Figures \ref{fig:murillo-generalization-experiments} and \ref{fig:murillo-generalization-experiments-6reads}.
+Murilo observed that the models of Kanerva-read ($z=1$) and Chada-read ($z=0$) were simple variations of the exponent $z$, which suggests experimenting with different values. The results, however, have not yielded performance improvements.  Though for $z \leq 1$ results are comparable to $z=1$, for $z>1$, the system shows a clear deterioration, with a smaller distance to convergence and higher divergence at large-distance reads. This is shown in Figures \ref{fig:murillo-generalization-experiments} and \ref{fig:murillo-generalization-experiments-6reads}.
 
 
 \chapter{Results (iv): Performance}
