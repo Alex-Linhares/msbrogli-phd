@@ -304,7 +304,7 @@ Our results show that the theoretical prediction is not accurate.  There are int
 
 Obviously, these small deviations from Kanerva's original theoretical predictions deserve a qualification.  Kanerva was working in the 1980s and the 1990s, and had no access to the immense computational power that we do today. It is no surprise that some small interaction effects should exist as machines allow us to explore the ideas of his monumental work.
 
-But, when we reduced the number of random bitstrings written in the SDM from 10,000 to only 100, the results reflected very well the Kanerva's theoretical expectation (Figure \ref{fig:sdm-100w-table-7-2-10samples}). This result strengthens our hypothesis that the disparities in the computational results are due to the interaction effect of high numbers of different attractors. In Figure \ref{fig:sdm-table-7-2-steps} we can notice that, the more random bitstrings are written, the stronger the attractots.
+But, when we reduced the number of random bitstrings written in the SDM from 10,000 to only 100, the results reflected very well the Kanerva's theoretical expectation (Figure \ref{fig:sdm-100w-table-7-2-10samples}). This result strengthens our hypothesis that the disparities in the computational results are due to the interaction effect of high numbers of different attractors. In Figure \ref{fig:sdm-table-7-2-steps} we can notice that, the more random bitstrings are written, the stronger the attractors.
 
 \begin{figure}[h]
 \centering
@@ -338,36 +338,56 @@ Hence, our understanding is that the attractors are just preventing the bitstrin
 
 \chapter{Results (ii): Loss of neurons}
 
-In SDM, the data is written distributed among millions of hard-locations, which gives SDM robustness against loss of neurons. In other words, SDM should keep convering correctly even when some neurons are dead. The question is: how robust it really is? How many neurons may die before it starts to forget things.
+In SDM, the data is written distributed among millions of hard-locations, which theoretically gives SDM robustness against loss of neurons. In other words, SDM should keep convering correctly even when some neurons are dead. The question is: how robust it really is? How many neurons may die before it starts to forget things. These questions have never been addresses before.
 
-Looking for answers to those questions, we run a simulation in which we kept killing some neurons and checking whether SDM remained converging to a given bitstring. In this simulation, 10,000 random bitstrings were written to a 1,000-bit SDM.
+Looking for answers to these questions, we run simulations in which we kept killing some neurons and checking whether SDM remained converging to a given bitstring or not. In these simulations, 10,000 random bitstrings were written to a 1,000-bit SDM with 1,000,000 hard-locations, and we choose one of them as our target. As the bitstrings were all written exactly once, we may generalize the results. The code is available in the ``Reseting hard-locations'' notebook \citep{sdmframework}.
 
-When we say that we killed a neuron, it means that its hard-location's counters have been zeroed and a new random bitstring address has been given to its hard-location. As no other bitstring is written into the memory, it is exactly like ignoring this hard-location in the next reading operations, i.e., the hard-location does not affect the next reading.
+As neurons are hard-locations in SDM, when we say that a neuron has been killed, we mean that its counters have been zeroed and a new random bitstring address has been assigned. During our simulations, no other bitstring has been written after the 10,000. Consequently, as their counters willl remain zeroed, it is exactly like ignoring the dead hard-locations in the subsequent reading operations.
 
-In Figure \ref{fig:sdm-neuron-death-50k}, we can notice that SDM is absolutely robust up to 50,000 neuron deaths which is 5\% of the all hard-locations.
-
-\begin{figure}[h]
-\centering\includegraphics[width=\textwidth]{./images02/new-images/sdm-neuron-death-50k.png}
-\caption{This graph shows the SDM's robustness against loss of neurons. It shows from 0 to 50,000 neuron deaths.
-\label{fig:sdm-neuron-death-50k}}
+\begin{figure}[!p]
+\centering\includegraphics[width=\textwidth]{./images02/new-images/sdm-neuron-death-200k.png}
+\caption{This graph shows the SDM's robustness against loss of neurons in a SDM with $n=1,000$ and $H=1,000,000$. It shows that a loss of 200,000 neurons, 20\% of the total, does not affect SDM whatsoever.
+\label{fig:sdm-neuron-death-200k}}
 \end{figure}
 
-In fact, SDM begins to be affected by loss of neurons after 600,000 deaths (Figure \ref{fig:sdm-neuron-death-1m}), and obviously forgets everything when all neurons are dead.
+In Figure \ref{fig:sdm-neuron-death-200k}, we can notice that SDM is absolutely robust up to 200,000 neuron deaths which is 20\% of all hard-locations. This result is pretty impressive and really surprised us.
 
-It is interesting that 500,000 deaths have almost no effect in SDM's recall. It is analogous to do an hemispherectomy in a person and, after the procedure, the person is able to recall exactly like before.
+In fact, SDM begins to be significantly affected by loss of neurons after 600,000 neuron deaths (Figure \ref{fig:sdm-neuron-death-1m}), and obviously forgets everything when all neurons are dead.
 
-\begin{figure}[h]
+\begin{figure}[!p]
 \centering\includegraphics[width=\textwidth]{./images02/new-images/sdm-neuron-death-1m.png}
-\caption{This graph shows the SDM's robustness against loss of neurons.
+\caption{This graph shows the SDM's robustness against loss of neurons in a SDM with $n=1,000$ and $H=1,000,000$. The more neurons are death, the smaller the critical distance, i.e., the worse the SDM recall.
 \label{fig:sdm-neuron-death-1m}}
 \end{figure}
 
-Although there is some decrease in SDM after 600,000, it is curious that there is a sudden change between 900,000 (90\%) and 1,000,000 (100\%). In Figure \ref{fig:sdm-neuron-death-details} we can see the details of this non-linear change.
+It is interesting that 500,000 neuron deaths has a minor effect in SDM's recall capability (see Figure \ref{fig:sdm-neuron-death-500k}). It is analogous to do an hemispherectomy in a person and, after the procedure, the person is able to recall and learn almost just like before. In fact, there are clinical reports of children submitted to hemispherectomy who live an almost normal life with minor motor problems.
 
-\begin{figure}[h]
+\begin{figure}[!p]
+\centering\includegraphics[width=\textwidth]{./images02/new-images/sdm-neuron-death-500k.png}
+\caption{This graph shows the SDM's robustness against loss of neurons in a SDM with $n=1,000$ and $H=1,000,000$. Even when 50\% of neurons are dead, SDM recall is barely affected, which is an impressive result and matches with some clinical results of children submitted to hemispherectomy.
+\label{fig:sdm-neuron-death-500k}}
+\end{figure}
+
+An important observation is that around 800,000 neuron deaths (80\% of all neurons) the critical distance is really small, i.e., SDM recall capacity is very diminished. After 900,000 neuron deaths the critical distance is zero. In this case, everything has been forgot.
+
+Although there is some decrease in SDM recall after 600,000 neuron deaths, it is curious that there is a sudden change between 900,000 (90\%) and 1,000,000 (100\%). In Figure \ref{fig:sdm-neuron-death-details} we can see the details of this non-linear change. Notice that after 950,000 even the exact clue $\eta_0$ does not converge to $\eta$.
+
+\begin{figure}[!p]
 \centering\includegraphics[width=\textwidth]{images02/new-images/sdm-neuron-death.png}
-\caption{This graph shows the SDM's robustness against loss of neurons. In each color, a given amount of neurons have been killed.
+\caption{This graph shows the SDM's robustness against loss of neurons in a SDM with $n=1,000$ and $H=1,000,000$.
 \label{fig:sdm-neuron-death-details}}
+\end{figure}
+
+We run exactly the same simulation for a 256-bit SDM with 1,000,000 hard-locations. The results were even more surprising, because the 256-bit SDM was more robust to loss of neuron than the 1,000-bit SDM (see Figure \ref{fig:sdm-neuron-death-256bits}). Notice that the loss of 50\% of neurons barely affected the 256-bit SDM which remained functional even facing an enormous loss of 90\% of neurons.
+
+\begin{figure}[!p]
+\centering
+\subfloat[Up to 500,000 neuron deaths ]{\includegraphics[width=\textwidth]{images02/new-images/sdm-neuron-death-256-500k.png}}
+
+\subfloat[From 600,000 to 1,000,000 neuron deaths ]{\includegraphics[width=\textwidth]{images02/new-images/sdm-neuron-death-256-1m.png}}
+
+\caption{This graph shows the SDM's robustness against loss of neurons in a SDM with $n=256$ and $H=1,000,000$.
+\label{fig:sdm-neuron-death-256bits}}
 \end{figure}
 
 
