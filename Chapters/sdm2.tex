@@ -237,7 +237,7 @@ Starting from the premise of SDM as a faithful model of human short-term memory,
 \begin{figure}[!htb]
 \centering
 
-\subfloat[Kanerva's original model]{\includegraphics[width=3.1in]{./images02/new-images/kanerva-read.png}}
+\subfloat[Kanerva's original model]{\includegraphics[width=3.1in]{./images02/new-images/kanerva-read.png}\label{fig:cir-dist-10k-writes-kanerva}}
 
 \subfloat[Chada's read]{\includegraphics[width=3.1in]{./images02/new-images/chada-read_z_0.png}}
 \caption{How far, in hamming distance, is a read item from the original stored item? Kanerva demonstrated that, after a small number of iterative readings (6 here), a critical distance behavior emerges. Items read at close distance converge rapidly; whereas farther items do not converge. Most striking is the point in which the system displays the tip-of-tongue behavior. Described by psychological moments when some features of the item are prominent in one's thoughts, yet the item still cannot be recalled (but an additional cue makes convergence `immediate'). Mathematically, this is the precise distance in which, despite having a relatively high number of cues (correct bits) about the desired item, the time to convergence is infinite.   Heatmap colors display the hamming distance the associative memory is able to cleanly converge to---or not.   In the $x$-axis, the distance from the desired item is displayed. In the $y$-axis, we display the read operation's behavior as the number of items registered in the memory grows.  These graphs are computing intensive, yet they can be easily tested by readers in our provided jupyter notebooks. Note the different scales.}

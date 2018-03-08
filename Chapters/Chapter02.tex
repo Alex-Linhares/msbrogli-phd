@@ -393,10 +393,7 @@ We run exactly the same simulation for a 256-bit SDM with 1,000,000 hard-locatio
 
 \chapter{Results (iii): Generalized read operation}
 
-
 In this chapter we will explore how Murilo's generalized read operation works and whether it may improve SDM behavior. In this case, we understand that SDM behavior will have been improved when the critical distance increases, which means it is able to recognize things with even less clues than before.
-
-% ?????????  In Figure
 
 \begin{figure}[h!]
   \centering
@@ -424,11 +421,123 @@ Murilo observed that the models of Kanerva-read ($z=1$) and Chada-read ($z=0$) w
 
 \chapter{Results (iv): Performance}
 
-Our intention is to provide comparative performance metrics under different computation engines (CPU, GPU, etc) and different operating systems (Linux, MacOs, Windows, etc). Performance can be measured as the average number of scans of all hard locations per second, reads per second, writes per second, etc.
+Performance is an important part of our framework. Running an SDM memory consumes a lot of resource from both CPU and RAM.
 
-Our first device is a personal MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU.  We also intend to test on machines such as the iMac with dedicated GPU, MacPro with dedicated GPU, and personal computers under Linux with dedicated GPUs.
+For instance, each scan in 1,000,000 hard-locations with 1,000 bits executes $10^9$ bit compares through $10^9/64 = 15,625,000$ XORs and calls to the built-in popcount. So, 10,000 writes execute $10^{13}$ bit compares, while a 6-iterative reading executes $6 \cdot 10^{12}$ bit compares. The heatmap of Figure \ref{fig:cir-dist-10k-writes-kanerva} executed $3.05 \cdot 10^{15}$ bit compares. For comparison, the number of seconds since Jesus's birth is 63,639,648,000 = $6.36 \cdot 10^{10}$. The number of people who have ever lived on earth is estimated to be $1,08 \cdot 10^{11}$. There are approximtely $1.8 \cdot 10^{9}$ websites in the internet.
 
-Beyond that, we are running as state-of-the-art devices: (i) an Amazon EC2 p3.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU, and (ii) an Amazon EC2 p3.8xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and 8x NVIDIA K80 GPU.
+Amazon EC2 p3.2xlarge has generated the heatmap of Figure \ref{fig:cir-dist-10k-writes-kanerva} in 15 minutes and 3 seconds. It has compared $3.37 \cdot 10^{12}$ bits per second through $52.6 \cdot 10^{9} = 52.6 \text{ billion}$ XORs and popcounts per second.
+
+We have executed the same performance test in each device. The test has 3 parts. The first part consists of: 1,000 linear scans, 5,000 thread scans, and 5,000 OpenCL scans. The second part consists of 5,000 writes, 5,000 single reads, and 1,000 6-iterative readings, with both thread and opencl scanners. The code is available in the ``Performance test'' notebook \citep{sdmframework}.
+
+Our first device is a personal MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU.
+
+Our second device is an iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G CPU. The complete results are presented in Figures \ref{fig:perf-imac-read-256}, \ref{fig:perf-imac-write-256}, \ref{fig:perf-imac-read-1000}, \ref{fig:perf-imac-write-1000}, \ref{fig:perf-imac-scan-256}, \ref{fig:perf-imac-scan-1000}, and \ref{fig:perf-imac-scan-10k} and Tables \ref{tab:perf-imac-256}, \ref{tab:perf-imac-1000}, and \ref{tab:perf-imac-10k}.
+
+Beyond that, we are also running in state-of-the-art devices: (i) an Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU, and (ii) an Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU.
+
+It is interesting that which scanner is faster depends also on the SDM settings. In the iMac 2017, the faster scanner for a 1,000-bits SDM was the OpenCL, but for a 256-bit SDM was the threads. What happened here is that the OpenCL kernel chosen was a generic one which performs the scan for any SDM. It is always possible to optimize the OpenCL kernel to a specific setting, and it would be faster than the threads. By default, the framework chooses a generic kernel which we believe would be reasonable for the most common setups.
+% TODO Run the optimized kernel and show the results.
+
+Most of the time, the bottleneck of both the read and the write operations is the scanner. But we have optimized the OpenCL kernel so much for the iMac 2017 that scanner not the bottleneck anymore. In the writing operation, it took the same time to scan and to update the counters. It is impressive because it update, on average, 1,000 counters of 32-bit integers each, and it was as fast as (i) sending the command to the GPU, (ii) performing 1 billion bit compares, and (iii) downloading the response from the GPU.
+
+Our conclusion is that, if one is really concerned about performance, one should fine tune the OpenCL kernel for one's GPU. It would always be faster than running in the CPU.
+
+\begin{figure}[!htb]
+\centering\includegraphics[width=\textwidth]{images02/performance/imac-read-256.png}
+\caption{Time to run a single read in a SDM with $n=256$, $H=1,000,000$ and $r=103$.
+\label{fig:perf-imac-read-256}}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering\includegraphics[width=\textwidth]{images02/performance/imac-write-256.png}
+\caption{Time to run one write in a SDM with $n=256$, $H=1,000,000$ and $r=103$.
+\label{fig:perf-imac-write-256}}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering\includegraphics[width=\textwidth]{images02/performance/imac-write-1000.png}
+\caption{Time to run one write in a SDM with $n=1,000$, $H=1,000,000$ and $r=451$.
+\label{fig:perf-imac-write-1000}}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering\includegraphics[width=\textwidth]{images02/performance/imac-read-1000.png}
+\caption{Time to run a single read in a SDM with $n=1,000$, $H=1,000,000$ and $r=451$.
+\label{fig:perf-imac-read-1000}}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering\includegraphics[width=\textwidth]{images02/performance/imac-scans-256.png}
+\caption{Time to run a single scan in a SDM with $n=256$, $H=1,000,000$ and $r=103$.
+\label{fig:perf-imac-scan-256}}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering\includegraphics[width=\textwidth]{images02/performance/imac-scans-1000.png}
+\caption{Time to run a single scan in a SDM with $n=1,000$, $H=1,000,000$ and $r=451$.
+\label{fig:perf-imac-scan-1000}}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering\includegraphics[width=\textwidth]{images02/performance/imac-scans-10k.png}
+\caption{Time to run a single scan in a SDM with $n=10,000$, $H=1,000,000$ and $r=4845$.
+\label{fig:perf-imac-scan-10k}}
+\end{figure}
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{| l | r | r | r |}
+    \hline
+    & Loops & Scans / second & Scan time (ms) \\ \hline
+    Linear scan & 1000 & 81.62 & 12.25 \\
+    Thread scan & 5000 & 143.68 & 6.95 \\
+    OpenCL scan & 5000 & 238.00 & 4.20 \\ \hline
+    \hline
+    & Loops & Ops / second & Op. time (ms) \\ \hline
+    Thread write & 1000 & 74.92 & 13.34 \\
+    Thread single read & 1000 & 96.22 & 10.39 \\
+    OpenCL write & 1000 & 126.50 & 7.90 \\
+    OpenCL single read & 1000 & 190.20 & 5.25 \\
+    \hline
+\end{tabular}
+\caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=1,000$ bits, $H=1,000,000$, and $r=451$.
+\label{tab:perf-imac-1000}}
+\end{table}
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{| l | r | r | r |}
+    \hline
+    & Loops & Scans / second & Scan time (ms) \\ \hline
+    Linear scan & 1000 & 175.48 & 5.69 \\
+    Thread scan & 5000 & 352.63 & 2.83 \\
+    OpenCL scan & 5000 & 244.88 & 4.08 \\ \hline
+    \hline
+    & Loops & Ops / second & Op. time (ms) \\ \hline
+    Thread write & 2000 & 304.46 & 3.28 \\
+    Thread single read & 2000 & 391.21 & 2.55 \\
+    OpenCL write & 2000 & 378.44 & 2.64 \\
+    OpenCL single read & 2000 & 466.16 & 2.14 \\
+    \hline
+\end{tabular}
+\caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=256$ bits, $H=1,000,000$, and $r=103$.
+\label{tab:perf-imac-256}}
+\end{table}
+
+\begin{table}[!htb]
+\centering
+\begin{tabular}{| l | r | r | r |}
+    \hline
+    & Loops & Scans / second & Scan time (ms) \\ \hline
+    Linear scan & 100 & 8.59 & 116.38 \\
+    Thread scan & 500 & 18.66 & 53.56 \\
+    OpenCL scan & 1000 & 77.20 & 12.95 \\
+    \hline
+\end{tabular}
+\caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=10,000$ bits, $H=1,000,000$, and $r=4845$.  There is no benchmark for read and write operations because RAM is not enough to allocate the counters --- it would consume 37.25 GB of RAM.
+\label{tab:perf-imac-10k}}
+\end{table}
+
 
 \input{./Chapters/sdm-applications.tex}
 
@@ -645,3 +754,5 @@ Of course, for the skeptical reader who may consider software a less worthy purs
 %  pagecommand={\pagestyle{headings}},
 %  %addtotoc={1,section,1,Quilling Shapes,sec:shapes}
 %]{./Chapter02-SDM/Kanerva-Table-7.3/Kanerva-Table-7_3.pdf}
+
+\chapter*{List of jupyter notebooks}
