@@ -393,10 +393,7 @@ We run exactly the same simulation for a 256-bit SDM with 1,000,000 hard-locatio
 
 \chapter{Results (iii): Generalized read operation}
 
-
 In this chapter we will explore how Murilo's generalized read operation works and whether it may improve SDM behavior. In this case, we understand that SDM behavior will have been improved when the critical distance increases, which means it is able to recognize things with even less clues than before.
-
-% ?????????  In Figure
 
 \begin{figure}[h!]
   \centering
@@ -679,7 +676,7 @@ The overarching intention here is to not only provide a starting point, but to p
 
 Consider the misunderstanding concerning the SDM read operation:  Dr Stan Franklin describes Kanerva's read operation in a way that each hard location, at each dimension, provides only a single bit of information to the read operation (instead of Kanerva's full counter).  We have referred to this modified read operation as Chada read.  Having an open, testable, codebase reduces the possibilities of such misunderstandings in the long run.
 
-Of course, there is also new work here.  The mathematics of the model has been to be correct (with a single exception); we have shown how to execute unsupervised learning with nothing besides operations originally proposed by Kanerva; and finally, we have reproduced
+Of course, there is also new work here.  The mathematics of the model has been shown to be correct (with a single exception); we have shown how to execute unsupervised learning with nothing besides operations originally proposed by Kanerva; we have studied the generalized Murilo read; we have seen and finally, we have reproduced
 
 
 \subsection{From theory to a platform.}
@@ -701,3 +698,5 @@ Opens 10 doors.
 %  pagecommand={\pagestyle{headings}},
 %  %addtotoc={1,section,1,Quilling Shapes,sec:shapes}
 %]{./Chapter02-SDM/Kanerva-Table-7.3/Kanerva-Table-7_3.pdf}
+
+\chapter*{List of jupyter notebooks}
