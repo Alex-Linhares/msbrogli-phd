@@ -393,7 +393,19 @@ We run exactly the same simulation for a 256-bit SDM with 1,000,000 hard-locatio
 
 \chapter{Results (iii): Generalized read operation}
 
-In this chapter we will explore how Murilo's generalized read operation works and whether it may improve SDM behavior. In this case, we understand that SDM behavior will have been improved when the critical distance increases, which means it is able to recognize things with even less clues than before.
+Murilo observed that the models of Kanerva's read ($z=1$) and Chada's read ($z=0$) were simple variations of a generalized read with an exponent $z$, which suggests experimenting with different values. Mathematically, let $A$ be the set of the counters of the activated hardlocation, and $c_i$ be the counter of the $i$-th bit. Then,
+
+$$
+s_i = \sum_{c \in A} \frac{c_i}{|c_i|} |c_i|^z
+$$
+
+The sum of $|c_i|^z$ turns the intermediate values from integers to float point numbers. Thus, we have developed a specific read operation which stored the intermediate values in double variables.
+
+The results, however, have not yielded performance improvements. Though for $z \leq 1$ results are comparable to $z=1$, for $z>1$, the system shows a clear deterioration, with a smaller critical distance and faster divergence at large-distance reads. This is shown in Figures \ref{fig:murillo-generalization-experiments} and \ref{fig:murillo-generalization-experiments-6reads}.
+
+We understand that the critical distant is an important parameter of SDM. The bigger the critical distance, the best, because SDM is able to converge even with farther clues. For $z>1$, the bigger the $z$, the smaller the critical distance. For $z = 6$, the critical distance almost reaches zero.
+
+It is interesting that Kanerva has proposed $z=1$ without realizing the generalized reading. Even so, he proposed the optimal $z$ --- the one with the highest critical distance.
 
 \begin{figure}[h!]
   \centering
@@ -401,22 +413,19 @@ In this chapter we will explore how Murilo's generalized read operation works an
 
   \subfloat[SDM behavior when $z \in \{1.5, 3, 4.5, 6\}$ ]{\includegraphics[width=\textwidth]{./images02/new-images/z_15_3_45_6.png}}
 
-  \caption{(a) and (b) show the behavior of a single read; As stated previously, we can see a deterioration of convergence, with lower critical distance as $z>1$.  Another observation can be made here, concerning the discrepancy of Kanerva's Fig 7.3 and our data.  It seems that Kanerva may not have considered that a single read would only `clean' a small number of dimensions \emph{after the critical distance}. What we observe clearly is that with a single read, as the distance grows, the system only `cleans' towards the orthoghonal distance 500 after a number of iterative readings.}
+  \caption{(a) and (b) show the behavior of a single read. As stated previously, we can see a deterioration of convergence, with lower critical distance as $z>1$.  Another observation can be made here, concerning the discrepancy of Kanerva's Fig 7.3 and our data.  It seems that Kanerva may not have considered that a single read would only `clean' a small number of dimensions \emph{after the critical distance}. What we observe clearly is that with a single read, as the distance grows, the system only `cleans' towards the orthoghonal distance 500 after a number of iterative readings.}
   \label{fig:murillo-generalization-experiments}
 \end{figure}
 
 \begin{figure}[h!]
   \centering
-  \subfloat[$z \in \{0, 1\}$]{\includegraphics[width=3.2in]{./images02/new-images/z_0_1.png}}
+  \subfloat[$z \in \{0, 1\}$]{\includegraphics[width=\textwidth]{./images02/new-images/z_0_1.png}}
 
-  \subfloat[$z \in \{0, 0.5, 1, 1.5, 3, 4.5, 6\}$]{\includegraphics[width=3.2in]{./images02/new-images/iter_z_all_2.png}}
+  \subfloat[$z \in \{0, 0.5, 1, 1.5, 3, 4.5, 6\}$]{\includegraphics[width=\textwidth]{./images02/new-images/iter_z_all_2.png}}
 
-  \caption{(a) and (b) show the behavior of the previous Figure, now executed with 6 iterative reads. What we observe clearly is that with a single read, as the distance grows, the system only `cleans' towards the orthoghonal distance 500 after a number of iterative readings.}
+  \caption{(a) and (b) show the behavior of Figure \ref{fig:murillo-generalization-experiments}, now executed with 6-iterative reads. What we observe clearly is that with a single read, as the distance grows, the system only `cleans' towards the orthoghonal distance 500 after a number of iterative readings.}
   \label{fig:murillo-generalization-experiments-6reads}
 \end{figure}
-
-
-Murilo observed that the models of Kanerva-read ($z=1$) and Chada-read ($z=0$) were simple variations of the exponent $z$, which suggests experimenting with different values. The results, however, have not yielded performance improvements.  Though for $z \leq 1$ results are comparable to $z=1$, for $z>1$, the system shows a clear deterioration, with a smaller distance to convergence and higher divergence at large-distance reads. This is shown in Figures \ref{fig:murillo-generalization-experiments} and \ref{fig:murillo-generalization-experiments-6reads}.
 
 
 \chapter{Results (iv): Performance}
