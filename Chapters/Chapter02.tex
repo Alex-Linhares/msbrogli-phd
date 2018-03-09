@@ -543,126 +543,10 @@ Our conclusion is that, if one is really concerned about performance, one should
     OpenCL scan & 1000 & 77.20 & 12.95 \\
     \hline
 \end{tabular}
-\caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=10,000$ bits, $H=1,000,000$, and $r=4845$.  There is no benchmark for read and write operations because RAM was not enough to allocate the counters --- it would consume 37.25 GB of RAM.
+\caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=10,000$ bits, $H=1,000,000$, and $r=4845$.  There is no benchmark for read and write operations because RAM is not enough to allocate the counters --- it would consume 37.25 GB of RAM.
 \label{tab:perf-imac-10k}}
 \end{table}
 
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Linear scan & 1000 & 15.44 & 64.73 \\
-    Thread scan & 5000 & 30.47 & 32.81 \\
-    OpenCL scan & 5000 & 93.63 & 10.67 \\ \hline
-    \hline
-    & Loops & Ops / second & Op. time (ms) \\ \hline
-    Thread write & 1000 & 23.44 & 42.64 \\
-    Thread single read & 1000 & 28.26 & 35.37 \\
-    OpenCL write & 1000 & 51.78 & 19.31 \\
-    OpenCL single read & 1000 & 85.31 & 11.72 \\
-    \hline
-\end{tabular}
-\caption{Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU. Running an SDM with $n=1,000$ bits, $H=1,000,000$, and $r=451$.}
-\end{table}
-
-
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Linear scan & 1000 & 52.35 & 19.09 \\
-    Thread scan & 5000 & 100.48 & 9.95 \\
-    OpenCL scan & 5000 & 145.18 & 6.88 \\ \hline
-    \hline
-    & Loops & Ops / second & Op. time (ms) \\ \hline
-    Thread write & 2000 & 84.73 & 11.80 \\
-    Thread single read & 2000 & 95.26 & 10.49 \\
-    OpenCL write & 2000 & 113.01 & 8.84 \\
-    OpenCL single read & 2000 & 133.19 & 7.50 \\
-    \hline
-\end{tabular}
-\caption{Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU. Running an SDM with $n=256$ bits, $H=1,000,000$, and $r=103$.}
-\end{table}
-
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Linear scan & 100 & 1.66 & 600.75 \\
-    Thread scan & 500 & 3.37 & 296.56 \\
-    OpenCL scan & 1000 & 21.39 & 46.73 \\ \hline
-    \hline
-    & Loops & Ops / second & Op. time (ms) \\ \hline
-    Thread write & 500 & 2.60 & 383.50 \\
-    Thread single read & 500 & 3.24 & 307.97 \\
-    OpenCL write & 1000 & 8.18 & 122.17 \\
-    OpenCL single read & 55.47 & 18.02 & 55.47 \\
-    \hline
-\end{tabular}
-\caption{EC p2.xlarge 10,000-bits}
-\caption{Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU. Running an SDM with $n=10,000$ bits, $H=1,000,000$, and $r=4845$.}
-\end{table}
-
-
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Linear scan & 1000 & 17.13 & 58.34 \\
-    Thread scan & 5000 & 60.98 & 16.39 \\
-    OpenCL scan & 5000 & 1175.88 & 0.85 \\ \hline
-    \hline
-    & Loops & Ops / second & Op. time (ms) \\ \hline
-    Thread write & 1000 & 35.12 & 28.47 \\
-    Thread single read & 1000 & 57.31 & 17.44 \\
-    OpenCL write & 1000 & 113.98 & 8.77 \\
-    OpenCL single read & 1000 & 549.12 & 1.82 \\
-    \hline
-\end{tabular}
-\caption{Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU. Running an SDM with $n=1,000$ bits, $H=1,000,000$, and $r=451$.}
-\end{table}
-
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Linear scan & 1000 & 56.80 & 17.60 \\
-    Thread scan & 5000 & 192.54 & 5.19 \\
-    OpenCL scan & 5000 & 1565.28 & 0.63 \\ \hline
-    \hline
-    & Loops & Ops / second & Op. time (ms) \\ \hline
-    Thread write & 2000 & 131.64 & 7.59 \\
-    Thread single read & 2000 & 161.97 & 6.17 \\
-    OpenCL write & 2000 & 427.38 & 2.33 \\
-    OpenCL single read & 2000 & 987.95 & 1.01 \\
-    \hline
-\end{tabular}
-\caption{Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU. Running an SDM with $n=256$ bits, $H=1,000,000$, and $r=103$.}
-\end{table}
-
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Linear scan & 100 & 1.84 & 540.97 \\
-    Thread scan & 500 & 5.03 & 198.74 \\
-    OpenCL scan & 1000 & 174.05 & 5.74 \\ \hline
-    \hline
-    & Loops & Ops / second & Op. time (ms) \\ \hline
-    Thread write & 500 & 4.50 & 222.08 \\
-    Thread single read & 500 & 6.89 & 145.01 \\
-    OpenCL write & 1000 & 12.42 & 80.48 \\
-    OpenCL single read & 1000 & 71.46 & 13.99 \\
-    \hline
-\end{tabular}
-\caption{Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU. Running an SDM with $n=10,000$ bits, $H=1,000,000$, and $r=4845$.}
-\end{table}
 
 \input{./Chapters/sdm-applications.tex}
 
@@ -822,21 +706,6 @@ A reduction from measuring the distance to $2^{20}$ hard locations to a computat
 
 \section{Seeing farther}
 
-\begin{figure}[!p]
-\centering
-
-\subfloat[]{\includegraphics[width=0.5\textwidth]{images02/new-images/Only-one-life077.jpeg}}
-\subfloat[]{\includegraphics[width=0.5\textwidth]{images02/new-images/Only-one-life078.jpeg}}
-
-\subfloat[]{\includegraphics[width=0.5\textwidth]{images02/new-images/Only-one-life079.jpeg}}
-\subfloat[]{\includegraphics[width=0.5\textwidth]{images02/new-images/Only-one-life080.jpeg}}
-
-\subfloat[]{\includegraphics[width=0.5\textwidth]{images02/new-images/Only-one-life081.jpeg}}
-\subfloat[]{\includegraphics[width=0.5\textwidth]{images02/new-images/Only-one-life082.jpeg}}
-
-\caption{Some slides from an old Linhares class; a viewpoint that has influenced the choice of topics found in this thesis.   In the history of computing business, the most interesting level of analysis seems to be that of the \emph{platform}.  It is where things can get built on top of, and communities emerge, and standards fight against each other, and fortunes are built or lost.  It is, in a sense, the Big Drama of our moment in history. Each time a new computing platform appears, it seems as the opportunities are ripe for the taking; as if a multitude of doors have opened simultaneously.  Note that the slides were made in 2007, and expected an AI-based `semantic revolution` by 2015 \citep{only-one-life}.  In between, both the iPhone (and competitors) and Bitcoin (and competitors) have created giant platforms on top of which immense wealth has been created (Uber, Instagram, etc, on the case of smartphones; and exchanges, miners, investors, payment processors, etc., in the case of blockchains).  Linhares's thesis is that students should (i) expect new technological platforms, (ii) rapidly identify them, and (iii) skydive, truly throw their lifes, at them.  It is there that we might find leverage to make a small impact upon the world. 
-\label{fig:one-life}}
-\end{figure}
 
 Let us revisit, in these concluding thoughts, the emphasis employed over speed of computation.  At first sight, that might seem like a typical objective of efficiency in computer science. But we are not only interested in the computer science effects here --- the ambition is different. More important than this `computer-sciency' goal, i.e., a beautiful, clean, efficient algorithm with the primary effect of enhanced speed, however, is the secondary effect on the sociology of science:  \emph{We can see farther}.
 
@@ -860,7 +729,7 @@ Consider the misunderstanding concerning the SDM read operation:  Dr Stan Frankl
 
 It is no coincidence that scientific journals such as BMC Neuroscience, or the Journal of Machine Learning Research have specific sections on open-source software. The journal Neurocomputing even goes as far as to state that “software is scientific method by machine”.
 
-Of course, for the skeptical reader who may consider software a less worthy pursuit, there is also new work here.  The mathematics of the model has been shown to be correct numerically (with a single, small, anomaly); we have shown how to execute unsupervised learning with nothing besides operations original to the SDM; we have studied the generalized Murilo read; we have seen noise filtering; the death of neurons; how information-theory may be of use; and finally, we have reproduced numerous of the original propositions put forth by Kanerva.  The emphasis might have been on \emph{breadth of topics}, in detriment of depth here or there.  But this is due to our research group's enthusiam for the topic; we do indeed believe that SDM is --- if not correct --- extremely close to a full scientific understanding of human long-term memory.  If so, it is such a monumental achievement that we want readers to be able to see all of what we see and imagine the vastness of possibilities.  The work on, say, reinforcement learning, is most definitely not the definitive work we will see on the subject, but a challenge left for readers to contemplate. Ralph Waldo Emerson once said \emph{do not go where the path may lead, go instead where there is no path, and leave a trail.}  Dr. Kanerva has left the trail.  It is my job to pave it and throw light at it and try to deliver an easier pathway for the next generation.  Some essays completely shut the door close at the end; this one intends to leave it wide open. As the reader might have noticed, this final section does not read as an analysis of work previously done; it reads, instead, as a \emph{desiderata}, a prologue, a yearning for others to join me in imagining the shape of things to come.
+Of course, for the skeptical reader who may consider software a less worthy pursuit, there is also new work here.  The mathematics of the model has been shown to be correct numerically (with a single, small, anomaly); we have shown how to execute unsupervised learning with nothing besides operations original to the SDM; we have studied the generalized Murilo read; we have seen noise filtering; the death of neurons; how information-theory may be of use; and finally, we have reproduced numerous of the original propositions put forth by Kanerva.  The emphasis might have been on \emph{breadth of topics}, in detriment of depth here or there.  But this is due to our research group's enthusiam for the topic; we do indeed believe that SDM is --- if not correct --- extremely close to a full scientific understanding of human long-term memory.  If so, it is such a monumental achievement that we want readers to be able to see all of what we see and imagine the vastness of possibilities.  The work on, say, reinforcement learning, is most definitely not the definitive work we will see on the subject, but a challenge left for readers to contemplate. Ralph Waldo Emerson once said \emph{Do not go where the path may lead. Go, instead, where there is no path, and leave a trail.}  Dr. Kanerva has left the trail.  It is my job to pave it and to throw light at it and to try to deliver an easier pathway for the next generation.  Some essays completely shut the door close at the end; this one intends to leave it wide open. As the reader might have noticed, this final section does not read as an analysis of the work done; it reads, instead, as a \emph{desiderata}, a prologue, a yearning for others to join me in imagining the shape of things to come.
 
 
 
