@@ -430,11 +430,11 @@ It is interesting that Kanerva has proposed $z=1$ without realizing the generali
 
 \chapter{Results (iv): Performance}
 
-Performance is an important part of our framework. Running an SDM memory consumes a lot of resource from both CPU and RAM.
+Performance matters --- and has always mattered. If an experiment takes a few seconds, there is no point arguing whether we should try it. If it takes a few hours, maybe we should think first. If it takes a few days, it is more important to make a good plan. As SDM consumes a lot of both processor and memory resources, some experiments may take a long time.
 
-For instance, each scan in 1,000,000 hard-locations with 1,000 bits executes $10^9$ bit compares through $10^9/64 = 15,625,000$ XORs and calls to the built-in popcount. So, 10,000 writes execute $10^{13}$ bit compares, while a 6-iterative reading executes $6 \cdot 10^{12}$ bit compares. The heatmap of Figure \ref{fig:cir-dist-10k-writes-kanerva} executed $3.05 \cdot 10^{15}$ bit compares. For comparison, the number of seconds since Jesus's birth is 63,639,648,000 = $6.36 \cdot 10^{10}$. The number of people who have ever lived on earth is estimated to be $1,08 \cdot 10^{11}$. There are approximtely $1.8 \cdot 10^{9}$ websites in the internet.
+Each scan a 1,000-bits SDM with 1,000,000 hard-locations executes $10^9$ bit compares through $10^9/64 = 15,625,000$ XORs and calls to the built-in popcount. So, 10,000 writes execute $10^{13}$ bit compares, while a 6-iterative reading executes $6 \cdot 10^{12}$ bit compares. The heatmap of Figure \ref{fig:cir-dist-10k-writes-kanerva} executed $3.05 \cdot 10^{15}$ bit compares. For comparison, the number of seconds since Jesus's birth is 63,639,648,000 = $6.36 \cdot 10^{10}$. The number of people who have ever lived on earth is estimated to be $1,08 \cdot 10^{11}$. There are approximtely $1.8 \cdot 10^{9}$ websites in the internet. A modern laptop can increment a counter $5 \cdot 10^{8}$ times per second. Hence, a naive implementation of SDM may take several hours to simply write 10,000 random bitstrings.
 
-Amazon EC2 p3.2xlarge has generated the heatmap of Figure \ref{fig:cir-dist-10k-writes-kanerva} in 15 minutes and 3 seconds. It has compared $3.37 \cdot 10^{12}$ bits per second through $52.6 \cdot 10^{9} = 52.6 \text{ billion}$ XORs and popcounts per second.
+Amazon EC2 p3.2xlarge has generated the heatmap of Figure \ref{fig:cir-dist-10k-writes-kanerva} in 15 minutes and 3 seconds. It has compared $3.37 \cdot 10^{12}$ bits per second through $52.6 \cdot 10^{9} = 52.6 \text{ billion}$ XORs and popcounts per second. It is a great improvement when compared to the first versions of the code which took 16 hours to generate the same heatmap (and its memory use was already optimized and the computations were distributed in threads).
 
 We have executed the same performance test in each device. The test has 3 parts. The first part consists of: 1,000 linear scans, 5,000 thread scans, and 5,000 OpenCL scans. The second part consists of 5,000 writes, 5,000 single reads, and 1,000 6-iterative readings, with both thread and opencl scanners. The code is available in the ``Performance test'' notebook \citep{sdmframework}.
 
@@ -488,6 +488,99 @@ single_scan4	500	5.727261781692505	87.30175414685539	11.45452356338501
 single_scan5	500	6.294461011886597	79.43491890025042	12.588922023773193
 single_scan5_unroll	500	5.688975811004639	87.88928211521136	11.377951622009277
 single_scan6	500	5.48170280456543	91.21253337258189	10.96340560913086
+
+
+MacBook 1000 bits
+Loops	Total time	Scans per second	Time per scan (ms)
+single_scan0	1000	23.6049609184	42.363976092	23.6049609184
+single_scan1	1000	13.2222340107	75.6301846716	13.2222340107
+single_scan2	1000	47.2828419209	21.1493209667	47.2828419209
+single_scan3	1000	33.0640568733	30.2443225231	33.0640568733
+single_scan4	1000	40.3230810165	24.7996922554	40.3230810165
+single_scan5	1000	31.5100109577	31.7359458028	31.5100109577
+single_scan5_unroll	1000	27.5569870472	36.288437422	27.5569870472
+single_scan6	1000	39.4823219776	25.3277910192	39.4823219776
+
+
+MacBook 256 bits
+Loops	Total time	Scans per second	Time per scan (ms)
+single_scan0	1000	8.36867690086	119.493202073	8.36867690086
+single_scan1	1000	10.4354770184	95.8269562801	10.4354770184
+single_scan2	1000	23.4823930264	42.5850976465	23.4823930264
+single_scan3	1000	25.5149869919	39.1926517665	25.5149869919
+single_scan4	1000	42.3955621719	23.5873744508	42.3955621719
+single_scan5	1000	24.4205920696	40.9490481291	24.4205920696
+single_scan5_unroll	1000	22.7717738152	43.9140142581	22.7717738152
+single_scan6	1000	42.1847259998	23.7052624214	42.1847259998
+
+
+EC2 p3.2xlarge 1000 bits
+Loops	Total time	Scans per second	Time per scan (ms)
+single_scan0	3000	2.09311103821	1433.27322117	0.697703679403
+single_scan1	3000	1.64607286453	1822.51956438	0.548690954844
+single_scan2	3000	2.57495617867	1165.06837082	0.858318726222
+single_scan3	3000	3.06142997742	979.934220978	1.02047665914
+single_scan4	3000	3.30994796753	906.358658635	1.10331598918
+single_scan5	3000	2.8592748642	1049.21707163	0.953091621399
+single_scan6	3000	3.12985897064	958.509641533	1.04328632355
+
+
+EC2 p3.2xlarge 256 bits
+Loops	Total time	Scans per second	Time per scan (ms)
+single_scan0	3000	1.09906792641	2729.58561334	0.366355975469
+single_scan1	3000	1.10967302322	2703.49908236	0.369891007741
+single_scan2	3000	2.21544480324	1354.12987749	0.738481601079
+single_scan3	3000	1.9066619873	1573.43043496	0.635553995768
+single_scan4	3000	3.15382003784	951.227389009	1.05127334595
+single_scan5	3000	1.87652993202	1598.69552241	0.625509977341
+single_scan6	3000	3.04240322113	986.062589983	1.01413440704
+
+
+EC2 p3.2xlarge 10k bits
+Loops	Total time	Scans per second	Time per scan (ms)
+single_scan0	500	10.3001351357	48.5430524372	20.6002702713
+single_scan1	500	2.47107696533	202.340925441	4.94215393066
+single_scan2	500	2.5089058876	199.290058057	5.01781177521
+single_scan3	500	3.0364408493	164.666471311	6.07288169861
+single_scan4	500	2.99925804138	166.707896787	5.99851608276
+single_scan5	500	2.68434309959	186.265310152	5.36868619919
+single_scan6	500	2.98077511787	167.741604189	5.96155023575
+
+
+EC2 p2.xlarge 1000 bits
+Loops	Total time	Scans per second	Time per scan (ms)
+single_scan0	3000	11.3801429272	263.617075743	3.79338097572
+single_scan1	3000	11.8365280628	253.452700325	3.94550935427
+single_scan2	3000	25.6270592213	117.063763505	8.54235307376
+single_scan3	3000	29.2102689743	102.70360751	9.73675632477
+single_scan4	3000	34.1599340439	87.8221836186	11.3866446813
+single_scan5	3000	29.8609650135	100.465607814	9.9536550045
+single_scan6	3000	34.0075969696	88.2155832028	11.3358656565
+
+
+EC2 p2.xlarge 256 bits
+Loops	Total time	Scans per second	Time per scan (ms)
+single_scan0	3000	2.28510403633	1312.85051022	0.761701345444
+single_scan1	3000	2.42481589317	1237.20733126	0.808271964391
+single_scan2	3000	16.7731001377	178.857812531	5.59103337924
+single_scan3	3000	18.9349951744	158.436797705	6.31166505814
+single_scan4	3000	30.8822939396	97.1430427373	10.2940979799
+single_scan5	3000	20.0731289387	149.453531094	6.69104297956
+single_scan6	3000	30.8959820271	97.1000046988	10.2986606757
+
+
+
+EC2 p2.xlarge 10k bits
+Loops	Total time	Scans per second	Time per scan (ms)
+single_scan0	500	17.7273669243	28.204978333	35.4547338486
+single_scan1	500	28.9013559818	17.3002263394	57.8027119637
+single_scan2	500	31.8554549217	15.6958989042	63.7109098434
+single_scan3	500	19.9614479542	25.0482831279	39.9228959084
+single_scan4	500	22.749904871	21.9781138794	45.499809742
+single_scan5	500	21.7587711811	22.9792388476	43.5175423622
+single_scan6	500	20.7129361629	24.1395037414	41.4258723259
+
+
 
 
 \begin{figure}[!htb]
