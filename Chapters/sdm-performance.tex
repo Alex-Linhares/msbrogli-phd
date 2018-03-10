@@ -24,134 +24,204 @@ Our conclusion is that, if one is really concerned about performance, one should
 
 Kernel comparisons
 
-iMac 1000 bits
-Loops	Total time	Scans per second	Time per scan (ms)
-single\_scan0	3000	15.028241872787476	199.62414934459346	5.009413957595825
-single\_scan1	3000	11.874222040176392	252.6481305343213	3.958074013392131
-single\_scan2	3000	13.736932039260864	218.38937482007222	4.578977346420288
-single\_scan3	3000	11.063963174819946	271.1505771121497	3.687987724939982
-single\_scan4	3000	12.131728887557983	247.2854469305467	4.043909629185994
-single\_scan5	3000	11.181737899780273	268.29460920014515	3.7272459665934243
-single\_scan5\_unroll	3000	10.841995000839233	276.7018431356759	3.6139983336130777
-single\_scan6	3000	12.084025859832764	248.26163356468672	4.028008619944255
+\begin{table}[!htb]
+\centering
+\begin{tabular}{| l | r | r | r |}
+    \hline
+    & Loops & Scans / second & Scan time (ms) \\ \hline
+    single\_scan0 & 3000 & 15.02 & 199.62 & 5.00 \\
+    single\_scan1 & 3000 & 11.87 & 252.64 & 3.95 \\
+    single\_scan2 & 3000 & 13.73 & 218.38 & 4.57 \\
+    single\_scan3 & 3000 & 11.06 & 271.15 & 3.68 \\
+    single\_scan4 & 3000 & 12.13 & 247.28 & 4.04 \\
+    single\_scan5 & 3000 & 11.18 & 268.29 & 3.72 \\
+    single\_scan5\_unroll & 3000 & 10.84 & 276.70 & 3.6139983336130777 \\
+    single\_scan6 & 3000 & 12.08 & 248.26 & 4.02 \\
+    \hline
+\end{tabular}
+\caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=1,000$ bits, $H=1,000,000$, and $r=451$.
+\label{tab:perf-imac-256}}
+\end{table}
 
+\begin{table}[!htb]
+\centering
+\begin{tabular}{| l | r | r | r |}
+    \hline
+    & Loops & Scans / second & Scan time (ms) \\ \hline
+    single\_scan0 & 3000 & 9.09 & 329.71 & 3.03 \\
+    single\_scan1 & 3000 & 8.63 & 347.42 & 2.87 \\
+    single\_scan2 & 3000 & 11.46 & 261.73 & 3.82 \\
+    single\_scan3 & 3000 & 11.18 & 268.16 & 3.72 \\
+    single\_scan4 & 3000 & 13.44 & 223.18 & 4.48 \\
+    single\_scan5 & 3000 & 11.29 & 265.59 & 3.76 \\
+    single\_scan5\_unroll & 3000 & 11.39 & 263.24 & 3.79 \\
+    single\_scan6 & 3000 & 13.10 & 228.92 & 4.36 \\
+\end{tabular}
+\caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=256$ bits, $H=1,000,000$, and $r=103$.
+\label{tab:perf-imac-256}}
+\end{table}
 
-iMac 256 bits
-Loops	Total time	Scans per second	Time per scan (ms)
-single\_scan0	3000	9.098679065704346	329.7181907764943	3.0328930219014483
-single\_scan1	3000	8.634926080703735	347.4262514770137	2.8783086935679116
-single\_scan2	3000	11.461902141571045	261.7366614149787	3.8206340471903486
-single\_scan3	3000	11.187175273895264	268.1642082608964	3.729058424631755
-single\_scan4	3000	13.442016124725342	223.18080652215394	4.480672041575114
-single\_scan5	3000	11.295457601547241	265.59348950936374	3.76515253384908
-single\_scan5\_unroll	3000	11.396361827850342	263.24190520773243	3.798787275950114
-single\_scan6	3000	13.104900121688843	228.92200414675017	4.368300040562947
+\begin{table}[!htb]
+\centering
+\begin{tabular}{| l | r | r | r |}
+    \hline
+    & Loops & Scans / second & Scan time (ms) \\ \hline
+    single\_scan0 & 500 & 30.53 & 16.37 & 61.06 \\
+    single\_scan1 & 500 & 22.48 & 22.24 & 44.96 \\
+    single\_scan2 & 500 & 22.49 & 22.23 & 44.98 \\
+    single\_scan3 & 500 & 6.33 & 78.92 & 12.67 \\
+    single\_scan4 & 500 & 5.72 & 87.30 & 11.45 \\
+    single\_scan5 & 500 & 6.29 & 79.43 & 12.58 \\
+    single\_scan5\_unroll & 500 & 5.68 & 87.88 & 11.37 \\
+    single\_scan6 & 500 & 5.48 & 91.21 & 10.96 \\
+\end{tabular}
+\caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=10,000$ bits, $H=1,000,000$, and $r=4850$.
+\label{tab:perf-imac-256}}
+\end{table}
 
+\begin{table}[!htb]
+\centering
+\begin{tabular}{| l | r | r | r |}
+    \hline
+    & Loops & Scans / second & Scan time (ms) \\ \hline
+    single\_scan0 & 1000 & 23.60 & 42.36 & 23.60 \\
+    single\_scan1 & 1000 & 13.22 & 75.63 & 13.22 \\
+    single\_scan2 & 1000 & 47.28 & 21.14 & 47.28 \\
+    single\_scan3 & 1000 & 33.06 & 30.24 & 33.06 \\
+    single\_scan4 & 1000 & 40.32 & 24.79 & 40.32 \\
+    single\_scan5 & 1000 & 31.51 & 31.73 & 31.51 \\
+    single\_scan5\_unroll & 1000 & 27.55 & 36.28 & 27.55 \\
+    single\_scan6 & 1000 & 39.48 & 25.32 & 39.48 \\
+\end{tabular}
+\caption{MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU. Running an SDM with $n=1,000$ bits, $H=1,000,000$, and $r=451$.
+\label{tab:perf-imac-256}}
+\end{table}
 
-iMac 10k bits
-Loops	Total time	Scans per second	Time per scan (ms)
-single\_scan0	500	30.534967184066772	16.374669636484867	61.069934368133545
-single\_scan1	500	22.480546236038208	22.24145244293299	44.961092472076416
-single\_scan2	500	22.491918802261353	22.23020651976254	44.983837604522705
-single\_scan3	500	6.335015773773193	78.92640174156905	12.670031547546387
-single\_scan4	500	5.727261781692505	87.30175414685539	11.45452356338501
-single\_scan5	500	6.294461011886597	79.43491890025042	12.588922023773193
-single\_scan5\_unroll	500	5.688975811004639	87.88928211521136	11.377951622009277
-single\_scan6	500	5.48170280456543	91.21253337258189	10.96340560913086
+\begin{table}[!htb]
+\centering
+\begin{tabular}{| l | r | r | r |}
+    \hline
+    & Loops & Scans / second & Scan time (ms) \\ \hline
+    single\_scan0 & 1000 & 8.36 & 119.49 & 8.36 \\
+    single\_scan1 & 1000 & 10.43 & 95.82 & 10.43 \\
+    single\_scan2 & 1000 & 23.48 & 42.58 & 23.48 \\
+    single\_scan3 & 1000 & 25.51 & 39.19 & 25.51 \\
+    single\_scan4 & 1000 & 42.39 & 23.58 & 42.39 \\
+    single\_scan5 & 1000 & 24.42 & 40.94 & 24.42 \\
+    single\_scan5\_unroll & 1000 & 22.77 & 43.91 & 22.77 \\
+    single\_scan6 & 1000 & 42.18 & 23.70 & 42.18 \\
+\end{tabular}
+\caption{MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU. Running an SDM with $n=256$ bits, $H=1,000,000$, and $r=103$.
+\label{tab:perf-imac-256}}
+\end{table}
 
+\begin{table}[!htb]
+\centering
+\begin{tabular}{| l | r | r | r |}
+    \hline
+    & Loops & Scans / second & Scan time (ms) \\ \hline
+    Loops & Total time & Scans per second & Time per scan (ms) \\
+    single\_scan0 & 3000 & 2.09 & 1433.27 & 0.69 \\
+    single\_scan1 & 3000 & 1.64 & 1822.51 & 0.54 \\
+    single\_scan2 & 3000 & 2.57 & 1165.06 & 0.85 \\
+    single\_scan3 & 3000 & 3.06 & 979.93 & 1.02 \\
+    single\_scan4 & 3000 & 3.30 & 906.35 & 1.10 \\
+    single\_scan5 & 3000 & 2.85 & 1049.21 & 0.95 \\
+    single\_scan6 & 3000 & 3.12 & 958.50 & 1.04 \\
+\end{tabular}
+\caption{EC2 p3.2xlarge 1000 bits
+\label{tab:perf-imac-256}}
+\end{table}
 
-MacBook 1000 bits
-Loops	Total time	Scans per second	Time per scan (ms)
-single\_scan0	1000	23.6049609184	42.363976092	23.6049609184
-single\_scan1	1000	13.2222340107	75.6301846716	13.2222340107
-single\_scan2	1000	47.2828419209	21.1493209667	47.2828419209
-single\_scan3	1000	33.0640568733	30.2443225231	33.0640568733
-single\_scan4	1000	40.3230810165	24.7996922554	40.3230810165
-single\_scan5	1000	31.5100109577	31.7359458028	31.5100109577
-single\_scan5\_unroll	1000	27.5569870472	36.288437422	27.5569870472
-single\_scan6	1000	39.4823219776	25.3277910192	39.4823219776
+\begin{table}[!htb]
+\centering
+\begin{tabular}{| l | r | r | r |}
+    \hline
+    & Loops & Scans / second & Scan time (ms) \\ \hline
+    Loops & Total time & Scans per second & Time per scan (ms) \\
+    single\_scan0 & 3000 & 1.09 & 2729.58 & 0.36 \\
+    single\_scan1 & 3000 & 1.10 & 2703.49 & 0.36 \\
+    single\_scan2 & 3000 & 2.21 & 1354.12 & 0.73 \\
+    single\_scan3 & 3000 & 1.90 & 1573.43 & 0.63 \\
+    single\_scan4 & 3000 & 3.15 & 951.22 & 1.05 \\
+    single\_scan5 & 3000 & 1.87 & 1598.69 & 0.62 \\
+    single\_scan6 & 3000 & 3.04 & 986.06 & 1.01 \\
+\end{tabular}
+\caption{EC2 p3.2xlarge 256 bits
+\label{tab:perf-imac-256}}
+\end{table}
 
+\begin{table}[!htb]
+\centering
+\begin{tabular}{| l | r | r | r |}
+    \hline
+    & Loops & Scans / second & Scan time (ms) \\ \hline
+    Loops & Total time & Scans per second & Time per scan (ms) \\
+    single\_scan0 & 500 & 10.30 & 48.54 & 20.60 \\
+    single\_scan1 & 500 & 2.47 & 202.34 & 4.94 \\
+    single\_scan2 & 500 & 2.50 & 199.29 & 5.01 \\
+    single\_scan3 & 500 & 3.03 & 164.66 & 6.07 \\
+    single\_scan4 & 500 & 2.99 & 166.70 & 5.99 \\
+    single\_scan5 & 500 & 2.68 & 186.26 & 5.36 \\
+    single\_scan6 & 500 & 2.98 & 167.74 & 5.96 \\
+\end{tabular}
+\caption{EC2 p3.2xlarge 10k bits
+\label{tab:perf-imac-256}}
+\end{table}
 
-MacBook 256 bits
-Loops	Total time	Scans per second	Time per scan (ms)
-single\_scan0	1000	8.36867690086	119.493202073	8.36867690086
-single\_scan1	1000	10.4354770184	95.8269562801	10.4354770184
-single\_scan2	1000	23.4823930264	42.5850976465	23.4823930264
-single\_scan3	1000	25.5149869919	39.1926517665	25.5149869919
-single\_scan4	1000	42.3955621719	23.5873744508	42.3955621719
-single\_scan5	1000	24.4205920696	40.9490481291	24.4205920696
-single\_scan5\_unroll	1000	22.7717738152	43.9140142581	22.7717738152
-single\_scan6	1000	42.1847259998	23.7052624214	42.1847259998
+\begin{table}[!htb]
+\centering
+\begin{tabular}{| l | r | r | r |}
+    \hline
+    & Loops & Scans / second & Scan time (ms) \\ \hline
+    Loops & Total time & Scans per second & Time per scan (ms) \\
+    single\_scan0 & 3000 & 11.38 & 263.61 & 3.79 \\
+    single\_scan1 & 3000 & 11.83 & 253.45 & 3.94 \\
+    single\_scan2 & 3000 & 25.62 & 117.06 & 8.54 \\
+    single\_scan3 & 3000 & 29.21 & 102.70 & 9.73 \\
+    single\_scan4 & 3000 & 34.15 & 87.82 & 11.38 \\
+    single\_scan5 & 3000 & 29.86 & 100.46 & 9.95 \\
+    single\_scan6 & 3000 & 34.00 & 88.21 & 11.33 \\
+\end{tabular}
+\caption{EC2 p2.xlarge 1000 bits
+\label{tab:perf-imac-256}}
+\end{table}
 
+\begin{table}[!htb]
+\centering
+\begin{tabular}{| l | r | r | r |}
+    \hline
+    & Loops & Scans / second & Scan time (ms) \\ \hline
+    Loops & Total time & Scans per second & Time per scan (ms) \\
+    single\_scan0 & 3000 & 2.28 & 1312.85 & 0.76 \\
+    single\_scan1 & 3000 & 2.42 & 1237.20 & 0.80 \\
+    single\_scan2 & 3000 & 16.77 & 178.85 & 5.59 \\
+    single\_scan3 & 3000 & 18.93 & 158.43 & 6.31 \\
+    single\_scan4 & 3000 & 30.88 & 97.14 & 10.29 \\
+    single\_scan5 & 3000 & 20.07 & 149.45 & 6.69 \\
+    single\_scan6 & 3000 & 30.89 & 97.10 & 10.29 \\
+\end{tabular}
+\caption{EC2 p2.xlarge 256 bits
+\label{tab:perf-imac-256}}
+\end{table}
 
-EC2 p3.2xlarge 1000 bits
-Loops	Total time	Scans per second	Time per scan (ms)
-single\_scan0	3000	2.09311103821	1433.27322117	0.697703679403
-single\_scan1	3000	1.64607286453	1822.51956438	0.548690954844
-single\_scan2	3000	2.57495617867	1165.06837082	0.858318726222
-single\_scan3	3000	3.06142997742	979.934220978	1.02047665914
-single\_scan4	3000	3.30994796753	906.358658635	1.10331598918
-single\_scan5	3000	2.8592748642	1049.21707163	0.953091621399
-single\_scan6	3000	3.12985897064	958.509641533	1.04328632355
-
-
-EC2 p3.2xlarge 256 bits
-Loops	Total time	Scans per second	Time per scan (ms)
-single\_scan0	3000	1.09906792641	2729.58561334	0.366355975469
-single\_scan1	3000	1.10967302322	2703.49908236	0.369891007741
-single\_scan2	3000	2.21544480324	1354.12987749	0.738481601079
-single\_scan3	3000	1.9066619873	1573.43043496	0.635553995768
-single\_scan4	3000	3.15382003784	951.227389009	1.05127334595
-single\_scan5	3000	1.87652993202	1598.69552241	0.625509977341
-single\_scan6	3000	3.04240322113	986.062589983	1.01413440704
-
-
-EC2 p3.2xlarge 10k bits
-Loops	Total time	Scans per second	Time per scan (ms)
-single\_scan0	500	10.3001351357	48.5430524372	20.6002702713
-single\_scan1	500	2.47107696533	202.340925441	4.94215393066
-single\_scan2	500	2.5089058876	199.290058057	5.01781177521
-single\_scan3	500	3.0364408493	164.666471311	6.07288169861
-single\_scan4	500	2.99925804138	166.707896787	5.99851608276
-single\_scan5	500	2.68434309959	186.265310152	5.36868619919
-single\_scan6	500	2.98077511787	167.741604189	5.96155023575
-
-
-EC2 p2.xlarge 1000 bits
-Loops	Total time	Scans per second	Time per scan (ms)
-single\_scan0	3000	11.3801429272	263.617075743	3.79338097572
-single\_scan1	3000	11.8365280628	253.452700325	3.94550935427
-single\_scan2	3000	25.6270592213	117.063763505	8.54235307376
-single\_scan3	3000	29.2102689743	102.70360751	9.73675632477
-single\_scan4	3000	34.1599340439	87.8221836186	11.3866446813
-single\_scan5	3000	29.8609650135	100.465607814	9.9536550045
-single\_scan6	3000	34.0075969696	88.2155832028	11.3358656565
-
-
-EC2 p2.xlarge 256 bits
-Loops	Total time	Scans per second	Time per scan (ms)
-single\_scan0	3000	2.28510403633	1312.85051022	0.761701345444
-single\_scan1	3000	2.42481589317	1237.20733126	0.808271964391
-single\_scan2	3000	16.7731001377	178.857812531	5.59103337924
-single\_scan3	3000	18.9349951744	158.436797705	6.31166505814
-single\_scan4	3000	30.8822939396	97.1430427373	10.2940979799
-single\_scan5	3000	20.0731289387	149.453531094	6.69104297956
-single\_scan6	3000	30.8959820271	97.1000046988	10.2986606757
-
-
-
-EC2 p2.xlarge 10k bits
-Loops	Total time	Scans per second	Time per scan (ms)
-single\_scan0	500	17.7273669243	28.204978333	35.4547338486
-single\_scan1	500	28.9013559818	17.3002263394	57.8027119637
-single\_scan2	500	31.8554549217	15.6958989042	63.7109098434
-single\_scan3	500	19.9614479542	25.0482831279	39.9228959084
-single\_scan4	500	22.749904871	21.9781138794	45.499809742
-single\_scan5	500	21.7587711811	22.9792388476	43.5175423622
-single\_scan6	500	20.7129361629	24.1395037414	41.4258723259
-
-
-
+\begin{table}[!htb]
+\centering
+\begin{tabular}{| l | r | r | r |}
+    \hline
+    & Loops & Scans / second & Scan time (ms) \\ \hline
+    Loops & Total time & Scans per second & Time per scan (ms) \\
+    single\_scan0 & 500 & 17.72 & 28.20 & 35.45 \\
+    single\_scan1 & 500 & 28.90 & 17.30 & 57.80 \\
+    single\_scan2 & 500 & 31.85 & 15.69 & 63.71 \\
+    single\_scan3 & 500 & 19.96 & 25.04 & 39.92 \\
+    single\_scan4 & 500 & 22.74 & 21.97 & 45.49 \\
+    single\_scan5 & 500 & 21.75 & 22.97 & 43.51 \\
+    single\_scan6 & 500 & 20.71 & 24.13 & 41.42 \\
+\end{tabular}
+\caption{EC2 p2.xlarge 10k bits
+\label{tab:perf-imac-256}}
+\end{table}
 
 \begin{figure}[!htb]
 \centering\includegraphics[width=\textwidth]{images02/performance/imac-read-256.png}
