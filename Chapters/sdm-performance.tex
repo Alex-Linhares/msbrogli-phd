@@ -29,14 +29,14 @@ Kernel comparisons
 \begin{tabular}{| l | r | r | r |}
     \hline
     & Loops & Scans / second & Scan time (ms) \\ \hline
-    single\_scan0 & 3000 & 15.02 & 199.62 & 5.00 \\
-    single\_scan1 & 3000 & 11.87 & 252.64 & 3.95 \\
-    single\_scan2 & 3000 & 13.73 & 218.38 & 4.57 \\
-    single\_scan3 & 3000 & 11.06 & 271.15 & 3.68 \\
-    single\_scan4 & 3000 & 12.13 & 247.28 & 4.04 \\
-    single\_scan5 & 3000 & 11.18 & 268.29 & 3.72 \\
-    single\_scan5\_unroll & 3000 & 10.84 & 276.70 & 3.6139983336130777 \\
-    single\_scan6 & 3000 & 12.08 & 248.26 & 4.02 \\
+    single\_scan0 & 3000 & 199.62 & 5.00 \\
+    single\_scan1 & 3000 & 252.64 & 3.95 \\
+    single\_scan2 & 3000 & 218.38 & 4.57 \\
+    single\_scan3 & 3000 & 271.15 & 3.68 \\
+    single\_scan4 & 3000 & 247.28 & 4.04 \\
+    single\_scan5 & 3000 & 268.29 & 3.72 \\
+    single\_scan5\_unroll & 3000 & 276.70 & 3.6139983336130777 \\
+    single\_scan6 & 3000 & 248.26 & 4.02 \\
     \hline
 \end{tabular}
 \caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=1,000$ bits, $H=1,000,000$, and $r=451$.
@@ -48,14 +48,14 @@ Kernel comparisons
 \begin{tabular}{| l | r | r | r |}
     \hline
     & Loops & Scans / second & Scan time (ms) \\ \hline
-    single\_scan0 & 3000 & 9.09 & 329.71 & 3.03 \\
-    single\_scan1 & 3000 & 8.63 & 347.42 & 2.87 \\
-    single\_scan2 & 3000 & 11.46 & 261.73 & 3.82 \\
-    single\_scan3 & 3000 & 11.18 & 268.16 & 3.72 \\
-    single\_scan4 & 3000 & 13.44 & 223.18 & 4.48 \\
-    single\_scan5 & 3000 & 11.29 & 265.59 & 3.76 \\
-    single\_scan5\_unroll & 3000 & 11.39 & 263.24 & 3.79 \\
-    single\_scan6 & 3000 & 13.10 & 228.92 & 4.36 \\
+    single\_scan0 & 3000 & 329.71 & 3.03 \\
+    single\_scan1 & 3000 & 347.42 & 2.87 \\
+    single\_scan2 & 3000 & 261.73 & 3.82 \\
+    single\_scan3 & 3000 & 268.16 & 3.72 \\
+    single\_scan4 & 3000 & 223.18 & 4.48 \\
+    single\_scan5 & 3000 & 265.59 & 3.76 \\
+    single\_scan5\_unroll & 3000 & 263.24 & 3.79 \\
+    single\_scan6 & 3000 & 228.92 & 4.36 \\
 \end{tabular}
 \caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=256$ bits, $H=1,000,000$, and $r=103$.
 \label{tab:perf-imac-256}}
@@ -66,14 +66,14 @@ Kernel comparisons
 \begin{tabular}{| l | r | r | r |}
     \hline
     & Loops & Scans / second & Scan time (ms) \\ \hline
-    single\_scan0 & 500 & 30.53 & 16.37 & 61.06 \\
-    single\_scan1 & 500 & 22.48 & 22.24 & 44.96 \\
-    single\_scan2 & 500 & 22.49 & 22.23 & 44.98 \\
-    single\_scan3 & 500 & 6.33 & 78.92 & 12.67 \\
-    single\_scan4 & 500 & 5.72 & 87.30 & 11.45 \\
-    single\_scan5 & 500 & 6.29 & 79.43 & 12.58 \\
-    single\_scan5\_unroll & 500 & 5.68 & 87.88 & 11.37 \\
-    single\_scan6 & 500 & 5.48 & 91.21 & 10.96 \\
+    single\_scan0 & 500 & 16.37 & 61.06 \\
+    single\_scan1 & 500 & 22.24 & 44.96 \\
+    single\_scan2 & 500 & 22.23 & 44.98 \\
+    single\_scan3 & 500 & 78.92 & 12.67 \\
+    single\_scan4 & 500 & 87.30 & 11.45 \\
+    single\_scan5 & 500 & 79.43 & 12.58 \\
+    single\_scan5\_unroll & 500 & 87.88 & 11.37 \\
+    single\_scan6 & 500 & 91.21 & 10.96 \\
 \end{tabular}
 \caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=10,000$ bits, $H=1,000,000$, and $r=4850$.
 \label{tab:perf-imac-256}}
@@ -84,14 +84,14 @@ Kernel comparisons
 \begin{tabular}{| l | r | r | r |}
     \hline
     & Loops & Scans / second & Scan time (ms) \\ \hline
-    single\_scan0 & 1000 & 23.60 & 42.36 & 23.60 \\
-    single\_scan1 & 1000 & 13.22 & 75.63 & 13.22 \\
-    single\_scan2 & 1000 & 47.28 & 21.14 & 47.28 \\
-    single\_scan3 & 1000 & 33.06 & 30.24 & 33.06 \\
-    single\_scan4 & 1000 & 40.32 & 24.79 & 40.32 \\
-    single\_scan5 & 1000 & 31.51 & 31.73 & 31.51 \\
-    single\_scan5\_unroll & 1000 & 27.55 & 36.28 & 27.55 \\
-    single\_scan6 & 1000 & 39.48 & 25.32 & 39.48 \\
+    single\_scan0 & 1000 & 42.36 & 23.60 \\
+    single\_scan1 & 1000 & 75.63 & 13.22 \\
+    single\_scan2 & 1000 & 21.14 & 47.28 \\
+    single\_scan3 & 1000 & 30.24 & 33.06 \\
+    single\_scan4 & 1000 & 24.79 & 40.32 \\
+    single\_scan5 & 1000 & 31.73 & 31.51 \\
+    single\_scan5\_unroll & 1000 & 36.28 & 27.55 \\
+    single\_scan6 & 1000 & 25.32 & 39.48 \\
 \end{tabular}
 \caption{MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU. Running an SDM with $n=1,000$ bits, $H=1,000,000$, and $r=451$.
 \label{tab:perf-imac-256}}
@@ -102,14 +102,14 @@ Kernel comparisons
 \begin{tabular}{| l | r | r | r |}
     \hline
     & Loops & Scans / second & Scan time (ms) \\ \hline
-    single\_scan0 & 1000 & 8.36 & 119.49 & 8.36 \\
-    single\_scan1 & 1000 & 10.43 & 95.82 & 10.43 \\
-    single\_scan2 & 1000 & 23.48 & 42.58 & 23.48 \\
-    single\_scan3 & 1000 & 25.51 & 39.19 & 25.51 \\
-    single\_scan4 & 1000 & 42.39 & 23.58 & 42.39 \\
-    single\_scan5 & 1000 & 24.42 & 40.94 & 24.42 \\
-    single\_scan5\_unroll & 1000 & 22.77 & 43.91 & 22.77 \\
-    single\_scan6 & 1000 & 42.18 & 23.70 & 42.18 \\
+    single\_scan0 & 1000 & 119.49 & 8.36 \\
+    single\_scan1 & 1000 & 95.82 & 10.43 \\
+    single\_scan2 & 1000 & 42.58 & 23.48 \\
+    single\_scan3 & 1000 & 39.19 & 25.51 \\
+    single\_scan4 & 1000 & 23.58 & 42.39 \\
+    single\_scan5 & 1000 & 40.94 & 24.42 \\
+    single\_scan5\_unroll & 1000 & 43.91 & 22.77 \\
+    single\_scan6 & 1000 & 23.70 & 42.18 \\
 \end{tabular}
 \caption{MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU. Running an SDM with $n=256$ bits, $H=1,000,000$, and $r=103$.
 \label{tab:perf-imac-256}}
@@ -121,13 +121,13 @@ Kernel comparisons
     \hline
     & Loops & Scans / second & Scan time (ms) \\ \hline
     Loops & Total time & Scans per second & Time per scan (ms) \\
-    single\_scan0 & 3000 & 2.09 & 1433.27 & 0.69 \\
-    single\_scan1 & 3000 & 1.64 & 1822.51 & 0.54 \\
-    single\_scan2 & 3000 & 2.57 & 1165.06 & 0.85 \\
-    single\_scan3 & 3000 & 3.06 & 979.93 & 1.02 \\
-    single\_scan4 & 3000 & 3.30 & 906.35 & 1.10 \\
-    single\_scan5 & 3000 & 2.85 & 1049.21 & 0.95 \\
-    single\_scan6 & 3000 & 3.12 & 958.50 & 1.04 \\
+    single\_scan0 & 3000 & 1433.27 & 0.69 \\
+    single\_scan1 & 3000 & 1822.51 & 0.54 \\
+    single\_scan2 & 3000 & 1165.06 & 0.85 \\
+    single\_scan3 & 3000 & 979.93 & 1.02 \\
+    single\_scan4 & 3000 & 906.35 & 1.10 \\
+    single\_scan5 & 3000 & 1049.21 & 0.95 \\
+    single\_scan6 & 3000 & 958.50 & 1.04 \\
 \end{tabular}
 \caption{EC2 p3.2xlarge 1000 bits
 \label{tab:perf-imac-256}}
@@ -139,13 +139,13 @@ Kernel comparisons
     \hline
     & Loops & Scans / second & Scan time (ms) \\ \hline
     Loops & Total time & Scans per second & Time per scan (ms) \\
-    single\_scan0 & 3000 & 1.09 & 2729.58 & 0.36 \\
-    single\_scan1 & 3000 & 1.10 & 2703.49 & 0.36 \\
-    single\_scan2 & 3000 & 2.21 & 1354.12 & 0.73 \\
-    single\_scan3 & 3000 & 1.90 & 1573.43 & 0.63 \\
-    single\_scan4 & 3000 & 3.15 & 951.22 & 1.05 \\
-    single\_scan5 & 3000 & 1.87 & 1598.69 & 0.62 \\
-    single\_scan6 & 3000 & 3.04 & 986.06 & 1.01 \\
+    single\_scan0 & 3000 & 2729.58 & 0.36 \\
+    single\_scan1 & 3000 & 2703.49 & 0.36 \\
+    single\_scan2 & 3000 & 1354.12 & 0.73 \\
+    single\_scan3 & 3000 & 1573.43 & 0.63 \\
+    single\_scan4 & 3000 & 951.22 & 1.05 \\
+    single\_scan5 & 3000 & 1598.69 & 0.62 \\
+    single\_scan6 & 3000 & 986.06 & 1.01 \\
 \end{tabular}
 \caption{EC2 p3.2xlarge 256 bits
 \label{tab:perf-imac-256}}
@@ -157,13 +157,13 @@ Kernel comparisons
     \hline
     & Loops & Scans / second & Scan time (ms) \\ \hline
     Loops & Total time & Scans per second & Time per scan (ms) \\
-    single\_scan0 & 500 & 10.30 & 48.54 & 20.60 \\
-    single\_scan1 & 500 & 2.47 & 202.34 & 4.94 \\
-    single\_scan2 & 500 & 2.50 & 199.29 & 5.01 \\
-    single\_scan3 & 500 & 3.03 & 164.66 & 6.07 \\
-    single\_scan4 & 500 & 2.99 & 166.70 & 5.99 \\
-    single\_scan5 & 500 & 2.68 & 186.26 & 5.36 \\
-    single\_scan6 & 500 & 2.98 & 167.74 & 5.96 \\
+    single\_scan0 & 500 & 48.54 & 20.60 \\
+    single\_scan1 & 500 & 202.34 & 4.94 \\
+    single\_scan2 & 500 & 199.29 & 5.01 \\
+    single\_scan3 & 500 & 164.66 & 6.07 \\
+    single\_scan4 & 500 & 166.70 & 5.99 \\
+    single\_scan5 & 500 & 186.26 & 5.36 \\
+    single\_scan6 & 500 & 167.74 & 5.96 \\
 \end{tabular}
 \caption{EC2 p3.2xlarge 10k bits
 \label{tab:perf-imac-256}}
@@ -175,13 +175,13 @@ Kernel comparisons
     \hline
     & Loops & Scans / second & Scan time (ms) \\ \hline
     Loops & Total time & Scans per second & Time per scan (ms) \\
-    single\_scan0 & 3000 & 11.38 & 263.61 & 3.79 \\
-    single\_scan1 & 3000 & 11.83 & 253.45 & 3.94 \\
-    single\_scan2 & 3000 & 25.62 & 117.06 & 8.54 \\
-    single\_scan3 & 3000 & 29.21 & 102.70 & 9.73 \\
-    single\_scan4 & 3000 & 34.15 & 87.82 & 11.38 \\
-    single\_scan5 & 3000 & 29.86 & 100.46 & 9.95 \\
-    single\_scan6 & 3000 & 34.00 & 88.21 & 11.33 \\
+    single\_scan0 & 3000 & 263.61 & 3.79 \\
+    single\_scan1 & 3000 & 253.45 & 3.94 \\
+    single\_scan2 & 3000 & 117.06 & 8.54 \\
+    single\_scan3 & 3000 & 102.70 & 9.73 \\
+    single\_scan4 & 3000 & 87.82 & 11.38 \\
+    single\_scan5 & 3000 & 100.46 & 9.95 \\
+    single\_scan6 & 3000 & 88.21 & 11.33 \\
 \end{tabular}
 \caption{EC2 p2.xlarge 1000 bits
 \label{tab:perf-imac-256}}
@@ -193,13 +193,13 @@ Kernel comparisons
     \hline
     & Loops & Scans / second & Scan time (ms) \\ \hline
     Loops & Total time & Scans per second & Time per scan (ms) \\
-    single\_scan0 & 3000 & 2.28 & 1312.85 & 0.76 \\
-    single\_scan1 & 3000 & 2.42 & 1237.20 & 0.80 \\
-    single\_scan2 & 3000 & 16.77 & 178.85 & 5.59 \\
-    single\_scan3 & 3000 & 18.93 & 158.43 & 6.31 \\
-    single\_scan4 & 3000 & 30.88 & 97.14 & 10.29 \\
-    single\_scan5 & 3000 & 20.07 & 149.45 & 6.69 \\
-    single\_scan6 & 3000 & 30.89 & 97.10 & 10.29 \\
+    single\_scan0 & 3000 & 1312.85 & 0.76 \\
+    single\_scan1 & 3000 & 1237.20 & 0.80 \\
+    single\_scan2 & 3000 & 178.85 & 5.59 \\
+    single\_scan3 & 3000 & 158.43 & 6.31 \\
+    single\_scan4 & 3000 & 97.14 & 10.29 \\
+    single\_scan5 & 3000 & 149.45 & 6.69 \\
+    single\_scan6 & 3000 & 97.10 & 10.29 \\
 \end{tabular}
 \caption{EC2 p2.xlarge 256 bits
 \label{tab:perf-imac-256}}
@@ -211,13 +211,13 @@ Kernel comparisons
     \hline
     & Loops & Scans / second & Scan time (ms) \\ \hline
     Loops & Total time & Scans per second & Time per scan (ms) \\
-    single\_scan0 & 500 & 17.72 & 28.20 & 35.45 \\
-    single\_scan1 & 500 & 28.90 & 17.30 & 57.80 \\
-    single\_scan2 & 500 & 31.85 & 15.69 & 63.71 \\
-    single\_scan3 & 500 & 19.96 & 25.04 & 39.92 \\
-    single\_scan4 & 500 & 22.74 & 21.97 & 45.49 \\
-    single\_scan5 & 500 & 21.75 & 22.97 & 43.51 \\
-    single\_scan6 & 500 & 20.71 & 24.13 & 41.42 \\
+    single\_scan0 & 500 & 28.20 & 35.45 \\
+    single\_scan1 & 500 & 17.30 & 57.80 \\
+    single\_scan2 & 500 & 15.69 & 63.71 \\
+    single\_scan3 & 500 & 25.04 & 39.92 \\
+    single\_scan4 & 500 & 21.97 & 45.49 \\
+    single\_scan5 & 500 & 22.97 & 43.51 \\
+    single\_scan6 & 500 & 24.13 & 41.42 \\
 \end{tabular}
 \caption{EC2 p2.xlarge 10k bits
 \label{tab:perf-imac-256}}
