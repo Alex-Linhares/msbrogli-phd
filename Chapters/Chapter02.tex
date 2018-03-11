@@ -44,11 +44,15 @@ This time, however, it will be running on a computer.
 \input{./Chapters/sdm-architecture.tex}
 
 
-\chapter{Results (i): Framework Validation}
+\chapter{Results (i): Framework validation}
 \input{./Chapters/sdm-validation.tex}
 
 
-\chapter{Results (ii): Loss of neurons}
+\chapter{Results (ii): Critical distance}
+\input{./Chapters/sdm-critical-distance.tex}
+
+
+\chapter{Results (iii): Loss of neurons}
 In SDM, the data is written distributed among millions of hard-locations, which theoretically gives SDM robustness against loss of neurons. In other words, SDM should keep convering correctly even when some neurons are dead. The question is: how robust it really is? How many neurons may die before it starts to forget things. These questions have never been addresses before.
 
 Looking for answers to these questions, we run simulations in which we kept killing some neurons and checking whether SDM remained converging to a given bitstring or not. In these simulations, 10,000 random bitstrings were written to a 1,000-bit SDM with 1,000,000 hard-locations, and we choose one of them as our target. As the bitstrings were all written exactly once, we may generalize the results. The code is available in the ``Reseting hard-locations'' notebook \citep{sdmframework}.
@@ -102,7 +106,7 @@ We run exactly the same simulation for a 256-bit SDM with 1,000,000 hard-locatio
 \end{figure}
 
 
-\chapter{Results (iii): Generalized read operation}
+\chapter{Results (iv): Generalized read operation}
 
 Murilo observed that the models of Kanerva's read ($z=1$) and Chada's read ($z=0$) were simple variations of a generalized read with an exponent $z$, which suggests experimenting with different values. Mathematically, let $A$ be the set of the counters of the activated hardlocation, and $c_i$ be the counter of the $i$-th bit. Then,
 
@@ -139,14 +143,14 @@ It is interesting that Kanerva has proposed $z=1$ without realizing the generali
 \end{figure}
 
 
-\chapter{Results (iv): Performance}
+\chapter{Results (v): Performance}
 \input{./Chapters/sdm-performance.tex}
 
 % Application
 \input{./Chapters/sdm-applications.tex}
 
 
-\chapter{Results (vi): Information-theoretical write operation}
+\chapter{Results (vii): Information-theoretical write operation}
 
 
 \begin{figure}[h!]
