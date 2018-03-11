@@ -8,463 +8,367 @@ Amazon EC2 p3.2xlarge has generated the heatmap of Figure \ref{fig:cir-dist-10k-
 
 We have created a benchmark to be able to compare the performance in different devices. So, the same performance test was executable in our devices and the results were reported in tables and figures. The benchmark has 3 parts: (i) the first part consists of comparing the available OpenCL kernels to find which works best for that device; than (ii) the second part consists of comparing the linear scanner, the thread scanner, and the OpenCL scanners with the best kernel found in part one; finally, (iii) the third part consists of comparing read and write operations using the thread scanner and the OpenCL scanner with the best kernel. Each part was run for three SDM setups: (i) $n=1,000$, $r=451$, and $H=1,000,000$; (ii) $n=256$, $r=103$, and $H=1,000,000$; and (iii) $n=10,000$, $r=4850$, and $H=1,000,000$. The whole source code is available in the ``Performance test'' notebook \citep{sdmframework}. We would like to invite you to run this benchmark in your device and send us the results.
 
-Our first device was a personal MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU. It was not possible to run the 10,000-bits in this device because there was no memory available --- it would use 37.25 GB of memory.
+Our first device was a personal MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU. It was not possible to run the 10,000-bits in this device because there was no memory available --- it would use 37.25 GB of memory. For its results, see Table \ref{tab:perf-macbook}
 
-Our second device was an iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G CPU. The complete results are presented in Figures \ref{fig:perf-imac-read-256}, \ref{fig:perf-imac-write-256}, \ref{fig:perf-imac-read-1000}, \ref{fig:perf-imac-write-1000}, \ref{fig:perf-imac-scan-256}, \ref{fig:perf-imac-scan-1000}, and \ref{fig:perf-imac-scan-10k} and Tables \ref{tab:perf-imac-256}, \ref{tab:perf-imac-1000}, and \ref{tab:perf-imac-10k}.
+Our second device was an iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G CPU. For its results, see Table \ref{tab:perf-ec2-imac}.
 
-Beyond that, we were also running in state-of-the-art devices: (i) an Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU, and (ii) an Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU.
+Beyond that, we were also running in state-of-the-art devices: (i) an Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU (see Table \ref{tab:perf-p2}), and (ii) an Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU (see Table \ref{tab:perf-ec2-p3}).
 
 
 \section{Kernels comparison}
 
 OpenCL is a framework for writting software that executes in \emph{heterogeneous} devices \citep{munshi2009opencl}, like CPUs, GPUs, and other co-processor for hardware acceleration. Because they are heterogogeneous, they may differ a lot in architecture and performance, which means there is no one-size-fits-all kernel. The slower kernel for one device may be the fastest for another device, and it really happened in our case.
 
-Our framework has 7 kernels available: single\_scan0, single\_scan1, single\_scan2, single\_scan3, single\_scan4, single\_scan5, single\_scan5\_unroll, and single\_scan6. Each scan uses a different algorithm to do exactly the same thing: calculate which hard-locations are inside the circle of the given bitstring. They differ in how they split the work between work-groups and how they explore the GPU architecture to obtain performance gains.
+Our framework has 8 kernels available: single\_scan0, single\_scan1, single\_scan2, single\_scan3, single\_scan4, single\_scan5, single\_scan5\_unroll, and single\_scan6. Each scan uses a different algorithm to do exactly the same thing: calculate which hard-locations are inside the circle of the given bitstring. They differ in how they split the work between work-groups and how they explore the GPU architecture to obtain performance gains.
 
-The difference in which kernel is the best depends also in the SDM setup. The best kernel for the 1,000-bits SDM in the MacBook Pro was single\_scan1 with average scan time of 13.22ms (Table \ref{tab:perf-macbook-1000}). But, for the 256-bits SDM in the same device, it was single\_scan0 with average scan time of 8.36ms (Table \ref{tab:perf-macbook-256}). The comparison of all kernels in MacBook Pro is available in Figures \ref{fig:perf-macbook-kernels-1000} and \ref{fig:perf-macbook-kernels-256}.
+The difference in which kernel is the best depends also in the SDM setup. The best kernel for the 1,000-bits SDM in the iMac 2017 was single\_scan5\_unroll with average scan time of 3.61ms; but, for the 256-bits SDM in the same device, it was single\_scan0 with average scan time of 3.03ms; while, for the 10,000-bits SDM in the same device, it was single\_scan6 with 10.96ms (see Table \ref{tab:perf-imac}).
 
-
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    single\_scan0 & 1000 & 42.36 & 23.60 \\
-    single\_scan1 & 1000 & 75.63 & 13.22 \\
-    single\_scan2 & 1000 & 21.14 & 47.28 \\
-    single\_scan3 & 1000 & 30.24 & 33.06 \\
-    single\_scan4 & 1000 & 24.79 & 40.32 \\
-    single\_scan5 & 1000 & 31.73 & 31.51 \\
-    single\_scan5\_unroll & 1000 & 36.28 & 27.55 \\
-    single\_scan6 & 1000 & 25.32 & 39.48 \\
-    \hline
-\end{tabular}
-\caption{MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU. Running an SDM with $n=1,000$ bits, $H=1,000,000$, and $r=451$.
-\label{tab:perf-macbook-kernels-1000}}
-\end{table}
-
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    single\_scan0 & 1000 & 119.49 & 8.36 \\
-    single\_scan1 & 1000 & 95.82 & 10.43 \\
-    single\_scan2 & 1000 & 42.58 & 23.48 \\
-    single\_scan3 & 1000 & 39.19 & 25.51 \\
-    single\_scan4 & 1000 & 23.58 & 42.39 \\
-    single\_scan5 & 1000 & 40.94 & 24.42 \\
-    single\_scan5\_unroll & 1000 & 43.91 & 22.77 \\
-    single\_scan6 & 1000 & 23.70 & 42.18 \\
-    \hline
-\end{tabular}
-\caption{MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU. Running an SDM with $n=256$ bits, $H=1,000,000$, and $r=103$.
-\label{tab:perf-macbook-kernels-256}}
-\end{table}
-
-\begin{figure}[!htb]
-\centering\includegraphics[width=\textwidth]{images02/performance/imac-scans-1000.png}
-\caption{MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU. Kernel comparisons in a SDM with $n=1,000$, $H=1,000,000$ and $r=451$.
-\label{fig:perf-macbook-kernels-1000}}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering\includegraphics[width=\textwidth]{images02/performance/imac-scans-1000.png}
-\caption{MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU. Kernel comparisons in a SDM with $n=256$, $H=1,000,000$ and $r=103$.
-\label{fig:perf-macbook-kernels-256}}
-\end{figure}
+We recommend users to run a specific kernel comparison test for their own GPU and SDM settings.
 
 
 \section{Scanners comparison}
 
+In this section, we are comparing the OpenCL scanner (with the best kernel) with the linear scanner and the threads scanner. Again, which one is faster depends on the SDM settings. In the iMac 2017, the faster scanner for a 1,000-bits SDM was the OpenCL scanner with , but for a 256-bit SDM was the threads scanner.
 
-It is interesting that which scanner is faster depends also on the SDM settings. In the iMac 2017, the faster scanner for a 1,000-bits SDM was the OpenCL, but for a 256-bit SDM was the threads. What happened here is that the OpenCL kernel chosen was a generic one which performs the scan for any SDM. It is always possible to optimize the OpenCL kernel to a specific setting, and it would be faster than the threads. By default, the framework chooses a generic kernel which we believe would be reasonable for the most common setups.
+What happened here is that the OpenCL kernel chosen was a generic one which performs the scan for any SDM. It is always possible to optimize the OpenCL kernel to a specific setting, and it would be faster than the threads. By default, the framework chooses a generic kernel which we believe would be reasonable for the most common setups.
 % TODO Run the optimized kernel and show the results.
 
-Most of the time, the bottleneck of both the read and the write operations is the scanner. But we have optimized the OpenCL kernel so much for the iMac 2017 that scanner not the bottleneck anymore. In the writing operation, it took the same time to scan and to update the counters. It is impressive because it update, on average, 1,000 counters of 32-bit integers each, and it was as fast as (i) sending the command to the GPU, (ii) performing 1 billion bit compares, and (iii) downloading the response from the GPU.
+We can notice that Amazon EC2 p3.2xlarge and p2.xlarge's linear and thread scanners, both running on CPU, were much slower than the CPU of both the personal MacBook Pro and the iMac 2017. As Amazon EC2 are virtual machines with GPU devices, their CPU is shared with other virtual machines which reduces CPU power significantly. Hence, for both virtual machines we have tested, using the GPU really boost the performance, but using the CPU should be avoided. See Tables \ref{tab:perf-imac}
 
-Our conclusion is that, if one is really concerned about performance, one should fine tune the OpenCL kernel for one's GPU. It would always be faster than running in the CPU.
+\section{Read and write operations}
+
+Even though scan is an important part of the operations, we are really interested in the performance of the operations themselves. Comparing the times of the thread and OpenCL scanners with the times of their respective operations (either read or write), we can notice that their difference remains almost constant, which means the operation time itself is negligible when compared to the scan time. In other words, in order to gain even more performance, we have to pursue ways to improve the scan.
 
 
 \begin{table}[!htb]
 \centering
-\begin{tabular}{| l | r | r | r |}
+\begin{tabular}{lrrrr}
+    \toprule
+    & \textbf{256 bits} & \textbf{1,000 bits} & \textbf{10,000 bits} \\ \hline
     \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    single\_scan0 & 3000 & 199.62 & 5.00 \\
-    single\_scan1 & 3000 & 252.64 & 3.95 \\
-    single\_scan2 & 3000 & 218.38 & 4.57 \\
-    single\_scan3 & 3000 & 271.15 & 3.68 \\
-    single\_scan4 & 3000 & 247.28 & 4.04 \\
-    single\_scan5 & 3000 & 268.29 & 3.72 \\
-    single\_scan5\_unroll & 3000 & 276.70 & 3.6139983336130777 \\
-    single\_scan6 & 3000 & 248.26 & 4.02 \\
+	Kernel & Duration (ms) & Duration (ms) & Duration (ms) \\ \hline
+    single\_scan0 &  8.36 & 23.60 &  \\
+    single\_scan1 & 10.43 & 13.22 &  \\
+    single\_scan2 & 23.48 & 47.28 &  \\
+    single\_scan3 & 25.51 & 33.06 &  \\
+    single\_scan4 & 42.39 & 40.32 &  \\
+    single\_scan5 & 24.42 & 31.51 &  \\
+	single\_scan5\_unroll & 22.77 & 27.55 & & \\
+	single\_scan6 & 42.18 & 39.48 &  \\ \hline
     \hline
+	Scanner & Duration (ms) & Duration (ms) & Duration (ms) \\ \hline
+    Linear scan & 9.07 & 17.98 & \\
+    Thread scan & 5.14 & 10.17 & \\
+    OpenCL scan & 8.05 & 12.35 & \\ \hline
+    \hline
+	Operation & Duration (ms) & Duration (ms) & Duration (ms) \\ \hline
+	Thread write       & 6.72 & 14.13 & \\
+	Thread single read & 5.88 & 11.12 & \\
+	OpenCL write       & 6.39 & 18.55 & \\
+	OpenCL single read & 5.26 & 13.06 & \\
+    \bottomrule
 \end{tabular}
-\caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=1,000$ bits, $H=1,000,000$, and $r=451$.
-\label{tab:perf-imac-kernels-1000}
+\caption{MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU. The SDM settings were: (i) $n=256$, $r=103$, and $H=1,000,000$; (ii) $n=1,000$, $r=451$, and $H=1,000,000$; and (iii) $n=10,000$, $r=4850$, and $H=1,000,000$. There is no benchmark for $n=10,000$ because memory is not enough on either RAM or GPU---it would consume 37.25 GB of RAM and 1.2GB of memory in the GPU.
+For the histogram of durations, see Figures \ref{fig:perf-macbook-kernels}, \ref{fig:perf-macbook-scanners}, \ref{fig:perf-macbook-read}, and \ref{fig:perf-macbook-write}.
+\label{tab:perf-macbook}}
 \end{table}
 
 \begin{table}[!htb]
 \centering
-\begin{tabular}{| l | r | r | r |}
+\begin{tabular}{lrrrr}
+    \toprule
+    & \textbf{256 bits} & \textbf{1,000 bits} & \textbf{10,000 bits} \\ \hline
     \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    single\_scan0 & 3000 & 329.71 & 3.03 \\
-    single\_scan1 & 3000 & 347.42 & 2.87 \\
-    single\_scan2 & 3000 & 261.73 & 3.82 \\
-    single\_scan3 & 3000 & 268.16 & 3.72 \\
-    single\_scan4 & 3000 & 223.18 & 4.48 \\
-    single\_scan5 & 3000 & 265.59 & 3.76 \\
-    single\_scan5\_unroll & 3000 & 263.24 & 3.79 \\
-    single\_scan6 & 3000 & 228.92 & 4.36 \\
+	Kernel & Duration (ms) & Duration (ms) & Duration (ms) \\ \hline
+    single\_scan0 & 3.03 & 5.00 & 61.06 \\
+    single\_scan1 & 2.87 & 3.95 & 44.96 \\
+    single\_scan2 & 3.82 & 4.57 & 44.98 \\
+    single\_scan3 & 3.72 & 3.68 & 12.67 \\
+    single\_scan4 & 4.48 & 4.04 & 11.45 \\
+    single\_scan5 & 3.76 & 3.72 & 12.58 \\
+	single\_scan5\_unroll & 3.79 & 3.61 & 11.37 \\
+	single\_scan6 & 4.36 & 4.02 & 10.96 \\ \hline
     \hline
+	Scanner & Duration (ms) & Duration (ms) & Duration (ms) \\ \hline
+    Linear scan & 5.04 & 12.25 & 116.38 \\
+    Thread scan & 2.92 &  6.95 &  53.56 \\
+    OpenCL scan & 2.81 &  4.20 &  12.95 \\ \hline
+    \hline
+	Operation & Duration (ms) & Duration (ms) & Duration (ms) \\ \hline
+    Thread write       & 3.28 & 13.34 \\
+    Thread single read & 2.55 & 10.39 \\
+    OpenCL write       & 2.64 &  7.90 \\
+    OpenCL single read & 2.14 &  5.25 \\
+    \bottomrule
 \end{tabular}
-\caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=256$ bits, $H=1,000,000$, and $r=103$.
-\label{tab:perf-imac-kernels-256}}
+\caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. The SDM settings were: (i) $n=256$, $r=103$, and $H=1,000,000$; (ii) $n=1,000$, $r=451$, and $H=1,000,000$; and (iii) $n=10,000$, $r=4850$, and $H=1,000,000$. There is no benchmark for read and write operations with $n=10,000$ because RAM is not enough to allocate the counters---it would consume 37.25 GB of RAM.
+For the histogram of durations, see Figures \ref{fig:perf-imac-kernels}, \ref{fig:perf-imac-scanners}, \ref{fig:perf-imac-read}, and \ref{fig:perf-imac-write}.
+\label{tab:perf-imac}}
 \end{table}
+
+
 
 \begin{table}[!htb]
 \centering
-\begin{tabular}{| l | r | r | r |}
+\begin{tabular}{lrrr}
+    \toprule
+    & \textbf{256 bits} & \textbf{1,000 bits} & \textbf{10,000 bits} \\ \hline
+	\hline
+	Kernels & Duration (ms) & Duration (ms) & Duration (ms) \\ \hline
+    single\_scan0 &  0.76 &  3.79 & 35.45 \\
+    single\_scan1 &  0.80 &  3.94 & 57.80 \\
+    single\_scan2 &  5.59 &  8.54 & 63.71 \\
+    single\_scan3 &  6.31 &  9.73 & 39.92 \\
+    single\_scan4 & 10.29 & 11.38 & 45.49 \\
+    single\_scan5 &  6.69 &  9.95 & 43.51 \\
+	single\_scan5\_unroll & & & \\
+    single\_scan6 & 10.29 & 11.33 & 41.42 \\
     \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    single\_scan0 & 500 & 16.37 & 61.06 \\
-    single\_scan1 & 500 & 22.24 & 44.96 \\
-    single\_scan2 & 500 & 22.23 & 44.98 \\
-    single\_scan3 & 500 & 78.92 & 12.67 \\
-    single\_scan4 & 500 & 87.30 & 11.45 \\
-    single\_scan5 & 500 & 79.43 & 12.58 \\
-    single\_scan5\_unroll & 500 & 87.88 & 11.37 \\
-    single\_scan6 & 500 & 91.21 & 10.96 \\
+	Scanners & Duration (ms) & Duration (ms) & Duration (ms) \\ \hline
+    Linear scan & 19.09 & 64.73 & 600.75 \\
+    Thread scan &  9.95 & 32.81 & 296.56 \\
+    OpenCL scan &  6.88 & 10.67 &  46.73 \\ \hline
     \hline
+	Operations & Duration (ms) & Duration (ms) & Duration (ms) \\ \hline
+    Thread write       & 11.80 & 42.64 & 383.50 \\
+    Thread single read & 10.49 & 35.37 & 307.97 \\
+    OpenCL write       &  8.84 & 19.31 & 122.17 \\
+    OpenCL single read &  7.50 & 11.72 &  55.47 \\
+    \bottomrule
 \end{tabular}
-\caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=10,000$ bits, $H=1,000,000$, and $r=4850$.
-\label{tab:perf-imac-kernels-10k}}
+\caption{Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU. Running an SDM with $n=256$ bits, $H=1,000,000$, and $r=103$. The SDM settings were: (i) $n=256$, $r=103$, and $H=1,000,000$; (ii) $n=1,000$, $r=451$, and $H=1,000,000$; and (iii) $n=10,000$, $r=4850$, and $H=1,000,000$. There is no benchmark for kernel single\_scan5\_unroll because it returns the wrong result in this GPU. The problem is related with the premises of the optimization used by this kernel, which are not true for this GPU.
+For the histogram of durations, see Figures \ref{fig:perf-ec2-p2-kernels}, \ref{fig:perf-imac-scanners}, \ref{fig:perf-imac-read}, and \ref{fig:perf-imac-write}.
+\label{tab:perf-ec2-p2}}
 \end{table}
+
 
 \begin{table}[!htb]
 \centering
-\begin{tabular}{| l | r | r | r |}
+\begin{tabular}{lrrr}
+    \toprule
+    & \textbf{256 bits} & \textbf{1,000 bits} & \textbf{10,000 bits} \\ \hline
+	\hline
+	Kernel & Duration (ms) & Duration (ms) & Duration (ms) \\ \hline
     \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    single\_scan0 & 3000 & 1433.27 & 0.69 \\
-    single\_scan1 & 3000 & 1822.51 & 0.54 \\
-    single\_scan2 & 3000 & 1165.06 & 0.85 \\
-    single\_scan3 & 3000 & 979.93 & 1.02 \\
-    single\_scan4 & 3000 & 906.35 & 1.10 \\
-    single\_scan5 & 3000 & 1049.21 & 0.95 \\
-    single\_scan6 & 3000 & 958.50 & 1.04 \\
+    single\_scan0 & 0.36 & 0.69 & 20.60 \\
+    single\_scan1 & 0.36 & 0.54 &  4.94 \\
+    single\_scan2 & 0.73 & 0.85 &  5.01 \\
+    single\_scan3 & 0.63 & 1.02 &  6.07 \\
+    single\_scan4 & 1.05 & 1.10 &  5.99 \\
+    single\_scan5 & 0.62 & 0.95 &  5.36 \\
+	single\_scan5\_unroll & & & \\
+    single\_scan6 & 1.01 & 1.04 &  5.96 \\ \hline
+    \hline
+	Scanner & Duration (ms) & Duration (ms) & Duration (ms) \\ \hline
+    Linear scan & 17.60 & 58.34 & 540.97 \\
+    Thread scan &  5.19 & 16.39 & 198.74 \\
+    OpenCL scan &  0.63 &  0.85 &   5.74 \\ \hline
+    \hline
+	Operation & Duration (ms) & Duration (ms) & Duration (ms) \\ \hline
+    Thread write       & 7.59 & 28.47 & 222.08 \\
+    Thread single read & 6.17 & 17.44 & 145.01 \\
+    OpenCL write       & 2.33 &  8.77 &  80.48 \\
+    OpenCL single read & 1.01 &  1.82 &  13.99 \\
     \hline
 \end{tabular}
-\caption{EC2 p3.2xlarge 1000 bits
-\label{tab:perf-imac-256}}
+\caption{Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU. The SDM settings were: (i) $n=256$, $r=103$, and $H=1,000,000$; (ii) $n=1,000$, $r=451$, and $H=1,000,000$; and (iii) $n=10,000$, $r=4850$, and $H=1,000,000$. There is no benchmark for kernel single\_scan5\_unroll because it returns the wrong result in this GPU. The problem is related with the premises of the optimization used by this kernel, which are not true for this GPU.
+For the histogram of durations, see Figures \ref{fig:perf-ec2-p3-kernels}, \ref{fig:perf-ec2-p3-scanners}, \ref{fig:perf-ec2-p3-read}, and \ref{fig:perf-ec2-p3-write}.
+\label{tab:perf-ec2-p3}}
 \end{table}
 
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Loops & Total time & Scans per second & Time per scan (ms) \\
-    single\_scan0 & 3000 & 2729.58 & 0.36 \\
-    single\_scan1 & 3000 & 2703.49 & 0.36 \\
-    single\_scan2 & 3000 & 1354.12 & 0.73 \\
-    single\_scan3 & 3000 & 1573.43 & 0.63 \\
-    single\_scan4 & 3000 & 951.22 & 1.05 \\
-    single\_scan5 & 3000 & 1598.69 & 0.62 \\
-    single\_scan6 & 3000 & 986.06 & 1.01 \\
-    \hline
-\end{tabular}
-\caption{EC2 p3.2xlarge 256 bits
-\label{tab:perf-imac-256}}
-\end{table}
 
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Loops & Total time & Scans per second & Time per scan (ms) \\
-    single\_scan0 & 500 & 48.54 & 20.60 \\
-    single\_scan1 & 500 & 202.34 & 4.94 \\
-    single\_scan2 & 500 & 199.29 & 5.01 \\
-    single\_scan3 & 500 & 164.66 & 6.07 \\
-    single\_scan4 & 500 & 166.70 & 5.99 \\
-    single\_scan5 & 500 & 186.26 & 5.36 \\
-    single\_scan6 & 500 & 167.74 & 5.96 \\
-    \hline
-\end{tabular}
-\caption{EC2 p3.2xlarge 10k bits
-\label{tab:perf-imac-256}}
-\end{table}
 
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Loops & Total time & Scans per second & Time per scan (ms) \\
-    single\_scan0 & 3000 & 263.61 & 3.79 \\
-    single\_scan1 & 3000 & 253.45 & 3.94 \\
-    single\_scan2 & 3000 & 117.06 & 8.54 \\
-    single\_scan3 & 3000 & 102.70 & 9.73 \\
-    single\_scan4 & 3000 & 87.82 & 11.38 \\
-    single\_scan5 & 3000 & 100.46 & 9.95 \\
-    single\_scan6 & 3000 & 88.21 & 11.33 \\
-    \hline
-\end{tabular}
-\caption{EC2 p2.xlarge 1000 bits
-\label{tab:perf-imac-256}}
-\end{table}
-
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Loops & Total time & Scans per second & Time per scan (ms) \\
-    single\_scan0 & 3000 & 1312.85 & 0.76 \\
-    single\_scan1 & 3000 & 1237.20 & 0.80 \\
-    single\_scan2 & 3000 & 178.85 & 5.59 \\
-    single\_scan3 & 3000 & 158.43 & 6.31 \\
-    single\_scan4 & 3000 & 97.14 & 10.29 \\
-    single\_scan5 & 3000 & 149.45 & 6.69 \\
-    single\_scan6 & 3000 & 97.10 & 10.29 \\
-    \hline
-\end{tabular}
-\caption{EC2 p2.xlarge 256 bits
-\label{tab:perf-imac-256}}
-\end{table}
-
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Loops & Total time & Scans per second & Time per scan (ms) \\
-    single\_scan0 & 500 & 28.20 & 35.45 \\
-    single\_scan1 & 500 & 17.30 & 57.80 \\
-    single\_scan2 & 500 & 15.69 & 63.71 \\
-    single\_scan3 & 500 & 25.04 & 39.92 \\
-    single\_scan4 & 500 & 21.97 & 45.49 \\
-    single\_scan5 & 500 & 22.97 & 43.51 \\
-    single\_scan6 & 500 & 24.13 & 41.42 \\
-    \hline
-\end{tabular}
-\caption{EC2 p2.xlarge 10k bits
-\label{tab:perf-imac-256}}
-\end{table}
+% MacBook Pro
 
 \begin{figure}[!htb]
-\centering\includegraphics[width=\textwidth]{images02/performance/imac-read-256.png}
-\caption{Time to run a single read in a SDM with $n=256$, $H=1,000,000$ and $r=103$.
-\label{fig:perf-imac-read-256}}
+\centering
+\subfloat[$n=256$, $r=103$, and $H=1,000,000$]{\includegraphics[width=\textwidth]{images02/performance/macbook-kernels-256.png}}
+
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=\textwidth]{images02/performance/macbook-kernels-1000.png}}
+
+\caption{Kernel comparisons for MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU.
+\label{fig:perf-macbook-kernels}}
 \end{figure}
 
 \begin{figure}[!htb]
-\centering\includegraphics[width=\textwidth]{images02/performance/imac-write-256.png}
-\caption{Time to run one write in a SDM with $n=256$, $H=1,000,000$ and $r=103$.
-\label{fig:perf-imac-write-256}}
+\centering
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=\textwidth]{images02/performance/macbook-scan-256.png}}
+
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=\textwidth]{images02/performance/macbook-scan-1000.png}}
+
+\caption{Scanner comparisons for MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU.
+\label{fig:perf-macbook-scanners}}
+\end{figure}
+
+
+\begin{figure}[!htb]
+\centering
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=\textwidth]{images02/performance/macbook-read-256.png}}
+
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=\textwidth]{images02/performance/macbook-read-1000.png}}
+
+\caption{Read operation comparisons for MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU.
+\label{fig:perf-macbook-read}}
 \end{figure}
 
 \begin{figure}[!htb]
-\centering\includegraphics[width=\textwidth]{images02/performance/imac-write-1000.png}
-\caption{Time to run one write in a SDM with $n=1,000$, $H=1,000,000$ and $r=451$.
-\label{fig:perf-imac-write-1000}}
+\centering
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=\textwidth]{images02/performance/macbook-write-256.png}}
+
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=\textwidth]{images02/performance/macbook-write-1000.png}}
+
+\caption{Write operation comparisons for MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU.
+\label{fig:perf-macbook-write}}
+\end{figure}
+
+
+% iMac
+
+\begin{figure}[!htb]
+\centering
+\subfloat[$n=256$, $r=103$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/imac-kernels-256.png}}
+
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/imac-kernels-1000.png}}
+
+\subfloat[$n=10,000$, $r=4805$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/imac-kernels-10k.png}}
+
+\caption{Kernel comparisons for iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU.
+\label{fig:perf-imac-kernels}}
 \end{figure}
 
 \begin{figure}[!htb]
-\centering\includegraphics[width=\textwidth]{images02/performance/imac-read-1000.png}
-\caption{Time to run a single read in a SDM with $n=1,000$, $H=1,000,000$ and $r=451$.
-\label{fig:perf-imac-read-1000}}
+\centering
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/imac-scan-256.png}}
+
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/imac-scan-1000.png}}
+
+\subfloat[$n=10,000$, $r=4805$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/imac-scan-10k.png}}
+
+\caption{Scanner comparisons for iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU.
+\label{fig:perf-imac-scanners}}
+\end{figure}
+
+
+\begin{figure}[!htb]
+\centering
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=\textwidth]{images02/performance/imac-read-256.png}}
+
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=\textwidth]{images02/performance/imac-read-1000.png}}
+
+\caption{Read operation comparisons for iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU.
+\label{fig:perf-imac-read}}
 \end{figure}
 
 \begin{figure}[!htb]
-\centering\includegraphics[width=\textwidth]{images02/performance/imac-scans-256.png}
-\caption{Time to run a single scan in a SDM with $n=256$, $H=1,000,000$ and $r=103$.
-\label{fig:perf-imac-scan-256}}
+\centering
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=\textwidth]{images02/performance/imac-write-256.png}}
+
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=\textwidth]{images02/performance/imac-write-1000.png}}
+
+\caption{Write operation comparisons for iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU.
+\label{fig:perf-imac-write}}
+\end{figure}
+
+
+% EC2 p2.xlarge
+
+\begin{figure}[!htb]
+\centering
+\subfloat[$n=256$, $r=103$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p2-kernels-256.png}}
+
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p2-kernels-1000.png}}
+
+\subfloat[$n=10,000$, $r=4805$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p2-kernels-10k.png}}
+
+\caption{Kernel comparisons for Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU.
+\label{fig:perf-ec2-p2-kernels}}
 \end{figure}
 
 \begin{figure}[!htb]
-\centering\includegraphics[width=\textwidth]{images02/performance/imac-scans-1000.png}
-\caption{Time to run a single scan in a SDM with $n=1,000$, $H=1,000,000$ and $r=451$.
-\label{fig:perf-imac-scan-1000}}
+\centering
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p2-scan-256.png}}
+
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p2-scan-1000.png}}
+
+\subfloat[$n=10,000$, $r=4805$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p2-scan-10k.png}}
+
+\caption{Scanner comparisons for Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU.
+\label{fig:perf-ec2-p2-scanners}}
+\end{figure}
+
+
+\begin{figure}[!htb]
+\centering
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p2-read-256.png}}
+
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p2-read-1000.png}}
+
+\subfloat[$n=10,000$, $r=4805$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p2-read-10k.png}}
+
+\caption{Read operation comparisons for Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU.
+\label{fig:perf-ec2-p2-read}}
 \end{figure}
 
 \begin{figure}[!htb]
-\centering\includegraphics[width=\textwidth]{images02/performance/imac-scans-10k.png}
-\caption{Time to run a single scan in a SDM with $n=10,000$, $H=1,000,000$ and $r=4845$.
-\label{fig:perf-imac-scan-10k}}
+\centering
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p2-write-256.png}}
+
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p2-write-1000.png}}
+
+\subfloat[$n=10,000$, $r=4805$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p2-write-10k.png}}
+
+\caption{Write operation comparisons for Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU.
+\label{fig:perf-ec2-p2-write}}
 \end{figure}
 
-\begin{table}[!htb]
+
+% EC2 p3.2xlarge
+
+\begin{figure}[!htb]
 \centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Linear scan & 1000 & 81.62 & 12.25 \\
-    Thread scan & 5000 & 143.68 & 6.95 \\
-    OpenCL scan & 5000 & 238.00 & 4.20 \\ \hline
-    \hline
-    & Loops & Ops / second & Op. time (ms) \\ \hline
-    Thread write & 1000 & 74.92 & 13.34 \\
-    Thread single read & 1000 & 96.22 & 10.39 \\
-    OpenCL write & 1000 & 126.50 & 7.90 \\
-    OpenCL single read & 1000 & 190.20 & 5.25 \\
-    \hline
-\end{tabular}
-\caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=1,000$ bits, $H=1,000,000$, and $r=451$.
-\label{tab:perf-imac-1000}}
-\end{table}
+\subfloat[$n=256$, $r=103$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p3-kernels-256.png}}
 
-\begin{table}[!htb]
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p3-kernels-1000.png}}
+
+\subfloat[$n=10,000$, $r=4805$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p3-kernels-10k.png}}
+
+\caption{Kernel comparisons for Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU.
+\label{fig:perf-ec2-p3-kernels}}
+\end{figure}
+
+\begin{figure}[!htb]
 \centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Linear scan & 1000 & 175.48 & 5.69 \\
-    Thread scan & 5000 & 352.63 & 2.83 \\
-    OpenCL scan & 5000 & 244.88 & 4.08 \\ \hline
-    \hline
-    & Loops & Ops / second & Op. time (ms) \\ \hline
-    Thread write & 2000 & 304.46 & 3.28 \\
-    Thread single read & 2000 & 391.21 & 2.55 \\
-    OpenCL write & 2000 & 378.44 & 2.64 \\
-    OpenCL single read & 2000 & 466.16 & 2.14 \\
-    \hline
-\end{tabular}
-\caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=256$ bits, $H=1,000,000$, and $r=103$.
-\label{tab:perf-imac-256}}
-\end{table}
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p3-scan-256.png}}
 
-\begin{table}[!htb]
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p3-scan-1000.png}}
+
+\subfloat[$n=10,000$, $r=4805$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p3-scan-10k.png}}
+
+\caption{Scanner comparisons for Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU.
+\label{fig:perf-ec2-p3-scanners}}
+\end{figure}
+
+
+\begin{figure}[!htb]
 \centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Linear scan & 100 & 8.59 & 116.38 \\
-    Thread scan & 500 & 18.66 & 53.56 \\
-    OpenCL scan & 1000 & 77.20 & 12.95 \\
-    \hline
-\end{tabular}
-\caption{iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G GPU. Running an SDM with $n=10,000$ bits, $H=1,000,000$, and $r=4845$.  There is no benchmark for read and write operations because RAM is not enough to allocate the counters --- it would consume 37.25 GB of RAM.
-\label{tab:perf-imac-10k}}
-\end{table}
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p3-read-256.png}}
 
-\begin{table}[!htb]
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p3-read-1000.png}}
+
+\subfloat[$n=10,000$, $r=4805$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p3-read-10k.png}}
+
+\caption{Read operation comparisons for Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU.
+\label{fig:perf-ec2-p3-read}}
+\end{figure}
+
+\begin{figure}[!htb]
 \centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Linear scan & 1000 & 15.44 & 64.73 \\
-    Thread scan & 5000 & 30.47 & 32.81 \\
-    OpenCL scan & 5000 & 93.63 & 10.67 \\ \hline
-    \hline
-    & Loops & Ops / second & Op. time (ms) \\ \hline
-    Thread write & 1000 & 23.44 & 42.64 \\
-    Thread single read & 1000 & 28.26 & 35.37 \\
-    OpenCL write & 1000 & 51.78 & 19.31 \\
-    OpenCL single read & 1000 & 85.31 & 11.72 \\
-    \hline
-\end{tabular}
-\caption{Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU. Running an SDM with $n=1,000$ bits, $H=1,000,000$, and $r=451$.}
-\end{table}
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p3-write-256.png}}
 
+\subfloat[$n=1,000$, $r=451$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p3-write-1000.png}}
 
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Linear scan & 1000 & 52.35 & 19.09 \\
-    Thread scan & 5000 & 100.48 & 9.95 \\
-    OpenCL scan & 5000 & 145.18 & 6.88 \\ \hline
-    \hline
-    & Loops & Ops / second & Op. time (ms) \\ \hline
-    Thread write & 2000 & 84.73 & 11.80 \\
-    Thread single read & 2000 & 95.26 & 10.49 \\
-    OpenCL write & 2000 & 113.01 & 8.84 \\
-    OpenCL single read & 2000 & 133.19 & 7.50 \\
-    \hline
-\end{tabular}
-\caption{Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU. Running an SDM with $n=256$ bits, $H=1,000,000$, and $r=103$.}
-\end{table}
+\subfloat[$n=10,000$, $r=4805$, and $H=1,000,000$]{\includegraphics[width=0.7\textwidth]{images02/performance/ec2-p3-write-10k.png}}
 
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Linear scan & 100 & 1.66 & 600.75 \\
-    Thread scan & 500 & 3.37 & 296.56 \\
-    OpenCL scan & 1000 & 21.39 & 46.73 \\ \hline
-    \hline
-    & Loops & Ops / second & Op. time (ms) \\ \hline
-    Thread write & 500 & 2.60 & 383.50 \\
-    Thread single read & 500 & 3.24 & 307.97 \\
-    OpenCL write & 1000 & 8.18 & 122.17 \\
-    OpenCL single read & 55.47 & 18.02 & 55.47 \\
-    \hline
-\end{tabular}
-\caption{EC p2.xlarge 10,000-bits}
-\caption{Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU. Running an SDM with $n=10,000$ bits, $H=1,000,000$, and $r=4845$.}
-\end{table}
-
-
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Linear scan & 1000 & 17.13 & 58.34 \\
-    Thread scan & 5000 & 60.98 & 16.39 \\
-    OpenCL scan & 5000 & 1175.88 & 0.85 \\ \hline
-    \hline
-    & Loops & Ops / second & Op. time (ms) \\ \hline
-    Thread write & 1000 & 35.12 & 28.47 \\
-    Thread single read & 1000 & 57.31 & 17.44 \\
-    OpenCL write & 1000 & 113.98 & 8.77 \\
-    OpenCL single read & 1000 & 549.12 & 1.82 \\
-    \hline
-\end{tabular}
-\caption{Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU. Running an SDM with $n=1,000$ bits, $H=1,000,000$, and $r=451$.}
-\end{table}
-
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Linear scan & 1000 & 56.80 & 17.60 \\
-    Thread scan & 5000 & 192.54 & 5.19 \\
-    OpenCL scan & 5000 & 1565.28 & 0.63 \\ \hline
-    \hline
-    & Loops & Ops / second & Op. time (ms) \\ \hline
-    Thread write & 2000 & 131.64 & 7.59 \\
-    Thread single read & 2000 & 161.97 & 6.17 \\
-    OpenCL write & 2000 & 427.38 & 2.33 \\
-    OpenCL single read & 2000 & 987.95 & 1.01 \\
-    \hline
-\end{tabular}
-\caption{Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU. Running an SDM with $n=256$ bits, $H=1,000,000$, and $r=103$.}
-\end{table}
-
-\begin{table}[!htb]
-\centering
-\begin{tabular}{| l | r | r | r |}
-    \hline
-    & Loops & Scans / second & Scan time (ms) \\ \hline
-    Linear scan & 100 & 1.84 & 540.97 \\
-    Thread scan & 500 & 5.03 & 198.74 \\
-    OpenCL scan & 1000 & 174.05 & 5.74 \\ \hline
-    \hline
-    & Loops & Ops / second & Op. time (ms) \\ \hline
-    Thread write & 500 & 4.50 & 222.08 \\
-    Thread single read & 500 & 6.89 & 145.01 \\
-    OpenCL write & 1000 & 12.42 & 80.48 \\
-    OpenCL single read & 1000 & 71.46 & 13.99 \\
-    \hline
-\end{tabular}
-\caption{Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU. Running an SDM with $n=10,000$ bits, $H=1,000,000$, and $r=4845$.}
-\end{table}
+\caption{Write operation comparisons for Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU.
+\label{fig:perf-ec2-p3-write}}
+\end{figure}
