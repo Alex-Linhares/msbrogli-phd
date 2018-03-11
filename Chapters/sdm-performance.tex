@@ -1,6 +1,6 @@
 % !TEX root = ../partial-sdm.tex
 
-Performance matters --- and has always mattered. If an experiment takes a few seconds, there is no point arguing whether we should try it. If it takes a few hours, maybe we should think first. If it takes a few days, it is more important to make a good plan. As SDM consumes large processor and memory resources, some experiments may take a long time.
+Performance matters --- and has always mattered. If an experiment takes a few seconds, there is no point arguing whether we should try it. If it takes a few hours, maybe we should think first. If it takes a few days --- or more ---, it is important to devise a good plan. As SDM consumes large processor and memory resources, some experiments may take a long time.
 
 Each scan on a 1,000-bits SDM with 1,000,000 hard-locations executes $10^9$ bit compares through $10^9/64 = 15,625,000$ XORs and calls to the built-in popcount. So, 10,000 writes execute $10^{13}$ bit compares, while a 6-iterative reading executes $6 \cdot 10^{12}$ bit compares. The heatmap of Figure \ref{fig:cir-dist-10k-writes-kanerva} executed $3.05 \cdot 10^{15}$ bit compares. For comparison, the number of seconds since Jesus's birth is 63,639,648,000 = $6.36 \cdot 10^{10}$. The number of people who have ever lived on earth is estimated to be $1,08 \cdot 10^{11}$. There are approximtely $1.8 \cdot 10^{9}$ websites in the internet. A modern laptop can increment a counter $5 \cdot 10^{8}$ times per second. Hence, a naive implementation of SDM may take several hours --- or days --- to simply write 10,000 random bitstrings.
 
@@ -37,7 +37,7 @@ We can notice that Amazon EC2 p3.2xlarge and p2.xlarge's linear and thread scann
 
 \section{Read and write operations}
 
-Even though scan is an important part of the operations, we are really interested in the performance of the operations themselves. Comparing the times of the thread and OpenCL scanners with the times of their respective operations (either read or write), we can notice that their difference remains almost constant, which means the operation time itself is negligible when compared to the scan time. In other words, in order to gain even more performance, we have to pursue ways to improve the scan.
+Even though scaning is an important part of the operations, we are really interested in the performance of the enterity of operations themselves. Comparing the times of the thread and OpenCL scanners with the times of their respective operations (either read or write), we can notice that their difference remains almost constant, which means the operation time itself is negligible when compared to the scan time. In other words, in order to gain even more performance, we have to pursue ways to improve the scan.
 
 
 \begin{table}[!htb]
@@ -391,3 +391,5 @@ For the histogram of durations, see Figures \ref{fig:perf-ec2-p3-kernels}, \ref{
 \subsection{Summary of results}
 
 The results, beyond showing the obvious fact that consumer grade hardware is not comparable to the Amazon instances, indicate a non-trivial issue:  The chosen kernel for scanning the memory is of crucial importance to performance, and this kernel speed is a function of both the hardware used and the particular parameters used in the SDM settings.
+
+It is reasonable to consider that the performance results obtained are of particular merit, and one particular fact stands out:  The scanning of 1,000,000 hard locations has become, in the desired professional-grade machines, \emph{faster} than the updating of the 1,000 active locations.
