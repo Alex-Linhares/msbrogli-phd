@@ -60,7 +60,7 @@ P(miss | bit=1) &= P \left( \sum_{i=1}^\theta X_i < \frac{sh^2}{2H} - w \cdot \p
 P(miss) &= \frac{1}{2} \cdot \left[ P(miss | bit=0) + P(miss | bit=1) \right]
 \end{align}
 
-For details and the proof of this equation, see \citet{brogliato2014sparse}. Although Kanerva has found a formula for $\phi(d)$ through an unsolved integral, and \citet{de1995geometrical} has proposed another way to calculate $\phi(d)$, we have used our framework to estimate the values of $d$. In order to do that, we used a Monte Carlo approach, generating many pair of random bitstrings $d$ bits away from them and calculating the average number of shared hard-locations between them. The code is available in the ``Calculate critical distance'' notebook \citep{sdmframework}.
+For details and the proof of this equation, see \citet{brogliato2014sparse}. Although Kanerva has found a formula for $\phi(d)$ through an unsolved integral, and \citet{de1995geometrical} have proposed another way to calculate $\phi(d)$, we have used our framework to estimate the values of $d$. In order to do that, we used a Monte Carlo approach, generating many pair of random bitstrings $d$ bits away from them and calculating the average number of shared hard-locations between them. The code is available in the ``Calculate critical distance'' notebook \citep{sdmframework}.
 
 Kanerva's settings according to the parameters of the equation were: $s=10,000$, $H=1,000,000$, and $w=1$. We have calculated $\phi(d)$ as explained, and $h = H \cdot 2^{-n} \sum_{i=0}^{r} \binom{n}{i}$, where $n=1,000$ and $r=451$. Finally, $h=1,071.85$ and changing $d$ from $0$ to $1000$, we got Figure \ref{fig:kanerva-figure-73-calculated}.
 
@@ -71,7 +71,7 @@ Kanerva's settings according to the parameters of the equation were: $s=10,000$,
 }
 \end{figure}
 
-As we can easily notice, we got exactly the same curve as Kanerva. This question has been intriguing us since then and we are still looking for a better explanation then ``attractors''.
+As we can easily notice, we got exactly the same curve as Kanerva. This question has been intriguing us since then and we are still looking for a more analytic explanation then merely interference from the other written attractors.
 
 
 \section{Critical distance of 209}
@@ -99,6 +99,6 @@ To confirm that the critical distance is not around 209, but around 221, we also
 
 %\begin{figure}[h]
 %\centering\includegraphics[width=0.8\textwidth]{images02/sdm-10000w-notX-table-7-2.png}
-%\caption{This graph shows the interaction effects more clearly.  As we include an opposite bitstring, one can see the accelerating effects towards convergence to both attractors: the origin and the opposite. Here we have the exact same configuration of Figure \ref{sdm-10000w-table-7-2}, with the addition of the single opposite attractor.
+%\caption{This graph shows the interaction effects more clearly.  As we include an opposite bitstring, one can see the accelerating effects towards convergence to both attractors: the origin and its polar opposite. Here we have the exact same configuration of Figure \ref{sdm-10000w-table-7-2}, with the addition of the single opposite attractor.
 %\label{sdm-10000w-notX-table-7-2}}
 %\end{figure}
