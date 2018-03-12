@@ -320,9 +320,9 @@ Reinforcement learning is a machine learning algorithm which learns from the rew
 
 We have done some experiments with an SDM as a memory for a TicTacToe player. Basically, it receives the current board state and returns which action should be played. In the end of the game, it receives the sequences of boards and the winner, and is supposed to learn from them.
 
-Our algorithm to decide what should be player is very simples: it read the current board from SDM. If the reading converges to another board, it chooses the movement which would bring the current board to the one read from SDM. If the reading does not converge, it just play randomly.
+Our algorithm to decide what should be played is very simples: it read the current board from SDM. If the reading converges to another board, it chooses the movement which would bring the current board to the one read from SDM. If the reading does not converge, it just play randomly.
 
-After a game has finished, it is time to learn from its decisions. Thus, if SDM wins the game, it will write the whole sequence of boards to SDM. Let $b_0, b_1, b_2, \dots, b_n$ be the board sequence of the game (see Figure \ref{fig-ttt-example}). Then it will write $b_0 \rightarrow b_1 \rightarrow b_2 \rightarrow \cdots \rightarrow b_n$, with possibly different weights for each transition. If it loses, it will reverse the board (replace X by O and vice versa), and will act as if it had won. Hence, it will learn which sequences lead to victory. When a new board appears, it may have already seen that situation and will decide according to the sequences which goes towards victory. This is our positive reward learning.
+After a game has finished, it is time to learn from its decisions. Thus, if SDM wins the game, it will write the whole sequence of boards to SDM. Let $b_0, b_1, b_2, \dots, b_n$ be the board sequence of the game (see Figure \ref{fig-ttt-example}). Then it will write $b_0 \rightarrow b_1 \rightarrow b_2 \rightarrow \cdots \rightarrow b_n$, with possibly different weights for each transition. If it loses, it will reverse the board (replacing X by O and vice versa), and will act as if it had won. Hence, it will learn which sequences lead to victory. When a new board appears, it may have already seen that situation and will decide according to the sequences which goes towards victory. This is our positive reward learning.
 
 \begin{figure}
     \captionsetup[subfigure]{labelformat=empty}
@@ -331,31 +331,31 @@ After a game has finished, it is time to learn from its decisions. Thus, if SDM 
     \subfloat[$b0$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
      & & \\\hline  & & \\\hline  & &
     \end{tabular}}
-    {$\xrightarrow{w_0}$}
+    {$\rightarrow$}
     \subfloat[$b1$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
      & & \\\hline  &x& \\\hline  & &
     \end{tabular}}
-    {$\xrightarrow{w_1}$}
+    {$\rightarrow$}
     \subfloat[$b2$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
      & & \\\hline o&x& \\\hline  & &
     \end{tabular}}
-    {$\xrightarrow{w_2}$}
+    {$\rightarrow$}
     \subfloat[$b3$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
     x& & \\\hline o&x& \\\hline  & &
     \end{tabular}}
-    {$\xrightarrow{w_3}$}
+    {$\rightarrow$}
     \subfloat[$b4$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
     x& & \\\hline o&x& \\\hline  & &o
     \end{tabular}}
-    {$\xrightarrow{w_4}$}
+    {$\rightarrow$}
     \subfloat[$b5$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
     x&x& \\\hline o&x& \\\hline  & &o
     \end{tabular}}
-    {$\xrightarrow{w_5}$}
+    {$\rightarrow$}
     \subfloat[$b6$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
     x&x&o\\\hline o&x& \\\hline  & &o
     \end{tabular}}
-    {$\xrightarrow{w_6}$}
+    {$\rightarrow$}
     \subfloat[$b7$]{\begin{tabular}{p{\widthof{x}}|p{\widthof{x}}|p{\widthof{x}}}
     x&x&o\\\hline o&x& \\\hline  &x&o
     \end{tabular}}
