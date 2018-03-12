@@ -204,7 +204,7 @@ Then, in order to test the filtering, we just have read from noisy images, and t
 
 A simplified mathematical analysis would be: During the learning phase, $200$ images with 15\% of noise were written to SDM, so, the average distance between them and the clean image was 150 bits. Thus they shared, on average, 175 hard-locations with the clean image. In this 175 hard-locations, the counter's value for a black pixel mapped to bit 1 was $(1-0.15) \cdot 200 - 0.15 \cdot 200 = 140$. Finally, let's analyse the reading. When reading from a noise image with 42\% of noise, the average distance between the noisy image and its clean image is 420, which means they share, on average, 6 hard-locations. As the average number of activated hard-locations is 1,072, the sum of their counters will be, on average, $Y = 6 \cdot 140 - \sum_{i=1}^{1072-6} X_i$, where $X_i$ is a Bernoulli trial with probability 0.5. Hence, $P(\text{black pixel}) = P(Y > 0) = P(6 \cdot 140 - \sum_{i=1}^{1072-6} X_i > 0) = P(\sum_{i=1}^{1066} X_i < 840) = 99.99\%$. But, when reading from a noise image with 45\% of noise, the average number of hard-locations shared with the clean image is only 3. Thus the sum of the activated hardlocations' counters will be, on average, $3 \cdot 140 - \sum_{i=1}^{1072-3} X_i$, and $P(\text{black pixel}) = P(\sum_{i=1}^{1069} X_i < 420) = 1.28 \cdot 10^{-12}$. The probability abruptly drops from 100\% to 0\% when the noise goes from 42\% to 45\% (see Figure \ref{fig:filter-prob-right-pixel}). The analysis for while pixels is exactly the same, but with opposite signs. The code to calculate this probability is available in ``Noise filter - Math analysis'' notebook \citep{sdmframework}.
 
-This is a simplified analysis because it does not take into consideration the hardlocations shared by the different letters. It works fine for our example because letter ``I'' and ``T'' share, on average, zero hardlocations.
+This is a simplified analysis because it does not take into consideration the hardlocations shared by the different letters. It works fine for our example because letter ``I'' and ``T'' are almost orthogonal and share, on average, only one hardlocation.
 
 \begin{figure}[!htb]
 \centering\includegraphics[width=0.7\textwidth]{./images02/filter/prob-right-pixel.png}
@@ -213,9 +213,49 @@ This is a simplified analysis because it does not take into consideration the ha
 }
 \end{figure}
 
-In the learning phase, noisy images are generated and they are written into SDM chunked with their labels. The chunk was calculated using the exclusive or (XOR) operator. So, the image bitstring was written to the address of its bitstrings XOR its label bitstring --- write(addr=bs\_image $\oplus$ bs\_label, datum=bs\_image).
+If the intersection between images becomes too high, the noise filter stops working. We have confirmed it writing letters ``B'', ``C'', ``D'' and numeral ``8''. They share a great amount of hard-locations and our noise filter stopped working. The training sets can be seen in Figure \ref{fig:filter-training2} and the results in Figure \ref{fig:filter-results2}.
 
-Finally, in order to remove the noise of a new image, first we have to classify it (possibly using the already presented classification algorithm), and then we just have to read from the chunked address until it converges.
+A possible solution to this interference problem is to use labels. Each label has a random bitstring, which will be chuncked with the images before writing into SDM. Hence, before reading, we also have to chunck the image with the label --- which means we need to know the label of each image. The chunk was done using the exclusive OR (XOR) operator, i.e., $bs\_chunck = bs\_image \oplus bs\_label$. In other words, we run \lstinline{write(address=bs_chunk, datum=bs_label)} during the training, and \lstinline{read(address=bs_chunk)} during the testing. We used the same training set as before, and the results can be seen in Figure \ref{fig:filter-results2-chunk}.
+
+The chunck through exclusive OR (XOR) works because of the following theorem:
+
+\begin{theorem}
+If $v_1$ and $v_2$ are random bitstrings, then $\forall a, b, \mathbf{E} \left[ d(a \oplus v_1, b \oplus v_2) \right] = n/2$.
+\end{theorem}
+\begin{proof}
+Let $\mathbb{A} = \{ i | a^i = b^i \}$ be the indexes in which the bits of $a$ are equal to the bits of $b$, and $\mathbb{B} = \{ i | a^i \ne b^i \}$ be indexes in which the bits of $a$ are different from the bits of $b$. Thus,
+
+\begin{align*}
+d(a \oplus v_1, b \oplus v_2) &= \sum_{i=1}^n d(a^i \oplus v_1^i, b^i \oplus v_2^i) \\
+    &= \sum_{i=1}^n (a^i \oplus v_1^i) \oplus (b^i \oplus v_2^i) \\
+    &= \sum_{i=1}^n (a^i \oplus b^i) \oplus (v_1^i \oplus v_2^i) \\
+    &= \sum_{i \in \mathbb{A}} (a^i \oplus b^i) \oplus (v_1^i \oplus v_2^i) +
+       \sum_{i \in \mathbb{B}} (a^i \oplus b^i) \oplus (v_1^i \oplus v_2^i)
+\end{align*}
+
+For $i \in \mathbb{A}$, $a^i \oplus b^i = 0$, and follows:
+
+\begin{align*}
+(a^i \oplus b^i) \oplus (v_1^i \oplus v_2^i) &= 0 \oplus (v_1^i \oplus v_2^i) \\
+    &= v_1^i \oplus v_2^i \\
+    &= d(v_1^i, v_2^i)
+\end{align*}
+
+Hence, $\mathbf{E} \left[ \sum_{i \in \mathbb{A}} d(a^i \oplus v_1^i, b^i \oplus v_2^i) \right] = \mathbf{E} \left[ \sum_{i \in \mathbb{A}} d(v_1^i, v_2^i) \right] = |\mathbb{A}|/2$, because $v_1$ and $v_2$ are random bitstrings and their average distance is half the number of bits.
+
+For $i \in \mathbb{B}$, $a^i \oplus b^i = 1$, and follows:
+
+\begin{align*}
+(a^i \oplus b^i) \oplus (v_1^i \oplus v_2^i) &= 1 \oplus (v_1^i \oplus v_2^i) \\
+    &= d(1, v_1^i \oplus v_2^i)
+\end{align*}
+
+Hence, $\mathbf{E} \left[ \sum_{i \in \mathbb{B}} d(a^i \oplus v_1^i, b^i \oplus v_2^i) \right] = \mathbf{E} \left[ \sum_{i \in \mathbb{B}} d(1, v_1^i \oplus v_2^i) \right] = |\mathbb{B}|/2$.
+
+Finally, $\mathbf{E} \left[ d(a \oplus v_1, b \oplus v_2) \right] = |\mathbb{A}|/2 + |\mathbb{B}|/2 = n/2$, since $|\mathbb{A}| + |\mathbb{B}| = n$
+\end{proof}
+
+In our example, we just used the right label to read each image. But, we could have used our classification algorithm already presented in this work as a pre-processing step, and then, with the correct label, run the noise filter.
 
 
 
