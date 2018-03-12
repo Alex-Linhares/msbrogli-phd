@@ -93,10 +93,466 @@ The OpenCL must be initialized, which just copies the address space's bitstrings
 
 \subsection{OpenCL kernel}
 
-The OpenCL kernel explores the GPU architecture to improve performance. Each work group calculates the distance of several bitstrings. During the distance calculation, each worker calculates the exclusive OR (XOR) between two 64-bit integers and use the built-in popcount function to count the number of ones. Then, they update an array of intermediate distances with their partial distances. This array is stored in the local memory and is shared with all workers of the same group. This whole step happens simultaneously in the GPU. Then, we used a reduction algorithm to sum the intermediate distances array in order to calculate the correct distance. This reduction algorithm is also distributed between the workers and runs in $O(\log_2(\text{bs\_step}))$. Finally, one of the workers checks whether the distance is less than or equal to the radius to include the bitstring index into the resulting array.
+There are 8 OpenCL kernels which explore differently the GPU architecture to improve performance. It is necessary because there are several GPU microarchitecture and a single kernel will never be optimal for all of them. In simplified form, OpenCL splits the tasks into workgroups which, in turn, split their part of the task into workers. The works are like threads in a computer. OpenCL specifies four levels of memory hierarchy for the GPUs: global memory, read-only memory, local memory, and private memory. The global memory and read-only memory are accessible by all workgroups, while each workgroup has its own local memory, accessible by its workers. Finally, each worker has its own private memory. The number of workers per workgroup is defined by user and must be multiple of the number of tasks.
 
-The number of workers in each group is the closest power of two above bs\_len (which is the number of 64-integers that forms a bitstring).
+All 8 kernels do the same thing: calculate the exclusive OR (XOR) between two 64-bit integers and count the number of bits one in the result. They just do it with different approaches. For instance, \lstinline{single_scan0} calculates one distance between bitstrings per worker (Listing \ref{lst:single_scan0}); while \lstinline{single_scan2} uses a whole workgroup to calculate each distance, distributing each element of the 64-int integer array per worker (Listing \ref{lst:single_scan2}).
 
+The OpenCL kernels \lstinline{single_scan3} (Listing \ref{lst:single_scan3}), \lstinline{single_scan4} (Listing \ref{lst:single_scan4}), \lstinline{single_scan5} (Listing \ref{lst:single_scan5}), \lstinline{single_scan5_unroll} (Listing \ref{lst:single_scan5_unroll}), \lstinline{single_scan6} (Listing \ref{lst:single_scan6}) explore the GPU architecture to improve the sum of the partial distances. Each workgroup calculates the distance of several bitstrings. During the distance calculation, each worker calculates the exclusive OR (XOR) between two 64-bit integers and use the built-in popcount function to count the number of ones. Then, they update an array of partial distances with their results. This array is stored in the local memory and is shared between all workers of the same workgroup. This whole step happens simultaneously in the GPU. Then, a reduction algorithm is used to sum the partial distances array in order to calculate the total distance. This reduction algorithm is also distributed between the workers and runs in $O(\log_2(\text{bs\_step}))$. Finally, the first worker of each workgroup checks whether the distance is less than or equal to the radius to include the bitstring index into the resulting array.
+
+Some of the optimizations may not work in some GPUs, because not all their premises are valid. Before choosing a kernel, one should check whether it works property for one's specific GPU device.
+
+
+\begin{figure}[!p]
+\begin{lstlisting}[
+language={[OpenCL]C},
+label={lst:single_scan0},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan0}}. It calculates one distance per worker and let the GPU decide how to distribute this task between workgroups and workers. It is the most simple kernel and does not explore any details of the GPU architecture.},
+]
+__kernel
+void single_scan0(
+		__constant const uchar *bitcount_table,
+		__global const ulong *bitstrings,
+		const uint bs_len,
+		const uint sample,
+		__constant const ulong *bs,
+		const uint radius,
+		__global uint *counter,
+		__global uint *selected,
+		__local uint *partial_dist)
+{
+	uint id = get_global_id(0);
+
+	if (id < sample) {
+		ulong a;
+		uint dist;
+
+		const __global ulong *row = bitstrings + id*bs_len;
+
+		dist = 0;
+		for(uint j=0; j<bs_len; j++) {
+			a = row[j] ^ bs[j];
+			dist += popcount(a);
+		}
+		if (dist <= radius) {
+			selected[atomic_inc(counter)] = id;
+		}
+	}
+}
+\end{lstlisting}
+\end{figure}
+
+
+\begin{figure}[!p]
+\begin{lstlisting}[
+language={[OpenCL]C},
+label={lst:single_scan1},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan1}}. It is just like \lstinline{single_scan0}, but it distribute several distances per workgroup, which, in turn, distribute the distances among their workers.},
+]
+__kernel
+void single_scan1(
+        __constant const uchar *bitcount_table,
+        __global const ulong *bitstrings,
+        const uint bs_len,
+        const uint sample,
+        __constant const ulong *bs,
+        const uint radius,
+        __global uint *counter,
+        __global uint *selected,
+        __local uint *partial_dist)
+{
+    uint id;
+    ulong a;
+    uint dist;
+    const __global ulong *row;
+
+    for (id=get_global_id(0); id < sample; id += get_global_size(0)) {
+
+        row = bitstrings + id*bs_len;
+
+        dist = 0;
+        for(uint j=0; j<bs_len; j++) {
+            a = row[j] ^ bs[j];
+            dist += popcount(a);
+        }
+        if (dist <= radius) {
+            selected[atomic_inc(counter)] = id;
+        }
+
+    }
+}
+\end{lstlisting}
+\end{figure}
+
+
+\begin{figure}[!p]
+\begin{lstlisting}[
+language={[OpenCL]C},
+label={lst:single_scan2},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan2}}. It calculates one distance per workgroup, distributing each 64-bit integer operation per worker, and then summing the results obtained by the workers. The sum algorith is done by only the first worker of each workgroup.},
+]
+__kernel
+void single_scan2(
+        __constant const uchar *bitcount_table,
+        __global const ulong *bitstrings,
+        const uint bs_len,
+        const uint sample,
+        __constant const ulong *bs,
+        const uint radius,
+        __global uint *counter,
+        __global uint *selected,
+        __local uint *partial_dist)
+{
+    uint dist;
+    ulong a;
+    uint j;
+
+    for (uint id = get_group_id(0); id < sample; id += get_num_groups(0)) {
+
+        const __global ulong *row = bitstrings + id*bs_len;
+
+        dist = 0;
+        j = get_local_id(0);
+        if (j < bs_len) {
+            a = row[j] ^ bs[j];
+            dist += popcount(a);
+        }
+        partial_dist[get_local_id(0)] = dist;
+
+        barrier(CLK_LOCAL_MEM_FENCE);
+
+        if (get_local_id(0) == 0) {
+            dist = 0;
+            for(uint t = 0; t < bs_len; t++) {
+                dist += partial_dist[t];
+            }
+            if (dist <= radius) {
+                selected[atomic_inc(counter)] = id;
+            }
+        }
+
+        barrier(CLK_LOCAL_MEM_FENCE);
+    }
+}
+\end{lstlisting}
+\end{figure}
+
+\begin{figure}[!p]
+\begin{lstlisting}[
+language={[OpenCL]C},
+label={lst:single_scan3},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan3}}. It calculates one distance per workgroup, distributing each 64-bit integer operation per worker, and then summing the results obtained by the workers. The sum algorith is a parallel reduction, in which the workers split the array in two parts and sum the second part in the first part every loop. So, the sum is calculated in {$O(\log_2(\text{number of workers per workgroup}))$}. This kernel only works when the number of workers per workgroup is a power-of-2.},
+]
+__kernel
+void single_scan3(
+        __constant const uchar *bitcount_table,
+        __global const ulong *bitstrings,
+        const uint bs_len,
+        const uint sample,
+        __constant const ulong *bs,
+        const uint radius,
+        __global uint *counter,
+        __global uint *selected,
+        __local uint *partial_dist)
+{
+    uint dist;
+    ulong a;
+    uint j;
+
+    for (uint id = get_group_id(0); id < sample; id += get_num_groups(0)) {
+
+        const __global ulong *row = bitstrings + id*bs_len;
+
+        dist = 0;
+        j = get_local_id(0);
+        if (j < bs_len) {
+            a = row[j] ^ bs[j];
+            dist = popcount(a);
+        }
+        partial_dist[get_local_id(0)] = dist;
+
+        // Parallel reduction to sum all partial_dist array.
+        for(uint stride = get_local_size(0)/2; stride > 0; stride /= 2) {
+            barrier(CLK_LOCAL_MEM_FENCE);
+            if (get_local_id(0) < stride) {
+                partial_dist[get_local_id(0)] +=
+                    partial_dist[get_local_id(0) + stride];
+            }
+        }
+
+        if (get_local_id(0) == 0) {
+            if (partial_dist[0] <= radius) {
+                selected[atomic_inc(counter)] = id;
+            }
+        }
+
+        barrier(CLK_LOCAL_MEM_FENCE);
+    }
+}
+\end{lstlisting}
+\end{figure}
+
+\begin{figure}[!p]
+\begin{lstlisting}[
+language={[OpenCL]C},
+label={lst:single_scan4},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan4}}. This kernel is just like \lstinline{single_scan3}, but it works with any number of workers per workgroup. The tradeoff is that it includes an aditional step in the parallel reduction algorithm.},
+]
+__kernel
+void single_scan4(
+        __constant const uchar *bitcount_table,
+        __global const ulong *bitstrings,
+        const uint bs_len,
+        const uint sample,
+        __constant const ulong *bs,
+        const uint radius,
+        __global uint *counter,
+        __global uint *selected,
+        __local uint *partial_dist)
+{
+    uint dist;
+    ulong a;
+    uint j;
+
+    for (uint id = get_group_id(0); id < sample; id += get_num_groups(0)) {
+
+        const __global ulong *row = bitstrings + id*bs_len;
+
+        dist = 0;
+        j = get_local_id(0);
+        if (j < bs_len) {
+            a = row[j] ^ bs[j];
+            dist = popcount(a);
+        }
+        partial_dist[get_local_id(0)] = dist;
+
+        uint old_stride = get_local_size(0);
+        __local uint extra;
+        extra = 0;
+        for(uint stride = get_local_size(0)/2; stride > 0; stride /= 2) {
+            barrier(CLK_LOCAL_MEM_FENCE);
+            if ((old_stride&1) == 1 && get_local_id(0) == old_stride-1) {
+                extra += partial_dist[get_local_id(0)];
+            }
+            if (get_local_id(0) < stride) {
+                partial_dist[get_local_id(0)] +=
+                    partial_dist[get_local_id(0) + stride];
+            }
+            old_stride = stride;
+        }
+
+        if (get_local_id(0) == 0) {
+            if (partial_dist[0] + extra <= radius) {
+                selected[atomic_inc(counter)] = id;
+            }
+        }
+
+        barrier(CLK_LOCAL_MEM_FENCE);
+    }
+}
+\end{lstlisting}
+\end{figure}
+
+\begin{figure}[!p]
+\begin{lstlisting}[
+language={[OpenCL]C},
+label={lst:single_scan5},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan5}}. This kernel is just like \lstinline{single_scan3}, but it explores one more detail of many GPU microarchitecture: the size of the warp. As the workers in the same warp are always synchronized, there is no need to synchronize them using a barrier. This specific kernel only works when the number of workers per workgroup is a power-of-2.},
+]
+__kernel
+void single_scan5(
+        __constant const uchar *bitcount_table,
+        __global const ulong *bitstrings,
+        const uint bs_len,
+        const uint sample,
+        __constant const ulong *bs,
+        const uint radius,
+        __global uint *counter,
+        __global uint *selected,
+        __local uint *partial_dist)
+{
+    uint dist;
+    ulong a;
+    uint j;
+
+    for (uint id = get_group_id(0); id < sample; id += get_num_groups(0)) {
+        const __global ulong *row = bitstrings + id*bs_len;
+
+        dist = 0;
+        j = get_local_id(0);
+        if (j < bs_len) {
+            a = row[j] ^ bs[j];
+            dist = popcount(a);
+        }
+        partial_dist[get_local_id(0)] = dist;
+
+        uint stride;
+        for(stride = get_local_size(0)/2; stride > 32; stride /= 2) {
+            barrier(CLK_LOCAL_MEM_FENCE);
+            if (get_local_id(0) < stride) {
+                partial_dist[get_local_id(0)] +=
+                    partial_dist[get_local_id(0) + stride];
+            }
+        }
+        barrier(CLK_LOCAL_MEM_FENCE);
+        for(/**/; stride > 0; stride /= 2) {
+            if (get_local_id(0) < stride) {
+                partial_dist[get_local_id(0)] +=
+                    partial_dist[get_local_id(0) + stride];
+            }
+        }
+
+        if (get_local_id(0) == 0) {
+            if (partial_dist[0] <= radius) {
+                selected[atomic_inc(counter)] = id;
+            }
+        }
+        barrier(CLK_LOCAL_MEM_FENCE);
+    }
+}
+\end{lstlisting}
+\end{figure}
+
+\begin{figure}[!p]
+\begin{lstlisting}[
+language={[OpenCL]C},
+basicstyle=\scriptsize\ttfamily,
+label={lst:single_scan5_unroll},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan5_unroll}}. This kernel is exactly like \lstinline{single_scan5}, but it unrolls the last for since it has at most 5 loops.},
+]
+__kernel
+void single_scan5_unroll(
+        __constant const uchar *bitcount_table,
+        __global const ulong *bitstrings,
+        const uint bs_len,
+        const uint sample,
+        __constant const ulong *bs,
+        const uint radius,
+        __global uint *counter,
+        __global uint *selected,
+        __local uint *partial_dist)
+{
+    uint dist;
+    ulong a;
+    uint j;
+
+    for (uint id = get_group_id(0); id < sample; id += get_num_groups(0)) {
+        const __global ulong *row = bitstrings + id*bs_len;
+
+        dist = 0;
+        j = get_local_id(0);
+        if (j < bs_len) {
+            a = row[j] ^ bs[j];
+            dist = popcount(a);
+        }
+        partial_dist[get_local_id(0)] = dist;
+
+        for(uint stride = get_local_size(0)/2; stride > 32; stride /= 2) {
+            barrier(CLK_LOCAL_MEM_FENCE);
+            if (get_local_id(0) < stride) {
+                partial_dist[get_local_id(0)] += partial_dist[get_local_id(0) + stride];
+            }
+        }
+
+        // We do not need to sync because they all run in the same warp.
+        if (get_local_id(0) < 32 && get_local_size(0) >= 64) {
+            partial_dist[get_local_id(0)] += partial_dist[get_local_id(0) + 32];
+        }
+        if (get_local_id(0) < 16 && get_local_size(0) >= 32) {
+            partial_dist[get_local_id(0)] += partial_dist[get_local_id(0) + 16];
+        }
+        if (get_local_id(0) < 8 && get_local_size(0) >= 16) {
+            partial_dist[get_local_id(0)] += partial_dist[get_local_id(0) + 8];
+        }
+        if (get_local_id(0) < 4 && get_local_size(0) >= 8) {
+            partial_dist[get_local_id(0)] += partial_dist[get_local_id(0) + 4];
+        }
+        if (get_local_id(0) < 2 && get_local_size(0) >= 4) {
+            partial_dist[get_local_id(0)] += partial_dist[get_local_id(0) + 2];
+        }
+
+        if (get_local_id(0) == 0) {
+            partial_dist[0] += partial_dist[1];
+            if (partial_dist[0] <= radius) {
+                selected[atomic_inc(counter)] = id;
+            }
+        }
+        barrier(CLK_LOCAL_MEM_FENCE);
+    }
+}
+\end{lstlisting}
+\end{figure}
+
+\begin{figure}[!p]
+\begin{lstlisting}[
+language={[OpenCL]C},
+basicstyle=\scriptsize\ttfamily,
+label={lst:single_scan6},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan6}}. This kernel is just like \lstinline{single_scan5}, but it works with any number of workers per work. The tradeoff is an aditional step in the parallel reduction algorithm.},
+]
+__kernel
+void single_scan6(
+        __constant const uchar *bitcount_table,
+        __global const ulong *bitstrings,
+        const uint bs_len,
+        const uint sample,
+        __constant const ulong *bs,
+        const uint radius,
+        __global uint *counter,
+        __global uint *selected,
+        __local uint *partial_dist)
+{
+    uint dist;
+    ulong a;
+    uint j;
+
+    for (uint id = get_group_id(0); id < sample; id += get_num_groups(0)) {
+        const __global ulong *row = bitstrings + id*bs_len;
+
+        dist = 0;
+        j = get_local_id(0);
+        if (j < bs_len) {
+            a = row[j] ^ bs[j];
+            dist = popcount(a);
+        }
+        partial_dist[get_local_id(0)] = dist;
+
+        uint old_stride = get_local_size(0);
+        uint stride;
+        __local uint extra;
+        extra = 0;
+        for(stride = get_local_size(0)/2; stride > 32; stride /= 2) {
+            barrier(CLK_LOCAL_MEM_FENCE);
+            if ((old_stride&1) == 1 && get_local_id(0) == old_stride-1) {
+                extra += partial_dist[get_local_id(0)];
+            }
+            if (get_local_id(0) < stride) {
+                partial_dist[get_local_id(0)] +=
+                    partial_dist[get_local_id(0) + stride];
+            }
+            old_stride = stride;
+        }
+        barrier(CLK_LOCAL_MEM_FENCE);
+        for(/**/; stride > 0; stride /= 2) {
+            if ((old_stride&1) == 1 && get_local_id(0) == old_stride-1) {
+                extra += partial_dist[get_local_id(0)];
+            }
+            if (get_local_id(0) < stride) {
+                partial_dist[get_local_id(0)] +=
+                    partial_dist[get_local_id(0) + stride];
+            }
+            old_stride = stride;
+        }
+
+        if (get_local_id(0) == 0) {
+            if (partial_dist[0] + extra <= radius) {
+                selected[atomic_inc(counter)] = id;
+            }
+        }
+        barrier(CLK_LOCAL_MEM_FENCE);
+    }
+}
+\end{lstlisting}
+\end{figure}
 
 \section{Counters}
 
