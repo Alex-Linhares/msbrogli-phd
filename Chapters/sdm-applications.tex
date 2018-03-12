@@ -146,12 +146,28 @@ The high noise scenario is the most interesting, because, even in a high noise l
 
 The critical distance plays an important role in the classification error. As we have 62 groups and each have been trained with 100 images, there were 6,200 writes to the memory. When an image is being classified, it will have to converge to a group, and the convergence depends on the distance between this image and the images from the training set, i.e, in the noise level.
 
-In our simplified scenario, there is neither translation nor rotation. Future work may explore how sensible this classification algorithm is to these operations. We expect that with proper training, the algorithm will remain classifying the images with a good hit rate.
+In our simplified scenario, there is neither translation nor rotation. Future work may explore how sensible this classification algorithm is to these operations. We expect that, with proper training, the algorithm will remain classifying the images with a good hit rate.
 
 These results show that the SDM may be used as a supervised classification algorithm. Although we do not believe that the mapping between images and bitstrings are even close to the way human cognition deals with images, we believe the results are interesting and useful to many possible real world problems.
 
 
+
+
+
+
+
+
+
+
+
+
+
 \chapter{Results (vi): Image noise filtering application}
+
+\lstset{
+    language=Python,
+    basicstyle=\small\ttfamily,
+}
 
 Image noise filtering consists in removing the noise from an input, in out case an image. Our images are black \& white images and the noise is generated randomly flipping some of their pixels from black to while and vice versa. In Figure \ref{fig-filter-progressive-noise}, we may see an image with different levels of noise, from 0\% to 45\% in steps of 5\%. It makes no sense to apply 50\% of noise because it would absolutely randomize the image.
 
@@ -161,9 +177,9 @@ Image noise filtering consists in removing the noise from an input, in out case 
 \label{fig-filter-progressive-noise}}
 \end{figure}
 
-The images have 30 x 30 pixels, totaling 900 pixels per image. Each image is mapped into a 1,000 bit bitstring in which the bits are set according to the color of each pixel of the image. White pixels are equal to bit 0, and black pixels to bit 1. The 100 remaining bits are all set to zero. This is a bijective mapping (or one-to-one) from images and bitstrings, i.e., there is one, and only one, bitstring for each image, and vice versa.
+The images have 30 x 30 pixels, totaling 900 pixels per image. Each image is mapped into a bistrings of 1,000 bit in which the bits are set according to the color of each pixel of the image. White pixels are mapped to bit 0, and black pixels to bit 1. The 100 remaining bits are all set to zero. This is a bijective mapping (or one-to-one) from images and bitstrings, i.e., there is one, and only one, bitstring for each image, and vice versa.
 
-In the learning phase, 200 noisy images were generated and written into SDM. Half of the letter ``I'' and half of the letter ``T'' (see Figure \ref{fig:filter-training}). They were written in their own addresses, i.e., write(address=bs\_image, datum=bs\_image).
+In the learning phase, 200 noisy images were generated and written into SDM. Half of the letter ``I'' and half of the letter ``T'' (see Figure \ref{fig:filter-training}). They were written into their own addresses, i.e., \lstinline{write(address=bs_image, datum=bs_image)}.
 
 \begin{figure}[!htb]
   \subfloat[Letter ``I'' with 15\% of noise. ]{\includegraphics[width=\textwidth]{./images02/filter/training-i.png}}
@@ -174,12 +190,42 @@ In the learning phase, 200 noisy images were generated and written into SDM. Hal
   \label{fig:filter-training}
 \end{figure}
 
-Then, in order to test the filtering, we have read from very noisy images.
+Then, in order to test the filtering, we just have read from noisy images, and the results were really impressive. We were able to clean images up to 42\% of noise (see Figure \ref{fig:filter-testing}). While SDM has never seen a clean version of the letters, it just learned from the learning phase which pixels has appeared more frequently and chose them.
 
+\begin{figure}[!htb]
+  \subfloat[Steps of reading from letter ``T'' with 42\% of noise]{\includegraphics[width=\textwidth]{./images02/filter/T-42noise.png}}
+
+  \subfloat[Steps of reading from letter ``I'' with 42\% of noise]{\includegraphics[width=\textwidth]{./images02/filter/I-42noise.png}}
+
+  \caption{In order to test the SDM as a noise filter, we read from noisy images expecting to get a clean image. It is interesting to highlight that SDM has never seen a clean version letters ``T'' and ``I''.
+  \label{fig:filter-testing}
+  }
+\end{figure}
+
+A simplified mathematical analysis would be: During the learning phase, $200$ images with 15\% of noise were written to SDM, so, the average distance between them and the clean image was 150 bits. Thus they shared, on average, 175 hard-locations with the clean image. In this 175 hard-locations, the counter's value for a black pixel mapped to bit 1 was $(1-0.15) \cdot 200 - 0.15 \cdot 200 = 140$. Finally, let's analyse the reading. When reading from a noise image with 42\% of noise, the average distance between the noisy image and its clean image is 420, which means they share, on average, 6 hard-locations. As the average number of activated hard-locations is 1,072, the sum of their counters will be, on average, $Y = 6 \cdot 140 - \sum_{i=1}^{1072-6} X_i$, where $X_i$ is a Bernoulli trial with probability 0.5. Hence, $P(\text{black pixel}) = P(Y > 0) = P(6 \cdot 140 - \sum_{i=1}^{1072-6} X_i > 0) = P(\sum_{i=1}^{1066} X_i < 840) = 99.99\%$. But, when reading from a noise image with 45\% of noise, the average number of hard-locations shared with the clean image is only 3. Thus the sum of the activated hardlocations' counters will be, on average, $3 \cdot 140 - \sum_{i=1}^{1072-3} X_i$, and $P(\text{black pixel}) = P(\sum_{i=1}^{1069} X_i < 420) = 1.28 \cdot 10^{-12}$. The probability abruptly drops from 100\% to 0\% when the noise goes from 42\% to 45\% (see Figure \ref{fig:filter-prob-right-pixel}). The analysis for while pixels is exactly the same, but with opposite signs. The code to calculate this probability is available in ``Noise filter - Math analysis'' notebook \citep{sdmframework}.
+
+This is a simplified analysis because it does not take into consideration the hardlocations shared by the different letters. It works fine for our example because letter ``I'' and ``T'' share, on average, zero hardlocations.
+
+\begin{figure}[!htb]
+\centering\includegraphics[width=0.7\textwidth]{./images02/filter/prob-right-pixel.png}
+\caption{Probability of getting the right pixel when reading from an image with noise $p$. It assumes that SDM was trained with 200 images with 15\% noise.
+\label{fig:filter-prob-right-pixel}
+}
+\end{figure}
 
 In the learning phase, noisy images are generated and they are written into SDM chunked with their labels. The chunk was calculated using the exclusive or (XOR) operator. So, the image bitstring was written to the address of its bitstrings XOR its label bitstring --- write(addr=bs\_image $\oplus$ bs\_label, datum=bs\_image).
 
 Finally, in order to remove the noise of a new image, first we have to classify it (possibly using the already presented classification algorithm), and then we just have to read from the chunked address until it converges.
+
+
+
+
+
+
+
+
+
+
 
 
 
