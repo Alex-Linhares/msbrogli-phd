@@ -1,6 +1,6 @@
 % !TEX root = ../partial-sdm.tex
 
-\chapter{Results (v): Supervised classification application}
+\chapter{Results (vi): Supervised classification application}
 
 Supervised classification problem consists of categorize data into groups after seeing some samples from each group. First, it is presented pieces of data with their categories. The algorithm learns from these data, which is known as learning phase. Then, new pieces of data are presented and the algorithm must classify them into the already known groups. It is named supervised because  the algorithm will not create the groups itself. It will learn the groups from during the learning phase, in which the groups have already been defined and the pieces of data have already been classified into them.
 
@@ -162,7 +162,7 @@ These results show that the SDM may be used as a supervised classification algor
 
 
 
-\chapter{Results (vi): Image noise filtering application}
+\chapter{Results (vii): Image noise filtering application}
 
 \lstset{
     language=Python,
@@ -213,14 +213,58 @@ This is a simplified analysis because it does not take into consideration the ha
 }
 \end{figure}
 
-If the intersection between images becomes too high, the noise filter stops working. We have confirmed it writing letters ``B'', ``C'', ``D'' and numeral ``8''. They share a great amount of hard-locations and our noise filter stopped working. The training sets can be seen in Figure \ref{fig:filter-training2} and the results in Figure \ref{fig:filter-results2}.
+If the intersection between images becomes too high, the noise filter stops working properly. We have confirmed it writing letters ``B'', ``C'', ``D'' and numeral ``8''. They share a great amount of hard-locations and our noise filter could not filter their noise correctly. The training sets can be seen in Figure \ref{fig:filter-training2} and the results in Figure \ref{fig:filter-results2}.
+
+\begin{figure}[!htb]
+  \subfloat[Letter ``B'' with 15\% of noise. ]{\includegraphics[width=0.5\textwidth]{./images02/filter/training2-b.png}}
+  \subfloat[Letter ``C'' with 15\% of noise. ]{\includegraphics[width=0.5\textwidth]{./images02/filter/training2-c.png}}
+
+  \subfloat[Letter ``D'' with 15\% of noise. ]{\includegraphics[width=0.5\textwidth]{./images02/filter/training2-d.png}}
+  \subfloat[Letter ``8'' with 15\% of noise. ]{\includegraphics[width=0.5\textwidth]{./images02/filter/training2-8.png}}
+
+  \caption{Training images in which the intersection between images is too high. They were written in their own addresses --- write(address=bs\_image, datum=bs\_image).}
+  \label{fig:filter-training2}
+\end{figure}
+
+\begin{figure}[!htb]
+  \captionsetup[subfigure]{labelformat=empty}
+  \subfloat[]{\includegraphics[width=0.285\textwidth]{./images02/filter/case2-b-10noise.png}}
+
+  \subfloat[]{\includegraphics[width=0.57\textwidth]{./images02/filter/case2-c-10noise.png}}
+
+  \subfloat[]{\includegraphics[width=0.285\textwidth]{./images02/filter/case2-d-10noise.png}}
+
+  \subfloat[]{\includegraphics[width=0.57\textwidth]{./images02/filter/case2-8-10noise.png}}
+
+  \caption{When the intersection between images becomes too high, there appears some interference in the resulting image. All cases have 10\% noise. We can notice that the empty space in the right side of the ``C'' letter generates some white pixels in the right side of both ``B'' and ``D'' letters.
+  \label{fig:filter-results2}
+  }
+\end{figure}
 
 A possible solution to this interference problem is to use labels. Each label has a random bitstring, which will be chuncked with the images before writing into SDM. Hence, before reading, we also have to chunck the image with the label --- which means we need to know the label of each image. The chunk was done using the exclusive OR (XOR) operator, i.e., $bs\_chunck = bs\_image \oplus bs\_label$. In other words, we run \lstinline{write(address=bs_chunk, datum=bs_label)} during the training, and \lstinline{read(address=bs_chunk)} during the testing. We used the same training set as before, and the results can be seen in Figure \ref{fig:filter-results2-chunk}.
 
-The chunck through exclusive OR (XOR) works because of the following theorem:
+\begin{figure}[!tb]
+  \captionsetup[subfigure]{labelformat=empty}
+  \subfloat[]{\includegraphics[width=\textwidth]{./images02/filter/labelB-20noise.png}}
+
+  \subfloat[]{\includegraphics[width=\textwidth]{./images02/filter/labelC-20noise.png}}
+
+  \subfloat[]{\includegraphics[width=\textwidth]{./images02/filter/labelD-20noise.png}}
+
+  \subfloat[]{\includegraphics[width=\textwidth]{./images02/filter/label8-20noise.png}}
+
+  \caption{Using labels solves the interference problem when the intersection between images becomes too high. All cases have 20\% noise.
+  \label{fig:filter-results2-chunk}
+  }
+\end{figure}
+
+The chunck through exclusive OR (XOR) works because of Theorem \ref{thm:xor-chuncks}, which says that chuncking the images with labels will generate, on average, orthogonal bitstrings. Thus, these orthogonal bitstrings will not interfere with each other because they share, on average, only one hardlocation.
+
+The disadvantage of using labels is that it requires classification of the images. In our example, we just used the correct label with each image, but we could have used our classification algorithm as a pre-processing step, and only then run the noise filter.
 
 \begin{theorem}
 If $v_1$ and $v_2$ are random bitstrings, then $\forall a, b, \mathbf{E} \left[ d(a \oplus v_1, b \oplus v_2) \right] = n/2$.
+\label{thm:xor-chuncks}
 \end{theorem}
 \begin{proof}
 Let $\mathbb{A} = \{ i | a^i = b^i \}$ be the indexes in which the bits of $a$ are equal to the bits of $b$, and $\mathbb{B} = \{ i | a^i \ne b^i \}$ be indexes in which the bits of $a$ are different from the bits of $b$. Thus,
@@ -255,7 +299,6 @@ Hence, $\mathbf{E} \left[ \sum_{i \in \mathbb{B}} d(a^i \oplus v_1^i, b^i \oplus
 Finally, $\mathbf{E} \left[ d(a \oplus v_1, b \oplus v_2) \right] = |\mathbb{A}|/2 + |\mathbb{B}|/2 = n/2$, since $|\mathbb{A}| + |\mathbb{B}| = n$
 \end{proof}
 
-In our example, we just used the right label to read each image. But, we could have used our classification algorithm already presented in this work as a pre-processing step, and then, with the correct label, run the noise filter.
 
 
 
@@ -269,7 +312,7 @@ In our example, we just used the right label to read each image. But, we could h
 
 
 
-\chapter{Results (vii): The possibility of unsupervised reinforcement learning}
+\chapter{Results (viii): The possibility of unsupervised reinforcement learning}
 
 Reinforcement learning has increasing prominence in the media after AlphaZero has won all games from both the best chess grandmasters in the world and the best chess engines. What is incredible about these victories is that AlphaZero has almost no knowledge about chess game and has learned all its movement playing against itself for 4 hours. Basically, it knowns only the valid movements and had to learn everything from scratch, which it did using a reinforcement learning algorithm.
 
