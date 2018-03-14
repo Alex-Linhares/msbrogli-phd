@@ -173,105 +173,131 @@ It is interesting that Kanerva has proposed $z=1$ without realizing the generali
 \input{./Chapters/sdm-applications.tex}
 
 
+
+
+
 \chapter{Results (ix): Information-theoretical write operation}
 
 
+My advisor, Alexandre Linhares, has proposed another write operation: an information-theoretical weighted write. In it, the sum of the counter's value is weighted based on the distance between each hard-location's address and the reading address. The logic behind it is to vary the importance of each hard-location inside the circle.  It is only natural that one encodes an item in closer hard locations with a stronger signal, and a natural candidate for this signal function is the amount of information contained in the distance between the item and each hard location.  Closer hard locations have lower probabilies and therefore should encode more information.
+
+Note that this is not the first time in which a weighted function has been applied to writing in SDM --- \citet{hely1997new} suggest a rather complex spreading model based on floating point signals in the interval [0.05, 1.0] --- they were, however, only able to test their model with 1,000 hard locations.
+
+
+Consider the following. Information Theory \citep{cover2012elements} let us compute the precise amount of information in an event, when given its probability $p$, through the measure of \emph{self-information}:
+
+$$
+I(p)= -log_2(p)
+$$
+
+Now, given any two $n$-sized bitstrings, the probability of their Hamming distance being exactly $d$ is given by $P(X=d)= 2^{-n} \binom{n}{d}$, and the probability of it being at most $d$ is:
+
+$$
+P(X\leq d)= 2^{-n} {\displaystyle\sum_{i=0}^{d}{\binom{n}{i}}}
+$$
+
+But we must consider that not all hardlocations are activated in each write operation, which changes our probability function. Thus, let $r$ be the access radius then:
+
+\begin{align*}
+P(X = d | X \leq r) &= \frac{P((X = d) \cap (X \leq r))}{P(X \leq r)} \\
+    &= \frac{P(X = d)}{P(X \leq r)}, \quad \text{as $d \leq r$} \\
+    &= \frac{ 2^{-n} \binom{n}{d} }{ 2^{-n} \sum_{i=0}^{r} \binom{n}{i} } \\
+    &= \frac{\binom{n}{d}}{\sum_{i=0}^{r} \binom{n}{i}}, \quad d \leq r
+\end{align*}
+
+And the probability of it being at most $d$ is:
+
+$$
+P(X \leq d | X \leq r) = \frac{\sum_{i=0}^{d} \binom{n}{i}}{\sum_{i=0}^{r} \binom{n}{i}}, \quad d \leq r
+$$
+
+As expected, $P(X \leq d | X \leq r) = 1$ when $d = r$.
+
+Hence the weighted write would, on each hard location, sum (or subtract) using the following weights, as seen in Figure \ref{fig:info-theory-hypothesis}:
+
+$$
+w(d) = -\log_2 \left( P(X = d | X \leq r) \right) = - \log_2 \binom{n}{d} + \log_2 \sum_{i=0}^{r} \binom{n}{i}, \quad d \leq r
+$$
+
 \begin{figure}[h!]
   \centering
-  \subfloat[$w_1(d), d \in \{ 1, 2, ..., n\}.$]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-a-global.jpeg}}
+  \subfloat[$w_2(d), d \in \{ 1, 2, ..., n\}.$]{\includegraphics[width=3.2in]{./images02/info-theory/weights.png}}
 
-  \subfloat[$w_1(d)$ for the desired range. ]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-b-to-500.jpeg}}
+  \subfloat[$w_2(d)$ for the desired range.]{\includegraphics[width=3.2in]{./images02/info-theory/weights-region.png}}
 
-  \subfloat[stepwise $\left \lfloor{w_1(d)}\right \rfloor$ for fast integer computation.]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-c-stepwise.jpeg}}
+  \subfloat[Stepwise $\left \lfloor{w_1(d)}\right \rfloor$ for fast integer computation.]{\includegraphics[width=3.2in]{./images02/info-theory/weights-region-stepwise.png}}
 
   \caption{Shannon write operation:  Computing the amount of information of a signal to each hard location in its access radius. (a) entirety of the space; (b) region of interest; (c) Fast integer computation is possible through a stepwise function.}
   \label{fig:info-theory-hypothesis}
 \end{figure}
 
 
+The initial results of this \emph{Shannon write} operation can be seen in Figure \ref{fig:info-theory-experiments} and seem promising. It seems that, when $n=1,000$, $H=1,000,000$, $r=451$, and 10,000 written random bitstrings, the critical distance increased from around 221 to around 250. This increase may be interpreted as an improvement in SDM, because it would converge to the correct bitstring even for farther bitstrings. Note that 29 additional bits imply an attractor area $2^{29}$ times larges than the original. It may affect memory capacity, possibly increasing it.
 
-\begin{figure}[h!]
-  \centering
-  \subfloat[$w_2(d), d \in \{ 1, 2, ..., n\}.$]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-a-sum.jpeg}}
-
-  \subfloat[$w_2(d)$ for the desired range. ]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-b-sum-range.jpeg}}
-
-  \subfloat[stepwise $\left \lfloor{w_2(d)}\right \rfloor$ for fast integer computation.]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-c-sum-stepwise.jpeg}}
-
-  \caption{SOON TO BE DEPRECATED.  Shannon write operation:  Computing the sum of low-likelihood signals. (a) entirety of the space; (b) region of interest; (c) Fast integer computation through a stepwise function. }
-  \label{fig:info-theory-sum-hypothesis}
-\end{figure}
-
-
+Another point to keep in mind is that, since the modulus of the vectors are not uniform in this approach, that the shape of the attractor may have asymmetries.
 
 
 \begin{figure}[h!]
   \centering
-  \subfloat[Kanerva's model]{\includegraphics[width=\linewidth]{./images02/new-images/kanerva-15iter-reads.jpeg}}
+  \subfloat[Write process weighted by the amount of information contained in the distance between the written bitstring and each hard location \label{fig:info-theory-figure73} ]{\includegraphics[width=0.7\textwidth]{./images02/info-theory/shannon-figure73.png}}
 
-  \subfloat[Write process weighted by the amount of information contained in the distance between the written bitstring and each hard location]{\includegraphics[width=\linewidth]{./images02/new-images/info-theory-15iter-reads.jpeg}}
+  \subfloat[Zoom in Figure \ref{fig:info-theory-figure73} ]{\includegraphics[width=0.7\textwidth]{./images02/info-theory/shannon-figure73-zoom.png}}
 
+  \subfloat[Behavior of weighted write operation according to the distance from the center and the number of items previously stored in the memory]{\includegraphics[width=0.7\textwidth]{./images02/info-theory/shannon-heatmap.png}}
 
-  \caption{(a) and (b) show the behavior of the critical distance under Kanerva's model and the information-theoretic one, respectively.}
+  \caption{Behavior of the critical distance under the information-theoretic weighted write operation when $n=1,000$, $H=1,000,000$ and $r=451$.}
   \label{fig:info-theory-experiments}
 \end{figure}
 
 
 
-\begin{figure}[h!]
-  \centering
-  \subfloat[$w_2(d), d \in \{ 1, 2, ..., n\}.$]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-shannon.jpeg}}
+%It is easy to interpret this weight through a binary tree approach.  How many binary questions would be needed to precisely define a bitstring inside the access radius and exactly $d$ bits away?
 
-  \subfloat[$w_2(d)$ for the desired range. ]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-shannon-region.jpeg}}
+%Another possibility would be to use the sum of all distances closer (and less likely) locations within the weighting function $w(d)$,
 
-  \subfloat[stepwise $\left \lfloor{w_1(d)}\right \rfloor$ for fast integer computation.]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-shannon-stepwise.jpeg}}
+%$w(d) = -\log_2 \left( 2^{-n} \displaystyle\sum_{i=0}^{d}{\binom{n}{i}} \right) = n - \log_2 \displaystyle\sum_{i=0}^{d}{\binom{n}{i}}$. \\
 
-  \caption{Shannon write operation:  Computing the amount of information of a signal to each hard location in its access radius. (a) entirety of the space; (b) region of interest; (c) Fast integer computation is possible through a stepwise function.}
-  \label{fig:info-theory-hypothesis}
-\end{figure}
+%This can be seen in \ref{fig:info-theory-sum-hypothesis}.
 
+%and, consequently,
 
+%$p(H\geq n-d)=2^{-n}{\displaystyle\sum_{i=n-d}^{n}{\binom{n}{i}}  }$, \\
 
-My advisor, Alexandre Linhares, has proposed another write operation: an information-theoretical weighted write. In it, the sum of the counter's value is weighted based on the distance between each hard-location's address and the reading address. The logic behind it is to vary the importance of each hard-location inside the circle.  It is only natural that one encodes an item in closer hard locations with a stronger signal, and a natural candidate for this signal function is the amount of information contained in the distance between the item and each hard location.  Closer hard locations have lower probabilies and therefore should encode more information.
+%$p(d+1 \leq H \leq n-d-1)=2^n - 2^{1-n}{\displaystyle\sum_{i=0}^{d}{\binom{n}{i}}, \forall d<n/2}$. \\
 
 
 
-Consider the following. Information Theory \citep{cover2012elements} let us compute the precise amount of information in an event, when given its probability $p$, through the measure of \emph{self-information}:\\
-
-$I(p)= -log_2(p).$ \\
-
-Now, given any two $n$-sized bitstrings, the probability of their Hamming distance being $d$ is given by,
-
-
-$p(H=d)= {2^{-n} \binom{n}{d} }$ \\
-
-And the probability of it being at most $d$ is \\
-
-$p(H\leq d)= 2^{-n} {\displaystyle\sum_{i=0}^{d}{\binom{n}{i}}}  $, \\
-
-and, consequently,
-
-$p(H\geq n-d)=2^{-n}{\displaystyle\sum_{i=n-d}^{n}{\binom{n}{i}}  }$, \\
-
-$p(d+1 \leq H \leq n-d-1)=2^n - 2^{1-n}{\displaystyle\sum_{i=0}^{d}{\binom{n}{i}}, \forall d<n/2}$. \\
-
-Hence the weighted write would, on each hard location, sum (or subtract) the following:  \\
-
-$w(d) = -\log_2 \left( 2^{-n} \binom{n}{d} \right) = n - \log_2 \binom{n}{d}$, as seen in Figure \ref{fig:info-theory-hypothesis}.
-
-It is easy to interpret this data though a binary tree approach.  How many binary questions would be needed to precisely define a bitstring?
-
-Another possibility would be to use the sum of all distances closer (and less likely) locations within the weighting function $w(d)$,
-
-$w(d) = -\log_2 \left( 2^{-n} \displaystyle\sum_{i=0}^{d}{\binom{n}{i}} \right) = n - \log_2 \displaystyle\sum_{i=0}^{d}{\binom{n}{i}}$. \\
-
-This can be seen in \ref{fig:info-theory-sum-hypothesis}.
-
-The initial results of this \emph{Shannon write} operation can be seen in Figure \ref{fig:info-theory-experiments} and seem promising. It seems that the critical distance increases by a number of bits.  Note that 10 additional bits imply an attractor $2^{10}$ of the size of the original. Another point to keep in mind is that, since the modulus of the vectors are not uniform in this approach, that the shape of the attractor may have asymmetries.
 
 
 
-Note, finally, that this is not the first time in which a weighted function has been applied to writing in SDM --- \citet{hely1997new} suggest a rather complex spreading model based on floating point signals in the interval [0.05, 1.0] --- they were, however, only able to test their model with 1,000 hard locations.
+%\begin{figure}[h!]
+%  \centering
+%  \subfloat[$w_1(d), d \in \{ 1, 2, ..., n\}.$]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-a-global.jpeg}}
+%
+%  \subfloat[$w_1(d)$ for the desired range. ]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-b-to-500.jpeg}}
+%
+%  \subfloat[stepwise $\left \lfloor{w_1(d)}\right \rfloor$ for fast integer computation.]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-c-stepwise.jpeg}}
+
+%  \caption{Shannon write operation:  Computing the amount of information of a signal to each hard location in its access radius. (a) entirety of the space; (b) region of interest; (c) Fast integer computation is possible through a stepwise function.}
+%  \label{fig:info-theory-hypothesis}
+%\end{figure}
+
+
+
+%\begin{figure}[h!]
+%  \centering
+%  \subfloat[$w_2(d), d \in \{ 1, 2, ..., n\}.$]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-a-sum.jpeg}}
+%
+%  \subfloat[$w_2(d)$ for the desired range. ]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-b-sum-range.jpeg}}
+%
+%  \subfloat[stepwise $\left \lfloor{w_2(d)}\right \rfloor$ for fast integer computation.]{\includegraphics[width=3.2in]{./images02/new-images/Info-theory-c-sum-stepwise.jpeg}}
+%
+%  \caption{SOON TO BE DEPRECATED.  Shannon write operation:  Computing the sum of low-likelihood signals. (a) entirety of the space; (b) region of interest; (c) Fast integer computation through a stepwise function. }
+%  \label{fig:info-theory-sum-hypothesis}
+%\end{figure}
+%
+
+
 
 
 
