@@ -307,7 +307,16 @@ Here are interesting questions that have been considered during this work, but h
 
 
 
-% \subsection{i versus l}
+\section{``i'' versus ``l'' issue}
+
+The classification algorithm had some problems classifying the letter ``i'' and ``l''. It may have happened because their distance is not enough. In this case, SDM could not differenciate the details --- it has only considered the big picture. Although this behavior is close to how we see things, we also have the ability to zoom and focus in the details, discerning letter ``i'' from letter ``l''.
+
+I have run the classification algorithm under the MNIST database of handwritten digits \citep{deng2012mnist}. First, SDM has been trained with the 60,000 training images, and then it classified the 10,000 testing images. It has given the correct classification for 77.22\% of the images, which is inferior to the specialized algorithms. For instance, in 1998, \citet{lecun1998gradient} has developed algorithms which reaches from 88\%, using linear classifier, to 99.7\%, using convolutional net. For a review of the algorithms' performance in the MNIST database, see \cite{mnist}.
+
+Looking into the reason behind images incorrectly classified, I have found that the issue is very related to the ``i'' versus ``l'' issue. Some handwritten digits are very close to others, and a ``2'' or a ``7'' may look like a ``1'', for instance. So, how can we solve this issue without using anything specific to images? The machine learning algorithms use specific tecniques to ace performance. I would like to unveil a solution closer to how we behave, even if this leads to smaller performance.
+
+An unexplored idea is to use other SDMs which communicates. A first SDM would write the whole picture, just like we have done. Another SDM would write specific parts of the image, just like our eye focusing in specific parts. When reading, they may compose the counters and give a more precise classification.
+
 
 
 \section{Magic numbers}
@@ -324,7 +333,7 @@ How should these parameters be compared?  What are the tradeoffs that should be 
 
 
 
-\section{Symmetrical, rapidly accessible, Hard Locations}
+\section{Symmetrical, rapidly accessible, hard locations}
 
 A hypercube with n dimensions can be divided by two hypercubes with $n-1$ dimensions. Is there an algorithm that separates the area of each hard-location in such a form that there exists a function mapping each bitstring in $\{0,1\}^n$ to the set of hard locations it `belongs to'?  Though this would break Kanerva's assumption of a randomly yet uniformly distributed set of hard locations --- for a perfectly symmetrical set of hard locations ---, there could be large performance gains if such a mapping function from a bitstring to its corresponding set of nearest hard locations exists.
 
@@ -332,8 +341,9 @@ Consider the hypercube with $n$ dimensions.  We want to select a subset of its v
 
 A reduction from measuring the distance to $2^{20}$ hard locations to a computation of $2^{10}$ hard locations might yield astonishing performance gains, depending, of course, on our optimistic assumptions concerning existence and complexity of such algorithm.  At large scales of computing, the very ability to perform some experiments is a function of sheer performance. The horizon of experiments --- and possibly of knowledge --- expands \emph{as a function of computational demands}. A little more on this in my closing words.
 
-\section{Paving and illuminating the pathway}
 
+
+\section{Paving and illuminating the pathway}
 
 Let us revisit, in these concluding thoughts, the emphasis employed over speed of computation.  At first sight, that might seem like a typical objective of efficiency in computer science. But we are not only interested in the computer science effects here --- the ambition is different. More important than this `computer-sciency' goal, i.e., a beautiful, clean, efficient algorithm with the primary effect of enhanced speed, however, is the secondary effect on the sociology of science:  \emph{We can see farther}.
 
