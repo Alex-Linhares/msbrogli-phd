@@ -314,12 +314,6 @@ We provide a new, open-source, cross-platform, highly parallel framework in whic
 
 Here are interesting questions that have been considered during this work, but have had to be left for future research.
 
-% \subsection{Multiple levels}
-
-% Deep neural networks, alphaGo, alphazero
-
-
-
 \section{``i'' versus ``l''}
 
 The classification algorithm had some problems classifying the letters ``i'' and ``l''. It may have happened because of the low distance between them. In this case, SDM could not differentiate the details --- it has only considered the big picture. Although this behavior is close to how humans see things, we also have the ability to zoom and focus in the details, clearly discerning letter ``i'' from letter ``l''.
@@ -330,15 +324,19 @@ Looking into the reason behind images incorrectly classified, I have found that 
 
 An unexplored idea is to use multiple SDMs which communicate. A first SDM would write the whole picture, just like we have done. Another SDM would write specific parts of the image, just like our eye focusing in specific parts. When reading, they may compose the counters and give a more precise classification.
 
+% \subsection{Multiple levels}
+
+% Deep neural networks, alphaGo, alphazero
+
 
 
 \section{Magic numbers}
 
 Kanerva suggests, in his book, the use of 1,000 dimensions and 1,000,000 hard locations.  More recently, he suggested the use of 10,000 dimensions, and on personal discussions suggested that this should be a minimum; as he has been concerned in latent semantic analysis and seems to be the proper scale in that application.
 
-Each parameter set choice like this will lead to particular numbers --- many of them emergent---, such as the access radius size, critical distance, and so forth.
+Each parameter set choice like this will lead to particular numbers --- many of them emergent---, such as the access radius size, critical distance, memory capacity, and so forth.
 
-One intriguing question here is:  is there a `better' number of dimensions and of hard locations?  If so, can such numbers better studied analitically, or numerically?
+One intriguing question here is:  is there a `better' number of dimensions and of hard locations?  If so, can such numbers be better studied algebrically or numerically?
 
 How should these parameters be compared?  What are the tradeoffs that should be considered?  What are the `best' benchmarks possible?
 
@@ -356,7 +354,7 @@ A reduction from measuring the distance to $2^{20}$ hard locations to a computat
 
 
 
-\section{Paving and illuminating the pathway}
+\section{Illuminating and paving a pathway}
 
 Let us revisit, in these concluding thoughts, the emphasis employed over speed of computation.  At first sight, that might seem like a typical objective of efficiency in computer science. But we are not only interested in the computer science effects here --- the ambition is different. More important than this `computer-sciency' goal, i.e., a beautiful, clean, efficient algorithm with the primary effect of enhanced speed, however, is the secondary effect on the sociology of science:  \emph{We can see farther}.
 
@@ -374,7 +372,7 @@ Consider the misunderstanding concerning the SDM read operation:  Dr Stan Frankl
 
 It is no coincidence that scientific journals such as BMC Neuroscience, or the Journal of Machine Learning Research have specific sections on open-source software. The journal Neurocomputing states, bluntly: “software is scientific method by machine”.
 
-Of course, for the skeptical reader who may consider software a less worthy pursuit, there is also new work here.  The mathematics of the model has been shown to be correct numerically (with a single, small, anomaly); we have shown how to execute unsupervised learning with nothing besides operations original to the SDM; we have studied the generalized Murilo read; we have seen noise filtering; the death of neurons; how information-theory may be of use; and finally, we have reproduced numerous of the original propositions put forth by Kanerva.  The emphasis might have been on \emph{breadth of topics}, in detriment of depth here or there.  But this is due to our research group's enthusiam for the topic; we do indeed believe that SDM is --- if not correct --- extremely close to a full scientific understanding of human long-term memory.  If so, it is such a monumental achievement that we want readers to be able to see all of what we see and imagine the vastness of possibilities.  The work on, say, reinforcement learning, is most definitely not the definitive work we will see on the subject, but a challenge left for readers to contemplate. Ralph Waldo Emerson once said \emph{Do not go where the path may lead. Go, instead, where there is no path, and leave a trail.}  Dr. Kanerva has left the trail.  It is my job to pave it and illuminate it and to try to deliver an easier pathway for the next generation.  Some essays completely shut the door close at the end; this one intends to leave it wide open. As the reader might have noticed, this final section does not read as an analysis of the work done; it reads, instead, as a \emph{desiderata}, a prologue, a yearning for others to join me in imagining the shape of things to come.
+Of course, for the skeptical reader who may consider software a less worthy pursuit, there is also new work here.  The mathematics of the model has been shown to be correct numerically (with a single, small, anomaly); we have shown how to execute unsupervised learning with nothing besides operations original to the SDM; we have studied the generalized Murilo read; we have seen noise filtering; the death of neurons; how information-theory may be of use; and finally, we have reproduced numerous of the original propositions put forth by Kanerva.  The emphasis might have been on \emph{breadth of topics}, in detriment of depth here or there.  But this is due to our research group's enthusiam for the topic; we do indeed believe that SDM is --- if not correct --- extremely close to a full scientific understanding of human long-term memory.  If so, it is such a monumental achievement that we want readers to be able to see all of what we see and imagine the vastness of possibilities.  The work on, say, reinforcement learning, is most definitely not the definitive work we will see on the subject, but a challenge left for readers to contemplate. Ralph Waldo Emerson once said \emph{do not go where the path may lead. Go, instead, where there is no path, and leave a trail.}  Pentti Kanerva has left the trail.  It is my job to illuminate it and to pave it and to clear it; to try to deliver an easier pathway for the next generation.  Some essays completely shut the door close at the end; this one intends to leave it wide open. As the reader might have noticed, this final section does not read as an analysis of the work done; it reads, instead, as a \emph{desiderata}, a prologue, a yearning for others to join me in imagining the shape of things to come.
 
 
 
