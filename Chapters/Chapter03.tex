@@ -3,14 +3,26 @@
 
 \chapter{Introduction}
 
-The way innovations diffuse in the market is an important and useful topic in marketing, which was made popular through Rogers' work \citep{rogers1962diffusion} and has influenced many marketing researchers. Within innovation diffusion, \citet{bass1969} proposed a model which forecasts how many people will have adopted new products or technologies by a given point in time. INFORMS members have voted this model as one of the Top 10 Most Influential Papers published in the 50-year history of Management Science in connection with the 50th anniversary of the journal \citep{bass2004comments}.
+\bigskip
+
+\begin{flushright}{\slshape
+    {Why do entrepreneurs appear, not continuously, that is singly in every appropriately chosen interval, but in clusters? Exclusively because the appearance of one or a few entrepreneurs facilitates the appearance of others, and these the appearance of more, in ever-increasing numbers.}
+	\\ \medskip
+    --- Joseph Schumpeter}
+\end{flushright}
+\bigskip
+\bigskip
+
+
+
+The way innovations diffuse through markets is an important and useful topic in marketing, which was made popular through Rogers' work \citep{rogers1962diffusion} and has influenced many marketing researchers. Within innovation diffusion, \citet{bass1969} proposed a model which forecasts how many people will have adopted new products or technologies by a given point in time. INFORMS members have voted this model as one of the Top 10 Most Influential Papers published in the 50-year history of Management Science in connection with the 50th anniversary of the journal \citep{bass2004comments}.
 
 The \citet{bass1969} model was designed to forecast only innovation adoption, which is the first time one consumes the innovation. In the model, either the consumer has or has not consumed the innovation by a given point in time. Thus, recurrent customers are considered only once, because they have already consumed the innovation before. The model has only three parameters, which are estimated through the number of adoptors of the innovation. Though very simple, it is considered very robust.
 
 Although it is clear that the marketing investment, the product prices, the economy itself, and many other variables affect the diffusion process, the \citet{bass1969} model does not contemplate these variables and yet it is still able to describe the empirical adoption curve of a large number of new products and technological innovations. In order to explain the robustness of the model, \citet{bass1994bass} developed a general model including these variables, and they showed that this general model reduces to the Bass model as a special case. They also showed that the shape of the diffusion of innovation process is always the same, an S-curve. \citet{norton1987diffusion} analyzed the diffusion of innovation for product substitution, explaining some unexpected changes in innovation adoption which were still unclear.
 
 The motivation behind the present work is that there may be people who reject a particular innovation. Such people do not recommend the innovation, on the contrary, they may publicly complain about it and bad-mouth it. This negative word-of-mouth effect of rejection has always existed \citep{richins1983negative, bone1995word, smith1995effects, buttle1998word} but it is becoming more and more important as information can spread more easily and faster among people through the usage of new technologies \citep{jansen2009twitter, godes2004using, babic2015effect}. Nowadays, before making a decision, people may search the internet for reviews and feedbacks about the innovation, and what they find affects their decision \citep{chen2004impact, dellarocas2003digitization, duan2008online, dellarocas2007exploring, lee2009electronic, pfeffer2014understanding}. A number of firms have already perceived this change caused in large part by the social media and have adapted to this new condition, like Starbucks \citep{gallaugher2010social}, for example.
-%Quali east2008measuring, 
+%Quali east2008measuring,
 
 There is an extensive literature on innovation diffusion. Numerous extensions to the \citet{bass1969} model have been proposed (for reviews, see \citet{meade2006modelling} and \citet{peres2010innovation}), among which Mahajan and colleagues were the first to propose a model that includes the negative word-of-mouth \citep{mahajan1984introduction}. The latter and other extensions that include negative word-of-mouth are much more complex than the \citet{bass1969} model, and their parameters must be estimated using the number of people who have already adopted the innovation at a given time. A problem is that most recent innovations, like Facebook, Twitter, and Netflix do not disclose their total number of users. Actually, they deem this number confidential. They only disclose the number of active users, not including the number of users who have rejected them.
 
@@ -137,7 +149,7 @@ Therefore, for small values of $\nu$, this model has approximately the same expl
 
 In contrast to model 1, no parameter could be arbitrarily set in this model, thus it can be estimated using an empirical \textit{active users} dataset.
 
-%This result is interesting because, although it is possible to estimate the parameters using the number \textit{active users}, it has approximately the same explanation power as 
+%This result is interesting because, although it is possible to estimate the parameters using the number \textit{active users}, it has approximately the same explanation power as
 
 % XXX TODO Discuss the inequalities that make sure f(t) >= 0.
 
@@ -346,4 +358,3 @@ It is also intended to run a back test with the available data. First, the param
 The main limitation of this work is that it has no theory to support which of the models of rejection best fit with empirical data. Although there is an extensive literature on negative word-of-mouth, this literature does not predict which model would be the best. But, if any of these companies discloses the number of \textit{total users} and \textit{active users}, the estimation method could be adapted to estimate the parameters using both pieces of information at the same time, which would make possible to verify which of the models of rejection is the best.
 
 Future work could explore other models of rejection and also other estimation methods, like nonlinear least squares \citep{srinivasan1986technical} and Kalman filter \citep{xie1997kalman}.
-
