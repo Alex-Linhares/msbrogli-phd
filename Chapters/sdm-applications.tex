@@ -316,13 +316,95 @@ Finally, $\mathbf{E} \left[ d(a \oplus v_1, b \oplus v_2) \right] = |\mathbb{A}|
 
 Reinforcement learning has increasing prominence in the media after AlphaZero has won all games from both the best chess grandmasters in the world and the best chess engines. What is incredible about these victories is that AlphaZero has almost no knowledge about chess game and has learned all its movement playing against itself for 4 hours. Basically, it knowns only the valid movements and had to learn everything from scratch, which it did using a reinforcement learning algorithm.
 
-Reinforcement learning is a machine learning algorithm which learns from the rewards of its actions. So, it receives the game state as input, then it decides which action will be taken, and finally it learns from the rewards of all the actions it has chosen. In theory, it learns after each reward feedback it receives, improving its decision over time and presenting intelligent behavior. A positive reward would indicate that the chosen action should be encouraged. While a negative reward would indicate the opposite. In some algorithms, there may be a neutral reward which would indicate that the chosen action was neither positive nor negative. How each type of reward should be handled depends on each algorithm.
+Reinforcement learning is a machine learning algorithm which learns from the rewards of its actions. So, it receives the game state as input, it decides which action will be taken, and then it learns from the rewards of all the actions it has chosen. In theory, it learns after each reward feedback it receives, improving its decision over time and presenting intelligent behavior. A positive reward would indicate that the chosen action should be encouraged, while a negative reward would indicate the opposite. In some algorithms, there may be a neutral reward which would indicate that the chosen action was neither positive nor negative. How each type of reward should be handled depends on each algorithm.
 
 We have done some experiments with an SDM as a memory for a TicTacToe player. Basically, it receives the current board state and returns which action should be played. In the end of the game, it receives the sequences of boards and the winner, and is supposed to learn from them.
 
-Our algorithm to decide what should be played is very simples: it read the current board from SDM. If the reading converges to another board, it chooses the movement which would bring the current board to the one read from SDM. If the reading does not converge, it just play randomly.
+In our approach, there were 9 possible actions: one for each cell of the TicTacToe game. Action 1 means playing in the first cell of the first row; action 2 means playing in the second cell of the first row; and so one. Figure \ref{fig:ttt-action-mapping} shows the TicTacToe board numbering and the link between each cell and its respective action.
 
-After a game has finished, it is time to learn from its decisions. Thus, if SDM wins the game, it will write the whole sequence of boards to SDM. Let $b_0, b_1, b_2, \dots, b_n$ be the board sequence of the game (see Figure \ref{fig-ttt-example}). Then it will write $b_0 \rightarrow b_1 \rightarrow b_2 \rightarrow \cdots \rightarrow b_n$, with possibly different weights for each transition. If it loses, it will reverse the board (replacing X by O and vice versa), and will act as if it had won. Hence, it will learn which sequences lead to victory. When a new board appears, it may have already seen that situation and will decide according to the sequences which goes towards victory. This is our positive reward learning.
+Our algorithm to decide what should be played is very simple: it reads the current board from SDM and then it chooses the valid action with highest score. To calculate the scores, the bitstring is split into 9 parts, one per action (Figure \ref{fig:ttt-action-mapping}). The number of bits 1 in each part indicates the score of its respective action.
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[
+mycell/.style={minimum size=7mm},
+matrixA/.style={matrix of nodes,
+    nodes={mycell, anchor=center},
+    column sep=-\pgflinewidth,
+    row sep=-\pgflinewidth,
+    },
+mycell2/.style={draw, minimum size=7mm},
+matrixB/.style={matrix of nodes,
+    nodes={mycell2, anchor=center},
+    column sep=-\pgflinewidth,
+    row sep=-\pgflinewidth,
+}]
+
+\matrix[matrixA] (A) { 1 & 2 & 3 \\ 4 & 5 & 6 \\ 7 & 8 & 9 \\};
+\draw[black] (A-1-1.north east) -- (A-3-1.south east);
+\draw[black] (A-1-2.north east) -- (A-3-2.south east);
+\draw[black] (A-1-1.south west) -- (A-1-3.south east);
+\draw[black] (A-2-1.south west) -- (A-2-3.south east);
+
+\matrix[matrixB, right=of A] (B) {
+Action 1 & Action 2 & Action 3 & $\cdots$ & Action 9 \\
+};
+
+\matrix[matrixB, below=of B] (C) {
+b$_0$ & b$_1$ & b$_2$ & b$_3$ & b$_4$ & b$_5$ & $\cdots$ & b$_k$ \\
+};
+
+\draw [
+	thick,
+    dashed,
+    ->
+] (A-1-1.north) edge[bend left] (B-1-1.north);
+
+\draw [
+	thick,
+    dashed,
+    ->
+] (A-1-2.north) edge[bend left] (B-1-2.north);
+
+\draw [
+	thick,
+    dashed,
+    ->
+] (A-1-3.north) edge[bend left] (B-1-3.north);
+
+\draw [
+	thick,
+    dashed,
+    ->
+] (A-2-3.south) edge[bend left] (B-1-5.north);
+
+\draw[dashed] (B-1-1.south west)--(C-1-1.north west);
+\draw[dashed] (B-1-1.south east)--(C-1-8.north east);
+\draw [
+	thick,
+    decoration={
+        brace,
+        mirror,
+		amplitude=0.2cm,
+        raise=0.2cm
+    },
+    decorate
+] (C-1-1.south west) -- (C-1-8.south east)
+node [pos=0.5,anchor=north,yshift=-0.5cm] {$k$ bits per action};
+
+\end{tikzpicture}
+
+\caption{Each action is a cell in the TicTacToe board and is mapped to slice of the bitstring.
+\label{fig:ttt-action-mapping}}
+\end{figure}
+
+%If the reading converges to another board, it chooses the movement which would bring the current board to the one read from SDM. If the reading does not converge, it just play randomly.
+
+After a game has finished, it is time to learn from its decisions. Our algorithm has three rewards: positive, negative, and neutral. It always learn from both players, no matter who wins or if it was a draw. The winner's sequence of actions feed our positive reward learning. The loser's sequence of actions feed our negative reward learning. If it is a draw, both sequences feed our neutral reward learning.
+
+Each board state has a unique random bitstring. For instance, each board in Figure \ref{fig-ttt-example} has its own unique random bitstring. Thus, if a specific board state is reached again, SDM will return the scores of each action.
+
+Let $b_0, b_1, b_2, \dots, b_n$ be the board sequence of the game (see Figure \ref{fig-ttt-example}). In order to learn, our algorithm will map each action which goes from $b_k$ to $b_{k+1}$ to a reward bitstring and then will write a pointer from $b_k$ to this reward bitstring, i.e., \lstinline{write(bs_board, bs_reward)}.
 
 \begin{figure}
     \captionsetup[subfigure]{labelformat=empty}
@@ -363,57 +445,153 @@ After a game has finished, it is time to learn from its decisions. Thus, if SDM 
     \caption{Example of a game with 7 movements in which X wins.\label{fig-ttt-example}}
 \end{figure}
 
-It is also important to learn when a draw happens --- after all, it is better to tie than to lose, right? In this case, the sequence of boards is also written to SDM, but with no weight at all. So, if the board has appeared both in a tie sequence and in a winning sequence, it would be more likely to choose the winning one because it was written with greater weight. This is our neutral reward learning.
+The reward bitstring may be a positive, negative, or neutral bitstring. The positive reward bitstring is randomly generated and then only the bits related to the action will be set to 1 (see Figure \ref{fig:ttt-positive-reward-bitstring}). The negative reward bitstring is also randomly generated and then only the bits related to the action will be set to 0. Finally, the neutral reward bitstring is only a random bitstring.
 
-Finally, we also want to prevent losing games. So, when it loses a game, it will stimulate movements different from the chosen ones. Thus, for each transition $b_k \rightarrow b_{k+1}$ made by its action, it will write all possible transitions from $b_k$ but $b_{k+1}$.
+The idea behind these reward bitstrings is to increase the score of positive rewards (all bits set to 1), and to decrease the score of negative rewards (all bits set to 0). The neutral reward will have, on average, half of its bits 1 and the other half 0. Thus, it is in the middle between a positive reward and a negative reward.
 
-Internally, every board is mapped into a random bitstring and passed to SDM. Thus, SDM knows nothing about the boards themselves. It knowns only about their transition and which ones would lead to either a victory or a draw. As every two boards are orthogonal, SDM does not known whether two boards are consecutives or not. The only link between two boards is the transition written in SDM.
+\begin{figure}
+\centering
 
-After all, SDM knowns nothing about the boards themselves and yet it may learn how to play TicTacToe.
+\begin{tikzpicture}[
+mycell/.style={draw, minimum size=7mm},
+matrixA/.style={matrix of nodes,
+    nodes={mycell, anchor=center},
+    column sep=-\pgflinewidth,
+    row sep=-\pgflinewidth,
+}]
 
-In order to properly run the discussed algorithms, it is necessary to have two SDMs: a 0-fold and a 1-fold SDM. In the 0-fold SDM, every bitstring is written to its own address. In the 1-fold SDM, every bitstring points to another one. So, the transitions are written in the 1-fold SDM, while the boards themselves are written to the 0-fold SDM. The boards are written only once in the 0-fold, no matter how many times they appear. The transitions may be written more than once in the 1-fold SDM, because it would reinforce that transition.
+\matrix[matrixA, right=of A] (A) {
+Action 1 & $\cdots$ & Action $k$ & $\cdots$ & Action 9 \\
+};
 
-In more details, the next movement decision consists in one read from the 1-fold SDM, resulting in a bitstring. Then this bitstring is used in an interative reading from the 0-fold SDM, which will converge to the bitstring associated with the next board. If it does not converge to any board, than SDM will choose a random movement and learn from it. Eventually it may converge to a board which is not a sequence of the current board. In this case, SDM will also choose a random movement.
+\matrix[matrixA, below=of B] (B) {
+0 & 1 & 0 & 1 & $\cdots$ & 1 & 1 & 1 & 1 & $\cdots$ & 1 & 0 & 0 & 1 \\
+};
 
-The weight used when writing a winning sequence is calculated using ...
+\draw[dashed] (A-1-1.south west)--(B-1-1.north west);
+\draw[dashed] (A-1-1.south east)--(B-1-4.north east);
+\draw[dashed] (A-1-3.south west)--(B-1-6.north west);
+\draw[dashed] (A-1-3.south east)--(B-1-9.north east);
+\draw[dashed] (A-1-5.south west)--(B-1-11.north west);
+\draw[dashed] (A-1-5.south east)--(B-1-14.north east);
 
---- talk about player generations ---
+\draw [
+	thick,
+    decoration={
+        brace,
+        mirror,
+		amplitude=0.2cm,
+        raise=0.2cm
+    },
+    decorate
+] (B-1-1.south west) -- (B-1-4.south east)
+node [pos=0.5,anchor=north,yshift=-0.5cm] {random bits};
+
+\draw [
+	thick,
+    decoration={
+        brace,
+        mirror,
+		amplitude=0.2cm,
+        raise=0.2cm
+    },
+    decorate
+] (B-1-6.south west) -- (B-1-9.south east)
+node [pos=0.5,anchor=north,yshift=-0.5cm] {all ones};
+
+\draw [
+	thick,
+    decoration={
+        brace,
+        mirror,
+		amplitude=0.2cm,
+        raise=0.2cm
+    },
+    decorate
+] (B-1-11.south west) -- (B-1-14.south east)
+node [pos=0.5,anchor=north,yshift=-0.5cm] {random bits};
+\end{tikzpicture}
+
+\caption{Positive reward bitstrings used in our reinforcement learning algorithm.
+\label{fig:ttt-positive-reward-bitstrings}}
+\end{figure}
+
+Let the $b$ be the sequence of boards and $a$ be the sequence of actions, then $b_0 \xrightarrow{a_0} b_1 \xrightarrow{a_1} b_2 \xrightarrow{a_2} \cdots \xrightarrow{a_{n-1}} b_n$. Suppose there is a winner, thus the winner's actions will be the sequence $a_{n-1}, a_{n-3}, a_{n-5}, \dots$, while the loser's actions will be the sequence $a_{n-2}, a_{n-4}, a_{n-6}, \dots$.
+
+The positive reward learning will be writing the following pointers in SDM: $b_{n-1} \rightarrow a_{n-1}$, $b_{n-3} \rightarrow a_{n-3}$, and so on. The reward bitstring of $a_{n-1}$ will have all bits set to one in $a_{n-1}$'s slice. All other bits will be random.
+
+The negative reward learning will be writing the following pointers in SDM: $b_{n-2} \rightarrow a_{n-2}$, $b_{n-3} \rightarrow a_{n-3}$, and so on. The reward bitstring of $a_{n-2}$ will have all bits set to zero in $a_{n-2}$'s slice. All other bits will be random.
+
+If it is a draw, all actions will be mapped to the neutral reward bitstring, which is simply a random bitstring.
+
+There is also weights associated to positive, negative, and neutral reward. They are used to indicate what goal is more important. For instance, if SDM should try to win in the first place, no matter if it may lead to losing, the weight of the positive reward should be higher than the others. But, if it is more important to not lose, then the weight of the negative reward should be higher.
+
+In the very beginning, SDM is empty and its counters are zeroed. So, any reading will result in a random bitstring, because it will flip a coin for all counters. Thus, the chosen action will be random, as their scores will follow a binomial distribution. It is exactly the desired behavior --- we play randomly until we learn. In fact, it will happen every time an unknown board is seen.
+
+Internally, every board is mapped into a random bitstring and passed to SDM. As every two boards are, on average, orthogonal, SDM knows nothing about the boards themselves, neither whether they are consecutives or not. It knowns only the score of the actions according to the games it has seen and learned from. Hopefully, the actions will lead to a victory or a draw.
+
+In more details, the next movement decision consists in one read from SDM, resulting in a bitstring. Then the scores of the actions are calculated counting the number of 1 in each part of the bitstring. The chosen action is the one which is valid and has the highest score.
+
 
 \subsection{Training}
 
-It is an unsupervised algorithm because SDM learns playing against an opponent, who may be another SDM player, a human, or a player whose movements are always random.
+Our algorithm learned playing games against opponents. We had four types of opponents: (i) another SDM player, (ii) a random player whose actions are always random; (iii) a smart player whose actions wins when it can, block the opponent when it can, or are random; and (iv) a human player.
 
-Thus, in order to train a SDM player, we just have to keep it playing over and over.
+The weights of the rewards were chosen to prevent losing. Thus the weight of the negative reward was 5, while the weight of the positive reward was 2 and the neutral was 1.
+
+Every learn cycle had two parts: (i) 100 games learning and (ii) 100 games testing. So, it has never learned during the testing phase and has not affected the measure of the statistics.
 
 
 \subsection{Results}
 
+When playing against the random player, SDM has already started improving after the first 100 training games. Its winning rate converges quickly to around 80\%, while the drawing rate starts to grow after 2,000 games and keeps growing until the end. The losing rate keeps decreasing until it reaches cycles of 100 games without any loss. See Figure \ref{fig:ttt-results-random}.
 
+When playing against smart player, SDM has started learning how to not lose during the first training cycles. The drawing rate grows quickly in the first 500 games and slowly since then. The winning rate grew to around 20\% and remained there until 6,000 games, while the drawing rate kept growing. Then, after learning how to not lose, SDM started learning how to win, since after 7,000 games, the winning rate started to increase. See Figure \ref{fig:ttt-results-smart}.
 
-\begin{forest}
-  TTT/.style args={#1:#2}{
-    make tab/.expanded=\forestove{content},
-    label={\pgfkeysvalueof{/forest/label position #1}:$#2$}
-  },
-  TTT*/.style={
-    make tab=::/::/::,
-    content/.expand once=%
-    \expandafter\vphantom\expandafter{\romannumeral-`0\forestov{content}},
-    draw=none,
-    append after command={(\tikzlastnode.north) edge (\tikzlastnode.south)},
-    for descendants={before computing xy={l*=1.2}},
-  },
-  th/.style=thick,
-  for tree={node options=draw, inner sep=+0pt, parent anchor=south, child anchor=north}
-%
-[::/::/::, TTT=r:1
-  [x::/::/::, TTT=r:-1
-    [x::/::/::, TTT=r:-1
-      [x::/::/::, TTT=r:-1
-      ]
-    ]
-  ]
-]
-\end{forest}
+When playing against another SDM player, both player quickly learns how to not lose. During the first 100 testing games, without any learning game, they have behaved like two random players. After the 100 training games, they have learned how to not lose and the drawing rate grows quickly, reaching 100\%. See Figure \ref{fig:ttt-results-sdm}.
 
-\subsection{Results}
+When playing against mixed players, SDM has also adapted. In Figure \ref{fig:ttt-results-mixed}, it has played 6,000 games against random player, smart player, and another SDM player. In each cycle, one of them was randomly chosen. The number of loses over time is decreasing, while the number of wins and draws change a lot. It is easy to notice when the other SDM player was chosen, because all games in that cycle have draw.
+
+\begin{figure}[!htb]
+\centering
+\subfloat[Loses over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-random-loses.png}}
+
+\subfloat[Results over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-random.png}}
+
+\caption{Results playing against random player. Each cyle was made of 100 games for training, and then 100 games for measuring statistics.
+\label{fig:ttt-results-random}
+}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\subfloat[Loses over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-smart-loses.png}}
+
+\subfloat[Results over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-smart.png}}
+
+\caption{Results playing against smart player. Each cycle was made of 100 games for training, and then 100 games for measuring statistics.
+\label{fig:ttt-results-smart}
+}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\subfloat[Loses over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-sdm-loses.png}}
+
+\subfloat[Results over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-sdm.png}}
+
+\caption{Results playing against another SDM player. Each cycle was made of 100 games for training, and then 100 games for measuring statistics.
+\label{fig:ttt-results-sdm}
+}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\subfloat[Loses over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-mixed-loses.png}}
+
+\subfloat[Results over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-mixed.png}}
+
+\caption{Results playing against a randomly chosen player between random player, smart player, and another SDM player. Each cycle was made of 100 games for training, and then 100 games for measuring statistics.
+\label{fig:ttt-results-mixed}
+}
+\end{figure}
