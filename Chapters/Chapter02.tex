@@ -320,15 +320,15 @@ Here are interesting questions that have been considered during this work, but h
 
 
 
-\section{``i'' versus ``l'' issue}
+\section{``i'' versus ``l''}
 
-The classification algorithm had some problems classifying the letter ``i'' and ``l''. It may have happened because their distance is not enough. In this case, SDM could not differenciate the details --- it has only considered the big picture. Although this behavior is close to how we see things, we also have the ability to zoom and focus in the details, discerning letter ``i'' from letter ``l''.
+The classification algorithm had some problems classifying the letters ``i'' and ``l''. It may have happened because of the low distance between them. In this case, SDM could not differentiate the details --- it has only considered the big picture. Although this behavior is close to how humans see things, we also have the ability to zoom and focus in the details, clearly discerning letter ``i'' from letter ``l''.
 
-I have run the classification algorithm under the MNIST database of handwritten digits \citep{deng2012mnist}. First, SDM has been trained with the 60,000 training images, and then it classified the 10,000 testing images. It has given the correct classification for 77.22\% of the images, which is inferior to the specialized algorithms. For instance, in 1998, \citet{lecun1998gradient} has developed algorithms which reaches from 88\%, using linear classifier, to 99.7\%, using convolutional net. For a review of the algorithms' performance in the MNIST database, see \cite{mnist}.
+I have run the classification algorithm under the MNIST database of handwritten digits \citep{deng2012mnist}. First, SDM has been trained with the 60,000 training images, and then it classified the 10,000 testing images. In these initial tests, the memory has given the correct classification for 77.22\% of the images, which is inferior to the specialized algorithms. For instance, in 1998, \citet{lecun1998gradient} have developed algorithms which achieve from 88\% through a linear classifier, to 99.7\% through a convolutional net. For a review of algorithms' performance in the MNIST database, see \cite{mnist}.
 
-Looking into the reason behind images incorrectly classified, I have found that the issue is very related to the ``i'' versus ``l'' issue. Some handwritten digits are very close to others, and a ``2'' or a ``7'' may look like a ``1'', for instance. So, how can we solve this issue without using anything specific to images? The machine learning algorithms use specific tecniques to ace performance. I would like to unveil a solution closer to how we behave, even if this leads to smaller performance.
+Looking into the reason behind images incorrectly classified, I have found that the issue is very related to the ``i'' versus ``l'' issue. Some handwritten digits are very close to others, and a ``2'' or a ``7'' may look like a ``1'', for instance. So, how can we solve this issue without using anything specific to images?  Machine learning algorithms use specific techniques to improve performance. I would like to unveil a solution psychologically closer to how we behave --- even if that eventually leads to lower performance.
 
-An unexplored idea is to use other SDMs which communicates. A first SDM would write the whole picture, just like we have done. Another SDM would write specific parts of the image, just like our eye focusing in specific parts. When reading, they may compose the counters and give a more precise classification.
+An unexplored idea is to use multiple SDMs which communicate. A first SDM would write the whole picture, just like we have done. Another SDM would write specific parts of the image, just like our eye focusing in specific parts. When reading, they may compose the counters and give a more precise classification.
 
 
 
