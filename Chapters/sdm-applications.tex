@@ -533,7 +533,7 @@ Internally, every board is mapped into a random bitstring and passed to SDM. As 
 In more details, the next movement decision consists in one read from SDM, resulting in a bitstring. Then the scores of the actions are calculated counting the number of 1 in each part of the bitstring. The chosen action is the one which is valid and has the highest score.
 
 
-\subsection{Training}
+\section{Training}
 
 Our algorithm learned playing games against opponents. We had four types of opponents: (i) another SDM player, (ii) a random player whose actions are always random; (iii) a smart player whose actions wins when it can, block the opponent when it can, or are random; and (iv) a human player.
 
@@ -542,7 +542,7 @@ The weights of the rewards were chosen to prevent losing. Thus the weight of the
 Every learn cycle had two parts: (i) 100 games learning and (ii) 100 games testing. So, it has never learned during the testing phase and has not affected the measure of the statistics.
 
 
-\subsection{Results}
+\section{Results}
 
 When playing against the random player, SDM has already started improving after the first 100 training games. Its winning rate converges quickly to around 80\%, while the drawing rate starts to grow after 2,000 games and keeps growing until the end. The losing rate keeps decreasing until it reaches cycles of 100 games without any loss. See Figure \ref{fig:ttt-results-random}.
 
@@ -550,11 +550,11 @@ When playing against smart player, SDM has started learning how to not lose duri
 
 When playing against another SDM player, both player quickly learns how to not lose. During the first 100 testing games, without any learning game, they have behaved like two random players. After the 100 training games, they have learned how to not lose and the drawing rate grows quickly, reaching 100\%. See Figure \ref{fig:ttt-results-sdm}.
 
-When playing against mixed players, SDM has also adapted. In Figure \ref{fig:ttt-results-mixed}, it has played 6,000 games against random player, smart player, and another SDM player. In each cycle, one of them was randomly chosen. The number of loses over time is decreasing, while the number of wins and draws change a lot. It is easy to notice when the other SDM player was chosen, because all games in that cycle have draw.
+When playing against mixed players, SDM has also adapted. In Figure \ref{fig:ttt-results-mixed}, it has played 6,000 games against random player, smart player, and another SDM player. In each cycle, one of them was randomly chosen. The number of losses over time is decreasing, whereas the number of wins and draws change a lot. It is easy to notice when the other SDM player was chosen, because all games in that cycle have draw.
 
 \begin{figure}[!htb]
 \centering
-\subfloat[Loses over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-random-loses.png}}
+\subfloat[Losses over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-random-loses.png}}
 
 \subfloat[Results over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-random.png}}
 
@@ -565,7 +565,7 @@ When playing against mixed players, SDM has also adapted. In Figure \ref{fig:ttt
 
 \begin{figure}[!htb]
 \centering
-\subfloat[Loses over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-smart-loses.png}}
+\subfloat[Losses over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-smart-loses.png}}
 
 \subfloat[Results over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-smart.png}}
 
@@ -576,7 +576,7 @@ When playing against mixed players, SDM has also adapted. In Figure \ref{fig:ttt
 
 \begin{figure}[!htb]
 \centering
-\subfloat[Loses over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-sdm-loses.png}}
+\subfloat[Losses over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-sdm-loses.png}}
 
 \subfloat[Results over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-sdm.png}}
 
@@ -587,7 +587,7 @@ When playing against mixed players, SDM has also adapted. In Figure \ref{fig:ttt
 
 \begin{figure}[!htb]
 \centering
-\subfloat[Loses over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-mixed-loses.png}}
+\subfloat[Losses over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-mixed-loses.png}}
 
 \subfloat[Results over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-mixed.png}}
 
