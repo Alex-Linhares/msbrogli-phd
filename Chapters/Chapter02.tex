@@ -61,21 +61,19 @@ As neurons are hard-locations in SDM, when we say that a neuron has been killed,
 
 \begin{figure}[!p]
 \centering\includegraphics[width=\textwidth]{./images02/new-images/sdm-neuron-death-200k.png}
-\caption{This graph shows the SDM's robustness against loss of neurons in a SDM with $n=1,000$ and $H=1,000,000$. It shows that a loss of 200,000 neurons, 20\% of the total, does not affect SDM whatsoever.
+\caption{This graph shows the SDM's robustness against loss of neurons in a SDM with $n=1,000$ and $H=1,000,000$. It shows that a loss of 200,000 neurons, 20\% of the total, does not seem to affect SDM whatsoever.
 \label{fig:sdm-neuron-death-200k}}
 \end{figure}
 
-In Figure \ref{fig:sdm-neuron-death-200k}, we can notice that SDM is absolutely robust up to 200,000 neuron deaths which is 20\% of all hard-locations. This result is pretty impressive and really surprised us.
-
-In fact, SDM begins to be significantly affected by loss of neurons after 600,000 neuron deaths (Figure \ref{fig:sdm-neuron-death-1m}), and obviously forgets everything when all neurons are dead.
+In Figure \ref{fig:sdm-neuron-death-200k}, we can notice that SDM is robust up to 200,000 neuron deaths which is 20\% of all hard-locations. Its robustness is astonishing.  In fact, SDM begins to be significantly affected by loss of neurons after 600,000 neuron deaths (Figure \ref{fig:sdm-neuron-death-1m}), and obviously forgets everything when all neurons are dead.
 
 \begin{figure}[!p]
 \centering\includegraphics[width=\textwidth]{./images02/new-images/sdm-neuron-death-1m.png}
-\caption{This graph shows the SDM's robustness against loss of neurons in a SDM with $n=1,000$ and $H=1,000,000$. The more neurons are death, the smaller the critical distance, i.e., the worse the SDM recall.
+\caption{This graph shows the SDM's robustness against loss of neurons in a SDM with $n=1,000$ and $H=1,000,000$. The more neurons are lost, the smaller the critical distance, i.e., the worse the SDM recall.
 \label{fig:sdm-neuron-death-1m}}
 \end{figure}
 
-It is interesting that 500,000 neuron deaths has a minor effect in SDM's recall capability (see Figure \ref{fig:sdm-neuron-death-500k}). It is analogous to do an hemispherectomy in a person and, after the procedure, the person is able to recall and learn almost just like before. In fact, there are clinical reports of children submitted to hemispherectomy who live an almost normal life with minor motor problems.
+It is interesting that 500,000 neuron deaths has a minor effect in SDM's recall capability (see Figure \ref{fig:sdm-neuron-death-500k}). It is analogous to do an hemispherectomy in a person and, after the procedure, the person being able to recall and learn almost just like before. In fact, there are clinical reports of children submitted to hemispherectomy who live an almost normal life with minor function problems.
 
 \begin{figure}[!p]
 \centering\includegraphics[width=\textwidth]{./images02/new-images/sdm-neuron-death-500k.png}
@@ -83,7 +81,7 @@ It is interesting that 500,000 neuron deaths has a minor effect in SDM's recall 
 \label{fig:sdm-neuron-death-500k}}
 \end{figure}
 
-An important observation is that around 800,000 neuron deaths (80\% of all neurons) the critical distance is really small, i.e., SDM recall capacity is very diminished. After 900,000 neuron deaths the critical distance is zero. In this case, everything has been forgot.
+An important observation is that around 800,000 neuron deaths (80\% of all neurons) the critical distance becomes small, i.e., SDM recall capacity is very diminished. After 900,000 neuron deaths the critical distance is zero. In this case, everything has been lost.
 
 Although there is some decrease in SDM recall after 600,000 neuron deaths, it is curious that there is a sudden change between 900,000 (90\%) and 1,000,000 (100\%). In Figure \ref{fig:sdm-neuron-death-details} we can see the details of this non-linear change. Notice that after 950,000 even the exact clue $\eta_0$ does not converge to $\eta$.
 
@@ -93,7 +91,7 @@ Although there is some decrease in SDM recall after 600,000 neuron deaths, it is
 \label{fig:sdm-neuron-death-details}}
 \end{figure}
 
-We run exactly the same simulation for a 256-bit SDM with 1,000,000 hard-locations. The results were even more surprising, because the 256-bit SDM was more robust to loss of neuron than the 1,000-bit SDM (see Figure \ref{fig:sdm-neuron-death-256bits}). Notice that the loss of 50\% of neurons barely affected the 256-bit SDM which remained functional even facing an enormous loss of 90\% of neurons.
+We run exactly the same simulation for a 256-bit SDM with 1,000,000 hard-locations. The results were even more surprising, as the 256-bit SDM seems to be more robust to loss of neurons than the 1,000-bit SDM (see Figure \ref{fig:sdm-neuron-death-256bits}). Notice that the loss of 50\% of neurons barely affected the 256-bit SDM which remained functional even facing an enormous loss of 90\% of neurons.
 
 \begin{figure}[!p]
 \centering
@@ -261,7 +259,7 @@ Note, finally, that this is not the first time in which a weighted function has 
 
 Sparse Distributed Memory is a viable model of human memory, yet it does require researchers to (re-)implement a number of parallel algorithms in different architectures.
 
-We propose to provide a new, open-source, cross-platform, highly parallel framework in which researchers may be able to create hypotheses and test them computationally through minimal effort. The framework is well-documented for public release at this time (http://sdm-framework.readthedocs.io), it has already served as the backbone of Chada's Ph.D. thesis. The single-line command ``pip install sdm'' will install the framework on posix-like systems, and single-line commands will let users test the framework, generate some of the figures from Kanerva's theoretical predictions in their own machines, and --- if interested enough ---, test their own theories and improve the framework, and the benchmarks used to evaluate the framework, in open-source fashion. It is our belief that such work is a necessary component towards accelerating research in this promising field.
+We provide a new, open-source, cross-platform, highly parallel framework in which researchers may be able to create hypotheses and test them computationally through minimal effort. The framework is well-documented for public release at this time (http://sdm-framework.readthedocs.io), it has already served as the backbone of Chada's Ph.D. thesis. The single-line command ``pip install sdm'' will install the framework on posix-like systems, and single-line commands will let users test the framework, generate some of the figures from Kanerva's theoretical predictions in their own machines, and --- if interested enough ---, test their own theories and improve the framework, and the benchmarks used to evaluate the framework, in open-source fashion. It is our belief that such work is a necessary component towards accelerating research in this promising field.
 
 \section{Future work}
 
