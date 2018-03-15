@@ -78,11 +78,11 @@ This time, however, it will be running on a computer.
 
 
 \chapter{Results (iii): Loss of neurons}
-In SDM, the data is written distributed among millions of hard locations, which theoretically gives SDM robustness against loss of neurons. In other words, SDM should keep convering correctly even when some neurons are dead. The question is: how robust it really is? How many neurons may die before it starts to forget things. These questions have never been addresses before.
+In SDM, the data is written distributed among millions of hard locations, which theoretically gives SDM robustness against loss of neurons. In other words, SDM should keep converging correctly even when some neurons are dead. The question is: how robust it really is? How many neurons may die before it starts to forget things? These questions have never been addressed before.
 
-Looking for answers to these questions, we run simulations in which we kept killing some neurons and checking whether SDM remained converging to a given bitstring or not. In these simulations, 10,000 random bitstrings were written to a 1,000-bit SDM with 1,000,000 hard locations, and we choose one of them as our target. As the bitstrings were all written exactly once, we may generalize the results. The code is available in the ``Reseting hard locations'' notebook \citep{sdmframework}.
+Looking for answers to these questions, we run simulations in which we kept killing some neurons and checking whether SDM remained converging to a given bitstring or not. In these simulations, 10,000 random bitstrings were written to a 1,000-bit SDM with 1,000,000 hard locations, and we choose one of them as our target. As the bitstrings were all written exactly once, we may generalize the results. The code is available in the ``Resetting hard locations'' notebook \citep{sdmframework}.
 
-As neurons are hard locations in SDM, when we say that a neuron has been killed, we mean that its counters have been zeroed and a new random bitstring address has been assigned. During our simulations, no other bitstring has been written after the 10,000. Consequently, as their counters willl remain zeroed, it is exactly like ignoring the dead hard locations in the subsequent reading operations.
+As neurons are hard locations in SDM, when we say that a neuron has been killed, we mean that its counters have been zeroed and a new random bitstring address has been assigned. During our simulations, no other bitstring has been written after the 10,000. Consequently, as their counters will remain zero, it is exactly like ignoring the dead hard locations in the subsequent reading operations.
 
 \begin{figure}[!p]
 \centering\includegraphics[width=\textwidth]{./images02/new-images/sdm-neuron-death-200k.png}
@@ -90,7 +90,7 @@ As neurons are hard locations in SDM, when we say that a neuron has been killed,
 \label{fig:sdm-neuron-death-200k}}
 \end{figure}
 
-In Figure \ref{fig:sdm-neuron-death-200k}, we can notice that SDM is robust up to 200,000 neuron deaths which is 20\% of all hard locations. Its robustness is astonishing.  In fact, SDM begins to be significantly affected by loss of neurons after 600,000 neuron deaths (Figure \ref{fig:sdm-neuron-death-1m}), and obviously forgets everything when all neurons are dead.
+In Figure \ref{fig:sdm-neuron-death-200k}, we can notice that SDM is robust up to 200,000 neuron deaths which are 20\% of all hard locations. Its robustness is astonishing.  In fact, SDM begins to be significantly affected by the loss of neurons after 600,000 neuron deaths (Figure \ref{fig:sdm-neuron-death-1m}) and obviously forgets everything when all neurons are dead.
 
 \begin{figure}[!p]
 \centering\includegraphics[width=\textwidth]{./images02/new-images/sdm-neuron-death-1m.png}
@@ -98,7 +98,7 @@ In Figure \ref{fig:sdm-neuron-death-200k}, we can notice that SDM is robust up t
 \label{fig:sdm-neuron-death-1m}}
 \end{figure}
 
-It is interesting that 500,000 neuron deaths has a minor effect in SDM's recall capability (see Figure \ref{fig:sdm-neuron-death-500k}). It is analogous to do an hemispherectomy in a person and, after the procedure, the person being able to recall and learn almost just like before. In fact, there are clinical reports of children submitted to hemispherectomy who live an almost normal life with minor function problems.
+It is interesting that 500,000 neuron deaths have a minor effect on SDM's recall capability (see Figure \ref{fig:sdm-neuron-death-500k}). It is analogous to do a hemispherectomy in a person and, after the procedure, the person being able to recall and learn almost just like before. In fact, there are clinical reports of children submitted to hemispherectomy who live an almost normal life with minor function problems.
 
 \begin{figure}[!p]
 \centering\includegraphics[width=\textwidth]{./images02/new-images/sdm-neuron-death-500k.png}
@@ -106,7 +106,7 @@ It is interesting that 500,000 neuron deaths has a minor effect in SDM's recall 
 \label{fig:sdm-neuron-death-500k}}
 \end{figure}
 
-An important observation is that around 800,000 neuron deaths (80\% of all neurons) the critical distance becomes small, i.e., SDM recall capacity is very diminished. After 900,000 neuron deaths the critical distance is zero. In this case, everything has been lost.
+An important observation is that around 800,000 neuron deaths (80\% of all neurons) the critical distance becomes small, i.e., SDM recall capacity is very diminished. After 900,000 neuron deaths, the critical distance is zero. In this case, everything has been lost.
 
 Although there is some decrease in SDM recall after 600,000 neuron deaths, it is curious that there is a sudden change between 900,000 (90\%) and 1,000,000 (100\%). In Figure \ref{fig:sdm-neuron-death-details} we can see the details of this non-linear change. Notice that after 950,000 even the exact clue $\eta_0$ does not converge to $\eta$.
 
@@ -131,17 +131,17 @@ We run exactly the same simulation for a 256-bit SDM with 1,000,000 hard locatio
 
 \chapter{Results (iv): Generalized read operation}
 
-Murilo observed that the models of Kanerva's read ($z=1$) and Chada's read ($z=0$) were simple variations of a generalized read with an exponent $z$, which suggests experimenting with different values. Mathematically, let $A$ be the set of the counters of the activated hard location, and $c_i$ be the counter of the $i$-th bit. Then,
+Murilo observed that the models of Kanerva's read ($z=1$) and Chada's read ($z=0$) were simple variations of a generalized read with an exponent $z$, which suggests experimenting with different values. Mathematically, let $A$ be the set of the counters of the activated hard location, and $c_i$ be the counter of the $i$th bit. Then,
 
 $$
 s_i = \sum_{c \in A} \frac{c_i}{|c_i|} |c_i|^z
 $$
 
-The sum of $|c_i|^z$ turns the intermediate values from integers to float point numbers. Thus, we have developed a specific read operation which stored the intermediate values in double variables.
+The sum of $|c_i|^z$ turns the intermediate values from integers to floating point numbers. Thus, we have developed a specific read operation which stored the intermediate values in double variables.
 
 The results, however, have not yielded performance improvements. Though for $z \leq 1$ results are comparable to $z=1$, for $z>1$, the system shows a clear deterioration, with a smaller critical distance and faster divergence at large-distance reads. This is shown in Figures \ref{fig:murillo-generalization-experiments} and \ref{fig:murillo-generalization-experiments-6reads}.
 
-We understand that the critical distant is an important parameter of SDM. The bigger the critical distance, the best, because SDM is able to converge even with farther clues. For $z>1$, the bigger the $z$, the smaller the critical distance. For $z = 6$, the critical distance almost reaches zero.
+We understand that the critical distance is an important parameter of SDM. The bigger the critical distance, the best, because SDM is able to converge even with farther clues. For $z>1$, the bigger the $z$, the smaller the critical distance. For $z = 6$, the critical distance almost reaches zero.
 
 It is interesting that Kanerva has proposed $z=1$ without realizing the generalized reading. Even so, he proposed the $z$ with the highest critical distance.
 
@@ -179,12 +179,12 @@ It is interesting that Kanerva has proposed $z=1$ without realizing the generali
 \chapter{Results (ix): Information-theoretical write operation}
 
 
-My advisor, Alexandre Linhares, has proposed another write operation: an information-theoretical weighted write. In it, the sum of the counter's value is weighted based on the distance between each hard location's address and the reading address. The logic behind it is to vary the importance of each hard location inside the circle.  It is only natural that one encodes an item in closer hard locations with a stronger signal, and a natural candidate for this signal function is the amount of information contained in the distance between the item and each hard location.  Closer hard locations have lower probabilies and therefore should encode more information.
+My advisor, Alexandre Linhares, has proposed another write operation: an information-theoretical weighted write. In it, the sum of the counter's value is weighted based on the distance between each hard location's address and the reading address. The logic behind it is to vary the importance of each hard location inside the circle.  It is only natural that one encodes an item in closer hard locations with a stronger signal, and a natural candidate for this signal function is the amount of information contained in the distance between the item and each hard location.  Closer hard locations have lower probabilities and therefore should encode more information.
 
 Note that this is not the first time in which a weighted function has been applied to writing in SDM --- \citet{hely1997new} suggest a rather complex spreading model based on floating point signals in the interval [0.05, 1.0] --- they were, however, only able to test their model with 1,000 hard locations.
 
 
-Consider the following. Information Theory \citep{cover2012elements} let us compute the precise amount of information in an event, when given its probability $p$, through the measure of \emph{self-information}:
+Consider the following. Information Theory \citep{cover2012elements} let us compute the precise amount of information in an event when given its probability $p$, through the measure of \emph{self-information}:
 
 $$
 I(p)= -log_2(p)
@@ -310,19 +310,19 @@ The initial results of this \emph{Shannon write} operation can be seen in Figure
 
 Sparse Distributed Memory is a viable model of human memory, yet it does require researchers to (re-)implement a number of parallel algorithms in different architectures.
 
-We provide a new, open-source, cross-platform, highly parallel framework in which researchers may be able to create hypotheses and test them computationally through minimal effort. The framework is well-documented for public release at this time (http://sdm-framework.readthedocs.io), it has already served as the backbone of Chada's Ph.D. thesis \citep{chada2016you}. The single-line command ``pip install sdm'' will install the framework on posix-like systems, and single-line commands will let users test the framework, generate some of the figures from Kanerva's theoretical predictions in their own machines, and --- if interested enough ---, test their own theories and improve the framework, and the benchmarks used to evaluate the framework, in open-source fashion. It is our belief that such work is a necessary component towards accelerating research in this promising field.
+We provide a new, open-source, cross-platform, highly parallel framework in which researchers may be able to create hypotheses and test them computationally with minimal effort. The framework is well-documented for public release at this time (http://sdm-framework.readthedocs.io), it has already served as the backbone of Chada's Ph.D. thesis \citep{chada2016you}. The single-line command ``pip install sdm'' will install the framework on posix-like systems, and single-line commands will let users test the framework, generate some of the figures from Kanerva's theoretical predictions in their own machines, and --- if interested enough ---, test their own theories and improve the framework, and the benchmarks used to evaluate the framework, in open-source fashion. It is our belief that such work is a necessary component towards accelerating research in this promising field.
 
 Here are interesting questions that have been considered during this work, but have had to be left for future research.
 
 \section{``i'' versus ``l''}
 
-The classification algorithm had some problems classifying the letters ``i'' and ``l''. It may have happened because of the low distance between them. In this case, SDM could not differentiate the details --- it has only considered the big picture. Although this behavior is close to how humans see things, we also have the ability to zoom and focus in the details, clearly discerning letter ``i'' from letter ``l''.
+The classification algorithm had some problems classifying the letters ``i'' and ``l''. It may have happened because of the low distance between them. In this case, SDM could not differentiate the details --- it has only considered the big picture. Although this behavior is close to how humans see things, we also have the ability to zoom and focus on the details, clearly discerning letter ``i'' from letter ``l''.
 
 I have run the classification algorithm under the MNIST database of handwritten digits \citep{deng2012mnist}. First, SDM has been trained with the 60,000 training images, and then it classified the 10,000 testing images. In these initial tests, the memory has given the correct classification for 79.22\% of the images, which is inferior to the specialized algorithms. For instance, in 1998, \citet{lecun1998gradient} have developed algorithms which achieve from 88\% through a linear classifier, to 99.7\% through a convolutional net. For a review of algorithms' performance in the MNIST database, see \cite{mnist}.
 
 Looking into the reason behind images incorrectly classified, I have found that the issue is very related to the ``i'' versus ``l'' issue. Some handwritten digits are very close to others, and a ``2'' or a ``7'' may look like a ``1'', for instance. So, how can we solve this issue without using anything specific to images?  Machine learning algorithms use specific techniques to improve performance. I would like to unveil a solution psychologically closer to how we behave --- even if that eventually leads to lower performance.
 
-An unexplored idea is to use multiple SDMs which communicate. A first SDM would write the whole picture, just like we have done. Another SDM would write specific parts of the image, just like our eye focusing in specific parts. When reading, they may compose the counters and give a more precise classification.
+An unexplored idea is to use multiple SDMs which communicate. A first SDM would write the whole picture, just like we have done. Another SDM would write specific parts of the image, just like our eye focusing on specific parts. When reading, they may compose the counters and give a more precise classification.
 
 % \subsection{Multiple levels}
 
@@ -336,7 +336,7 @@ Kanerva suggests, in his book, the use of 1,000 dimensions and 1,000,000 hard lo
 
 Each parameter set choice like this will lead to particular numbers --- many of them emergent---, such as the access radius size, critical distance, memory capacity, and so forth.
 
-One intriguing question here is:  is there a `better' number of dimensions and of hard locations?  If so, can such numbers be better studied algebrically or numerically?
+One intriguing question here is:  is there a `better' number of dimensions and of hard locations?  If so, can such numbers be better studied algebraically or numerically?
 
 How should these parameters be compared?  What are the tradeoffs that should be considered?  What are the `best' benchmarks possible?
 
@@ -348,7 +348,7 @@ How should these parameters be compared?  What are the tradeoffs that should be 
 
 A hypercube with n dimensions can be divided by two hypercubes with $n-1$ dimensions. Is there an algorithm that separates the area of each hard location in such a form that there exists a function mapping each bitstring in $\{0,1\}^n$ to the set of hard locations it `belongs to'?  Though this would break Kanerva's assumption of a randomly yet uniformly distributed set of hard locations --- for a perfectly symmetrical set of hard locations ---, there could be large performance gains if such a mapping function from a bitstring to its corresponding set of nearest hard locations exists.
 
-Consider the hypercube with $n$ dimensions.  We want to select a subset of its vertices with cardinality $2^{20}$ that is symmetrically distributed over the space. Afterwards, $\forall b \in \{ 0,1\} ^n$, we want an algorithm $A$ that yields the particular list of hard locations for $b$ and all hard locations respect the desired properties of the memory.
+Consider the hypercube with $n$ dimensions.  We want to select a subset of its vertices with cardinality $2^{20}$ that is symmetrically distributed over the space. Afterward, $\forall b \in \{ 0,1\} ^n$, we want an algorithm $A$ that yields the particular list of hard locations for $b$ and all hard locations respect the desired properties of the memory.
 
 A reduction from measuring the distance to $2^{20}$ hard locations to a computation of $2^{10}$ hard locations might yield astonishing performance gains, depending, of course, on our optimistic assumptions concerning existence and complexity of such algorithm.  At large scales of computing, the very ability to perform some experiments is a function of sheer performance. The horizon of experiments --- and possibly of knowledge --- expands \emph{as a function of computational demands}. A little more on this in my closing words.
 
@@ -361,9 +361,9 @@ Let us revisit, in these concluding thoughts, the emphasis employed over speed o
 
 Beyond speed, I have also strived for \emph{ease of use}.  All the simulations and graphics generated in this thesis are promptly available to be re-executed and explored by those interested. I have generated a Docker image, which makes it even easier to explore the framework. After running the container, a Jupyter Notebook is available with sdm-framework and other tools already installed. We invite the reader to take a look and explore a little bit.
 
-The overarching intention here is to not only provide a starting point, but to provide a documented Framework in which SDM research can be conducted.  Consider having the ability to compare the results of a new (‘forked’) model to the previous `best' (under a particular benchmark set).  For example, some of the benchmarks that we plan to develop in future research is: how fast is convergence through iterative reading?  How large is the attractor of the critical distance?  How well does the system filter noise?  How well does the system work under the supervised learning task?  And other authors may be able to improve this benchmark set themselves, as is usual in open source development.  It is perhaps this facility of ease to build on top of previous work that seems most exciting at this stage.
+The overarching intention here is to not only provide a starting point, but to provide a documented Framework in which SDM research can be conducted.  Consider having the ability to compare the results of a new (‘forked’) model to the previous `best' (under a particular benchmark set).  For example, some of the benchmarks that we plan to develop in future research are: how fast is convergence through iterative reading?  How large is the attractor of the critical distance?  How well does the system filter noise?  How well does the system work under the supervised learning task?  And other authors may be able to improve this benchmark set themselves, as is usual in open source development.  It is perhaps this facility of ease to build on top of previous work that seems most exciting at this stage.
 
-Consider the misunderstanding concerning the SDM read operation:  Dr Stan Franklin describes Kanerva's read operation in a way that each hard location, at each dimension, provides only a single bit of information to the read operation (instead of Kanerva's full counter).  We have referred to this modified read operation as Chada read\footnote{Legend has it that my friend \text{\&} colleague, Dr. Daniel de Magalhães Chada, along with Linhares, did not consult and re-check with Kanerva's book and only discovered the discrepancy in code and ideas a couple of years afterwards.}.  Having an open, testable, codebase reduces the possibilities of such misunderstandings in the long run.  Indeed, a high-quality codebase seems to have become a scientific community's form of unequivocally standing behind a consensus. For example, the journal Nature analysed the top-100 cited papers in history, to find:
+Consider the misunderstanding concerning the SDM read operation:  Dr Stan Franklin describes Kanerva's read operation in a way that each hard location, at each dimension, provides only a single bit of information to the read operation (instead of Kanerva's full counter).  We have referred to this modified read operation as Chada read\footnote{Legend has it that my friend \text{\&} colleague, Dr. Daniel de Magalhães Chada, along with Linhares, did not consult and re-check with Kanerva's book and only discovered the discrepancy in code and ideas a couple of years afterwards.}.  Having an open, testable, codebase reduces the possibilities of such misunderstandings in the long run.  Indeed, a high-quality codebase seems to have become a scientific community's form of unequivocally standing behind a consensus. For example, the journal Nature analyzed the top-100 cited papers in history, to find:
 
 \begin{quote}
 ... some surprises, not least that it takes a staggering 12,119 citations to rank in the top 100 — and that many of the world’s most famous papers do not make the cut. A few that do, such as the first observation of carbon nanotubes (number 36) are indeed classic discoveries. But the vast majority describe experimental methods or \emph{software that have become essential in their fields. [...] The list reveals just how powerfully research has been affected by computation and the analysis of large data sets.} \\
@@ -372,7 +372,7 @@ Consider the misunderstanding concerning the SDM read operation:  Dr Stan Frankl
 
 It is no coincidence that scientific journals such as BMC Neuroscience, or the Journal of Machine Learning Research have specific sections on open-source software. The journal Neurocomputing states, bluntly: “software is scientific method by machine”.
 
-Of course, for the skeptical reader who may consider software a less worthy pursuit, there is also new work here.  The mathematics of the model has been shown to be correct numerically (with a single, small, anomaly); we have shown how to execute unsupervised learning with nothing besides operations original to the SDM; we have studied the generalized Murilo read; we have seen noise filtering; the death of neurons; how information-theory may be of use; and finally, we have reproduced numerous of the original propositions put forth by Kanerva.  The emphasis might have been on \emph{breadth of topics}, in detriment of depth here or there.  But this is due to our research group's enthusiam for the topic; we do indeed believe that SDM is --- if not correct --- extremely close to a full scientific understanding of human long-term memory.  If so, it is such a monumental achievement that we want readers to be able to see all of what we see and imagine the vastness of possibilities.  The work on, say, reinforcement learning, is most definitely not the definitive work we will see on the subject, but a challenge left for readers to contemplate. Ralph Waldo Emerson once said \emph{do not go where the path may lead. Go, instead, where there is no path, and leave a trail.}  Professor Pentti Kanerva has left the trail.  It is my job to illuminate it and to pave it and to clear it; to try to deliver an easier pathway for the next generation.  Some essays completely shut the door close at the end; this one intends to leave it wide open. As the reader might have noticed, this final section does not read as an analysis of the work done; it reads, instead, as a \emph{desiderata}, a prologue, a yearning for others to join me in imagining the shape of things to come.
+Of course, for the skeptical reader who may consider software a less worthy pursuit, there is also new work here.  The mathematics of the model has been shown to be correct numerically (with a single, small, anomaly); we have shown how to execute unsupervised learning with nothing besides operations original to the SDM; we have studied the generalized Murilo read; we have seen noise filtering; the death of neurons; how information-theory may be of use; and finally, we have reproduced numerous of the original propositions put forth by Kanerva.  The emphasis might have been on the \emph{breadth of topics}, in detriment of depth here or there.  But this is due to our research group's enthusiasm for the topic; we do indeed believe that SDM is --- if not correct --- extremely close to a full scientific understanding of human long-term memory.  If so, it is such a monumental achievement that we want readers to be able to see all of what we see and imagine the vastness of possibilities.  The work on, say, reinforcement learning, is most definitely not the definitive work we will see on the subject, but a challenge left for readers to contemplate. Ralph Waldo Emerson once said \emph{do not go where the path may lead. Go, instead, where there is no path, and leave a trail.}  Professor Pentti Kanerva has left the trail.  It is my job to illuminate it and to pave it and to clear it; to try to deliver an easier pathway for the next generation.  Some essays completely shut the door close at the end; this one intends to leave it wide open. As the reader might have noticed, this final section does not read as an analysis of the work done; it reads, instead, as a \emph{desideratum}, a prologue, a yearning for others to join me in imagining the shape of things to come.
 
 
 

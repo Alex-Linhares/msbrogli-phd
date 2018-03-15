@@ -2,7 +2,7 @@
 
 \chapter{Results (vi): Supervised classification application}
 
-Supervised classification problem consists of categorize data into groups after seeing some samples from each group. First, it is presented pieces of data with their categories. The algorithm learns from these data, which is known as learning phase. Then, new pieces of data are presented and the algorithm must classify them into the already known groups. It is named supervised because  the algorithm will not create the groups itself. It will learn the groups from during the learning phase, in which the groups have already been defined and the pieces of data have already been classified into them.
+Supervised classification problem consists of categorizing data into groups after seeing some samples from each group. First, it is presented pieces of data with their categories. The algorithm learns from these data, which is known as the learning phase. Then, new pieces of data are presented and the algorithm must classify them into the already known groups. It is named supervised because  the algorithm will not create the groups itself. It will learn the groups from during the learning phase, in which the groups have already been defined and the pieces of data have already been classified into them.
 
 Although this problem has already been studied (REF), our intention here is to show that a pure SDM may also be used to classify data. \citet{fan1997genetic} has used SDM to solve a classification problem, recognizing handwriting letters from images, but he used a mix of genetic algorithm with SDM, which is very different from the original SDM described by \cite{Kanerva1988}. Even though his algorithm has classified properly, we were intrigued whether a pure SDM would also classify successfully.
 
@@ -14,7 +14,7 @@ Hence, we have developed a supervised classification algorithm based on a pure S
 \label{fig-classification-examples}}
 \end{figure}
 
-The images had 31 pixels of width and 32 pixels of height, totaling 992 pixels per image. Each image was mapped into a 1,000 bit bitstring in which the bits were set according to the color of each pixel of the image. So, white pixels were equal to bit 0, and black pixels to bit 1. The 8 remaining bits were all set to zero. This was a bijective mapping (or one-to-one mapping), i.e., there was only one bitstring for each image, and there was only one image for each bitstring.
+The images had 31 pixels of width and 32 pixels of height, totaling 992 pixels per image. Each image was mapped into a 1,000-bit bitstring in which the bits were set according to the color of each pixel of the image. So, white pixels were equal to bit 0, and black pixels to bit 1. The 8 remaining bits were all set to zero. This was a bijective mapping (or one-to-one mapping), i.e., there was only one bitstring for each image, and there was only one image for each bitstring.
 
 % TODO Add image showing the association between pixels and bits.
 
@@ -26,11 +26,11 @@ A total of 62 classification groups have been trained in the SDM. For each of th
 \label{fig-classification-groups}}
 \end{figure}
 
-The association of images to groups was stored as sequences in SDM, as detailed by \citet{Kanerva1988} in Chapter 8. During the learning phase, the image bitstrings were stored pointing to their groups bitstrings, i.e., write(addr=bs\_image, datum=bs\_label). Thus, in order to classify an unknown image, we only had to read from its address and check which group has been found.
+The association of images to groups was stored as sequences in SDM, as detailed by \citet{Kanerva1988} in Chapter 8. During the learning phase, the image bitstrings were stored pointing to their group's bitstrings, i.e., write(addr=bs\_image, datum=bs\_label). Thus, in order to classify an unknown image, we only had to read from its address and check which group has been found.
 
 % TODO Add image showing the pointers.
 
-During the learning phase, we have generated 100 noisy images for each character. The images had 5\% of noise, i.e., 5\% of their pixels have been randomly flipped. For example, see the generated images for letter A in Figure \ref{fig-classification-training-A}. Then, we have wrote the classification group bitstring into the bitstring associated to each noisy image, i.e., write(bs\_image, bs\_label). For a complete image training set, see Appendix XYZ.
+During the learning phase, we have generated 100 noisy images for each character. The images had 5\% of noise, i.e., 5\% of their pixels have been randomly flipped. For example, see the generated images for letter A in Figure \ref{fig-classification-training-A}. Then, we have written the classification group bitstring into the bitstring associated to each noisy image, i.e., write(bs\_image, bs\_label). For a complete image training set, see Appendix XYZ.
 
 \begin{figure}[!htb]
 \centering\includegraphics[width=\textwidth]{./images02/classification/trainingA.png}
@@ -38,7 +38,7 @@ During the learning phase, we have generated 100 noisy images for each character
 \label{fig-classification-training-A}}
 \end{figure}
 
-Finally, we have assess the performance of our classifier. We had done it in three different scenarios: high noise (20\%), low noise (5\%) and no noise. See Figures \ref{fig-classification-noise-high} and \ref{fig-classification-no-noise} for images with 20\% noise and no noise. The low noise scenario had the same noise as the training set. For each scenario, we had classified 620 unknown images with 10 images per group.
+Finally, we have assessed the performance of our classifier. We had done it in three different scenarios: high noise (20\%), low noise (5\%) and no noise. See Figures \ref{fig-classification-noise-high} and \ref{fig-classification-no-noise} for images with 20\% noise and no noise. The low noise scenario had the same noise as the training set. For each scenario, we had classified 620 unknown images with 10 images per group.
 
 \begin{figure}[!htb]
 \centering\includegraphics[width=0.75\textwidth]{./images02/classification/noise-high.png}
@@ -52,7 +52,7 @@ Finally, we have assess the performance of our classifier. We had done it in thr
 \label{fig-classification-no-noise}}
 \end{figure}
 
-The performance was calculated as the percentage of hits for each group. We did not expected the same performance for all groups because some groups become very similar to other depending on the noise level, and this similarity may even confuse a person (see Figure \ref{fig-classification-similarity}).
+The performance was calculated as the percentage of hits for each group. We did not expect the same performance for all groups because some groups become very similar to other depending on the noise level, and this similarity may even confuse a person (see Figure \ref{fig-classification-similarity}).
 
 \begin{figure}[!htb]
   \centering
@@ -72,7 +72,7 @@ The performance was calculated as the percentage of hits for each group. We did 
   \label{fig-classification-similarity}
 \end{figure}
 
-In the no noise scenario, the classifier has hit all characters, except letter ``l'' which was wrongly associated to the group of ``i''. We believe that it happened because the classifier had never seen an image with no noise and the difference between the images of ``l'' and ``i'' is smaller than the critical distance. So, both groups have been merged and it would converge to only one of them. In our simulation, it happened to be the group of ``i''.
+In the no noise scenario, the classifier has hit all characters, except letter ``l'' which was wrongly associated with the group of ``i''. We believe that it happened because the classifier had never seen an image with no noise and the difference between the images of ``l'' and ``i'' is smaller than the critical distance. So, both groups have been merged and it would converge to only one of them. In our simulation, it happened to be the group of ``i''.
 
 In the low noise scenario, it has made few mistakes. It correctly classified all images but some from characters ``b'', ``e'', ``f'', ``l'', ``t'', and ``9''. It completely classified ``l'' images to the ``i'' group. In the other cases, it made just a few mistakes. See Figure \ref{fig-classification-low-noise-results} to check the images and their classification.
 
@@ -94,7 +94,7 @@ In the low noise scenario, it has made few mistakes. It correctly classified all
   \label{fig-classification-low-noise-results}
 \end{figure}
 
-The high noise scenario is the most interesting, because, even in a high noise level, the classifier has hit most of the characters. It has hit all images for 44 out of 62 groups, and made at least one miss for the other 18 groups. The misses may be seen in details in Figure \ref{fig-classificiation-high-noise-misses}.
+The high noise scenario is the most interesting, because, even in a high noise level, the classifier has hit most of the characters. It has hit all images for 44 out of 62 groups and made at least one miss for the other 18 groups. The misses may be seen in details in Figure \ref{fig-classificiation-high-noise-misses}.
 
 \begin{figure}[!htb]
   \centering
@@ -144,11 +144,11 @@ The high noise scenario is the most interesting, because, even in a high noise l
   \label{fig-classification-high-noise-misses}
 \end{figure}
 
-The critical distance plays an important role in the classification error. As we have 62 groups and each have been trained with 100 images, there were 6,200 writes to the memory. When an image is being classified, it will have to converge to a group, and the convergence depends on the distance between this image and the images from the training set, i.e, in the noise level.
+The critical distance plays an important role in the classification error. As we have 62 groups and each has been trained with 100 images, there were 6,200 writes to the memory. When an image is being classified, it will have to converge to a group, and the convergence depends on the distance between this image and the images from the training set, i.e, in the noise level.
 
 In our simplified scenario, there is neither translation nor rotation. Future work may explore how sensible this classification algorithm is to these operations. We expect that, with proper training, the algorithm will remain classifying the images with a good hit rate.
 
-These results show that the SDM may be used as a supervised classification algorithm. Although we do not believe that the mapping between images and bitstrings are even close to the way human cognition deals with images, we believe the results are interesting and useful to many possible real world problems.
+These results show that the SDM may be used as a supervised classification algorithm. Although we do not believe that the mapping between images and bitstrings are even close to the way human cognition deals with images, we believe the results are interesting and useful to many possible real-world problems.
 
 
 
@@ -169,7 +169,7 @@ These results show that the SDM may be used as a supervised classification algor
     basicstyle=\small\ttfamily,
 }
 
-Image noise filtering consists in removing the noise from an input, in out case an image. Our images are black \& white images and the noise is generated randomly flipping some of their pixels from black to while and vice versa. In Figure \ref{fig-filter-progressive-noise}, we may see an image with different levels of noise, from 0\% to 45\% in steps of 5\%. It makes no sense to apply 50\% of noise because it would absolutely randomize the image.
+Image noise filtering consists in removing the noise from an input, in our case an image. Our images are black \& white images and the noise is generated randomly flipping some of their pixels from black to while and vice versa. In Figure \ref{fig-filter-progressive-noise}, we may see an image with different levels of noise, from 0\% to 45\% in steps of 5\%. It makes no sense to apply 50\% of noise because it would absolutely randomize the image.
 
 \begin{figure}[!htb]
 \centering\includegraphics[width=\textwidth]{./images02/filter/progressive-noise.png}
@@ -177,7 +177,7 @@ Image noise filtering consists in removing the noise from an input, in out case 
 \label{fig-filter-progressive-noise}}
 \end{figure}
 
-The images have 30 x 30 pixels, totaling 900 pixels per image. Each image is mapped into a bistrings of 1,000 bit in which the bits are set according to the color of each pixel of the image. White pixels are mapped to bit 0, and black pixels to bit 1. The 100 remaining bits are all set to zero. This is a bijective mapping (or one-to-one) from images and bitstrings, i.e., there is one, and only one, bitstring for each image, and vice versa.
+The images have 30 x 30 pixels, totaling 900 pixels per image. Each image is mapped into a bistring of 1,000 bit in which the bits are set according to the color of each pixel of the image. White pixels are mapped to bit 0, and black pixels to bit 1. The 100 remaining bits are all set to zero. This is a bijective mapping (or one-to-one) from images and bitstrings, i.e., there is one, and only one, bitstring for each image, and vice versa.
 
 In the learning phase, 200 noisy images were generated and written into SDM. Half of the letter ``I'' and half of the letter ``T'' (see Figure \ref{fig:filter-training}). They were written into their own addresses, i.e., \lstinline{write(address=bs_image, datum=bs_image)}.
 
@@ -190,7 +190,7 @@ In the learning phase, 200 noisy images were generated and written into SDM. Hal
   \label{fig:filter-training}
 \end{figure}
 
-Then, in order to test the filtering, we just have read from noisy images, and the results were really impressive. We were able to clean images up to 42\% of noise (see Figure \ref{fig:filter-testing}). While SDM has never seen a clean version of the letters, it just learned from the learning phase which pixels has appeared more frequently and chose them.
+Then, in order to test the filtering, we just have read from noisy images, and the results were really impressive. We were able to clean images up to 42\% of noise (see Figure \ref{fig:filter-testing}). While SDM has never seen a clean version of the letters, it just learned from the learning phase which pixels have appeared more frequently and choose them.
 
 \begin{figure}[!htb]
   \subfloat[Steps of reading from letter ``T'' with 42\% of noise]{\includegraphics[width=\textwidth]{./images02/filter/T-42noise.png}}
@@ -202,9 +202,9 @@ Then, in order to test the filtering, we just have read from noisy images, and t
   }
 \end{figure}
 
-A simplified mathematical analysis would be: During the learning phase, $200$ images with 15\% of noise were written to SDM, so, the average distance between them and the clean image was 150 bits. Thus they shared, on average, 175 hard locations with the clean image. In these 175 hard locations, the counter's value for a black pixel mapped to bit 1 was $(1-0.15) \cdot 200 - 0.15 \cdot 200 = 140$. Finally, let's analyse the reading. When reading from a noisy image with 42\% of noise, the average distance between the noisy image and its clean image is 420, which means they share, on average, 6 hard locations. As the average number of activated hard locations is 1,072, the sum of their counters will be, on average, $Y = 6 \cdot 140 - \sum_{i=1}^{1072-6} X_i$, where $X_i$ is a Bernoulli trial with probability 0.5. Hence, $P(\text{black pixel}) = P(Y > 0) = P(6 \cdot 140 - \sum_{i=1}^{1072-6} X_i > 0) = P(\sum_{i=1}^{1066} X_i < 840) = 99.99\%$. But, when reading from a noisy image with 45\% of noise, the average number of hard locations shared with the clean image is only 3. Thus the sum of the activated hard locations' counters will be, on average, $3 \cdot 140 - \sum_{i=1}^{1072-3} X_i$, and $P(\text{black pixel}) = P(\sum_{i=1}^{1069} X_i < 420) = 1.28 \cdot 10^{-12}$. The probability abruptly drops from 100\% to 0\% when the noise goes from 42\% to 45\% (see Figure \ref{fig:filter-prob-right-pixel}). The analysis for while pixels is exactly the same, but with opposite signs. The code to calculate this probability is available in ``Noise filter - Math analysis'' notebook \citep{sdmframework}.
+A simplified mathematical analysis would be: During the learning phase, $200$ images with 15\% of noise were written to SDM, so, the average distance between them and the clean image was 150 bits. Thus they shared, on average, 175 hard locations with the clean image. In these 175 hard locations, the counter's value for a black pixel mapped to bit 1 was $(1-0.15) \cdot 200 - 0.15 \cdot 200 = 140$. Finally, let's analyze the reading. When reading from a noisy image with 42\% of noise, the average distance between the noisy image and its clean image is 420, which means they share, on average, 6 hard locations. As the average number of activated hard locations is 1,072, the sum of their counters will be, on average, $Y = 6 \cdot 140 - \sum_{i=1}^{1072-6} X_i$, where $X_i$ is a Bernoulli trial with probability 0.5. Hence, $P(\text{black pixel}) = P(Y > 0) = P(6 \cdot 140 - \sum_{i=1}^{1072-6} X_i > 0) = P(\sum_{i=1}^{1066} X_i < 840) = 99.99\%$. But, when reading from a noisy image with 45\% of noise, the average number of hard locations shared with the clean image is only 3. Thus the sum of the activated hard locations' counters will be, on average, $3 \cdot 140 - \sum_{i=1}^{1072-3} X_i$, and $P(\text{black pixel}) = P(\sum_{i=1}^{1069} X_i < 420) = 1.28 \cdot 10^{-12}$. The probability abruptly drops from 100\% to 0\% when the noise goes from 42\% to 45\% (see Figure \ref{fig:filter-prob-right-pixel}). The analysis for while pixels is exactly the same, but with opposite signs. The code to calculate this probability is available in ``Noise filter - Math analysis'' notebook \citep{sdmframework}.
 
-This is a simplified analysis because it does not take into consideration the hard locations shared by the different letters. It works fine for our example because letter ``I'' and ``T'' are almost orthogonal and share, on average, only one hard location.
+This is a simplified analysis because it does not take into consideration the hard locations shared by the different letters. It works fine for our example because letters ``I'' and ``T'' are almost orthogonal and share, on average, only one hard location.
 
 \begin{figure}[!htb]
 \centering\includegraphics[width=0.7\textwidth]{./images02/filter/prob-right-pixel.png}
@@ -213,7 +213,7 @@ This is a simplified analysis because it does not take into consideration the ha
 }
 \end{figure}
 
-If the intersection between images becomes too high, the noise filter stops working properly. We have confirmed it writing letters ``B'', ``C'', ``D'' and numeral ``8''. They share a great amount of hard locations and our noise filter could not filter their noise correctly. The training sets can be seen in Figure \ref{fig:filter-training2} and the results in Figure \ref{fig:filter-results2}.
+If the intersection between images becomes too high, the noise filter stops working properly. We have confirmed it writing the letters ``B'', ``C'', ``D'' and the numeral ``8''. They share a great number of hard locations and our noise filter could not filter their noise correctly. The training sets can be seen in Figure \ref{fig:filter-training2} and the results in Figure \ref{fig:filter-results2}.
 
 \begin{figure}[!htb]
   \subfloat[Letter ``B'' with 15\% of noise. ]{\includegraphics[width=0.5\textwidth]{./images02/filter/training2-b.png}}
@@ -241,7 +241,7 @@ If the intersection between images becomes too high, the noise filter stops work
   }
 \end{figure}
 
-A possible solution to this interference problem is to use labels. Each label has a random bitstring, which will be chuncked with the images before writing into SDM. Hence, before reading, we also have to chunck the image with the label --- which means we need to know the label of each image. The chunk was done using the exclusive OR (XOR) operator, i.e., $bs\_chunck = bs\_image \oplus bs\_label$. In other words, we run \lstinline{write(address=bs_chunk, datum=bs_label)} during the training, and \lstinline{read(address=bs_chunk)} during the testing. We used the same training set as before, and the results can be seen in Figure \ref{fig:filter-results2-chunk}.
+A possible solution to this interference problem is to use labels. Each label has a random bitstring, which will be chunked with the images before writing into SDM. Hence, before reading, we also have to chunk the image with the label --- which means we need to know the label of each image. The chunk was done using the exclusive OR (XOR) operator, i.e., $bs\_chunck = bs\_image \oplus bs\_label$. In other words, we run \lstinline{write(address=bs_chunk, datum=bs_label)} during the training, and \lstinline{read(address=bs_chunk)} during the testing. We used the same training set as before, and the results can be seen in Figure \ref{fig:filter-results2-chunk}.
 
 \begin{figure}[!tb]
   \captionsetup[subfigure]{labelformat=empty}
@@ -258,7 +258,7 @@ A possible solution to this interference problem is to use labels. Each label ha
   }
 \end{figure}
 
-The chunck through exclusive OR (XOR) works because of Theorem \ref{thm:xor-chuncks}, which says that chuncking the images with labels will generate, on average, orthogonal bitstrings. Thus, these orthogonal bitstrings will not interfere with each other because they share, on average, only one hard location.
+The chunk through exclusive OR (XOR) works because of Theorem \ref{thm:xor-chuncks}, which says that chunking the images with labels will generate, on average, orthogonal bitstrings. Thus, these orthogonal bitstrings will not interfere with each other because they share, on average, only one hard location.
 
 The disadvantage of using labels is that it requires classification of the images. In our example, we just used the correct label with each image, but we could have used our classification algorithm as a pre-processing step, and only then run the noise filter.
 
@@ -314,15 +314,15 @@ A final note is in order.  In no way is it claimed here that these bitstrings sh
 
 \chapter{Results (viii): The possibility of unsupervised reinforcement learning}
 
-Reinforcement learning has increasing prominence in the media after AlphaZero has won all games from both the best chess grandmasters in the world and the best chess engines. What is incredible about these victories is that AlphaZero has almost no knowledge about chess game and has learned all its movement playing against itself for 4 hours. Basically, it knowns only the valid movements and had to learn everything from scratch, which it did using a reinforcement learning algorithm.
+Reinforcement learning has increasing prominence in the media after AlphaZero has won all games from both the best chess grandmasters in the world and the best chess engines. What is incredible about these victories is that AlphaZero has almost no knowledge about chess game and has learned all its movement playing against itself for 4 hours. Basically, it knows only the valid movements and had to learn everything from scratch, which it did using a reinforcement learning algorithm.
 
 Reinforcement learning is a machine learning algorithm which learns from the rewards of its actions. So, it receives the game state as input, it decides which action will be taken, and then it learns from the rewards of all the actions it has chosen. In theory, it learns after each reward feedback it receives, improving its decision over time and presenting intelligent behavior. A positive reward would indicate that the chosen action should be encouraged, while a negative reward would indicate the opposite. In some algorithms, there may be a neutral reward which would indicate that the chosen action was neither positive nor negative. How each type of reward should be handled depends on each algorithm.
 
-We have done some experiments with an SDM as a memory for a TicTacToe player. Basically, it receives the current board state and returns which action should be played. In the end of the game, it receives the sequences of boards and the winner, and is supposed to learn from them.
+We have done some experiments with an SDM as a memory for a TicTacToe player. Basically, it receives the current board state and returns which action should be played. At the end of the game, it receives both the sequences of boards and the winner and is supposed to learn from them.
 
 In our approach, there were 9 possible actions: one for each cell of the TicTacToe game. Action 1 means playing in the first cell of the first row; action 2 means playing in the second cell of the first row; and so one. Figure \ref{fig:ttt-action-mapping} shows the TicTacToe board numbering and the link between each cell and its respective action.
 
-Our algorithm to decide what should be played is very simple: it reads the current board from SDM and then it chooses the valid action with highest score. To calculate the scores, the bitstring is split into 9 parts, one per action (Figure \ref{fig:ttt-action-mapping}). The number of bits 1 in each part indicates the score of its respective action.
+Our algorithm to decide what should be played is very simple: it reads the current board from SDM and then it chooses the valid action with the highest score. To calculate the scores, the bitstring is split into 9 parts, one per action (Figure \ref{fig:ttt-action-mapping}). The number of bits 1 in each part indicates the score of its respective action.
 
 \begin{figure}
 \centering
@@ -400,9 +400,9 @@ node [pos=0.5,anchor=north,yshift=-0.5cm] {$k$ bits per action};
 
 %If the reading converges to another board, it chooses the movement which would bring the current board to the one read from SDM. If the reading does not converge, it just play randomly.
 
-After a game has finished, it is time to learn from its decisions. Our algorithm has three rewards: positive, negative, and neutral. It always learn from both players, no matter who wins or if it was a draw. The winner's sequence of actions feed our positive reward learning. The loser's sequence of actions feed our negative reward learning. If it is a draw, both sequences feed our neutral reward learning.
+After a game has finished, it is time to learn from its decisions. Our algorithm has three rewards: positive, negative, and neutral. It always learns from both players, no matter who wins or if it was a draw. The winner's sequence of actions feeds our positive reward learning. The loser's sequence of actions feeds our negative reward learning. If it is a draw, both sequences feed our neutral reward learning.
 
-Each board state has a unique random bitstring. For instance, each board in Figure \ref{fig-ttt-example} has its own unique random bitstring. Thus, if a specific board state is reached again, SDM will return the scores of each action.
+Each board state has a unique random bitstring. For instance, each board in Figure \ref{fig-ttt-example} has its own unique random bitstring. Thus, if a specific board state is reached again, SDM will return the scores for each action.
 
 Let $b_0, b_1, b_2, \dots, b_n$ be the board sequence of the game (see Figure \ref{fig-ttt-example}). In order to learn, our algorithm will map each action which goes from $b_k$ to $b_{k+1}$ to a reward bitstring and then will write a pointer from $b_k$ to this reward bitstring, i.e., \lstinline{write(bs_board, bs_reward)}.
 
@@ -447,7 +447,7 @@ Let $b_0, b_1, b_2, \dots, b_n$ be the board sequence of the game (see Figure \r
 
 The reward bitstring may be a positive, negative, or neutral bitstring. The positive reward bitstring is randomly generated and then only the bits related to the action will be set to 1 (see Figure \ref{fig:ttt-positive-reward-bitstring}). The negative reward bitstring is also randomly generated and then only the bits related to the action will be set to 0. Finally, the neutral reward bitstring is only a random bitstring.
 
-The idea behind these reward bitstrings is to increase the score of positive rewards (all bits set to 1), and to decrease the score of negative rewards (all bits set to 0). The neutral reward will have, on average, half of its bits 1 and the other half 0. Thus, it is in the middle between a positive reward and a negative reward.
+The idea behind these reward bitstrings is to increase the score of positive rewards (all bits set to 1), and to decrease the score of negative rewards (all bits set to 0). The neutral reward will have, on average, half of its bits 1 and the other half 0. Thus, it is in the middle of a positive reward and a negative reward.
 
 \begin{figure}
 \centering
@@ -524,11 +524,11 @@ The negative reward learning will be writing the following pointers in SDM: $b_{
 
 If it is a draw, all actions will be mapped to the neutral reward bitstring, which is simply a random bitstring.
 
-There is also weights associated to positive, negative, and neutral reward. They are used to indicate what goal is more important. For instance, if SDM should try to win in the first place, no matter if it may lead to losing, the weight of the positive reward should be higher than the others. But, if it is more important to not lose, then the weight of the negative reward should be higher.
+There are also weights associated with positive, negative, and neutral rewards. They are used to indicate what goal is more important. For instance, if SDM should try to win in the first place, no matter if it may lead to losing, the weight of the positive reward should be higher than the others. But, if it is more important to not lose, then the weight of the negative reward should be higher.
 
 In the very beginning, SDM is empty and its counters are zeroed. So, any reading will result in a random bitstring, because it will flip a coin for all counters. Thus, the chosen action will be random, as their scores will follow a binomial distribution. It is exactly the desired behavior --- we play randomly until we learn. In fact, it will happen every time an unknown board is seen.
 
-Internally, every board is mapped into a random bitstring and passed to SDM. As every two boards are, on average, orthogonal, SDM knows nothing about the boards themselves, neither whether they are consecutives or not. It knowns only the score of the actions according to the games it has seen and learned from. Hopefully, the actions will lead to a victory or a draw.
+Internally, every board is mapped into a random bitstring and passed to SDM. As every two boards are, on average, orthogonal, SDM knows nothing about the boards themselves, neither whether they are consecutive or not. It knows only the score of the actions according to the games it has seen and learned from. Hopefully, the actions will lead to a victory or a draw.
 
 In more details, the next movement decision consists in one read from SDM, resulting in a bitstring. Then the scores of the actions are calculated counting the number of 1 in each part of the bitstring. The chosen action is the one which is valid and has the highest score.
 
@@ -546,11 +546,11 @@ Every learn cycle had two parts: (i) 100 games learning and (ii) 100 games testi
 
 When playing against the random player, SDM has already started improving after the first 100 training games. Its winning rate converges quickly to around 80\%, while the drawing rate starts to grow after 2,000 games and keeps growing until the end. The losing rate keeps decreasing until it reaches cycles of 100 games without any loss. See Figure \ref{fig:ttt-results-random}.
 
-When playing against smart player, SDM has started learning how to not lose during the first training cycles. The drawing rate grows quickly in the first 500 games and slowly since then. The winning rate grew to around 20\% and remained there until 6,000 games, while the drawing rate kept growing. Then, after learning how to not lose, SDM started learning how to win, since after 7,000 games, the winning rate started to increase. See Figure \ref{fig:ttt-results-smart}.
+When playing against the smart player, SDM has started learning how to not lose during the first training cycles. The drawing rate grows quickly in the first 500 games and slowly since then. The winning rate grew to around 20\% and remained there until 6,000 games, while the drawing rate kept growing. Then, after learning how to not lose, SDM started learning how to win, since after 7,000 games, the winning rate started to increase. See Figure \ref{fig:ttt-results-smart}.
 
 When playing against another SDM player, both player quickly learns how to not lose. During the first 100 testing games, without any learning game, they have behaved like two random players. After the 100 training games, they have learned how to not lose and the drawing rate grows quickly, reaching 100\%. See Figure \ref{fig:ttt-results-sdm}.
 
-When playing against mixed players, SDM has also adapted. In Figure \ref{fig:ttt-results-mixed}, it has played 6,000 games against random player, smart player, and another SDM player. In each cycle, one of them was randomly chosen. The number of losses over time is decreasing, whereas the number of wins and draws change a lot. It is easy to notice when the other SDM player was chosen, because all games in that cycle have draw.
+When playing against mixed players, SDM has also adapted. In Figure \ref{fig:ttt-results-mixed}, it has played 6,000 games against the random player, the smart player, and another SDM player. In each cycle, one of them was randomly chosen. The number of losses over time is decreasing, whereas the number of wins and draws change a lot. It is easy to notice when the other SDM player was chosen since all games in that cycle have drawn.
 
 \begin{figure}[!htb]
 \centering
