@@ -121,6 +121,7 @@
 \DeclareMathOperator\erf{erf}
 
 % SDM
+\extrafloats{100}
 %\usepackage{pythonhighlight}
 \usepackage{subfig}
 \usepackage{colortbl}
@@ -173,6 +174,26 @@
 % 5. Setup code listings
 % ****************************************************************************************************
 \usepackage{listings}
+
+\newcommand\realnumberstyle[1]{}
+
+\makeatletter
+\newcommand{\zebra}[3]{%
+    {\realnumberstyle{#3}}%
+    \begingroup
+    \lst@basicstyle
+    \ifodd\value{lstnumber}%
+        \color{#1}%
+    \else
+        \color{#2}%
+    \fi
+        \rlap{\hspace*{\lst@numbersep}%
+        \color@block{\linewidth}{\ht\strutbox}{\dp\strutbox}%
+        }%
+    \endgroup
+}
+\makeatother
+
 \lstdefinelanguage[OpenCL]{C}[ANSI]{C}{
     morekeywords={__kernel,kernel,__local,local,__global,global,%
     __constant,constant,__private,private,%
@@ -199,8 +220,11 @@
     basicstyle=\small\ttfamily,
     %backgroundcolor=\color{gray},
     numbers=left,
-    numberstyle=\tiny,
+    %numberstyle=\tiny,
+    numberstyle=\zebra{white}{gray!10}{},
     keywordstyle=\color{RoyalBlue},%\bfseries,
+    %frameround=ftff,
+    %frame=single,
     emph={trueIndex,root},
     emphstyle=\color{BlueViolet}%\underbar % for special keywords
 }
