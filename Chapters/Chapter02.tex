@@ -27,13 +27,13 @@
 
 
 
-Sparse Distributed Memory (SDM) \citep{Kanerva1988} is a mathematical model of long-term memory that has a number of neuroscientific and psychologically plausible dynamics. This model may be applied in all sort of applications because of its incredible ability to closely reflect the human capacity to remember past experiences from clues of the present. For instance, when one is walking on a dark alley and is afraid of something, one cannot explain where one's fear come from. One just feels it. We may interpret this situation as clues of the present --- a dark alley; a giant metropolitan area; people going on about their lives mostly indifferent from each other; constrained routes ahead and behind you; a general lack of activity; that very feeling that something isn't right... without knowing precisely what isn't right, or even what `right' means... etc. --- recalling past experiences from memory and thus generating the feeling. Our memory is able to make a parallel between previous experiences and the clues. Although one has never been in the exactly same situation, one's brain involuntarily makes an analogy and recognizes the possibility of danger. This flexibility into mapping one situation in another is an important human feature which is hard to replicate in computers.
+Sparse Distributed Memory (SDM) \citep{Kanerva1988} is a mathematical model of long-term memory that has a number of neuroscientific and psychologically plausible dynamics. This model may be applied in all sort of applications because of its incredible ability to closely reflect the human capacity to remember past experiences from clues of the present. For instance, when one is walking on a dark alley and is afraid of something, one cannot explain where one's fear comes from. One just feels it. We may interpret this situation as clues of the present --- a dark alley; a giant metropolitan area; people going on about their lives mostly indifferent from each other; constrained routes ahead and behind you; a general lack of activity; that very feeling that something isn't right... without knowing precisely what isn't right, or even what `right' means... etc. --- recalling past experiences from memory and thus generating the feeling. Our memory is able to make a parallel between previous experiences and the clues. Although one has never been in the exactly same situation, one's brain involuntarily makes an analogy and recognizes the possibility of danger. This flexibility into mapping one situation in another is an important human feature which is hard to replicate in computers.
 
-SDM has been applied in many different fields, like pattern recognition \citep{norman2003modeling, rao1995natural}, noise reduction \citep{Meng2009}, handwriting recognition \citep{fan1997genetic}, robot automation \citep{Rajesh1998, mendes2008robot}, and so forth. \citet{Linhares2011} has showed that SDM respects the limits of short-term memory discussed by \citet{Miller1995} and \citet{Cowan2011}. Despite all those applications, there is not a reference implementation which would allow one to replicate the results published in a paper, to check the source code for details, and to improve it. Thus, even though intriguing results have been achieved using SDM, it requires counter-productive, duplicate, effort from researchers to build on top of previous work.
+SDM has been applied in many different fields, like pattern recognition \citep{norman2003modeling, rao1995natural}, noise reduction \citep{Meng2009}, handwriting recognition \citep{fan1997genetic}, robot automation \citep{Rajesh1998, mendes2008robot}, and so forth. \citet{Linhares2011} has shown that SDM respects the limits of short-term memory discussed by \citet{Miller1995} and \citet{Cowan2011}. Despite all those applications, there is not a reference implementation which would allow one to replicate the results published in a paper, to check the source code for details, and to improve it. Thus, even though intriguing results have been achieved using SDM, it requires counter-productive, duplicate, effort from researchers to build on top of previous work.
 
 It is our belief that a tool such as a framework could bring orders of magnitude more researchers and attention if they were able to use the model, at zero cost, with an easy to use high-level language such as python, in an intuitive platform such as juypyter notebooks. Neuroscientists interested in long-term memory storage should not have to worry about high-bandwidth vector parallel computation.  This new tool would provide a ready to use system in which experiments could be executed almost as soon as designed --- and it might accelerate research \citep{shen2014interactive}.
 
-Our motivation was our own effort to run our models. As there is no reference implementation, we had to implement our own and run several simulations to ensure that our implementation was correct and bug free. Thus, we had to deviate from our main goal --- which was to test our hypothesis and explore the `idea space' --- and to focus in the implementation itself. Furthermore, new members in our research group had to go through different source codes developed by former members.
+Our motivation was our own effort to run our models. As there is no reference implementation, we had to implement our own and run several simulations to ensure that our implementation was correct and bug free. Thus, we had to deviate from our main goal --- which was to test our hypothesis and explore the `idea space' --- and to focus on the implementation itself. Furthermore, new members of our research group had to go through different source codes developed by former members.
 
 Extensions of SDM have been used in many applications. For example, \citet{Snaider2011} extended SDM to efficiently store sequences of vectors and trees.  \citet{Rajesh1998} used a modified SDM in an autonomous robot. \citet{Meng2009} modified SDM to clean patterns from noisy inputs. \citet{fan1997genetic} extended SDM with genetic algorithms. \citet{chada2016you} extended SDM creating the Rotational Sparse Distributed Memory (RSDM), which is used to modeling network motifs, dynamic flexibility, and hierarchical organization, all results from neuroscience literature.
 
@@ -51,7 +51,7 @@ This time, however, it will be running on a computer.
 \begin{tabular}{cp{\textwidth}}
   $n$ & Number of dimensions, i.e., $n=1,000$. \\
   $N$ & Size of the binary space, $|\{0, 1\}^n| = 2^n$. \\
-  $N'$ & Number of hard-locations samples from $\{0, 1\}^n$. Its typical value is 1,000,000, as suggested by \citet{Kanerva1988}. \\
+  $N'$ & Number of hard locations samples from $\{0, 1\}^n$. Its typical value is 1,000,000, as suggested by \citet{Kanerva1988}. \\
   $H$ & Same as $N'$. \\
   $r$ & Access radius, i.e., when $n=1,000$ and $N'=1,000,000$, its typical value is $451$. This value is calculated to activate, on average, one thousandth of $N'$. \\
   $\eta$ & A bitstring, usually a datum. \\
@@ -78,11 +78,11 @@ This time, however, it will be running on a computer.
 
 
 \chapter{Results (iii): Loss of neurons}
-In SDM, the data is written distributed among millions of hard-locations, which theoretically gives SDM robustness against loss of neurons. In other words, SDM should keep convering correctly even when some neurons are dead. The question is: how robust it really is? How many neurons may die before it starts to forget things. These questions have never been addresses before.
+In SDM, the data is written distributed among millions of hard locations, which theoretically gives SDM robustness against loss of neurons. In other words, SDM should keep convering correctly even when some neurons are dead. The question is: how robust it really is? How many neurons may die before it starts to forget things. These questions have never been addresses before.
 
-Looking for answers to these questions, we run simulations in which we kept killing some neurons and checking whether SDM remained converging to a given bitstring or not. In these simulations, 10,000 random bitstrings were written to a 1,000-bit SDM with 1,000,000 hard-locations, and we choose one of them as our target. As the bitstrings were all written exactly once, we may generalize the results. The code is available in the ``Reseting hard-locations'' notebook \citep{sdmframework}.
+Looking for answers to these questions, we run simulations in which we kept killing some neurons and checking whether SDM remained converging to a given bitstring or not. In these simulations, 10,000 random bitstrings were written to a 1,000-bit SDM with 1,000,000 hard locations, and we choose one of them as our target. As the bitstrings were all written exactly once, we may generalize the results. The code is available in the ``Reseting hard locations'' notebook \citep{sdmframework}.
 
-As neurons are hard-locations in SDM, when we say that a neuron has been killed, we mean that its counters have been zeroed and a new random bitstring address has been assigned. During our simulations, no other bitstring has been written after the 10,000. Consequently, as their counters willl remain zeroed, it is exactly like ignoring the dead hard-locations in the subsequent reading operations.
+As neurons are hard locations in SDM, when we say that a neuron has been killed, we mean that its counters have been zeroed and a new random bitstring address has been assigned. During our simulations, no other bitstring has been written after the 10,000. Consequently, as their counters willl remain zeroed, it is exactly like ignoring the dead hard locations in the subsequent reading operations.
 
 \begin{figure}[!p]
 \centering\includegraphics[width=\textwidth]{./images02/new-images/sdm-neuron-death-200k.png}
@@ -90,7 +90,7 @@ As neurons are hard-locations in SDM, when we say that a neuron has been killed,
 \label{fig:sdm-neuron-death-200k}}
 \end{figure}
 
-In Figure \ref{fig:sdm-neuron-death-200k}, we can notice that SDM is robust up to 200,000 neuron deaths which is 20\% of all hard-locations. Its robustness is astonishing.  In fact, SDM begins to be significantly affected by loss of neurons after 600,000 neuron deaths (Figure \ref{fig:sdm-neuron-death-1m}), and obviously forgets everything when all neurons are dead.
+In Figure \ref{fig:sdm-neuron-death-200k}, we can notice that SDM is robust up to 200,000 neuron deaths which is 20\% of all hard locations. Its robustness is astonishing.  In fact, SDM begins to be significantly affected by loss of neurons after 600,000 neuron deaths (Figure \ref{fig:sdm-neuron-death-1m}), and obviously forgets everything when all neurons are dead.
 
 \begin{figure}[!p]
 \centering\includegraphics[width=\textwidth]{./images02/new-images/sdm-neuron-death-1m.png}
@@ -116,7 +116,7 @@ Although there is some decrease in SDM recall after 600,000 neuron deaths, it is
 \label{fig:sdm-neuron-death-details}}
 \end{figure}
 
-We run exactly the same simulation for a 256-bit SDM with 1,000,000 hard-locations. The results were even more surprising, as the 256-bit SDM seems to be more robust to loss of neurons than the 1,000-bit SDM (see Figure \ref{fig:sdm-neuron-death-256bits}). Notice that the loss of 50\% of neurons barely affected the 256-bit SDM which remained functional even facing an enormous loss of 90\% of neurons.
+We run exactly the same simulation for a 256-bit SDM with 1,000,000 hard locations. The results were even more surprising, as the 256-bit SDM seems to be more robust to loss of neurons than the 1,000-bit SDM (see Figure \ref{fig:sdm-neuron-death-256bits}). Notice that the loss of 50\% of neurons barely affected the 256-bit SDM which remained functional even facing an enormous loss of 90\% of neurons.
 
 \begin{figure}[!p]
 \centering
@@ -131,7 +131,7 @@ We run exactly the same simulation for a 256-bit SDM with 1,000,000 hard-locatio
 
 \chapter{Results (iv): Generalized read operation}
 
-Murilo observed that the models of Kanerva's read ($z=1$) and Chada's read ($z=0$) were simple variations of a generalized read with an exponent $z$, which suggests experimenting with different values. Mathematically, let $A$ be the set of the counters of the activated hardlocation, and $c_i$ be the counter of the $i$-th bit. Then,
+Murilo observed that the models of Kanerva's read ($z=1$) and Chada's read ($z=0$) were simple variations of a generalized read with an exponent $z$, which suggests experimenting with different values. Mathematically, let $A$ be the set of the counters of the activated hard location, and $c_i$ be the counter of the $i$-th bit. Then,
 
 $$
 s_i = \sum_{c \in A} \frac{c_i}{|c_i|} |c_i|^z
@@ -179,7 +179,7 @@ It is interesting that Kanerva has proposed $z=1$ without realizing the generali
 \chapter{Results (ix): Information-theoretical write operation}
 
 
-My advisor, Alexandre Linhares, has proposed another write operation: an information-theoretical weighted write. In it, the sum of the counter's value is weighted based on the distance between each hard-location's address and the reading address. The logic behind it is to vary the importance of each hard-location inside the circle.  It is only natural that one encodes an item in closer hard locations with a stronger signal, and a natural candidate for this signal function is the amount of information contained in the distance between the item and each hard location.  Closer hard locations have lower probabilies and therefore should encode more information.
+My advisor, Alexandre Linhares, has proposed another write operation: an information-theoretical weighted write. In it, the sum of the counter's value is weighted based on the distance between each hard location's address and the reading address. The logic behind it is to vary the importance of each hard location inside the circle.  It is only natural that one encodes an item in closer hard locations with a stronger signal, and a natural candidate for this signal function is the amount of information contained in the distance between the item and each hard location.  Closer hard locations have lower probabilies and therefore should encode more information.
 
 Note that this is not the first time in which a weighted function has been applied to writing in SDM --- \citet{hely1997new} suggest a rather complex spreading model based on floating point signals in the interval [0.05, 1.0] --- they were, however, only able to test their model with 1,000 hard locations.
 
@@ -196,7 +196,7 @@ $$
 P(X\leq d)= 2^{-n} {\displaystyle\sum_{i=0}^{d}{\binom{n}{i}}}
 $$
 
-But we must consider that not all hardlocations are activated in each write operation, which changes our probability function. Thus, let $r$ be the access radius then:
+But we must consider that not all hard locations are activated in each write operation, which changes our probability function. Thus, let $r$ be the access radius then:
 
 \begin{align*}
 P(X = d | X \leq r) &= \frac{P((X = d) \cap (X \leq r))}{P(X \leq r)} \\
@@ -346,7 +346,7 @@ How should these parameters be compared?  What are the tradeoffs that should be 
 
 \section{Symmetrical, rapidly accessible, hard locations}
 
-A hypercube with n dimensions can be divided by two hypercubes with $n-1$ dimensions. Is there an algorithm that separates the area of each hard-location in such a form that there exists a function mapping each bitstring in $\{0,1\}^n$ to the set of hard locations it `belongs to'?  Though this would break Kanerva's assumption of a randomly yet uniformly distributed set of hard locations --- for a perfectly symmetrical set of hard locations ---, there could be large performance gains if such a mapping function from a bitstring to its corresponding set of nearest hard locations exists.
+A hypercube with n dimensions can be divided by two hypercubes with $n-1$ dimensions. Is there an algorithm that separates the area of each hard location in such a form that there exists a function mapping each bitstring in $\{0,1\}^n$ to the set of hard locations it `belongs to'?  Though this would break Kanerva's assumption of a randomly yet uniformly distributed set of hard locations --- for a perfectly symmetrical set of hard locations ---, there could be large performance gains if such a mapping function from a bitstring to its corresponding set of nearest hard locations exists.
 
 Consider the hypercube with $n$ dimensions.  We want to select a subset of its vertices with cardinality $2^{20}$ that is symmetrically distributed over the space. Afterwards, $\forall b \in \{ 0,1\} ^n$, we want an algorithm $A$ that yields the particular list of hard locations for $b$ and all hard locations respect the desired properties of the memory.
 
