@@ -10,7 +10,7 @@ Hence, we have developed a supervised classification algorithm based on a pure S
 
 \begin{figure}[!htb]
 \centering\includegraphics[width=\textwidth]{./images02/classification/example.png}
-\caption{Examples of noisy images with uppercase letters, lowercase letters and numbers.
+\caption{Examples of noisy images with uppercase letters, lowercase letters, and numbers.
 \label{fig-classification-examples}}
 \end{figure}
 
@@ -84,7 +84,7 @@ In the low noise scenario, it has made few mistakes. It correctly classified all
 
   \subfloat[Images from character ``f which were classified as {[i, f, f, I, I, I, f, f, f, f]}, respectively. It has made 4 misses. ]{\includegraphics[width=\textwidth]{./images02/classification/low-noise-f.png}}
 
-  \subfloat[Images from character ``l'' which were classified as {[i, i, i, i, i, i, i, i, i, i]}, respectively. It has missed them all, as if both groups have been merged. ]{\includegraphics[width=\textwidth]{./images02/classification/low-noise-l.png}}
+  \subfloat[Images from character ``l'' which were classified as {[i, i, i, i, i, i, i, i, i, i]}, respectively. It has missed them all as if both groups have been merged. ]{\includegraphics[width=\textwidth]{./images02/classification/low-noise-l.png}}
 
   \subfloat[Images from character ``t'' which were classified as {[t, t, t, t, t, t, t, i, t, t]}, respectively. It has made 1 miss. ]{\includegraphics[width=\textwidth]{./images02/classification/low-noise-t.png}}
 
@@ -177,7 +177,7 @@ Image noise filtering consists in removing the noise from an input, in our case 
 \label{fig-filter-progressive-noise}}
 \end{figure}
 
-The images have 30 x 30 pixels, totaling 900 pixels per image. Each image is mapped into a bistring of 1,000 bit in which the bits are set according to the color of each pixel of the image. White pixels are mapped to bit 0, and black pixels to bit 1. The 100 remaining bits are all set to zero. This is a bijective mapping (or one-to-one) from images and bitstrings, i.e., there is one, and only one, bitstring for each image, and vice versa.
+The images have 30 x 30 pixels, totaling 900 pixels per image. Each image is mapped into a bitstring of 1,000 bit in which the bits are set according to the color of each pixel of the image. White pixels are mapped to bit 0, and black pixels to bit 1. The 100 remaining bits are all set to zero. This is a bijective mapping (or one-to-one) from images and bitstrings, i.e., there is one, and only one, bitstring for each image, and vice versa.
 
 In the learning phase, 200 noisy images were generated and written into SDM. Half of the letter ``I'' and half of the letter ``T'' (see Figure \ref{fig:filter-training}). They were written into their own addresses, i.e., \lstinline{write(address=bs_image, datum=bs_image)}.
 
@@ -236,7 +236,7 @@ If the intersection between images becomes too high, the noise filter stops work
 
   \subfloat[]{\includegraphics[width=0.57\textwidth]{./images02/filter/case2-8-10noise.png}}
 
-  \caption{When the intersection between images becomes too high, there appears some interference in the resulting image. All cases have 10\% noise. We can notice that the empty space in the right side of the ``C'' letter generates some white pixels in the right side of both ``B'' and ``D'' letters.
+  \caption{When the intersection between images becomes too high, there appears some interference in the resulting image. All cases have 10\% noise. We can notice that the empty space on the right side of the ``C'' letter generates some white pixels on the right side of both ``B'' and ``D'' letters.
   \label{fig:filter-results2}
   }
 \end{figure}
@@ -546,7 +546,7 @@ Every learn cycle had two parts: (i) 100 games learning and (ii) 100 games testi
 
 When playing against the random player, SDM has already started improving after the first 100 training games. Its winning rate converges quickly to around 80\%, while the drawing rate starts to grow after 2,000 games and keeps growing until the end. The losing rate keeps decreasing until it reaches cycles of 100 games without any loss. See Figure \ref{fig:ttt-results-random}.
 
-When playing against the smart player, SDM has started learning how to not lose during the first training cycles. The drawing rate grows quickly in the first 500 games and slowly since then. The winning rate grew to around 20\% and remained there until 6,000 games, while the drawing rate kept growing. Then, after learning how to not lose, SDM started learning how to win, since after 7,000 games, the winning rate started to increase. See Figure \ref{fig:ttt-results-smart}.
+When playing against the smart player, SDM has started learning how to not lose during the first training cycles. The drawing rate grows quickly in the first 500 games and slowly since then. The winning rate grew to around 20\% and remained there until 6,000 games, while the drawing rate kept growing. Then, after learning how to not lose, SDM started learning how to win, since, after 7,000 games, the winning rate started to increase. See Figure \ref{fig:ttt-results-smart}.
 
 When playing against another SDM player, both player quickly learns how to not lose. During the first 100 testing games, without any learning game, they have behaved like two random players. After the 100 training games, they have learned how to not lose and the drawing rate grows quickly, reaching 100\%. See Figure \ref{fig:ttt-results-sdm}.
 
@@ -558,7 +558,7 @@ When playing against mixed players, SDM has also adapted. In Figure \ref{fig:ttt
 
 \subfloat[Results over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-random.png}}
 
-\caption{Results playing against random player. Each cyle was made of 100 games for training, and then 100 games for measuring statistics.
+\caption{Results playing against the random player. Each cycle was made of 100 games for training, and then 100 games for measuring statistics.
 \label{fig:ttt-results-random}
 }
 \end{figure}
@@ -569,7 +569,7 @@ When playing against mixed players, SDM has also adapted. In Figure \ref{fig:ttt
 
 \subfloat[Results over time]{\includegraphics[width=\textwidth]{./images02/ttt/results-smart.png}}
 
-\caption{Results playing against smart player. Each cycle was made of 100 games for training, and then 100 games for measuring statistics.
+\caption{Results playing against the smart player. Each cycle was made of 100 games for training, and then 100 games for measuring statistics.
 \label{fig:ttt-results-smart}
 }
 \end{figure}

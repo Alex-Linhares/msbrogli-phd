@@ -6,7 +6,7 @@ Each scan on a 1,000-bits SDM with 1,000,000 hard locations executes $10^9$ bit 
 
 Amazon EC2 p3.2xlarge has generated the heatmap of Figure \ref{fig:cir-dist-10k-writes-kanerva} in 15 minutes and 3 seconds. It has compared $3.37 \cdot 10^{12}$ bits per second through $52.6 \cdot 10^{9} = 52.6 \text{ billion}$ XORs and popcounts per second. It is a 60-fold improvement over the first versions of the code which took 16 hours to generate the same heatmap (and its memory use was already optimized and the computations were distributed in threads).
 
-We have created a benchmark to be able to compare the performance on different devices. So, the same performance test was executable in our devices, with results reported in tables and figures. The benchmark has 3 parts: (i) the first part consists of comparing the available OpenCL kernels to find which works best for that device; than (ii) the second part consists of comparing the linear scanner, the thread scanner, and the OpenCL scanners with the best kernel found in part one; finally, (iii) the third part consists of comparing read and write operations using the thread scanner and the OpenCL scanner with the best kernel. Each part was run for three SDM setups: (i) $n=1,000$, $r=451$, and $H=1,000,000$; (ii) $n=256$, $r=103$, and $H=1,000,000$; and (iii) $n=10,000$, $r=4850$, and $H=1,000,000$. The whole source code is available in the ``Performance test'' notebook \citep{sdmframework}. We would like to invite the reader to run this benchmark and, if possible, share the results.
+We have created a benchmark to be able to compare the performance of different devices. So, the same performance test was executable in our devices, with results reported in tables and figures. The benchmark has 3 parts: (i) the first part consists of comparing the available OpenCL kernels to find which works best for that device; than (ii) the second part consists of comparing the linear scanner, the thread scanner, and the OpenCL scanners with the best kernel found in part one; finally, (iii) the third part consists of comparing read and write operations using the thread scanner and the OpenCL scanner with the best kernel. Each part was run for three SDM setups: (i) $n=1,000$, $r=451$, and $H=1,000,000$; (ii) $n=256$, $r=103$, and $H=1,000,000$; and (iii) $n=10,000$, $r=4850$, and $H=1,000,000$. The whole source code is available in the ``Performance test'' notebook \citep{sdmframework}. We would like to invite the reader to run this benchmark and, if possible, share the results.
 
 Our first device was a personal MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU. It was not possible to run the 10,000-bits on this device because there was no memory available --- it needs 37.25 GB of memory. For its results, see Table \ref{tab:perf-macbook}
 
@@ -23,7 +23,7 @@ A total of 8 kernels have been developed for benchmarking in our framework: sing
 
 The difference in which kernel is the best depends also on the SDM setup. The best kernel for the 1,000-bits SDM in the iMac 2017 was single\_scan5\_unroll with average scan time of 3.61ms; but, for the 256-bits SDM in the same device, it was single\_scan0 with average scan time of 3.03ms; while, for the 10,000-bits SDM in the same device, it was single\_scan6 with 10.96ms (see Table \ref{tab:perf-imac}).
 
-We recommend users to run a specific kernel comparison test for their own GPU and SDM settings.  This is available in the jupyter notebooks.
+We recommend users to run a specific kernel comparison test for their own GPU and SDM settings.  This is available in the Jupyter notebooks.
 
 
 \section{Scanners comparison}
@@ -37,7 +37,7 @@ We can notice that Amazon EC2 p3.2xlarge and p2.xlarge's linear and thread scann
 
 \section{Read and write operations}
 
-Even though scaning is an important part of the operations, we are really interested in the performance of the enterity of operations themselves. Comparing the times of the thread and OpenCL scanners with the times of their respective operations (either read or write), we can notice that their difference remains almost constant, which means the operation time itself is negligible when compared to the scan time. In other words, in order to gain even more performance, we have to pursue ways to improve the scan.
+Even though scanning is an important part of the operations, we are really interested in the performance of the entirety of operations themselves. Comparing the times of the thread and OpenCL scanners with the times of their respective operations (either read or write), we can notice that their difference remains almost constant, which means the operation time itself is negligible when compared to the scan time. In other words, in order to gain even more performance, we have to pursue ways to improve the scan.
 
 
 \begin{table}[!htb]
@@ -236,7 +236,7 @@ For the histogram of durations, see Figures \ref{fig:perf-imac-kernels}, \ref{fi
     OpenCL single read &  7.50 & 11.72 &  55.47 \\
     \bottomrule
 \end{tabular}
-\caption{Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU. Running an SDM with $n=256$ bits, $H=1,000,000$, and $r=103$. The SDM settings were: (i) $n=256$, $r=103$, and $H=1,000,000$; (ii) $n=1,000$, $r=451$, and $H=1,000,000$; and (iii) $n=10,000$, $r=4850$, and $H=1,000,000$. There is no benchmark for kernel single\_scan5\_unroll because it returns the wrong result in this GPU. The problem is related with the premises of the optimization used by this kernel, which are not true for this GPU.
+\caption{Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU. Running an SDM with $n=256$ bits, $H=1,000,000$, and $r=103$. The SDM settings were: (i) $n=256$, $r=103$, and $H=1,000,000$; (ii) $n=1,000$, $r=451$, and $H=1,000,000$; and (iii) $n=10,000$, $r=4850$, and $H=1,000,000$. There is no benchmark for kernel single\_scan5\_unroll because it returns the wrong result in this GPU. The problem is related to the premises of the optimization used by this kernel, which are not true for this GPU.
 For the histogram of durations, see Figures \ref{fig:perf-ec2-p2-kernels}, \ref{fig:perf-imac-scanners}, \ref{fig:perf-imac-read}, and \ref{fig:perf-imac-write}.
 \label{tab:perf-ec2-p2}}
 \end{table}

@@ -47,7 +47,7 @@ The activation of addresses takes place according to their distances from the da
 \centering\includegraphics[scale=0.75]{./images02/p_circle_r.pdf}
 
 \caption{Activated addresses inside access \protect \\
-radius $r$ around center address.\label{fig-addresses-inside-access-radius}}
+radius $r$ around the center address.\label{fig-addresses-inside-access-radius}}
 \end{figure}
 
 
@@ -60,7 +60,7 @@ In SDM, the data space is the same as the address space, which amounts to a vect
 
 In this case, when one needs to retrieve the data, one could have an imprecise cue at most one bit away from $\eta$, since all addresses one bit away have $\eta$ stored in themselves.  Extending this train of thought for larger dimensions and radius, exponential numbers of addresses are activated and one can see why SDM is a distributed memory.
 
-When reading a cue $\eta_{x}$ that is $x$ bits away of $\eta$, the cue shares many addresses with $\eta$. The number of shared addresses decreases as the cue's distance to $\eta$ increases, in other words, as $x$ increases. This is shown in Figure \ref{fig-shared-addresses}.  The target datum $\eta$ was written in all shared addresses, thus they will bias the read output in the direction of $\eta$. If the cue is sufficiently near the target datum $\eta$, the read output will be closer to $\eta$ than $\eta_{x}$ was. Repeating the read operation increasingly gets results closer to $\eta$, until it is exactly the same. So, it may be necessary to perform more than one read operation in order to converge to the target data $\eta$.
+When reading a cue $\eta_{x}$ that is $x$ bits away from $\eta$, the cue shares many addresses with $\eta$. The number of shared addresses decreases as the cue's distance to $\eta$ increases, in other words, as $x$ increases. This is shown in Figure \ref{fig-shared-addresses}.  The target datum $\eta$ was written in all shared addresses, thus they will bias the read output in the direction of $\eta$. If the cue is sufficiently near the target datum $\eta$, the read output will be closer to $\eta$ than $\eta_{x}$ was. Repeating the read operation increasingly gets results closer to $\eta$, until it is exactly the same. So, it may be necessary to perform more than one read operation in order to converge to the target data $\eta$.
 
 \begin{figure}[!htb]
 \centering\includegraphics[scale=0.75]{./images02/p1_inter_p2.pdf}
@@ -70,11 +70,11 @@ target datum $\eta$ and the cue $\eta_{x}$. \label{fig-shared-addresses}}
 \end{figure}
 
 
-The addresses of the $\{0,1\}^{n}$ space grows exponentially with the number of dimensions $n$, i.e. $N=2^{n}$. For $n=100$ we have $N\approx10^{30}$, which is incredibly large when related to a computer memory. Furthermore, \citet{Kanerva1988} suggests $n$ between 100 and 10,000. Recently he has postulated 10,000 as a desirable minimum $N$ (personal communication). To solve the feasibility problem of implementing this memory, Kanerva made a random sample of $\{0,1\}^{n}$, in his work, having $N'$ elements. All these addresses in the sample are called hard locations. Other elements of $\{0,1\}^{n}$, not in $N'$, are called virtual neurons. This is represented in Figure \ref{fig-hardlocations}.  All properties of read and write operations presented before remain valid, but limited to hard locations. Kanerva suggests taking a sample of about one million hard locations.
+The addresses of the $\{0,1\}^{n}$ space grow exponentially with the number of dimensions $n$, i.e. $N=2^{n}$. For $n=100$ we have $N\approx10^{30}$, which is incredibly large when related to a computer memory. Furthermore, \citet{Kanerva1988} suggests $n$ between 100 and 10,000. Recently he has postulated 10,000 as a desirable minimum $N$ (personal communication). To solve the feasibility problem of implementing this memory, Kanerva made a random sample of $\{0,1\}^{n}$, in his work, having $N'$ elements. All these addresses in the sample are called hard locations. Other elements of $\{0,1\}^{n}$, not in $N'$, are called virtual neurons. This is represented in Figure \ref{fig-hardlocations}.  All properties of reading and write operations presented before remain valid, but limited to hard locations. Kanerva suggests taking a sample of about one million hard locations.
 
 Using this sample of binary space, our data space does not exist completely.  That is, the binary space has $2^{n}$ addresses, but the memory is far away from having these addresses available. In fact, only a fraction of this vectorial space is actually instantiated. Following Kanerva's suggestion of one million hard locations, for $n=100$, only $100\cdot10^{6}/2^{100}=7\cdot10^{-23}$ percent of the whole space exists, and for $n=1,000$ only $100\cdot10^{6}/2^{1000}=7\cdot10^{-294}$ percent.
 
-Kanerva also suggests the selection of a radius that will activate, on average, one one thousandth of the sample, which is 1,000 hard locations for a sample of one million addresses. In order to achieve his suggestion, a 1,000-dimension memory uses an access radius $r=451$, and a 256-dimensional memory, $r=103$. We think that a 256-dimensional memory may be important because it presents conformity to Miller's magic number \citep{Linhares2011}.
+Kanerva also suggests the selection of a radius that will activate, on average, one-thousandth of the sample, which is 1,000 hard locations for a sample of one million addresses. In order to achieve his suggestion, a 1,000-dimension memory uses an access radius $r=451$, and a 256-dimensional memory, $r=103$. We think that a 256-dimensional memory may be important because it presents conformity to Miller's magic number \citep{Linhares2011}.
 
 \begin{figure}[!htb]
 \centering\includegraphics[scale=0.75]{./images02/hardlocations.pdf}
@@ -93,7 +93,7 @@ required to converge from $\eta_{x}$ to $\eta$.\label{fig-p1-p2-iterative-read}}
 \end{figure}
 
 
-The $\{0,1\}^{n}$ space has $N=2^{n}$ locations from which we instantiate $N'$ samples. Each location in our sample is called a hard location.  On these hard locations we do operations of read and write. One of the insights of SDM is exactly the way we read and write: using data as addresses in a distributed fashion. Each datum $\eta$ is written in every activated hard location inside the access radius centered on the address, that equals datum, $\xi=\eta$. Kanerva suggested using an access radius $r$ having about one one thousandth of $N'$.  As an imprecise cue $\eta_{x}$ shares hard locations with the target bitstring $\eta,$ it is possible to retrieve $\eta$ correctly. (Actually, probably more than one read is necessary to retrieve exactly $\eta.)$.  Moreover, if some neurons are lost, only a fraction of the datum is lost and it is possible that the memory can still retrieve the right datum.
+The $\{0,1\}^{n}$ space has $N=2^{n}$ locations from which we instantiate $N'$ samples. Each location in our sample is called a hard location.  On these hard locations, we do operations of read and write. One of the insights of SDM is exactly the way we read and write: using data as addresses in a distributed fashion. Each datum $\eta$ is written in every activated hard location inside the access radius centered on the address, that equals datum, $\xi=\eta$. Kanerva suggested using an access radius $r$ having about one-thousandth of $N'$.  As an imprecise cue $\eta_{x}$ shares hard locations with the target bitstring $\eta,$ it is possible to retrieve $\eta$ correctly. (Actually, probably more than one read is necessary to retrieve exactly $\eta.)$.  Moreover, if some neurons are lost, only a fraction of the datum is lost and it is possible that the memory can still retrieve the right datum.
 
 A random bitstring is generated with equal probability of $0$'s and $1$'s in each bit. One can readily see that the average distance between two random bitstrings has binomial distribution with mean $n/2$ and standard deviation $\sqrt{n/4}$. For a large $n$, most of the space lies close to the mean and has fewer shared hard locations.  As two bitstrings with distance far from $n/2$ are very improbable, \citet{Kanerva1988} defined that two bitstrings are orthogonal when their distance is $n/2$.
 
@@ -119,7 +119,7 @@ being written to $\xi$, one of the activated addresses.\label{tab:write operatio
 \end{table}
 
 
-The read is performed polling each activated hard location and statistically choosing the most written bit for each dimension. It consists of adding all $n$ counters from the activated hard locations and, for each bit, choosing bit 1 if the counter is positive, choose bit 0 if the counter if negative, and randomly choose bit 0 or 1 if the counter is zero.
+The read is performed polling each activated hard location and statistically choosing the most written bit for each dimension. It consists of adding all $n$ counters from the activated hard locations and, for each bit, choosing bit 1 if the counter is positive, choosing bit 0 if the counter is negative, and randomly choose bit 0 or 1 if the counter is zero.
 
 
 \section{Neurons as pointers}
@@ -142,7 +142,7 @@ Due to the distribution of hard locations between two random bitstrings, the vas
 
 For any two memory items, one can readily find a stream of thought relating two such items (``Darwin gave dinosaurs the boot''; ``she ran a fever on her birthday''; ``isn't it time for the Supreme Court to x-ray that executive order?'', ... and so forth). Robert French presents an intriguing example in which one suddenly creates a representation linking the otherwise unrelated concepts of ``coffee cups'' and ``old elephants'' \citep{French1997}.
 
-This mapping from concepts to bitstrings brings us two main questions: (i) Suppose we have a bitstring that is linking two major concepts.  How do we know which concepts are linked together? (ii) From a concept bitstring how can we list all concepts that are somehow linked to it? This second question is called the problem of spreading activation.
+This mapping from concepts to bitstrings brings us two main questions: (i) Suppose we have a bitstring that is linking two major concepts.  How do we know which concepts are linked together? (ii) From a concept bitstring, how can we list all concepts that are somehow linked to it? This second question is called the problem of spreading activation.
 
 
 \section{Read operation}
@@ -158,22 +158,22 @@ It is important to say that Chada's read came from \citet{anwar2003sparse} which
 \begin{samepage}
 \begin{quote}
 %Similar to writing, retrieving from SDM involves the same concept of access sphere --- you read all the hardlocations within the access sphere of location Y, pool the bit vectors read from all these hard locations and let each of the kth bits of those locations participate in a majority vote for the kth bit of Y. \hfill --- \citet{anwar2003sparse}
-With our datum distributively stored, the next question is how to retrieve it. With this in mind, let us ask first how one reads from a single hard location, $x$. Compute $\zeta$, the bit vector read at $x$, by assigning its $i$th bit the value 1 or 0 according as the $i$th counter at $x$ is positive or negative. Thus, each bit of $\zeta$ results from a majority rule decision of all the data that have been written at $x$. [...] Knowing how to read from a hard location allows us to read from any of the $2^{1000}$ arbitrary locations. Suppose $\zeta$ is any location. The bit vector, $\xi$, to be read at $\zeta$, [...] Put another way, pool the bit vectors read from hard locations accessible from $\zeta$, and let each of their $i$th bits vote on the $i$th bit of $\xi$. \\
+With our datum distributively stored, the next question is how to retrieve it. With this in mind, let us ask first how one reads from a single hard location, $x$. Compute $\zeta$, the bit vector read at $x$, by assigning its $i$th bit the value 1 or 0 according to the $i$th counter at $x$ is positive or negative. Thus, each bit of $\zeta$ results from a majority rule decision of all the data that have been written at $x$. [...] Knowing how to read from a hard location allows us to read from any of the $2^{1000}$ arbitrary locations. Suppose $\zeta$ is any location. The bit vector, $\xi$, to be read at $\zeta$, [...] Put another way, pool the bit vectors read from hard locations accessible from $\zeta$, and let each of their $i$th bits vote on the $i$th bit of $\xi$. \\
 \hfill --- \citet[p.342]{anwar2003sparse}
 \end{quote}
 \end{samepage}
 
-This fact just highlihts how important it is to have a reference implementation that one may read the code to clarify one's understanding about the details of each operation.
+This fact just highlights how important it is to have a reference implementation that one may read the code to clarify one's understanding about the details of each operation.
 
 \subsection{Generalized read operation}
 
-A member of my Master's committee, Prof. Paulo Murilo\footnote{Universidade Federal Fluminense's Physics Professor Paulo Murilo}, has proposed a generalized reading operation (personal communication), which covers both Kanerva's and Chada's read --- and opens a new venue of potential discoveries. He proposed summing all hard location counters raised to the power of $z$ while holding the original sign of the counter (positive or negative). Thus, Kanerva's read would be the same as $z=1$, while Chada's would be the same as $z=0$. Hence, we will here explore how SDM would behave with other values of $z$, such as 0.5, 2, and 3. Mathematically, let $A$ be the set of the counters of the activated hardlocation, and $c_i$ be the counter of the $i$-th bit. Then,
+A member of my Master's committee, Prof. Paulo Murilo\footnote{Universidade Federal Fluminense's Physics Professor Paulo Murilo}, has proposed a generalized reading operation (personal communication), which covers both Kanerva's and Chada's read --- and opens a new venue of potential discoveries. He proposed summing all hard location counters raised to the power of $z$ while holding the original sign of the counter (positive or negative). Thus, Kanerva's read would be the same as $z=1$, while Chada's would be the same as $z=0$. Hence, we will here explore how SDM would behave with other values of $z$, such as 0.5, 2, and 3. Mathematically, let $A$ be the set of the counters of the activated hard location, and $c_i$ be the counter of the $i$th bit. Then,
 
 $$
 s_i = \sum_{c \in A} \frac{c_i}{|c_i|} |c_i|^z
 $$
 
-Finally, the $i$-th bit of the resulting bitstring is 1 if $s_i > 0$, or 0 if $s_i < 0$, or random if $s_i = 0$. Notice that when $z=1$, then $s_i = \sum_{c \in A} c_i$, which is the Kanerva's read; and when $z=0$, then $s_i = \frac{c_i}{|c_i|} = \text{sign}(c_i)$, which is the Chada's read.
+Finally, the $i$th bit of the resulting bitstring is 1 if $s_i > 0$, or 0 if $s_i < 0$, or random if $s_i = 0$. Notice that when $z=1$, then $s_i = \sum_{c \in A} c_i$, which is the Kanerva's read; and when $z=0$, then $s_i = \frac{c_i}{|c_i|} = \text{sign}(c_i)$, which is the Chada's read.
 
 \begin{table}
 \begin{minipage}[t]{0.5\columnwidth}%
@@ -240,7 +240,7 @@ Starting from the premise of SDM as a faithful model of human short-term memory,
 \subfloat[Kanerva's original model]{\includegraphics[width=3.1in]{./images02/new-images/kanerva-read.png}\label{fig:cir-dist-10k-writes-kanerva}}
 
 \subfloat[Chada's read]{\includegraphics[width=3.1in]{./images02/new-images/chada-read_z_0.png}}
-\caption{How far, in Hamming distance, is a read item from the original stored item? Kanerva demonstrated that, after a small number of iterative readings (6 here), a critical distance behavior emerges. Items read at close distance converge rapidly; whereas farther items do not converge. Most striking is the point in which the system displays the tip-of-tongue behavior. Described by psychological moments when some features of the item are prominent in one's thoughts, yet the item still cannot be recalled (but an additional cue makes convergence `immediate'). Mathematically, this is the precise distance in which, despite having a relatively high number of cues (correct bits) about the desired item, the time to convergence is infinite.   Heatmap colors display the Hamming distance the associative memory is able to cleanly converge to---or not.   In the $x$-axis, the distance from the desired item is displayed. In the $y$-axis, we display the read operation's behavior as the number of items registered in the memory grows.  These graphs are computing intensive, yet they can be easily tested by readers in our provided jupyter notebooks. Note the different scales.}
+\caption{How far, in Hamming distance, is a read item from the original stored item? Kanerva demonstrated that, after a small number of iterative readings (6 here), a critical distance behavior emerges. Items read at close distance converge rapidly; whereas farther items do not converge. Most striking is the point in which the system displays the tip-of-tongue behavior. Described by psychological moments when some features of the item are prominent in one's thoughts, yet the item still cannot be recalled (but an additional cue makes convergence `immediate'). Mathematically, this is the precise distance in which, despite having a relatively high number of cues (correct bits) about the desired item, the time to convergence is infinite.   Heatmap colors display the Hamming distance the associative memory is able to cleanly converge to---or not.   In the $x$-axis, the distance from the desired item is displayed. In the $y$-axis, we display the read operation's behavior as the number of items registered in the memory grows.  These graphs are computing intensive, yet they can be easily tested by readers in our provided Jupyter notebooks. Note the different scales.}
 \label{fig:crit-dist-10k-writes}
 
 \end{figure}

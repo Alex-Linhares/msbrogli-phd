@@ -2,13 +2,13 @@
 
 The framework implements the basic operations in a Sparse Distributed Memory which may be used to create more complex operations. It is developed in C language and the OpenCL parallel framework --- which may be loaded in many platforms and programming languages --- with a wrapper in Python. The Python module makes it easy to create and execute simulations in a Sparse Distributed Memory and works properly in Jupyter Notebook \citep{kluyver2016jupyter}. It works in both Python 2 and Python 3.
 
-We split the SDM memory in two parts: the hard location addresses and the hard location counters. Thus, the addresses (bitstrings) of the hard locations are stored in one array, while their counters in another. This makes possible to create multiple SDMs using the same address space, which would save computational effort to scan a bitstring in all the SDMs --- since they share the same address space, the activated hard locations will be the same in all of them. As the slowest part of reading and writing operations is scanning the address space, the performance benefits are significant.
+We split the SDM memory into two parts: the hard location addresses and the hard location counters. Thus, the addresses (bitstrings) of the hard locations are stored in one array, while their counters in another. This makes possible to create multiple SDMs using the same address space, which would save computational effort to scan a bitstring in all the SDMs --- since they share the same address space, the activated hard locations will be the same in all of them. As the slowest part of reading and writing operations is scanning the address space, the performance benefits are significant.
 
 Each part may be stored either in the RAM memory or in a file. The RAM memory is interesting for quick experiments, automated tests, and others scenarios in which the SDM may be lost, while the file is interesting for a long-term SDM, like creating an SDM file with 10,000 random writes, which will be copied over and over to run multiple experiments. The file may also be sent to another researcher or may be published within the paper to let others run their own checks and verify the results. In summary, the framework fits many different uses and necessities.
 
 Let a SDM memory with $N$ dimensions and $H$ hard locations. Then, in a 64-bit computer, the array of hard location addresses will use $H \cdot 8 \cdot \lceil N/64 \rceil$ bytes of memory, and there will be $H \cdot N$ hard location counters. For example, in a SDM memory with 1,000 dimensions and 1,000,000 hard locations, using 32-bit integers for the counters, the array of addresses will use 122MB of memory and the counters will use 3.8 GB of memory.
 
-Basic operations were grouped in four sets: (i) for bitstrings, (ii) for addresses, (iii) for counters, and (iv) for memories (SDMs). Operations include creating new bitstrings, flipping bits, generating a bitstring with a specific distance from a given bitstring, scanning the address space using different algorithms, writing a bitstring to a counter, writing in an SDM, reading from an SDM, and iteratively reading from an SDM until convergence.
+Basic operations were grouped into four sets: (i) for bitstrings, (ii) for addresses, (iii) for counters, and (iv) for memories (SDMs). Operations include creating new bitstrings, flipping bits, generating a bitstring with a specific distance from a given bitstring, scanning the address space using different algorithms, writing a bitstring to a counter, writing in an SDM, reading from an SDM, and iteratively reading from an SDM until convergence.
 
 
 \section{Bitstring}
@@ -20,13 +20,13 @@ For instance, a 1,000-bit bitstring will have $\lceil 1000/64 \rceil = 16$ integ
 
 \subsection{The distance between two bitstrings}
 
-The distance between two bitstrings is calculated by the hamming distance, which is the number of different bits between them. It is calculated counting the number of ones in the exclusive or (xor) between the bitstrings, i.e., $d(x, y) = \text{number of ones in } x \oplus y$.
+The distance between two bitstrings is calculated by the Hamming distance, which is the number of different bits between them. It is calculated counting the number of ones in the exclusive or (xor) between the bitstrings, i.e., $d(x, y) = \text{number of ones in } x \oplus y$.
 
 There are several algorithms to calculate the number of ones \citep{warren2013hacker}, but the performance depends on the processor. So, we have implemented three different algorithms and one may be selected through compiling flags. The default algorithm is to use a built-in \_\_popcnt() instruction from the compiler.
 
 There is also the naive algorithm, which really counts the number of ones checking bit by bit. It is available only for testing purposes and should never be used.
 
-The other algorithm available is the lookup. It pre-calculates a table with the number of ones of all possible 16-bit integers. This table is accessed a few times to calculate the number of ones of a 64-bit integer, i.e., to calculate the distance between two bitstrings, it sums the distance of each 16-bit part of the bitstrings, i.e., $d(x[0:63], y[0:63]) = d(x[0:15], y[0:15]) + d(x[16:31], y[16:31]) + d(x[32:47], y[32:47]) + d(x[48:63], y[48:63])$ where $x[i:i+15]$ and $y[i, i+15]$ are the 16-bit integers formed by the bits between $i$ and $i+15$ of $x$ and $y$, respectivelly. Each 16-bit distance is calculated through a single table access. As each distance is calculated in O(1), this algorithm runs in O($\lceil bits/16 \rceil$). This table uses 65MB of RAM. One may change the table from 16-bit integers to 32-bit integers, which would halve the number of accesses at the expense of 4GB of RAM (instead of 65MB).
+The other algorithm available is the lookup. It pre-calculates a table with the number of ones of all possible 16-bit integers. This table is accessed a few times to calculate the number of ones of a 64-bit integer, i.e., to calculate the distance between two bitstrings, it sums the distance of each 16-bit part of the bitstrings, i.e., $d(x[0:63], y[0:63]) = d(x[0:15], y[0:15]) + d(x[16:31], y[16:31]) + d(x[32:47], y[32:47]) + d(x[48:63], y[48:63])$ where $x[i:i+15]$ and $y[i, i+15]$ are the 16-bit integers formed by the bits between $i$ and $i+15$ of $x$ and $y$, respectively. Each 16-bit distance is calculated through a single table access. As each distance is calculated in O(1), this algorithm runs in O($\lceil bits/16 \rceil$). This table uses 65MB of RAM. One may change the table from 16-bit integers to 32-bit integers, which would halve the number of accesses at the expense of 4GB of RAM (instead of 65MB).
 
 
 \section{Address space}
@@ -89,7 +89,7 @@ Finally, as our best approach is to scan through all hard locations, we may dist
 
 The framework implements three main scanner algorithms: linear scanner, thread scanner, and OpenCL scanner. The linear scanner runs in a single core, is the slowest one, and was developed only for testing purposes; the thread scanner runs at the CPU in multiple threads sharing memory (and our recommendation is to use the number of threads equals to twice the number of CPU cores); and the OpenCL scanner runs in multiple GPU cores and support multiple devices. The speed of a scan depends on the CPU and GPU devices, thus the best approach to choose which scanner is best for one's setup is to run a benchmark.
 
-The OpenCL must be initialized, which just copies the address space's bitstrings to the GPU's memory. Then, many scans may be executed with no necessity to upload the bitstrings again. The OpenCL scanner supports running into multiple devices.
+The OpenCL must be initialized, which just copies the address space's bitstrings to the GPU's memory. Then, many scans may be executed with no necessity to upload the bitstrings again. The OpenCL scanner supports running on multiple devices.
 
 \subsection{OpenCL kernels}
 
@@ -188,7 +188,7 @@ void single_scan1(
 \begin{lstlisting}[
 language={[OpenCL]C},
 label={lst:single_scan2},
-caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan2}}. It calculates one distance per workgroup, distributing each 64-bit integer operation per worker, and then summing the results obtained by the workers. The sum algorith is done by only the first worker of each workgroup.},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan2}}. It calculates one distance per workgroup, distributing each 64-bit integer operation per worker, and then summing the results obtained by the workers. The sum algorithm is done by only the first worker of each workgroup.},
 ]
 __kernel
 void single_scan2(
@@ -240,7 +240,7 @@ void single_scan2(
 \begin{lstlisting}[
 language={[OpenCL]C},
 label={lst:single_scan3},
-caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan3}}. It calculates one distance per workgroup, distributing each 64-bit integer operation per worker, and then summing the results obtained by the workers. The sum algorith is a parallel reduction, in which the workers split the array in two parts and sum the second part in the first part every loop. So, the sum is calculated in {$O(\log_2(\text{number of workers per workgroup}))$}. This kernel only works when the number of workers per workgroup is a power-of-2.},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan3}}. It calculates one distance per workgroup, distributing each 64-bit integer operation per worker, and then summing the results obtained by the workers. The sum algorithm is a parallel reduction, in which the workers split the array in two parts and sum the second part in the first part every loop. So, the sum is calculated in {$O(\log_2(\text{number of workers per workgroup}))$}. This kernel only works when the number of workers per workgroup is a power-of-2.},
 ]
 __kernel
 void single_scan3(
