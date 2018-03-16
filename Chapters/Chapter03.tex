@@ -26,9 +26,9 @@ The motivation behind the present work is that there may be people who reject a 
 
 There is an extensive literature on innovation diffusion. Numerous extensions to the \citet{bass1969} model have been proposed (for reviews, see \citet{meade2006modelling} and \citet{peres2010innovation}), among which Mahajan and colleagues were the first to propose a model that includes the negative word-of-mouth \citep{mahajan1984introduction}. The latter and other extensions that include negative word-of-mouth are much more complex than the \citet{bass1969} model, and their parameters must be estimated using the number of people who have already adopted the innovation at a given time. A problem is that most recent innovations, like Facebook, Twitter, and Netflix do not disclose their total number of users. Actually, they deem this number confidential. They only disclose the number of active users, not including the number of users who have rejected them.
 
-In this work, I propose an extension to the Bass model which (i) includes the negative effect of the rejections, (ii) is as simple as the \citet{bass1969} model, and (iii) its parameters can be estimated using the number of people who have adopted and have not posteriorly rejected the innovation, i.e., the number of \textit{active adopters}. An important difference between the number of \textit{active adopters} and the \textit{total adopters} is that first may decrease over time, while the latter cannot. First, I discuss the \citet{bass1969} model and its parameters; then I describe the model extension and analyze four models of rejection; next I detail the estimation method; after that I estimate the models by using Facebook's active users dataset; and finally, I discuss the results and conclude.
+In this work, I propose an extension to the Bass model which (i) includes the negative effect of the rejections, (ii) is as simple as the \citet{bass1969} model, and (iii) its parameters can be estimated using the number of people who have adopted and have not posteriorly rejected the innovation, i.e., the number of \textit{active adopters}. An important difference between the number of \textit{active adopters} and the \textit{total adopters} is that first may decrease over time, while the latter cannot. First, I discuss the \citet{bass1969} model and its parameters; then I describe the model extension and analyze four models of rejection; next, I detail the estimation method; after that, I estimate the models by using Facebook's active users dataset; and finally, I discuss the results and conclude.
 
-The main contribution of this work is that the proposed extension is the first to include the effect of the rejections that can be estimated using the number of \textit{active adopters} instead of the number of \textit{total adopters}. The model can be applied to forecast the number of active adopters of these companies in the next quarters, which becomes an important tool for analysts, investors, and the companies themselves. As the number of active adopters is related to the market cap of these companies, these forecasts may be useful to estimate the future value of the firms. At the time of this writing, Facebook's market cap is \$222.69B, Twitter's is \$23.18B, and Netflix's is \$20.49B\footnote{Data obtained from Yahoo! Finance website at December 1\textsuperscript{st}, 2016.}.
+The main contribution of this work is that the proposed extension is the first to include the effect of the rejections that can be estimated using the number of \textit{active adopters} instead of the number of \textit{total adopters}. The model can be applied to forecast the number of active adopters of these companies in the next quarters, which becomes an important tool for analysts, investors, and the companies themselves. As the number of active adopters is related to the market cap of these companies, these forecasts may be useful to estimate the future value of the firms. At the time of this writing, Facebook's market cap is \$222.69B, Twitter's is \$23.18B, and Netflix's is \$20.49B\footnote{Data obtained from Yahoo! Finance website on December 1\textsuperscript{st}, 2016.}.
 
 
 \chapter{The Bass model}
@@ -51,7 +51,7 @@ The non-linear ordinary differential equation \ref{eq:bass:ode} is the main equa
 
 Solving the differential equation, Bass found a closed formula for the diffusion, which is $F(t) = \frac{ 1 - e^{-(p+q)t} }{ 1 + \frac{q}{p} e^{-(p+q)t} }$. This closed formula always has the famous shape of the S-curve, regardless of the values of $p > 0$ and $q > 0$. From the closed formula of $F(t)$, it is trivial to obtain the equations of $S(t)$, $Y(t)$, and $f(t)$.
 
-The potential market size $m$ is the unknown number of people who will have adopted the innovation after a very long time. It is not exactly the target market of the innovation, but a subset of it, as no product difuses over its entire target market. If a company estimates and updates the model more than once for their product, the change in $m$ is a change in the potential market and could help the company to understand whether their decisions in the meantime have increased or decreased the number of future adopters. As, $\lim_{t \rightarrow \infty} Y(t) = m$, the whole potential market will have adopted the innovation at some point.
+The potential market size $m$ is the unknown number of people who will have adopted the innovation after a very long time. It is not exactly the target market of the innovation, but a subset of it, as no product diffuses over its entire target market. If a company estimates and updates the model more than once for their product, the change in $m$ is a change in the potential market and could help the company to understand whether their decisions in the meantime have increased or decreased the number of future adopters. As $\lim_{t \rightarrow \infty} Y(t) = m$, the whole potential market will have adopted the innovation at some point.
 
 The innovator parameter $p$ is related to the proportion of people in the potential market who adopt the innovation regardless the others. In other words, their decision to adopt is not influenced by the social system, but by other external factors. The bigger the $p$, the larger the number of innovators, thus the faster the diffusion at the beginning.
 
@@ -102,7 +102,7 @@ The proposed extended model already includes the effect of rejection through the
 % TODO Discuss why it does not make sense to have a constant in the models.
 % TODO Include the state diagram (1-F(t)), A(t), and R(t) with the transitions.
 
-These four models can be grouped in two families, one for the equations \ref{eq:model1} and \ref{eq:model2}, and another for the equations \ref{eq:model3} and \ref{eq:model4}. The former relates the rejection to the rate of new people adopting the innovation, as if people decide whether they will use or reject the innovation when they try it. Then, they do not change their position anymore. The latter assumption relates the rejection to the number of \textit{active users}, as if the \textit{active users} first adopt the innovation and then they continuously reject it.
+These four models can be grouped into two families, one for the equations \ref{eq:model1} and \ref{eq:model2}, and another for the equations \ref{eq:model3} and \ref{eq:model4}. The former relates the rejection to the rate of new people adopting the innovation, as if people decide whether they will use or reject the innovation when they try it. Then, they do not change their position anymore. The latter assumption relates the rejection to the number of \textit{active users}, as if the \textit{active users} first adopt the innovation and then they continuously reject it.
 
 The rejection parameter $\nu$ has a different interpretation in each family. In equations \ref{eq:model1} and \ref{eq:model2}, it is the proportion of new adopters who will reject the innovation. In equations \ref{eq:model3} and \ref{eq:model4}, it is the proportion of active users who are continuously rejecting the innovation.
 
@@ -128,9 +128,9 @@ This result is interesting because it shows that the Bass model can already expl
 
 \section{Model 2}
 
-The right side of the differential equation \ref{eq:model2} is the rate of rejection, i.e., the probability of someone who rejecting the innovation, provided that he/she has not rejected it yet. Thus, in this model, the rate of rejection is proportional to the percentage of people adopting the innovation at time $t$, i.e., the more people adopt the innovation, the more they reject it. But if no one is adopting, there would be no rejection also, which would hold the number of \textit{active users} the same.
+The right side of the differential equation \ref{eq:model2} is the rate of rejection, i.e., the probability of someone rejecting the innovation, provided that he/she has not rejected it yet. Thus, in this model, the rate of rejection is proportional to the percentage of people adopting the innovation at time $t$, i.e., the more people adopt the innovation, the more they reject it. But if no one is adopting, there would be no rejection also, which would hold the number of \textit{active users} the same.
 
-The differential equation \ref{eq:model2} can also be solved for $R(t)$ algebrically. Using the fact that $-\frac{d}{dt} \log[1 - R(t)] = r(t) / [1 - R(t)] = \nu f(t)$, and integrating both sides of this equation yields:
+The differential equation \ref{eq:model2} can also be solved for $R(t)$ algebraically. Using the fact that $-\frac{d}{dt} \log[1 - R(t)] = r(t) / [1 - R(t)] = \nu f(t)$, and integrating both sides of this equation yields:
 
 \begin{align}
 	- \frac{d}{dt} \int_0^t \log[1 - R(\tau)] d\tau &= \nu \int_0^t f(\tau) d\tau \\
@@ -156,7 +156,7 @@ In contrast to model 1, no parameter could be arbitrarily set in this model, thu
 
 \section{Model 3}
 
-In this model, the rate of new \textit{inactive users} increases linearly with the number of \textit{active users}, since $A(t) = F(t) - R(t)$. Thus, while there are \textit{active users}, a fraction $\nu$ of them will be rejecting the innovation. Hence, everyone will have reject the innovation sooner or later.
+In this model, the rate of new \textit{inactive users} increases linearly with the number of \textit{active users}, since $A(t) = F(t) - R(t)$. Thus, while there are \textit{active users}, a fraction $\nu$ of them will be rejecting the innovation. Hence, everyone will have rejected the innovation sooner or later.
 
 The differential equation \ref{eq:model3} can be rewritten as the following first order linear differential equation, which has to be solved:
 
@@ -214,7 +214,7 @@ The condition $w \leq p+q$ is sufficient to ensure $f(t) \geq 0$, since $w \leq 
 
 \section{Model 4}
 
-In this model, the rate of rejection increases linearly with the number of \textit{active users}. Thus, while there are \textit{active users}, the rate of rejection will be greater than zero. Hence, everyone will have reject the innovation sooner or later.
+In this model, the rate of rejection increases linearly with the number of \textit{active users}. Thus, while there are \textit{active users}, the rate of rejection will be greater than zero. Hence, everyone will have rejected the innovation sooner or later.
 
 Although equation \ref{eq:model4} is a Ricatti equation \citep{bittanti1991riccati}, none of the available techniques could solve the differential equation and it seems that there is no closed formula for $F(t)$. Hence, the equation will be analyzed through a linearization around the fixed points.
 
@@ -279,7 +279,7 @@ As the eigenvalues of $J|_{u_1^*}$ are $0$ and $-(p+q-w) < 0$, the point $u_1^* 
 
 \chapter{Estimation method}
 
-The parameters of the model should be estimated using empirical data in order to check the explanation power of the model. \citet{bass1969} used a discrete version of his differential equation with ordinary least squares. While it worked well for him, it has not in the present work. There are several well known problems in the estimation of parameters, most of them related to approximation of derivatives and instability of the estimators. These problems have been noticed by many authors \citep{schmittlein1982maximum, srinivasan1986technical, xie1997kalman}.
+The parameters of the model should be estimated using empirical data in order to check the explanation power of the model. \citet{bass1969} used a discrete version of his differential equation with ordinary least squares. While it worked well for him, it has not in the present work. There are several well-known problems in the estimation of parameters, most of them related to approximation of derivatives and instability of the estimators. These problems have been noticed by many authors \citep{schmittlein1982maximum, srinivasan1986technical, xie1997kalman}.
 
 In the present work, the parameters of the models were estimated using a maximum likelihood function on the residuals between $A(t) = F(t) - R(t)$ from the model and the empirical values from the dataset. The residuals were assumed to be normally distributed with $\mu=0$, which leads to the same results as the ordinary least square method. In order to calculate the residuals, $F(t)$ and $R(t)$ were calculated based on their differential equations using the 4th order Runge Kutta (RK4) numerical method \citep{butcher1987numerical} with $\Delta t = 0.01$.
 
@@ -292,7 +292,7 @@ The empirical data format was $(t_i, x_i)$, where $t_i$ is the time and $x_i$ is
 
 During the evaluation of $F(t)$ and $R(t)$ using the Runge Kutta numerical method, sometimes the exact value of $t_i$ was not reached because of the chosen $\Delta t$. In these cases, the value of $x_i$ was calculated using a linear approximation with the nearest points. Let $(\hat{t}_k, \hat{x}_k)$ and $(\hat{t}_{k+1}, \hat{x}_{k+1})$ be values calculated from the Runge Kutta method, such that $\hat{t}_k < t_i < \hat{t}_{k+1}$. Then, the calculated value at $t_i$ was $\hat{x}_k + \left( \frac{\hat{x}_{k+1} - \hat{x}_k}{\hat{t}_{k+1} - \hat{t}_k} \right) \cdot (t_i - \hat{t}_k)$.
 
-Since there is no explicit solution for the parameters $m$, $p$, $q$, $w$, and $\nu$ which maximize the LogLikelihood function, the parameters were estimated using the Truncated Newton Constrained (TNC) method \citep{dembo1983truncated, nash2000survey, nash1984newton} from the SciPy Python Library \citep{scipy}. The constrains were $m > 0$, $p > 0$, $q > 0$, $w \geq 0$, and $\nu \geq 0$ for all models. The initial guess for the TNC method was the same for all models estimation. Sometimes, the method did not converge and another initial guess had to be used.
+Since there is no explicit solution for the parameters $m$, $p$, $q$, $w$, and $\nu$ which maximize the LogLikelihood function, the parameters were estimated using the Truncated Newton Constrained (TNC) method \citep{dembo1983truncated, nash2000survey, nash1984newton} from the SciPy Python Library \citep{scipy}. The constraints were $m > 0$, $p > 0$, $q > 0$, $w \geq 0$, and $\nu \geq 0$ for all models. The initial guess for the TNC method was the same for all models estimation. Sometimes, the method did not converge and another initial guess had to be used.
 
 Even though it has not been done yet, the confidence interval, estimator average and estimator variance for each parameter will be calculated using the bootstrap method.
 
@@ -303,7 +303,7 @@ Even though it has not been done yet, the confidence interval, estimator average
 % Data source: http://news.yahoo.com/number-active-users-facebook-over-230449748.html
 % https://www.statista.com/statistics/264810/number-of-monthly-active-facebook-users-worldwide/
 
-The models parameters were estimated using the number of Facebook's \textit{active users} from December 2004 to March 2013 \citep{facebookdata}. In the dataset, $x_i$ was the number of Facebook's \textit{active users} at time $t_i$. The dataset had 23 non-equally time spaced measures. The users who have accessed Facebook at least once in each month were counted in the number of \textit{active users} in that month.
+The models' parameters were estimated using the number of Facebook's \textit{active users} from December 2004 to March 2013 \citep{facebookdata}. In the dataset, $x_i$ was the number of Facebook's \textit{active users} at time $t_i$. The dataset had 23 non-equally time spaced measures. The users who have accessed Facebook at least once in each month were counted in the number of \textit{active users} in that month.
 
 The model 1 has not been estimated because it is not possible to estimate it.
 
@@ -353,7 +353,7 @@ It is important to notice that, in models 3 and 4, the innovation may not be ado
 
 As this is a working paper, it is also intended to include the analyses of other datasets, like either Twitter's number of \textit{active users}, or WhatsApp's, or Netflix's, or Reddit's, or Dropbox's, or Waze's, etc. This would enhance the proposed model power of forecasting.
 
-It is also intended to run a back test with the available data. First, the parameters of the model is estimated using a subset of the dataset. Then, through extrapolation, the number of \textit{active uses} is forecast. Finally, it is compared to this part of the dataset - which must not have been used in the estimation.
+It is also intended to run a backtest with the available data. First, the parameters of the model are estimated using a subset of the dataset. Then, through extrapolation, the number of \textit{active users} is forecast. Finally, it is compared to this part of the dataset - which must not have been used in the estimation.
 
 The main limitation of this work is that it has no theory to support which of the models of rejection best fit with empirical data. Although there is an extensive literature on negative word-of-mouth, this literature does not predict which model would be the best. But, if any of these companies discloses the number of \textit{total users} and \textit{active users}, the estimation method could be adapted to estimate the parameters using both pieces of information at the same time, which would make possible to verify which of the models of rejection provides the best fit.
 
