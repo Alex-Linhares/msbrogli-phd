@@ -8,7 +8,7 @@ As shown by \citet{Kanerva1988}, the distance between two bitstrings follows a b
 
 In order to validate our random bitstring generation algorithm, we have calculated 10,000 distances between two random bitstrings with $n=1,000$ bits. In total, 20,000 random bitstrings have been generated during the simulation. The code is available in the ``Distance between bitstrings'' notebook \citep{sdmframework}.
 
-In figure \ref{fig:validation-distance}, we can notice that the theoretical model and the simulation matches. Hence, it seems the random bitstring generation algorithm works properly.
+In figure \ref{fig:validation-distance}, we can notice that the theoretical model and the simulation matches. Hence, it seems the random bitstring generation algorithm works appropriately.
 
 This also validates the algorithm used to calculate the distance between two bitstrings. In this simulation, we have used the built-in \_\_popcnt() function.
 
@@ -30,7 +30,7 @@ We extended his results, calculating the distribution of the number of activated
 
 In order to validate our scan algorithm, we have run 10,000 scans from a random bitstring and counted the number of activated hard locations. The code is available in the ``Number of activated hard locations'' notebook \citep{sdmframework}.
 
-In figure \ref{fig:validation-activated-hls}, we can notice that the theoretical model and the simulation matches. Hence, it seems that both the address space generation algorithm and the scan algorithm work properly. Notice that the curve is almost the same for $n=1,000$ and $n=256$. It happens because the access radius is adjusted to get $p$ as close as possible to $0.001$. They are not exactly the same because their $p$ differs a little.
+In figure \ref{fig:validation-activated-hls}, we can notice that the theoretical model and the simulation matches. Hence, it seems that both the address space generation algorithm and the scan algorithm work properly. Notice that the curve is almost the same for $n=1,000$ and $n=256$. This difference happens because the access radius is adjusted to get $p$ as close as possible to $0.001$, which mean they are very close, but not the same.
 
 \begin{figure}[!htb]
   \centering
@@ -61,7 +61,7 @@ In figure \ref{fig:validation-distance-activated-hls}, we can notice that the th
 
 \section{Intersection of two circles}
 
-Kanerva has calculated the intersection of two circles according to the distance between their centers. The intersection is important to understand how SDM works because it affects directly the critical distance. When $\eta_d$ is inside the critical distance, then it will converge to $\eta$. In fact, it converges because they share a sufficient amount of hard locations, i.e., the intersection of the circle around $\eta_d$ and $\eta$ is enough to converge. For further information about the relation between the critical distance and the intersection, see \citet{brogliato2014sparse}.
+Kanerva has calculated the intersection of two circles according to the distance between their centers. The intersection is important to understand how SDM works because it directly affects the critical distance. When $\eta_d$ is inside the critical distance, then it will converge to $\eta$. In fact, it converges because they share a sufficient amount of hard locations, i.e., the intersection of the circle around $\eta_d$ and $\eta$ is enough to converge. For further information about the relation between the critical distance and the intersection, see \citet{brogliato2014sparse}.
 
 We have calculated the intersection between a random bitstring (bs1) and another bitstring (bs2) exactly $d$ bits away. The former (bs1) is just a random bitstring. The latter (bs2) was generated randomly flipping $d$ bits of bs1. The code is available in the ``Kanerva's Figure 1.2'' notebook \citep{sdmframework}.
 
@@ -83,15 +83,15 @@ In Figure \ref{fig:validation-intersection}, we can notice that we have obtained
 
 Let $a_0, a_1, a_2, \dots, a_n$ be a sequence to be stored in a $k$-fold memory. So, all pointers of the form $a_i \rightarrow a_{i+k}$ will be written to $\text{sdm}_k$ memory, i.e., in $\text{sdm}_1$, the following pointers will be written: $a_0 \rightarrow a_1$, $a_1 \rightarrow a_2$, $\dots$, $a_{n-1} \rightarrow a_n$; while in $\text{sdm}_2$, the following pointers will be written: $a_0 \rightarrow a_2$, $a_2 \rightarrow a_3$, $\dots$, $a_{n-2} \rightarrow a_n$; and so forth.
 
-We have tested exactly the same example presented in \citet{Kanerva1988}, p.85. We wrote two sequences to a $3$-fold memory: $<A, B, C, D>$ and $<E, B, C, F>$. Then, after reading the sequences $<A, B, C>$ and $<E, B, C>$, we have obtained $D$ and $F$, respectively.
+We have tested the same example presented in \citet{Kanerva1988}, p.85. We wrote two sequences to a $3$-fold memory: $<A, B, C, D>$ and $<E, B, C, F>$. Then, after reading the sequences $<A, B, C>$ and $<E, B, C>$, we have obtained $D$ and $F$, respectively.
 
 Each reading operation was performed summing the counters of all activated hard locations from all three memories. For instance, to read the sequence $<A, B, C>$, we have activated the hard locations around $C$ in $\text{sdm}_1$, we have also activated the hard locations around $D$ in $\text{sdm}_2$, and, finally, we have also activated the hard locations around $A$ in $\text{sdm}_3$. After summing the counters of all those hard locations, we evaluate the resulting bitstring just as in the original read operation.
 
 The code is available in the ``Sequences (Kanerva Ch 8)'' notebook \citep{sdmframework}.
 
-The logic behind how it works is that, when reading the sequence $<A, B, C>$, we have $A$ pointing to $D$, while both $B$ and $C$ point to $D$ and $F$. Thus, $D$ appears more often than $F$ and ended up being the result.
+The logic behind how it works is that, when reading the sequence $<A, B, C>$, we have $A$ pointing to $D$, while both $B$ and $C$ point to $D$ and $F$. Thus, $D$ appeared more often than $F$ and ended up being the result.
 
-Hence, as we have replicated the theoretical results from Kanerva, we have one more evidence that our framework works properly.
+Hence, as we have replicated the theoretical results from Kanerva, we have one more evidence that our framework works appropriately.
 
 \subsection{$k$-fold memory using only one SDM}
 

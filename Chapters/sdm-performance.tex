@@ -21,7 +21,7 @@ OpenCL is a framework for writing software that executes in \emph{heterogeneous}
 
 A total of 8 kernels have been developed for benchmarking in our framework: single\_scan0, single\_scan1, single\_scan2, single\_scan3, single\_scan4, single\_scan5, single\_scan5\_unroll, and single\_scan6. Each scan uses a different algorithm to do exactly the same thing: calculate which hard locations are inside the circle of the given bitstring. They differ in how they split the work between work-groups and how they explore the GPU architecture to obtain performance gains.
 
-The difference in which kernel is the best depends also on the SDM setup. The best kernel for the 1,000-bits SDM in the iMac 2017 was single\_scan5\_unroll with average scan time of 3.61ms; but, for the 256-bits SDM in the same device, it was single\_scan0 with average scan time of 3.03ms; while, for the 10,000-bits SDM in the same device, it was single\_scan6 with 10.96ms (see Table \ref{tab:perf-imac}).
+The difference in which kernel is the best also depends on the SDM setup. The best kernel for the 1,000-bits SDM in the iMac 2017 was single\_scan5\_unroll with average scan time of 3.61ms; but, for the 256-bits SDM in the same device, it was single\_scan0 with average scan time of 3.03ms; while, for the 10,000-bits SDM in the same device, it was single\_scan6 with 10.96ms (see Table \ref{tab:perf-imac}).
 
 We recommend users to run a specific kernel comparison test for their own GPU and SDM settings.  This is available in the Jupyter notebooks.
 

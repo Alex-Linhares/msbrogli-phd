@@ -27,15 +27,15 @@
 
 
 
-Sparse Distributed Memory (SDM) \citep{Kanerva1988} is a mathematical model of long-term memory that has a number of neuroscientific and psychologically plausible dynamics. This model may be applied in all sort of applications because of its incredible ability to closely reflect the human capacity to remember past experiences from clues of the present. For instance, when one is walking on a dark alley and is afraid of something, one cannot explain where one's fear comes from. One just feels it. We may interpret this situation as clues of the present --- a dark alley; a giant metropolitan area; people going on about their lives mostly indifferent from each other; constrained routes ahead and behind you; a general lack of activity; that very feeling that something isn't right... without knowing precisely what isn't right, or even what `right' means... etc. --- recalling past experiences from memory and thus generating the feeling. Our memory is able to make a parallel between previous experiences and the clues. Although one has never been in the exactly same situation, one's brain involuntarily makes an analogy and recognizes the possibility of danger. This flexibility into mapping one situation in another is an important human feature which is hard to replicate in computers.
+Sparse Distributed Memory (SDM) \citep{Kanerva1988} is a mathematical model of long-term memory that has a number of neuroscientific and psychologically plausible dynamics. This model may be applied in all sort of applications because of its incredible ability to closely reflect the human capacity to remember past experiences from clues of the present. For instance, when one is walking on a dark alley and is afraid of something, one cannot explain where one's fear comes from. One just feels it. We may interpret this situation as clues of the present --- a dark alley; a giant metropolitan area; people going on about their lives mostly indifferent from each other; constrained routes ahead and behind you; a general lack of activity; that very feeling that something isn't right... without knowing precisely what isn't right, or even what `right' means... etc. --- recalling past experiences from memory and thus generating the feeling. Our memory is able to make a parallel between previous experiences and the clues. Although one has never been in the exactly same situation, one's brain involuntarily makes an analogy and recognizes the possibility of danger. This flexibility into mapping one situation in another is an essential human feature which is hard to replicate in computers.
 
 SDM has been applied in many different fields, like pattern recognition \citep{norman2003modeling, rao1995natural}, noise reduction \citep{Meng2009}, handwriting recognition \citep{fan1997genetic}, robot automation \citep{Rajesh1998, mendes2008robot}, and so forth. \citet{Linhares2011} has shown that SDM respects the limits of short-term memory discussed by \citet{Miller1955} and \citet{Cowan2011}. Despite all those applications, there is not a reference implementation which would allow one to replicate the results published in a paper, to check the source code for details, and to improve it. Thus, even though intriguing results have been achieved using SDM, it requires counter-productive, duplicate effort from researchers to build on top of previous work.
 
 It is our belief that a tool such as a framework could bring orders of magnitude more researchers and attention if they were able to use the model, at zero cost, with an easy to use high-level language such as Python, in an intuitive platform such as Juypyter notebooks. Neuroscientists interested in long-term memory storage should not have to worry about high-bandwidth vector parallel computation.  This new tool would provide a ready to use system in which experiments could be executed almost as soon as designed --- and it might accelerate research \citep{shen2014interactive}.
 
-Our motivation was our own effort to run our models. As there is no reference implementation, we had to implement our own and run several simulations to ensure that our implementation was correct and bug-free. Thus, we had to deviate from our main goal --- which was to test our hypothesis and explore the `ideas space' --- and to focus on the implementation itself. Furthermore, new members of our research group had to go through different source codes developed by former members.
+Our motivation was our own effort to run our models. As there is no reference implementation, we had to develop our own and run several simulations to ensure that our implementation was correct and bug-free. Thus, we had to deviate from our primary goal --- which was to test our hypothesis and explore the `ideas space' --- and to focus on the implementation itself. Furthermore, new members of our research group had to go through different source codes developed by former members.
 
-Extensions of SDM have been used in many applications. For example, \citet{Snaider2011} extended SDM to efficiently store sequences of vectors and trees.  \citet{Rajesh1998} used a modified SDM in an autonomous robot. \citet{Meng2009} modified SDM to clean patterns from noisy inputs. \citet{fan1997genetic} extended SDM with genetic algorithms. \citet{chada2016you} extended SDM creating the Rotational Sparse Distributed Memory (RSDM), which is used to modeling network motifs, dynamic flexibility, and hierarchical organization, all results from neuroscience literature.
+Extensions of SDM have been used in many applications. For example, \citet{Snaider2011} extended SDM to store sequences of vectors and trees efficiently.  \citet{Rajesh1998} used a modified SDM in an autonomous robot. \citet{Meng2009} modified SDM to clean patterns from noisy inputs. \citet{fan1997genetic} extended SDM with genetic algorithms. \citet{chada2016you} extended SDM creating the Rotational Sparse Distributed Memory (RSDM), which is used to modeling network motifs, dynamic flexibility, and hierarchical organization, all results from neuroscience literature.
 
 The main contribution of this work is a reference implementation which yields (i) orders of magnitude gains in performance, (ii) has several backends and operations, (iii) has been validated against the mathematical model, (iv) is cross-platform, and (v) is easily extended to test new research ideas. Our reference implementation may, hopefully, accelerate research into the model's dynamics and make it easier for readers to replicate any previous results and easily understand the source-code of the model.  Moreover, it is compatible with Jupyter notebook and researchers may share their notebooks possibly accelerating the advances in their fields \citep{shen2014interactive}.
 
@@ -106,7 +106,7 @@ It is interesting that 500,000 neuron deaths have a minor effect on SDM's recall
 \label{fig:sdm-neuron-death-500k}}
 \end{figure}
 
-An important observation is that around 800,000 neuron deaths (80\% of all neurons) the critical distance becomes small, i.e., SDM recall capacity is very diminished. After 900,000 neuron deaths, the critical distance is zero. In this case, everything has been lost.
+An important observation is that around 800,000 neuron deaths (80\% of all neurons) the critical distance becomes small, i.e., SDM recall capacity is hugely diminished. After 900,000 neuron deaths, the critical distance is zero. In this case, everything has been lost.
 
 Although there is some decrease in SDM recall after 600,000 neuron deaths, it is curious that there is a sudden change between 900,000 (90\%) and 1,000,000 (100\%). In Figure \ref{fig:sdm-neuron-death-details} we can see the details of this non-linear change. Notice that after 950,000 even the exact clue $\eta_0$ does not converge to $\eta$.
 
@@ -116,7 +116,7 @@ Although there is some decrease in SDM recall after 600,000 neuron deaths, it is
 \label{fig:sdm-neuron-death-details}}
 \end{figure}
 
-We run exactly the same simulation for a 256-bit SDM with 1,000,000 hard locations. The results were even more surprising, as the 256-bit SDM seems to be more robust to loss of neurons than the 1,000-bit SDM (see Figure \ref{fig:sdm-neuron-death-256bits}). Notice that the loss of 50\% of neurons barely affected the 256-bit SDM which remained functional even facing an enormous loss of 90\% of neurons.
+We run the same simulation for a 256-bit SDM with 1,000,000 hard locations. The results were even more surprising, as the 256-bit SDM seems to be more robust to loss of neurons than the 1,000-bit SDM (see Figure \ref{fig:sdm-neuron-death-256bits}). Notice that the loss of 50\% of neurons barely affected the 256-bit SDM which remained functional even facing an enormous loss of 90\% of neurons.
 
 \begin{figure}[!p]
 \centering
@@ -139,7 +139,7 @@ $$
 
 The sum of $|c_i|^z$ turns the intermediate values from integers to floating point numbers. Thus, we have developed a specific read operation which stored the intermediate values in double variables.
 
-The results, however, have not yielded performance improvements. Though for $z \leq 1$ results are comparable to $z=1$, for $z>1$, the system shows a clear deterioration, with a smaller critical distance and faster divergence at large-distance reads. This is shown in Figures \ref{fig:murillo-generalization-experiments} and \ref{fig:murillo-generalization-experiments-6reads}.
+The results, however, have not yielded performance improvements. Though for $z \leq 1$ results are comparable to $z=1$, for $z>1$, the system shows an evident deterioration, with a smaller critical distance and faster divergence at large-distance reads. This is shown in Figures \ref{fig:murillo-generalization-experiments} and \ref{fig:murillo-generalization-experiments-6reads}.
 
 We understand that the critical distance is an important parameter of SDM. The bigger the critical distance, the best, because SDM is able to converge even with farther clues. For $z>1$, the bigger the $z$, the smaller the critical distance. For $z = 6$, the critical distance almost reaches zero.
 
@@ -322,7 +322,7 @@ I have run the classification algorithm under the MNIST database of handwritten 
 
 Looking into the reason behind images incorrectly classified, I have found that the issue is very related to the ``i'' versus ``l'' issue. Some handwritten digits are very close to others, and a ``2'' or a ``7'' may look like a ``1'', for instance. So, how can we solve this issue without using anything specific to images?  Machine learning algorithms use specific techniques to improve performance. I would like to unveil a solution psychologically closer to how we behave --- even if that eventually leads to lower performance.
 
-An unexplored idea is to use multiple SDMs which communicate. A first SDM would write the whole picture, just like we have done. Another SDM would write specific parts of the image, just like our eye focusing on specific parts. When reading, they may compose the counters and give a more precise classification.
+An unexplored idea is to use multiple SDMs which communicate. A first SDM would write the whole picture, just like we have done. Another SDM would write specific regions of the image, just like our eye focusing on specific regions. When reading, they may compose the counters and give a more precise classification.
 
 % \subsection{Multiple levels}
 
@@ -336,7 +336,7 @@ Kanerva suggests, in his book, the use of 1,000 dimensions and 1,000,000 hard lo
 
 Each parameter set choice like this will lead to particular numbers --- many of them emergent---, such as the access radius size, critical distance, memory capacity, and so forth.
 
-One intriguing question here is:  is there a `better' number of dimensions and of hard locations?  If so, can such numbers be better studied algebraically or numerically?
+One intriguing question here is:  is there a `better' number of dimensions and hard locations?  If so, can such numbers be better studied algebraically or numerically?
 
 How should these parameters be compared?  What are the tradeoffs that should be considered?  What are the `best' benchmarks possible?
 

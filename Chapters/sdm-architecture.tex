@@ -79,9 +79,9 @@ The scan for activated hard locations is performed in an address space. It retur
 
 \subsection{Scanning for activated hard locations}
 
-Scanning for the activated hard locations is a problem similar to well-known problems in computational geometry called ``range reporting in higher dimensions''. In this case, none of the known algorithms is able to solve our problem faster than $O(H)$. The algorithm which seems to best fit in our problem consumes $O(H)$ space and runs in $O(\log^n(H))$ \citep{chazelle1988functional}, which is really slower than $O(H)$ when, for instance, $H=1,000,000$ and $n=1,000$. For a review of the range reporting algorithms, see \citet{chan2011orthogonal}.
+Scanning for the activated hard locations is a problem similar to well-known problems in computational geometry called ``range reporting in higher dimensions''. In this case, none of the known algorithms is able to solve our problem faster than $O(H)$. The algorithm which seems to best fit in our problem consumes $O(H)$ space and runs in $O(\log^n(H))$ \citep{chazelle1988functional}, which is significantly slower than $O(H)$ when, for instance, $H=1,000,000$ and $n=1,000$. For a review of the range reporting algorithms, see \citet{chan2011orthogonal}.
 
-In 2014, there was published a solution to fast search in hamming space which seems applicable to our problem \citet{norouzi2014fast}. It provides a fast search when $r/n < 0.11$ or $r/n < 0.06$, where $r$ is the radius and $n$ is the number of bits. But, in our case, for a 1,000 bits SDM, $r/n = 0.451$, which changes the runtime to $O(H^{0.993})$. This is really close to $O(H)$, but with a larger constant. Unfortunately, $O(H)$ is still faster.
+In 2014, there was published a solution to fast search in hamming space which seems applicable to our problem \citet{norouzi2014fast}. It provides a fast search when $r/n < 0.11$ or $r/n < 0.06$, where $r$ is the radius and $n$ is the number of bits. But, in our case, for a 1,000 bits SDM, $r/n = 0.451$, which changes the runtime to $O(H^{0.993})$. This is very close to $O(H)$, but with a larger constant. Unfortunately, $O(H)$ is still faster.
 
 It is intriguing that none of those algorithms is able to solve our scanning problem. The idea behind those computational geometry algorithms is roughly to split the search space in half each step, which would take $O(\log(H))$ to go through the whole space. But this approach does not work because of the high number of dimensions (i.e., 1,000) and because the hard locations' addresses are randomly sampled from the $\{0, 1\}^n$ space. Although each addresses' bit itself splits the hard locations in half, it does not split the search space in half since both halves still must be covered by the algorithm. For instance, let's say we have $n=1,000$ dimensions with $H=1,000,000$ hard locations, and we are scanning within a circle with radius $r=451$, then after checking the first bit we have two cases: (i) for the half with the same first bit, we must keep scanning with radius 451; and (ii) for the half with a different first bit, we must keep scanning with radius 450. Hence, the search space has not been split in half because both halves have been covered (and one of them should have been skipped).
 
@@ -93,9 +93,9 @@ The OpenCL must be initialized, which just copies the address space's bitstrings
 
 \subsection{OpenCL kernels}
 
-There are 8 OpenCL kernels which explore differently the GPU architecture to improve performance. It is necessary because there are several GPU microarchitectures and a single kernel will never be optimal for all of them. In simplified form, OpenCL splits the tasks into workgroups which, in turn, split their part of the task into workers. The works are like threads in a computer. OpenCL specifies four levels of memory hierarchy for the GPUs: global memory, read-only memory, local memory, and private memory. The global memory and read-only memory are accessible by all workgroups, while each workgroup has its own local memory, accessible by its workers. Finally, each worker has its own private memory. The number of workers per workgroup is defined by user and must be multiple of the number of tasks.
+There are eight OpenCL kernels which explore differently the GPU architecture to improve performance. It is necessary because there are several GPU microarchitectures and a single kernel will never be optimal for all of them. In simplified form, OpenCL splits the tasks into workgroups which, in turn, split their part of the task into workers. The works are like threads in a computer. OpenCL specifies four levels of memory hierarchy for the GPUs: global memory, read-only memory, local memory, and private memory. The global memory and read-only memory are accessible by all workgroups, while each workgroup has its own local memory, accessible by its workers. Finally, each worker has its own private memory. The number of workers per workgroup is defined by user and must be multiple of the number of tasks.
 
-All 8 kernels do the same thing: calculate the exclusive OR (XOR) between two 64-bit integers and count the number of bits one in the result. They just do it with different approaches. For instance, \lstinline{single_scan0} calculates one distance between bitstrings per worker (Listing \ref{lst:single_scan0}); while \lstinline{single_scan2} uses a whole workgroup to calculate each distance, distributing each element of the 64-int integer array per worker (Listing \ref{lst:single_scan2}).
+All eight kernels do the same thing: calculate the exclusive OR (XOR) between two 64-bit integers and count the number of bits one in the result. They just do it with different approaches. For instance, \lstinline{single_scan0} calculates one distance between bitstrings per worker (Listing \ref{lst:single_scan0}); while \lstinline{single_scan2} uses a whole workgroup to calculate each distance, distributing each element of the 64-int integer array per worker (Listing \ref{lst:single_scan2}).
 
 The OpenCL kernels \lstinline{single_scan3} (Listing \ref{lst:single_scan3}), \lstinline{single_scan4} (Listing \ref{lst:single_scan4}), \lstinline{single_scan5} (Listing \ref{lst:single_scan5}), \lstinline{single_scan5_unroll} (Listing \ref{lst:single_scan5_unroll}), \lstinline{single_scan6} (Listing \ref{lst:single_scan6}) explore the GPU architecture to improve the sum of the partial distances. Each workgroup calculates the distance of several bitstrings. During the distance calculation, each worker calculates the exclusive OR (XOR) between two 64-bit integers and use the built-in popcount function to count the number of ones. Then, they update an array of partial distances with their results. This array is stored in the local memory and is shared between all workers of the same workgroup. This whole step happens simultaneously in the GPU. Then, a reduction algorithm is used to sum the partial distances array in order to calculate the total distance. This reduction algorithm is also distributed among the workers and runs in $O(\log_2(\text{bs\_step}))$. Finally, the first worker of each workgroup checks whether the distance is less than or equal to the radius to include the bitstring index into the resulting array.
 
@@ -106,7 +106,7 @@ Some of the optimizations may not work in some GPUs because not all their premis
 \begin{lstlisting}[
 language={[OpenCL]C},
 label={lst:single_scan0},
-caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan0}}. It calculates one distance per worker and let the GPU decide how to distribute this task between workgroups and workers. It is the most simple kernel and does not explore any details of the GPU architecture.},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan0}}. It calculates one distance per worker and let the GPU decide how to distribute this task between workgroups and workers. It is the most straightforward kernel and does not explore any details of the GPU architecture.},
 ]
 __kernel
 void single_scan0(
@@ -146,7 +146,7 @@ void single_scan0(
 \begin{lstlisting}[
 language={[OpenCL]C},
 label={lst:single_scan1},
-caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan1}}. It is just like \lstinline{single_scan0}, but it distribute several distances per workgroup, which, in turn, distribute the distances among their workers.},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan1}}. It is just like \lstinline{single_scan0}, but it distributes several distances per workgroup, which, in turn, distributes the distances among their workers.},
 ]
 __kernel
 void single_scan1(
@@ -240,7 +240,7 @@ void single_scan2(
 \begin{lstlisting}[
 language={[OpenCL]C},
 label={lst:single_scan3},
-caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan3}}. It calculates one distance per workgroup, distributing each 64-bit integer operation per worker, and then summing the results obtained by the workers. The sum algorithm is a parallel reduction, in which the workers split the array in two parts and sum the second part in the first part every loop. So, the sum is calculated in {$O(\log_2(\text{number of workers per workgroup}))$}. This kernel only works when the number of workers per workgroup is a power-of-2.},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan3}}. It calculates one distance per workgroup, distributing each 64-bit integer operation per worker, and then summing the results obtained by the workers. The sum algorithm is a parallel reduction, in which the workers split the array into two parts and sum the second part in the first part every loop. So, the sum is calculated in {$O(\log_2(\text{number of workers per workgroup}))$}. This kernel only works when the number of workers per workgroup is a power-of-2.},
 ]
 __kernel
 void single_scan3(
@@ -356,7 +356,7 @@ void single_scan4(
 \begin{lstlisting}[
 language={[OpenCL]C},
 label={lst:single_scan5},
-caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan5}}. This kernel is just like \lstinline{single_scan3}, but it explores one more detail of many GPU microarchitecture: the size of the warp. As the workers in the same warp are always synchronized, there is no need to synchronize them using a barrier. This specific kernel only works when the number of workers per workgroup is a power-of-2.},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan5}}. This kernel is just like \lstinline{single_scan3}, but it explores one more detail of many GPU microarchitecture: the size of the warp. As the workers in the same warp are always synchronized, there is no need to sync them using a barrier. This specific kernel only works when the number of workers per workgroup is a power-of-2.},
 ]
 __kernel
 void single_scan5(
@@ -487,7 +487,7 @@ void single_scan5_unroll(
 language={[OpenCL]C},
 basicstyle=\scriptsize\ttfamily,
 label={lst:single_scan6},
-caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan6}}. This kernel is just like \lstinline{single_scan5}, but it works with any number of workers per work. The tradeoff is an aditional step in the parallel reduction algorithm.},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan6}}. This kernel is just like \lstinline{single_scan5}, but it works with any number of workers per work. The tradeoff is an additional step in the parallel reduction algorithm.},
 ]
 __kernel
 void single_scan6(
@@ -570,8 +570,8 @@ The reading and writing operations are executed in two steps: first, the address
 
 The iterated reading keeps reading until it gets exactly the same bitstring (or the number of maximum interactions has been reached), i.e., it performs $\eta_{i+1} = \text{read}(\eta_i)$ and stops when $\eta_{k+1} = \eta_{k}$. If the initial bitstring is inside the critical distance of $\eta$, it will converge to $\eta$, but, if it is not, it will diverge and reach the maximum number of iterations.
 
-The framework has both Kanerva's read and Murilo's generalized read. The generalization brings a parameter $z$, which is the exponent. In this case, the results are floating points instead of integers, which considerably reduces performance. When $z=1$, it is exactly as the Kanerva's read. When $z=0$, it is the Chada's read. We also explored how SDM would behave for different values of $z$.
+The framework has both Kanerva's read and Murilo's generalized read. The generalization brings a parameter $z$, which is the exponent. In this case, the results are floating points instead of integers, which considerably reduces performance. When $z=1$, it is precisely as the Kanerva's read. When $z=0$, it is the Chada's read. We also explored how SDM would behave for different values of $z$.
 
-There is another special read operation: the weighted reading. In the weighted reading, the value of the counters is multiplied by a weight which depends only on the distance between the reading address and the hard location address. The weight is retrieved from a lookup table of integers indexed by the distance. The rest of the read operation is exactly the same.
+There is another particular read operation: the weighted reading. In the weighted reading, the value of the counters is multiplied by a weight which depends only on the distance between the reading address and the hard location address. The weight is retrieved from a lookup table of integers indexed by the distance. The remaining of the read operation is just the same.
 
 There is also a weighted writing operation. In this case, the weight is applied when the counters are updated, i.e., if the weight is 2, the counters are increased twice when bits are 1, and decreased twice when bits are 0. Just as in the weighted reading, the weights depend only on the distance between the writing address and the hard location address. The weights are retrieved from a lookup table of integers indexed by the distance.
