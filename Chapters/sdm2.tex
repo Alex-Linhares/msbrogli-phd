@@ -1,6 +1,6 @@
 % !TEX root = ../partial-sdm.tex
 
-Sparse Distributed Memory (SDM) is a mathematical model developed and suggested as a theory of human memory by Finish Scientist Pentti \citet{Kanerva1988}. It introduces many interesting mathematical properties of $n$-dimensional binary space that, in a memory model, seem to be remarkably psychologically plausible.  Most notable among these are the tip-of-the-tongue phenomenon, conformity to Miller's magic number \citep{Linhares2011} and robustness against loss of neurons.
+Sparse Distributed Memory (SDM) is a mathematical model developed and suggested as a theory of human memory by Finish Scientist Pentti \citet{Kanerva1988}. It introduces many interesting mathematical properties of $n$-dimensional binary space that, in a memory model, seem to be remarkably psychologically plausible.  Most notable among these are the tip-of-the-tongue phenomenon, conformity to Miller's magic number \citep{Linhares2011}, and robustness against loss of neurons.
 
 The data --- and address space on which it is stored --- are represented by large sequences of bits, called \emph{bitstrings}. The \emph{Hamming distance} provides comparisons between bitstrings and is used as a metric for the system. The Hamming distance is defined for two bitstrings of equal length as the number of positions in which bits differ. For example, $00110_{b}$ and $01100_{b}$ are bitstrings of length 5 and their Hamming distance is 2.
 
@@ -17,7 +17,7 @@ The space studied by Kanerva is also called the \emph{hypercube graph}, or $Q_n$
 
 One has to be careful when thinking intuitively about distance in SDM because the Hamming distance does not have the same properties of, say, our 3-dimensional space.
 
-Though both follow the triangle inequality ($d(A, B) \le d(A, C) + d(B, C)$), which in 3-d Euclidean distance may be loosely interpreted as ``if A is close to B, and B is close to C, then A is also close to C'' --- $d(A, B) \le r \text{ and } d(B, C) \le r \Rightarrow d(A, C) \le 2r$ ---, but in SDM, although the inequality is also valid, two bitstrings would be close when, for instance, $r = 430$, so $2r = 860$ would cover all other bitstrings. Hence, it makes no sense to say that $A$ is also close to $C$.
+Though both follow the triangle inequality ($d(A, C) \le d(A, B) + d(B, C)$), which in 3-d Euclidean distance may be loosely interpreted as ``if A is close to B, and B is close to C, then A is also close to C'' --- $d(A, B) \le r \text{ and } d(B, C) \le r \Rightarrow d(A, C) \le 2r$ ---, but in SDM, although the inequality is also valid, two bitstrings would be close when, for instance, $r = 430$, so $2r = 860$ would cover all other bitstrings. Hence, it makes no sense to say that $A$ is also close to $C$.
 
 There are numerous, beautiful, counter-intuitive notions involved in this space. This difference in intuition may trick even experienced researchers when analyzing some situations.
 
@@ -52,7 +52,7 @@ radius $r$ around the center address.\label{fig-addresses-inside-access-radius}}
 
 
 
-Every time write or read in SDM memory activates a number of addresses with close distance.  The data is written in these activated addresses or read from them.  These issues will be addressed in due detail further on, but a major difference from a traditional computer memory is that the data are always stored and retrieved in a multitude of addresses. This way SDM memory has robustness against loss of addresses (e.g., death of a neuron).
+Every write or read in SDM memory activates a number of addresses with close distance.  The data is written in these activated addresses or read from them.  These issues will be addressed in due detail further on, but a major difference from a traditional computer memory is that the data are always stored and retrieved in a multitude of addresses. This way SDM memory has robustness against loss of addresses (e.g., death of a neuron).
 
 In traditional memory, each datum is stored in an address and every lookup of a specific datum requires a search through the memory. In spite of computer scientists having developed beautiful algorithms to perform fast searches, almost all of them do a precise search. That is, if you have an imprecise clue of what you need, these algorithms will simply fail.
 
@@ -95,7 +95,7 @@ required to converge from $\eta_{x}$ to $\eta$.\label{fig-p1-p2-iterative-read}}
 
 The $\{0,1\}^{n}$ space has $N=2^{n}$ locations from which we instantiate $N'$ samples. Each location in our sample is called a hard location.  On these hard locations, we do operations of read and write. One of the insights of SDM is exactly the way we read and write: using data as addresses in a distributed fashion. Each datum $\eta$ is written in every activated hard location inside the access radius centered on the address, that equals datum, $\xi=\eta$. Kanerva suggested using an access radius $r$ having about one-thousandth of $N'$.  As an imprecise cue $\eta_{x}$ shares hard locations with the target bitstring $\eta,$ it is possible to retrieve $\eta$ correctly. (Actually, probably more than one read is necessary to retrieve exactly $\eta.)$.  Moreover, if some neurons are lost, only a fraction of the datum is lost and it is possible that the memory can still retrieve the right datum.
 
-A random bitstring is generated with equal probability of $0$'s and $1$'s in each bit. One can readily see that the average distance between two random bitstrings follows the binomial distribution with mean $n/2$ and standard deviation $\sqrt{n/4}$. For a large $n$, most of the space lies close to the mean and has fewer shared hard locations.  As two bitstrings with distance far from $n/2$ are very improbable, \citet{Kanerva1988} defined that two bitstrings are orthogonal when their distance is $n/2$.
+A random bitstring is generated with equal probability of $0$'s and $1$'s for each bit. One can readily see that the average distance between two random bitstrings follows the binomial distribution with mean $n/2$ and standard deviation $\sqrt{n/4}$. For a large $n$, most of the space lies close to the mean and has fewer shared hard locations.  As two bitstrings with distance far from $n/2$ are very improbable, \citet{Kanerva1988} defined that two bitstrings are orthogonal when their distance is $n/2$.
 
 The write operation needs to store, for each dimension bit which happened more ($0$'s or $1$'s). This way, each hard location has $n$ counters, one for each dimension. The counter is incremented for each bit $1$ and decremented for each bit $0$. Thus, if the counter is positive, there have been more $1$'s than $0$'s, if the counter is negative, there have been more $0$'s than $1$'s, and if the counter is zero, there have been an equal number of $1$'s and $0$'s. Table \ref{tab:write operation} shows an example of a write operation being performed in a 7-dimensional memory.
 
@@ -229,7 +229,7 @@ Gray cells' value is obtained randomly with probability 50\%.\label{tab:read-ope
 
 Kanerva describes the critical distance as the threshold of convergence of a sequence of read words. It is ``the distance beyond which divergence is more likely than convergence''\citep{Kanerva1988}. Furthermore, Kanerva explains that ``a very good estimate of the critical distance can be obtained by finding the distance at which the arithmetic mean of the new distance to the target equals the old distance to the target''\citep{Kanerva1988}.  In other words, the critical distance can be equated as the edge to our memory, the limit of human recollection.
 
-In his book, Kanerva analyzed a specific situation with $n=1000$ ($N=2^{1000}$), 1 million hard locations $N'=1,000,000$, an access-radius of 451 (within 1,000 hard locations in each circle) and 10 thousand writes of random bitstrings in the memory. As computer resources were very poor those days, Kanerva couldn't make a more generic analysis.
+In his book, Kanerva analyzed a specific situation with $n=1000$ ($N=2^{1000}$), 1 million hard locations ($N'=1,000,000$), an access-radius of 451 (within 1,000 hard locations in each circle), and 10 thousand writes of random bitstrings in the memory. As computer resources were very poor those days, Kanerva couldn't make a more generic analysis.
 
 Starting from the premise of SDM as a faithful model of human short-term memory, a better understanding of the critical distance may shed light on our understanding of the thresholds that bind our own memory.
 

@@ -2,11 +2,11 @@
 
 The framework implements the basic operations in a Sparse Distributed Memory which may be used to create more complex operations. It is developed in C language and the OpenCL parallel framework --- which may be loaded in many platforms and programming languages --- with a wrapper in Python. The Python module makes it easy to create and execute simulations in a Sparse Distributed Memory and works properly in Jupyter Notebook \citep{kluyver2016jupyter}. It works in both Python 2 and Python 3.
 
-We split the SDM memory into two parts: the hard location addresses and the hard location counters. Thus, the addresses (bitstrings) of the hard locations are stored in one array, while their counters in another. This makes possible to create multiple SDMs using the same address space, which would save computational effort to scan a bitstring in all the SDMs --- since they share the same address space, the activated hard locations will be the same in all of them. As the slowest part of reading and writing operations is scanning the address space, the performance benefits are significant.
+The SDM memory has been split into two parts: the hard location addresses and the hard location counters. Thus, the addresses (bitstrings) of the hard locations are stored in one array, while their counters in another. This makes possible to create multiple SDMs using the same address space, which would save computational effort to scan a bitstring in all the SDMs --- since they share the same address space, the activated hard locations will be the same in all of them. As the slowest part of reading and writing operations is scanning the address space, the performance benefits are significant.
 
 Each part may be stored either in the RAM memory or in a file. The RAM memory is interesting for quick experiments, automated tests, and others scenarios in which the SDM may be lost, while the file is interesting for a long-term SDM, like creating an SDM file with 10,000 random writes, which will be copied over and over to run multiple experiments. The file may also be sent to another researcher or may be published within the paper to let others run their own checks and verify the results. In summary, the framework fits many different uses and necessities.
 
-Let a SDM memory with $N$ dimensions and $H$ hard locations. Then, in a 64-bit computer, the array of hard location addresses will use $H \cdot 8 \cdot \lceil N/64 \rceil$ bytes of memory, and there will be $H \cdot N$ hard location counters. For example, in a SDM memory with 1,000 dimensions and 1,000,000 hard locations, using 32-bit integers for the counters, the array of addresses will use 122MB of memory and the counters will use 3.8 GB of memory.
+Let a SDM memory with $n$ dimensions and $H$ hard locations. Then, in a 64-bit computer, the array of hard location addresses will use $H \cdot 8 \cdot \lceil n/64 \rceil$ bytes of memory, and there will be $H \cdot n$ hard location counters. For example, in a SDM memory with 1,000 dimensions and 1,000,000 hard locations, using 32-bit integers for the counters, the array of addresses will use 122MB of memory and the counters will use 3.8 GB of memory.
 
 Basic operations were grouped into four sets: (i) for bitstrings, (ii) for addresses, (iii) for counters, and (iv) for memories (SDMs). Operations include creating new bitstrings, flipping bits, generating a bitstring with a specific distance from a given bitstring, scanning the address space using different algorithms, writing a bitstring to a counter, writing in an SDM, reading from an SDM, and iteratively reading from an SDM until convergence.
 
@@ -53,7 +53,7 @@ matrixB/.style={matrix of nodes,
 \matrix[matrixA] (A) { addr$_1$ & addr$_2$ & addr$_3$ & $\cdots$ & addr$_H$ \\ };
 
 \matrix[matrixB, below=of A] (B) {
-addr$_{k, 1}$ & addr$_{k, 2}$ & addr$_{k, 3}$ & $\cdots$ & addr$_{k, 8 \cdot \lceil N/64 \rceil}$ \\
+addr$_{k, 1}$ & addr$_{k, 2}$ & addr$_{k, 3}$ & $\cdots$ & addr$_{k, 8 \cdot \lceil n/64 \rceil}$ \\
 };
 
 \draw[dashed] (A-1-1.south west)--(B-1-1.north west);
@@ -68,11 +68,11 @@ addr$_{k, 1}$ & addr$_{k, 2}$ & addr$_{k, 3}$ & $\cdots$ & addr$_{k, 8 \cdot \lc
     },
     decorate
 ] (B-1-1.south west) -- (B-1-5.south east)
-node [pos=0.5,anchor=north,yshift=-0.5cm] {N bits};
+node [pos=0.5,anchor=north,yshift=-0.5cm] {$n$ bits};
 
 \end{tikzpicture}
 
-\caption{Address space's bitstrings are stored in a contiguous array. In a 64-bit computer, each bitstring is stored in a sub-array of 64-bit integers, with length $8 \cdot \lceil N/64 \rceil$.\label{tab:hl-addresses-detail}}
+\caption{Address space's bitstrings are stored in a contiguous array. In a 64-bit computer, each bitstring is stored in a sub-array of 64-bit integers, with length $8 \cdot \lceil n/64 \rceil$.\label{tab:hl-addresses-detail}}
 \end{figure}
 
 The scan for activated hard locations is performed in an address space. It returns the indexes of the bitstrings which were inside the circle (and their distances). Then, each operation uses these pieces of information in a different way.
@@ -81,21 +81,21 @@ The scan for activated hard locations is performed in an address space. It retur
 
 Scanning for the activated hard locations is a problem similar to well-known problems in computational geometry called ``range reporting in higher dimensions''. In this case, none of the known algorithms is able to solve our problem faster than $O(H)$. The algorithm which seems to best fit in our problem consumes $O(H)$ space and runs in $O(\log^n(H))$ \citep{chazelle1988functional}, which is significantly slower than $O(H)$ when, for instance, $H=1,000,000$ and $n=1,000$. For a review of the range reporting algorithms, see \citet{chan2011orthogonal}.
 
-In 2014, there was published a solution to fast search in hamming space which seems applicable to our problem \citet{norouzi2014fast}. It provides a fast search when $r/n < 0.11$ or $r/n < 0.06$, where $r$ is the radius and $n$ is the number of bits. But, in our case, for a 1,000 bits SDM, $r/n = 0.451$, which changes the runtime to $O(H^{0.993})$. This is very close to $O(H)$, but with a larger constant. Unfortunately, $O(H)$ is still faster.
+In 2014, \citet{norouzi2014fast} published a solution to fast search in hamming space which seems applicable to our problem. It provides a fast search when $r/n < 0.11$ or $r/n < 0.06$, where $r$ is the radius and $n$ is the number of bits. But, in our case, for a 1,000 bits SDM, $r/n = 0.451$, which changes the runtime to $O(H^{0.993})$. This is very close to $O(H)$, but with a larger constant. Unfortunately, $O(H)$ is still faster.
 
-It is intriguing that none of those algorithms is able to solve our scanning problem. The idea behind those computational geometry algorithms is roughly to split the search space in half each step, which would take $O(\log(H))$ to go through the whole space. But this approach does not work because of the high number of dimensions (i.e., 1,000) and because the hard locations' addresses are randomly sampled from the $\{0, 1\}^n$ space. Although each addresses' bit itself splits the hard locations in half, it does not split the search space in half since both halves still must be covered by the algorithm. For instance, let's say we have $n=1,000$ dimensions with $H=1,000,000$ hard locations, and we are scanning within a circle with radius $r=451$, then after checking the first bit we have two cases: (i) for the half with the same first bit, we must keep scanning with radius 451; and (ii) for the half with a different first bit, we must keep scanning with radius 450. Hence, the search space has not been split in half because both halves have been covered (and one of them should have been skipped).
+It is intriguing that none of those algorithms is able to solve our scanning problem. The roughly idea behind those computational geometry algorithms is to split the search space in half each step, which would take $O(\log(H))$ to go through the whole space. But this approach does not work because of the high number of dimensions (i.e., 1,000) and because the hard locations' addresses are randomly sampled from the $\{0, 1\}^n$ space. Although each addresses' bit itself splits the hard locations in half, it does not split the search space in half since both halves still must be covered by the algorithm. For instance, let's say we have $n=1,000$ dimensions with $H=1,000,000$ hard locations, and we are scanning within a circle with radius $r=451$, then after checking the first bit we have two cases: (i) for the half with the same first bit, we must keep scanning with radius 451; and (ii) for the half with a different first bit, we must keep scanning with radius 450. Hence, the search space has not been split in half because both halves have been covered (and one of them should have been skipped).
 
 Finally, as our best approach is to scan through all hard locations, we may distribute the scan into many tasks which will be executed independently. The tasks may be executed in different processes, threads, or even computers. They may also run in the CPU or in the GPU. In this case, we may take into account both the time required to distribute the tasks and the time to receive their results.
 
 The framework implements three main scanner algorithms: linear scanner, thread scanner, and OpenCL scanner. The linear scanner runs in a single core, is the slowest one, and was developed only for testing purposes; the thread scanner runs at the CPU in multiple threads sharing memory (and our recommendation is to use the number of threads equals to twice the number of CPU cores); and the OpenCL scanner runs in multiple GPU cores and support multiple devices. The speed of a scan depends on the CPU and GPU devices, thus the best approach to choose which scanner is best for one's setup is to run a benchmark.
 
-The OpenCL must be initialized, which just copies the address space's bitstrings to the GPU's memory. Then, many scans may be executed with no necessity to upload the bitstrings again. The OpenCL scanner supports running on multiple devices.
+The OpenCL must be initialized, which basically copies the address space's bitstrings to the GPU's memory. Then, many scans may be executed with no necessity to upload the bitstrings again. The OpenCL scanner supports running on multiple devices.
 
 \subsection{OpenCL kernels}
 
-There are eight OpenCL kernels which explore differently the GPU architecture to improve performance. It is necessary because there are several GPU microarchitectures and a single kernel will never be optimal for all of them. In simplified form, OpenCL splits the tasks into workgroups which, in turn, split their part of the task into workers. The works are like threads in a computer. OpenCL specifies four levels of memory hierarchy for the GPUs: global memory, read-only memory, local memory, and private memory. The global memory and read-only memory are accessible by all workgroups, while each workgroup has its own local memory, accessible by its workers. Finally, each worker has its own private memory. The number of workers per workgroup is defined by user and must be multiple of the number of tasks.
+There are eight OpenCL kernels which differently explore the GPU architecture to improve performance. It is necessary because there are several GPU microarchitectures and a single kernel will never be optimal for all of them. In simplified form, OpenCL splits the tasks into workgroups which, in turn, split their part of the task into workers. The works are like threads in a computer. OpenCL specifies four levels of memory hierarchy for the GPUs: global memory, read-only memory, local memory, and private memory. The global memory and read-only memory are accessible by all workgroups, while each workgroup has its own local memory, shared by its workers. Finally, each worker has its own private memory. The number of workers per workgroup is defined by user and must be multiple of the number of tasks.
 
-All eight kernels do the same thing: calculate the exclusive OR (XOR) between two 64-bit integers and count the number of bits one in the result. They just do it with different approaches. For instance, \lstinline{single_scan0} calculates one distance between bitstrings per worker (Listing \ref{lst:single_scan0}); while \lstinline{single_scan2} uses a whole workgroup to calculate each distance, distributing each element of the 64-int integer array per worker (Listing \ref{lst:single_scan2}).
+All eight kernels do the same thing: calculate the exclusive OR (XOR) between two 64-bit integers and count the number of bits one in the result. They just do it with different approaches. For instance, \lstinline{single_scan0} calculates one distance between bitstrings per worker (Listing \ref{lst:single_scan0}); while \lstinline{single_scan2} uses a whole workgroup to calculate each distance, distributing each element of the 64-bit integer array per worker (Listing \ref{lst:single_scan2}).
 
 The OpenCL kernels \lstinline{single_scan3} (Listing \ref{lst:single_scan3}), \lstinline{single_scan4} (Listing \ref{lst:single_scan4}), \lstinline{single_scan5} (Listing \ref{lst:single_scan5}), \lstinline{single_scan5_unroll} (Listing \ref{lst:single_scan5_unroll}), \lstinline{single_scan6} (Listing \ref{lst:single_scan6}) explore the GPU architecture to improve the sum of the partial distances. Each workgroup calculates the distance of several bitstrings. During the distance calculation, each worker calculates the exclusive OR (XOR) between two 64-bit integers and use the built-in popcount function to count the number of ones. Then, they update an array of partial distances with their results. This array is stored in the local memory and is shared between all workers of the same workgroup. This whole step happens simultaneously in the GPU. Then, a reduction algorithm is used to sum the partial distances array in order to calculate the total distance. This reduction algorithm is also distributed among the workers and runs in $O(\log_2(\text{bs\_step}))$. Finally, the first worker of each workgroup checks whether the distance is less than or equal to the radius to include the bitstring index into the resulting array.
 
@@ -106,7 +106,7 @@ Some of the optimizations may not work in some GPUs because not all their premis
 \begin{lstlisting}[
 language={[OpenCL]C},
 label={lst:single_scan0},
-caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan0}}. It calculates one distance per worker and let the GPU decide how to distribute this task between workgroups and workers. It is the most straightforward kernel and does not explore any details of the GPU architecture.},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan0}}. It calculates one distance per worker and lets the GPU decide how to distribute this task between workgroups and workers. It is the most straightforward kernel and does not explore any details of the GPU architecture.},
 ]
 __kernel
 void single_scan0(
@@ -417,7 +417,7 @@ void single_scan5(
 language={[OpenCL]C},
 basicstyle=\scriptsize\ttfamily,
 label={lst:single_scan5_unroll},
-caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan5_unroll}}. This kernel is exactly like \lstinline{single_scan5}, but it unrolls the last for since it has at most 5 loops.},
+caption={OpenCL kernel {\lstinline[columns=fixed]{single_scan5_unroll}}. This kernel is exactly like \lstinline{single_scan5}, but it unrolls the last \lstinline{for} since it has at most 5 loops.},
 ]
 __kernel
 void single_scan5_unroll(
@@ -556,11 +556,9 @@ void single_scan6(
 
 \section{Counters}
 
-Each hard location has one integer of data per bit. For instance, each hard location of a 1,000 bits SDM has 1,000 bits. Those integers are stored in a counter.
+A counter is an array of integers which stores the data of all hard locations. Each hard location has one integer of data per bit. For instance, each hard location of a 1,000 bits SDM has 1,000 integers, totalizing 1,000,000 integers. Those integers are stored in a counter. So, the counter's array has $n \cdot H$ integers.
 
-A counter is an array of integers which stores the data of all hard locations. So, the counter's array has $n \cdot H$ integers.
-
-When two counters are added in a third counter, there may occur an overflow. It is not supposed to be a problem because, by default, each counter is a signed 32-bit integer that can store any number between -2,147,483,648 and 2,147,483,647, which means they will not overflow with fewer writes than $2^{31}-1$ divided by the average number of activated hard locations. For instance, when $n=1,000$, $H=1,000,000$, and $r=451$, the average number of activated hard locations is 1,000 and it would require at least one million writes before being possible to a counter to overflow.  Note also that it would be more likely to saturate the memory before any overflow.
+When two counters are added in a third counter, there may occur an overflow. It is not supposed to be a problem because, by default, each counter is a signed 32-bit integer that can store any number between -2,147,483,648 and 2,147,483,647, which means they will not overflow with fewer writes than $2^{31}-1$ divided by the average number of activated hard locations. For instance, when $n=1,000$, $H=1,000,000$, and $r=451$, the average number of activated hard locations is 1,000 and it would require at least one million writes before any overflow is possible.  Note also that it would be more likely to saturate the memory before any overflow.
 
 Anyway, counters may have overflow protection depending on compiling options. By default, there is no overflow check for performance reasons (and because it does not seem necessary).
 

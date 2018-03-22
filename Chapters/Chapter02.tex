@@ -39,7 +39,7 @@ Extensions of SDM have been used in many applications. For example, \citet{Snaid
 
 The main contribution of this work is a reference implementation which yields (i) orders of magnitude gains in performance, (ii) has several backends and operations, (iii) has been validated against the mathematical model, (iv) is cross-platform, and (v) is easily extended to test new research ideas. Our reference implementation may, hopefully, accelerate research into the model's dynamics and make it easier for readers to replicate any previous results and easily understand the source-code of the model.  Moreover, it is compatible with Jupyter notebook and researchers may share their notebooks possibly accelerating the advances in their fields \citep{shen2014interactive}.
 
-Other contributions have also been introduced, which include (i) a noise filtering approach, (ii) a supervised classification algorithm, (iii) and a reinforcement learning algorithm, all of them using only the original SDM proposed by Kanerva, i.e., with no additional mechanisms, algorithms, data structures, etc. Although some of these applications have already been explored in previous work \citep{Meng2009, fan1997genetic, rao1995natural}, all of them have done some adapting of SDM to their problems, and none of them have used just the ideas introduced by Kanerva. We have presented different approaches with no adaptations whatsoever.
+Other contributions have also been introduced, which include (i) a noise filtering approach, (ii) a supervised classification algorithm, (iii) and a reinforcement learning algorithm, all of them using only the original SDM proposed by Kanerva, i.e., with no additional mechanisms, algorithms, data structures, etc. Although some of these applications have already been explored in previous work \citep{Meng2009, fan1997genetic, rao1995natural}, all of them have adapted SDM to fit their problems, and none of them have used just the ideas introduced by Kanerva. We have presented different approaches with no adaptations whatsoever.
 
 Finally, I have striven to provide a visual tour of the theory and application of SDM: whenever possible, detailed figures should tell the story --- or at least do the heavy lifting. In this study, we will see an anomaly in one of Kanerva's predictions, which I believe is related to SDM capacity. We will see tests of a generalized reading operation proposed by Physics Professor Paulo Murilo (personal communication).  We will see what happens when neurons --- and
 all their information --- is simply and suddenly lost.  We will see whether information-theory can improve some of Kanerva's ideas.  From (basic) noise filtering to learning to play tic-tac-toe, we will review the entirety of Dr. Pentti Kanerva's proposal.
@@ -106,7 +106,7 @@ It is interesting that 500,000 neuron deaths have a minor effect on SDM's recall
 \label{fig:sdm-neuron-death-500k}}
 \end{figure}
 
-An important observation is that around 800,000 neuron deaths (80\% of all neurons) the critical distance becomes small, i.e., SDM recall capacity is hugely diminished. After 900,000 neuron deaths, the critical distance is zero. In this case, everything has been lost.
+An important observation is that around 800,000 neuron deaths (80\% of all neurons) the critical distance becomes small, i.e., SDM recall capacity is hugely diminished. After 900,000 neuron deaths, the critical distance is zero, and everything has been lost.
 
 Although there is some decrease in SDM recall after 600,000 neuron deaths, it is curious that there is a sudden change between 900,000 (90\%) and 1,000,000 (100\%). In Figure \ref{fig:sdm-neuron-death-details} we can see the details of this non-linear change. Notice that after 950,000 even the exact clue $\eta_0$ does not converge to $\eta$.
 
@@ -131,7 +131,7 @@ We run the same simulation for a 256-bit SDM with 1,000,000 hard locations. The 
 
 \chapter{Results (iv): Generalized read operation}
 
-Murilo observed that the models of Kanerva's read ($z=1$) and Chada's read ($z=0$) were simple variations of a generalized read with an exponent $z$, which suggests experimenting with different values. Mathematically, let $A$ be the set of the counters of the activated hard location, and $c_i$ be the counter of the $i$th bit. Then,
+Dr. Murilo observed that the models of Kanerva's read ($z=1$) and Chada's read ($z=0$) were simple variations of a generalized read with an exponent $z$, which suggests experimenting with different values. Mathematically, let $A$ be the set of the counters of the activated hard location, and $c_i$ be the counter of the $i$th bit. Then,
 
 $$
 s_i = \sum_{c \in A} \frac{c_i}{|c_i|} |c_i|^z
@@ -141,7 +141,7 @@ The sum of $|c_i|^z$ turns the intermediate values from integers to floating poi
 
 The results, however, have not yielded performance improvements. Though for $z \leq 1$ results are comparable to $z=1$, for $z>1$, the system shows an evident deterioration, with a smaller critical distance and faster divergence at large-distance reads. This is shown in Figures \ref{fig:murillo-generalization-experiments} and \ref{fig:murillo-generalization-experiments-6reads}.
 
-We understand that the critical distance is an important parameter of SDM. The bigger the critical distance, the best, because SDM is able to converge even with farther clues. For $z>1$, the bigger the $z$, the smaller the critical distance. For $z = 6$, the critical distance almost reaches zero.
+We understand that the critical distance is an important parameter of SDM. The bigger the critical distance, the better, because SDM is able to converge even with farther clues. For $z>1$, the bigger the $z$, the smaller the critical distance. For $z = 6$, the critical distance almost reaches zero.
 
 It is interesting that Kanerva has proposed $z=1$ without realizing the generalized reading. Even so, he proposed the $z$ with the highest critical distance.
 

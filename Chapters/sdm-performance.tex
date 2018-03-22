@@ -10,9 +10,9 @@ We have created a benchmark to be able to compare the performance of different d
 
 Our first device was a personal MacBook Pro Retina 13-inch Late 2013 with a 2.6GHz Intel core i5 processor, 6GB DDR3 RAM, and Intel Iris GPU. It was not possible to run the 10,000-bits on this device because there was no memory available --- it needs 37.25 GB of memory. For its results, see Table \ref{tab:perf-macbook}
 
-Our second device was an iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G CPU. For its results, see Table \ref{tab:perf-ec2-imac}.
+Our second device was an iMac Retina 5K 27-inch 2017 with a 3.8GHz Intel core i5 processor, 8GB DDR4 RAM, and a Radeon Pro 580 8G CPU. For its results, see Table \ref{tab:perf-imac}.
 
-Beyond that, we were also running in state-of-the-art devices: (i) an Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU (see Table \ref{tab:perf-p2}), and (ii) an Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU (see Table \ref{tab:perf-ec2-p3}).
+Beyond that, we were also running in state-of-the-art devices: (i) an Amazon EC2 p2.xlarge with Intel Xeon E5-2686v4 processor, 61GB DDR3 RAM, and NVIDIA K80 GPU (see Table \ref{tab:perf-ec2-p2}), and (ii) an Amazon EC2 p3.2xlarge with Intel Xeon E5-2686v4 processor, 488GB DDR3 RAM, and NVIDIA Tesla V100 GPU (see Table \ref{tab:perf-ec2-p3}).
 
 
 \section{Kernels comparison}
@@ -28,12 +28,12 @@ We recommend users to run a specific kernel comparison test for their own GPU an
 
 \section{Scanners comparison}
 
-In this section, we are comparing the OpenCL scanner (with the best kernel) with the linear scanner and the threads scanner. Again, which one is faster depends on the SDM settings. In the iMac 2017, the faster scanner for a 1,000-bits SDM was the OpenCL scanner with \lstinline{single_scan5_unroll}, but for a 256-bit SDM was the threads scanner.
+In this section, we are comparing the OpenCL scanner (with the best kernel) with the linear scanner and the threads scanner. Again, which one is faster depends on the SDM settings. In the iMac 2017, the fastest scanner for a 1,000-bits SDM was the OpenCL scanner with \lstinline{single_scan5_unroll}, but, for a 256-bit SDM, it was the threads scanner.
 
 What happened here is that the OpenCL kernel chosen was a generic one which performs the scan for any SDM. It is always possible to optimize the OpenCL kernel to a specific setting, and it would be faster than the threads. By default, the framework chooses a generic kernel which we believe would be reasonable for the most common setups.
 % TODO Run the optimized kernel and show the results.
 
-We can notice that Amazon EC2 p3.2xlarge and p2.xlarge's linear and thread scanners, both running on CPU, were much slower than the CPU of both the personal MacBook Pro and the iMac 2017. As Amazon EC2 are virtual machines with GPU devices, their CPU is shared with other virtual machines which reduces CPU power significantly. Hence, for both virtual machines we have tested, using the GPU seriously boosts performance, but using the CPU should be avoided. See Tables \ref{tab:perf-imac}
+We can notice that Amazon EC2 p3.2xlarge and p2.xlarge's linear and thread scanners, both running on CPU, were much slower than the CPU of both the personal MacBook Pro and the iMac 2017. As Amazon EC2 are virtual machines with GPU devices, their CPU is shared with other virtual machines which significantly reduces CPU power. Hence, for both virtual machines we have tested, using the GPU seriously boosts performance, but using the CPU should be avoided (see Table \ref{tab:perf-imac})
 
 \section{Read and write operations}
 
