@@ -10,9 +10,27 @@
 
 \begin{document}
 
-Let $x$ and $y$ be random bitstrings and $n$ be the SDM's number of bits; let $x_i$ and $y_i$ be the $i$th bit of $x$ and $y$, respectivelly; and $d(x, y)$ be the Hamming distance.
 
-Applying the law of total probability:
+[Thesis text....] ...As one can easily notice, we have got exactly the same curve as Kanerva. Both his and our model expect that, after reading, say, from 550 bits of distance from a written bitstring, we should obtain the expected $n/2$ equator distance. This question has intrigued us, and here we look for a more analytic explanation than merely interference from the other written attractors. Let us turn back to mathematics to study this anomaly.
+
+\section{A deviation from the equator distance?}
+
+Dr. Kanerva writes:
+
+\begin{quote}
+    You have done an incredibly thorough analysis of SDM. I like the puzzle in your message and believe that your simulations are correct and to be learned from.  So what to make of the difference compared to my Figure 7.3 (and your Figure \ref{fig:kanerva-figure-73-calculated})?  I think the difference comes from my not having accounted fully for the effect of the other 9,999 vectors that are stored in the memory.  You say it in \\
+
+   "Our results show that the theoretical prediction is not accurate. There are interaction effects from one or more of the attractors created by the 10,000 writes, and these attractors seem to raise the distance beyond ~500 bits
+   (Figure \ref{fig:sdm-10000w-table-7-2})." \\
+
+   I think that is correct.  It also brings to mind a comment Louis Jaeckel made when we worked at NASA Ames.  He pointed out that autoassociative storage (each vector is stored with itself as the address) introduces autocorrelation that my formula for Figure 7.2 did not take into account.  When we read from memory, each stored vector exerts a pull toward itself, which also means that each bit of a retrieved vector is slightly biased toward the same bit of the read address, regardless of the read address.  We never worked out the math.
+\end{quote}
+
+This is an important insight: a hard location is activated because it shares many dimensions with the items read from or written onto it. Imagine the `counter's eye view':  each individual counter `likes' to write on its own corresponding bit-address more than it likes the opposite; as each hard-location has a say in its own area (and nowhere else).
+
+Let $x$ and $y$ be random bitstrings and $n$ be the number of dimensions in the memory; let $x_i$ and $y_i$ be the $i$-th bit of $x$ and $y$, respectively; and $d(x, y)$ be the Hamming distance. Whilst the probability of a shared bit-value between same dimension-bits in two random addresses is $1/2$, an address only activates hard-locations close to it.
+
+So what is the probability of shared bit-values given that we know the access radius $r$ between the address and a hard-location?  Applying the law of total probability:
 
 \begin{align}
 P(x_i = y_i | d(x, y) \le r) = \sum_{k=0}^{r} P(x_i = y_i | d(x, y) = k \le r) \cdot P(d(x, y) = k | d(x, y) \le r)
@@ -38,6 +56,30 @@ P(x_i = y_i | d(x, y) \le r) = \frac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}^{
 \end{align}
 
 This equation is valid for both ``x at x'' (autoassociative memory) and ``random at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905498137$.
+
+
+
+
+Linhares here...
+
+Finally, as $\frac{n-k}{n} \binom{n}{k} = \binom{n-1}{k}$
+
+is it?
+
+%\begin{align}
+
+  $\frac{n-k}{n} \binom{n}{k} = \frac{n-k}{n} \frac{n!}{k!(n-k)!}$ \\
+  $ = \frac{(n-k)(n-1)!}{k!(n-k)!} $
+  $ = \frac{(n-1)!}{k!(n-k-1)!}$
+
+%\end{align}
+
+
+
+
+
+
+
 
 \section{Counter bias}
 
