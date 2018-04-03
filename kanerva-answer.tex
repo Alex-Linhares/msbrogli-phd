@@ -137,8 +137,8 @@ We may analyze only one case, because the probability of the other is exactly th
 Each sum is a sum of normally distributed random variables, so
 
 \begin{align}
-\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] &\sim \mathcal{N}(\mu_3 = \mu_2 ph, \sigma^2 = \sigma_1^2 ph) \label{eqn:sdm-eta1-addr1} \\
-\sum_{k=1}^{(1-p)h} \left[ \text{cnt}_k | \text{addr}_k=0 \right] &\sim \mathcal{N}(\mu = -\mu_2 (1-p)h, \sigma^2 = \sigma_1^2 (1-p)h) \label{eqn:sdm-eta1-addr0}
+\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] &\sim \mathcal{N}(\mu_3 = \mu_2 ph, \sigma_3^2 = \sigma_2^2 ph + \mu_2^2 h p(1-p)) \label{eqn:sdm-eta1-addr1} \\
+\sum_{k=1}^{(1-p)h} \left[ \text{cnt}_k | \text{addr}_k=0 \right] &\sim \mathcal{N}(\mu_3 = -\mu_2 (1-p)h, \sigma_3^2 = \sigma_2^2 (1-p)h + \mu_2^2 h p (1-p)) \label{eqn:sdm-eta1-addr0}
 \end{align}
 
 In our case, $\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=672.12, \sigma^2=6281.00)$, and $\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=-543.49, \sigma^2=5078.99)$. See Figure \ref{fig:sdm-read-sums} --- we can notice there a small but significant difference between the theoretical and the simulated mean.
@@ -155,11 +155,11 @@ In our case, $\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim
 Hence,
 
 \begin{align}
-\left[ \text{acc}_i|\eta_i=1 \right] &\sim \mathcal{N}(\mu = (2p-1)^2 \theta h, \sigma^2 = 4 \theta p (1-p) h) \label{eqn:sdm-eta1} \\
-\left[ \text{acc}_i|\eta_i=0 \right] &\sim \mathcal{N}(\mu = -(2p-1)^2 \theta h, \sigma^2 = 4 \theta p (1-p) h) \label{eqn:sdm-eta0}
+\left[ \text{acc}_i|\eta_i=1 \right] &\sim \mathcal{N}(\mu = (2p-1)^2 \theta h, \sigma^2 = \sigma_2^2 h + 2 \mu_2^2 hp(1-p)) \label{eqn:sdm-eta1} \\
+\left[ \text{acc}_i|\eta_i=0 \right] &\sim \mathcal{N}(\mu = -(2p-1)^2 \theta h, \sigma^2 = \sigma_2^2 h + 2 \mu_2^2 hp(1-p)) \label{eqn:sdm-eta0}
 \end{align}
 
-In our case, $\left[ \text{acc}_i|\eta_i=1 \right] \sim \mathcal{N}(\mu = 128.62, \sigma^2 = 11359.99)$, and $\left[ \text{acc}_i|\eta_i=0 \right] \sim \mathcal{N}(\mu = -128.62, \sigma^2 = 11359.99)$. See Figure \ref{fig:sdm-read} --- we can notice that the small difference in the means from Figure \ref{fig:sdm-read-sums} has propagated to these images.
+In our case, $\left[ \text{acc}_i|\eta_i=1 \right] \sim \mathcal{N}(\mu = 128.62, \sigma^2 = 12181.95)$, and $\left[ \text{acc}_i|\eta_i=0 \right] \sim \mathcal{N}(\mu = -128.62, \sigma^2 = 12181.95)$. See Figure \ref{fig:sdm-read} --- we can notice that the small difference in the means from Figure \ref{fig:sdm-read-sums} has propagated to these images.
 
 \begin{figure}[h!]
   \centering
@@ -180,9 +180,9 @@ P(wrong) &= P(\text{acc}_i < 0 | \eta_i = 1) \cdot P(\eta_i = 1) + P(\text{acc}_
     &= \mathcal{N}_{\eta_i=1}.\text{cdf}(0)
 \end{align}
 
-In our case, $P(wrong) = 0.1137518032308093$.
+In our case, $P(wrong) = 0.12193065104931683$.
 
-In order to check this probability, I have run a simulation reading from 1,000 random bitstrings (which have never been written into memory) and calculate the distance from the result of a single read. As the $P(wrong) = 0.11375$, I expected to get an average distance of 113.75 with a standard deviation of 10.04. See Figure \ref{fig:sdm-read-random-bs} --- We can notice a big difference between the theoretical model and the simulation. Using $\mu=102$ and $\sigma=121$, the curves match. I'm still looking for the mistake in the equations. I believe the problem is in Equation \ref{eqn:sdm-eta1-addr1}.
+In order to check this probability, I have run a simulation reading from 1,000 random bitstrings (which have never been written into memory) and calculate the distance from the result of a single read. As the $P(wrong) = 0.12193$, I expected to get an average distance of 121.93 with a standard deviation of 10.34. See Figure \ref{fig:sdm-read-random-bs} --- We can notice a big difference between the theoretical model and the simulation. Using $\mu=221$ and $\sigma^2=168$, the curves match. I'm still looking for the mistake in the equations. I believe the problem is in Equation \ref{eqn:sdm-eta1-addr1}.
 
 \begin{figure}[h!]
   \centering
