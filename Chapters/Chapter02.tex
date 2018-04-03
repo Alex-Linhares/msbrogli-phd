@@ -336,11 +336,9 @@ An unexplored idea is to use multiple SDMs which communicate. A first SDM would 
 
 Kanerva suggests, in his book, the use of 1,000 dimensions and 1,000,000 hard locations.  More recently, he suggested the use of 10,000 dimensions, and on personal discussions suggested that this should be a minimum; as he has been concerned in latent semantic analysis and seems to be the proper scale in that application.
 
-Each parameter set choice like this will lead to particular numbers --- many of them emergent---, such as the access radius size, critical distance, memory capacity, and so forth.
+Each parameter set choice like this will lead to particular numbers --- many of them emergent ---, such as the access radius size, critical distance, memory capacity, and so forth.  For example, the number of dimensions $n$ leads to the number of standard deviations available on the space: $2 \sqrt{n}$.  One then must choose a proper multiple $m\times\sigma$: Kanerva (and most in the literature) have been using $m=3$, as $\mu-3\sigma$ selects approximately $1/1000$ of the space. These constants will determine the size of the access radius.  Then one must choose the number of hard locations, which will determine how many hard-locations are activated on average; and so on and so forth...
 
-One intriguing question here is:  is there a `better' number of dimensions and hard locations?  If so, can such numbers be better studied algebraically or numerically?
-
-How should these parameters be compared?  What are the tradeoffs that should be considered?  What are the `best' benchmarks possible?
+One intriguing question here is:  is there a `better' number of dimensions and hard locations?  If so, can such numbers be better studied algebraically or numerically? How should these parameters be compared?  What are the tradeoffs that should be considered?  What are the `best' benchmarks possible?
 
 % \subsection{Classification with context using sequences --- for words instead of only letters}
 
@@ -348,7 +346,7 @@ How should these parameters be compared?  What are the tradeoffs that should be 
 
 \section{Symmetrical, rapidly accessible, hard locations}
 
-A hypercube with n dimensions can be divided by two hypercubes with $n-1$ dimensions. Is there an algorithm that separates the area of each hard location in such a form that there exists a function mapping each bitstring in $\{0,1\}^n$ to the set of hard locations it `belongs to'?  Though this would break Kanerva's assumption of a randomly yet uniformly distributed set of hard locations --- for a perfectly symmetrical set of hard locations ---, there could be large performance gains if such a mapping function from a bitstring to its corresponding set of nearest hard locations exists. Note that others have attempted heuristic approaches to this\footnote{\citet{Kanerva2009} has recently mentioned that `The computationally most efficient implementation of it, by \citet{Karlsson95afast}, is equivalent to the RAM-based WISARD of  \citet{aleksander1982computer}.' Note, however, that Karlsson's model seems to require $O(2^n)$ hard-locations, and may introduce non-uniform asymmetries in the space.}.
+A hypercube with n dimensions can be divided by two hypercubes with $n-1$ dimensions. Is there an algorithm that separates the area of each hard location in such a form that there exists a function mapping each bitstring in $\{0,1\}^n$ to the set of hard locations it `belongs to'?  Though this would break Kanerva's assumption of a randomly yet uniformly distributed set of hard locations --- for a perfectly symmetrical set of hard locations ---, there could be large performance gains if such a mapping function from a bitstring to its corresponding set of nearest hard locations exists. Note that others have attempted heuristic approaches to this\footnote{\citet{Kanerva2009} has recently mentioned that `The computationally most efficient implementation of it, by \citet{Karlsson95afast}, is equivalent to the RAM-based WISARD of  \citet{aleksander1982computer}.' Note, however, that Karlsson's model may introduce non-uniform asymmetries in the space, and seems to require a staggering $O(2^n)$ hard-locations.}.
 
 Consider the hypercube with $n$ dimensions.  We want to select a subset of its vertices with cardinality $2^{20}$ that is symmetrically distributed over the space. Afterward, $\forall b \in \{ 0,1\} ^n$, we want an algorithm $A$ that yields the particular list of hard locations for $b$ and all hard locations respect the desired properties of the memory.
 
@@ -356,7 +354,7 @@ A reduction from measuring the distance to $2^{20}$ hard locations to a computat
 
 
 
-\section{Illuminating and paving a pathway}
+\section{Illuminating, paving, clearing}
 
 Let us revisit, in these concluding thoughts, the emphasis employed over speed of computation.  At first sight, that might seem like a typical objective of efficiency in computer science. But we are not only interested in the computer science effects here --- the ambition is different. More important than this `computer-sciency' goal, i.e., a beautiful, clean, efficient algorithm with the primary effect of enhanced speed, however, is the secondary effect on the sociology of science:  \emph{We can see farther}.
 
@@ -374,7 +372,9 @@ Consider the misunderstanding concerning the SDM read operation:  Dr. Stan Frank
 
 It is no coincidence that scientific journals such as BMC Neuroscience, or the Journal of Machine Learning Research have specific sections on open-source software. The journal Neurocomputing states, bluntly: “software is scientific method by machine”.
 
-Of course, for the skeptical reader who may consider software a less worthy pursuit, there is also new work here.  The mathematics of the model has been shown to be correct numerically (with a single, small, anomaly); we have shown how to execute unsupervised learning with nothing besides operations original to the SDM; we have studied the generalized Murilo read; we have seen noise filtering; the death of neurons; how information-theory may be of use; and finally, we have reproduced numerous of the original propositions put forth by Kanerva.  The emphasis might have been on the \emph{breadth of topics}, in detriment of depth here or there.  But this is due to our research group's enthusiasm for the topic; we do indeed believe that SDM is --- if not correct --- extremely close to a full scientific understanding of human long-term memory.  If so, it is such a monumental achievement that we want readers to be able to see all of what we see and imagine the vastness of possibilities.  The work on, say, reinforcement learning, is most definitely not the definitive work we will see on the subject, but a challenge left for readers to contemplate. Ralph Waldo Emerson once said \emph{do not go where the path may lead. Go, instead, where there is no path, and leave a trail.}  Professor Pentti Kanerva has left the trail.  It is my job to illuminate it and to pave it and to clear it; to try to deliver an easier pathway for the next generation.  Some essays completely shut the door close at the end; this one intends to leave it wide open. As the reader might have noticed, this final section does not read as an analysis of the work done; it reads, instead, as a \emph{desideratum}, a prologue, a yearning for others to join me in imagining the shape of things to come.
+Of course, for the skeptical reader who may consider software a less worthy pursuit, there is also new work here.  The mathematics of the model has been shown to be correct numerically (with a single, small, anomaly); we have shown how to execute unsupervised learning with nothing besides operations original to the SDM; we have studied the generalized Murilo read; we have seen noise filtering; the death of neurons; how information-theory may be of use; and finally, we have reproduced numerous of the original propositions put forth by Kanerva.  The emphasis might have been on the \emph{breadth of topics}, in detriment of depth here or there.  The work on, say, reinforcement learning, is most definitely not the last word we will see on the subject, but a challenge left for readers to contemplate. But this is due to our research group's enthusiasm for the topic; we do indeed believe that SDM is --- if not correct --- extremely close to a full scientific understanding of human long-term memory.  If so, it is such a monumental achievement that we want readers to be able to see all of what we see and imagine the vastness of possibilities.
+
+Ralph Waldo Emerson once said: \emph{do not go where the path may lead. Go, instead, where there is no path, and leave a trail.}  Professor Pentti Kanerva has left the trail.  It is my job to illuminate it and to pave it and to clear it; to try to deliver an easier pathway for the next generation.  Some essays completely shut the door close at the end; this one intends to leave it wide open. As the reader might have noticed, this final section does not read as an analysis of the work done; it reads, instead, as a \emph{desideratum}, a prologue, a yearning for others to join me in imagining the shape of things to come.
 
 
 
@@ -385,7 +385,7 @@ Of course, for the skeptical reader who may consider software a less worthy purs
 
 
 
-% TODO Include in the to do list simulations based on the suggestion of Murilinho.
+% TODO
 
 \chapter{Appendix}
 %\section{Generating Kanerva's table 7.3}
