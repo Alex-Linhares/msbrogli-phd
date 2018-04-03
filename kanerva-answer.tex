@@ -26,7 +26,7 @@ Dr. Kanerva writes:
    I think that is correct.  It also brings to mind a comment Louis Jaeckel made when we worked at NASA Ames.  He pointed out that autoassociative storage (each vector is stored with itself as the address) introduces autocorrelation that my formula for Figure 7.2 did not take into account.  When we read from memory, each stored vector exerts a pull toward itself, which also means that each bit of a retrieved vector is slightly biased toward the same bit of the read address, regardless of the read address.  We never worked out the math.
 \end{quote}
 
-This is an important insight: a hard location is activated because it shares many dimensions with the items read from or written onto it. Imagine the `counter's eye view':  each individual counter `likes' to write on its own corresponding bit-address more than it likes the opposite; as each hard-location has a say in its own area (and nowhere else).
+This is an important observation. A hard location is activated because it shares many dimensions with the items read from or written onto it. Imagine the `counter's eye view':  each individual counter `likes' to write on its own corresponding bit-address more than it likes the opposite; as each hard-location has a say in its own area --- and nowhere else.
 
 Let $x$ and $y$ be random bitstrings and $n$ be the number of dimensions in the memory; let $x_i$ and $y_i$ be the $i$-th bit of $x$ and $y$, respectively; and $d(x, y)$ be the Hamming distance. Whilst the probability of a shared bit-value between same dimension-bits in two random addresses is $1/2$, an address only activates hard-locations close to it.
 
@@ -50,15 +50,6 @@ P(x_i = y_i | d(x, y) \le r) = \frac{\sum_{k=0}^{r} \frac{n-k}{n} \binom{n}{k}}{
 \end{align}
 
 Finally, as $\frac{n-k}{n} \binom{n}{k} = \binom{n-1}{k}$,
-
-THIS STEP IS A LITTLE WTF TO ME...
-
-$\frac{n-k}{n} \binom{n}{k} = \frac{n-k}{n} \binom{n}{n-k} = \frac{n-k}{n} \frac{n!}{k!(n-k)!}$ \\
-
-$ = \frac{(n-k)(n-1)!}{k!(n-k)!} $
-
-$ = \frac{(n-1)!}{k!(n-k-1)!}$
-
 
 \begin{align}
 P(x_i = y_i | d(x, y) \le r) = \frac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}^{r} \binom{n}{k}}
