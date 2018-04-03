@@ -57,7 +57,11 @@ P(x_i = y_i | d(x, y) \le r) = \frac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}^{
 
 This equation is valid for both ``x at x'' (autoassociative memory) and ``random at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905498137$.
 
-Hence, let $Z$ be the number of activated hard location with the same bit as the reading address, then: $Z = \sum_{i=1}^{h} X_i$, where $\mathbf{E}[h] = h$, $\mathbf{V}[h] = H p_1 (1-p_1)$, $p_1 = 2^{-n} \sum_{k=0}^{r} \binom{n}{k}$, and $X_i \sim \text{Bernoulli}(p)$. By the central limit theorem, $Z$ is normally distributed with $\mathbf{E}[Z] = \mathbf{E}[\mathbf{E}[W_i | h]] = \mathbf{E}[ph] = p \mathbf{E}[h] = ph$, and $\mathbf{V}[Z] = \mathbf{E}[\mathbf{V}[X_i|h]] + \mathbf{V}[\mathbf{E}[X_i|h]] = \mathbf{E}[hp(1-p)] + \mathbf{V}[ph] = p(1-p) \mathbf{E}[h] + p^2 \mathbf{V}[h] = hp(1-p) + p^2 H p_1 (1-p_1)$. See Figure \ref{fig:sdm-same-bit-histogram} for a comparison between the theoretical model and a simulation.
+Hence, let $Z$ be the number of activated hard location with the same bit as the reading address, then: $Z = \sum_{i=1}^{h} X_i$, where $\mathbf{E}[h] = h$, $\mathbf{V}[h] = H p_1 (1-p_1)$, $p_1 = 2^{-n} \sum_{k=0}^{r} \binom{n}{k}$, and $X_i \sim \text{Bernoulli}(p)$. By the central limit theorem, $Z$ is normally distributed.
+
+Applying the law of total average and the law of total variance, $\mathbf{E}[Z] = \mathbf{E}[\mathbf{E}[Z | h]] = \mathbf{E}[ph] = p \mathbf{E}[h] = ph$, and $\mathbf{V}[Z] = \mathbf{E}[\mathbf{V}[Z|h]] + \mathbf{V}[\mathbf{E}[Z|h]] = \mathbf{E}[hp(1-p)] + \mathbf{V}[ph] = p(1-p) \mathbf{E}[h] + p^2 \mathbf{V}[h] = hp(1-p) + p^2 H p_1 (1-p_1)$.
+
+See Figure \ref{fig:sdm-same-bit-histogram} for a comparison between the theoretical model and a simulation.
 
 \begin{figure}[h!]
   \centering
@@ -73,7 +77,11 @@ The bias begins in the counters. Let's analyze the $i$th counter of a hard locat
 
 Let $s$ be the number of bitstrings written into memory (in our case, $s=10,000$), $h$ be the average number of activated hard locations ($h=1,071.85$), $H$ be the number of hard locations ($H=1,000,000$), and $\text{addr}_i$ be the $i$th bit of the hard location's address.
 
-Let $\theta = \frac{sh}{H}$ be the average number of bitstrings written in each hard location, and $X_k \sim \text{Bernoulli}(p)$ (where $p = P(x_i = y_i | d(x, y) \le r)$). Thus, $Y_i = \sum_{k=1}^{\theta} X_k \sim \mathcal{N}(\mu_1, \sigma_1^2)$ with $\mu_1 = p \theta$, and $\sigma_1^2 = p(1-p) \theta + p^2 s^2 p_1 (1 - p_1) / H$.
+Let $\theta = \frac{sh}{H}$ be the average number of bitstrings written in each hard location, and $X_k \sim \text{Bernoulli}(p)$ (where $p = P(x_i = y_i | d(x, y) \le r)$). Thus,
+
+\begin{align}
+Y_i = \sum_{k=1}^{\theta} X_k \sim \mathcal{N}(\mu_1 = p \theta, \sigma_1^2 = p(1-p) \theta + p^2 s^2 p_1 (1 - p_1) / H)
+\end{align}
 
 During a write operation, the counters are incremented for every bit 1 and decremented for every bit 0. So, after $s$ writes, there will be $\theta$ bitstrings written in each hard location, $Y_i$ bits 1, and $\theta - Y_i$ bits 0. Thus, $[\text{cnt}_i | \text{addr}_i = 1] = (Y_i) - (\theta - Y_i) = 2Y_i - \theta$; and $[\text{cnt}_i | \text{addr}_i = 0] = \theta - 2Y_i$.
 
@@ -104,7 +112,7 @@ P(\text{cnt}_i > 0 | \text{addr}_i = 1) = P(\text{cnt}_i < 0 | \text{addr}_i = 0
 
 For ``random at x'', $p=0.5$ implies $\mu_2 = 0$, which implies $P(\text{cnt}_i > 0 | \text{addr}_i = 1) = P(\text{cnt}_i < 0 | \text{addr}_i = 0) = 0.5$, independently of the parameters because they will only affect the variance and the normal distribution is symmetrical around the average.
 
-However, for ``x at x'', $p=0.5529$ and the probabilities depend on $s$. For $s=10,000$, they are equal to 0.6354. For $s=20,000$, they are equal to 0.6867. For $s=30,000$, they are equal to 0.7232. The more random bitstrings are written into the memory, the more a hard location to point to itself. See Figure \ref{fig:sdm-corr-prob} --- and notice that I still have to figure out why the mean is correct, but the standard deviation is not. As each of the $n$ counters of a hard location may be equal or not with the same probability, I assumed it would follow a Binomial distribution (and it worked for ``random at x'').
+However, for ``x at x'', $p=0.5529$ and the probabilities depend on $s$. For $s=10,000$, they are equal to 0.6354. For $s=20,000$, they are equal to 0.6867. For $s=30,000$, they are equal to 0.7232. The more random bitstrings are written into the memory, the more the hard locations point to themselves. See Figure \ref{fig:sdm-corr-prob} --- and notice that I still have to figure out why the mean is correct, but the standard deviation is not. As each of the $n$ counters of a hard location may be equal or not with the same probability, I assumed it would follow a Binomial distribution (and it worked for ``random at x'').
 
 \begin{figure}[h!]
   \centering
@@ -125,20 +133,17 @@ Now that we know the distribution of $\text{cnt}_i | \text{addr}_i$, we may go t
 \text{acc}_i = \sum_{k=1}^{h} \text{cnt}_k
 \end{align}
 
-Let $\eta$ be the reading address and $\eta_i$ the $i$th bit of it. Then,
+Let $\eta$ be the reading address and $\eta_i$ the $i$th bit of it. Then, let's split the $h$ activated hard locations into two groups: (i) the ones with the same bit as $\eta_i$ with $ph$ hard locations, and (ii) the ones with the opposite bit as $\eta_i$ with $(1-p)h$ hard locations.
 
 \begin{align}
-\left[ \text{acc}_i|\eta_i=1 \right] &= \sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] + \sum_{k=1}^{(1-p)h} \left[ \text{cnt}_k | \text{addr}_k=0 \right] \\
-\left[ \text{acc}_i|\eta_i=0 \right] &= \sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=0 \right] + \sum_{k=1}^{(1-p)h} \left[ \text{cnt}_k | \text{addr}_k=1 \right]
+\left[ \text{acc}_i|\eta_i \right] &= \sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=\eta_i \right] + \sum_{k=1}^{(1-p)h} \left[ \text{cnt}_k | \text{addr}_k \ne \eta_i \right]
 \end{align}
-
-We may analyze only one case, because the probability of the other is exactly the same.
 
 Each sum is a sum of normally distributed random variables, so
 
 \begin{align}
-\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] &\sim \mathcal{N}(\mu_3 = \mu_2 ph, \sigma_3^2 = \sigma_2^2 ph + \mu_2^2 h p(1-p)) \label{eqn:sdm-eta1-addr1} \\
-\sum_{k=1}^{(1-p)h} \left[ \text{cnt}_k | \text{addr}_k=0 \right] &\sim \mathcal{N}(\mu_3 = -\mu_2 (1-p)h, \sigma_3^2 = \sigma_2^2 (1-p)h + \mu_2^2 h p (1-p)) \label{eqn:sdm-eta1-addr0}
+\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=\eta_1 \right] &\sim \mathcal{N}(\mu_3 = \mu_2 ph, \sigma_3^2 = \sigma_2^2 ph + \mu_2^2 h p(1-p)) \label{eqn:sdm-eta1-addr1} \\
+\sum_{k=1}^{(1-p)h} \left[ \text{cnt}_k | \text{addr}_k \ne \eta_1 \right] &\sim \mathcal{N}(\mu_3 = -\mu_2 (1-p)h, \sigma_3^2 = \sigma_2^2 (1-p)h + \mu_2^2 h p (1-p)) \label{eqn:sdm-eta1-addr0}
 \end{align}
 
 In our case, $\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=672.12, \sigma^2=6281.00)$, and $\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=-543.49, \sigma^2=5078.99)$. See Figure \ref{fig:sdm-read-sums} --- we can notice there a small but significant difference between the theoretical and the simulated mean.
