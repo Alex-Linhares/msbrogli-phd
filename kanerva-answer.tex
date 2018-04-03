@@ -29,20 +29,22 @@ Dr. Kanerva writes\footnote{Email thread `SDM: A puzzling issue and an invitatio
    I think that is correct.  It also brings to mind a comment Louis Jaeckel made when we worked at NASA Ames.  He pointed out that autoassociative storage (each vector is stored with itself as the address) introduces autocorrelation that my formula for Figure 7.2 did not take into account.  When we read from memory, each stored vector exerts a pull toward itself, which also means that each bit of a retrieved vector is slightly biased toward the same bit of the read address, regardless of the read address.  We never worked out the math.
 \end{quote}
 
-This is an important observation. A hard location is activated because it shares many dimensions with the items read from or written onto it. Imagine the `counter's eye view':  each individual counter `likes' to write on its own corresponding bit-address more than it likes the opposite; as each hard-location has a say in its own area --- and nowhere else.
+This is an important observation. A hard location is activated because it shares many dimensions with the items read from or written onto it. Imagine the `counter's eye view':  each individual counter `likes' to write on its own corresponding bit-address value more than it likes the opposite; as each hard-location has a say in its own area --- and nowhere else.
 
-Let $x$ and $y$ be random bitstrings and $n$ be the number of dimensions in the memory; let $x_i$ and $y_i$ be the $i$-th bit of $x$ and $y$, respectively; and $d(x, y)$ be the Hamming distance. Whilst the probability of a shared bit-value between same dimension-bits in two random addresses is $1/2$, an address only activates hard-locations close to it.
+Let $x$ and $y$ be random bitstrings and $n$ be the number of dimensions in the memory; let $x_i$ and $y_i$ be the $i$-th bit of $x$ and $y$, respectively; and $d(x, y)$ be the Hamming distance. Whilst the probability of a shared bit-value between same dimension-bits in two random addresses is $1/2$, an address only activates hard-locations close to it.  Let us call these shared bitvalues a \emph{bitmatch in dimension $i$}.
 
-So what is the probability of shared bit-values given that we know the access radius $r$ between the address and a hard-location?
+So, what is the probability of bitmatches given that we know the access radius $r$ between the address and a hard-location?
 \bigskip
 
 \begin{theorem}
-%\emph{(Lagrange's Theorem)}
+\emph{Each dimension has a small pull bias, which can be measured by}
 \label{T1}
-$P(x_i = y_i | d(x, y) \le r) = \dfrac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}^{r} \binom{n}{k}}$
+$P(x_i = y_i | d(x, y) \le r) = \dfrac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}^{r} \binom{n}{k}}.$
 \end{theorem}
 
 \begin{proof}
+    The left-hand expression $P(x_i = y_i | d(x, y) \le r)$ computes the probability of a bitmatch in $i$, given that we know that $x$ and $y$ are in the access radius defined by $r$, i.e., $d(x, y)\le r$.
+
     Applying the law of total probability to the left-hand expression we obtain
 
     \begin{align}
@@ -72,9 +74,27 @@ $P(x_i = y_i | d(x, y) \le r) = \dfrac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}
 
 \end{proof}
 
-This equation is valid for both ``x at x'' (autoassociative memory) and ``random at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905498137$.
+Theorem \ref{T1} is valid for both ``x at x'' (autoassociative memory) and ``random at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905498137$.  Each bit of a hard location does indeed have a small pull bias.  What is meant by this is that each particular dimension has a small preference toward positive values if its address bit is set to 1, and negative values otherwise.
 
-Hence, let $Z$ be the number of activated hard location with the same bit as the reading address, then: $Z = \sum_{i=1}^{h} X_i$, where $\mathbf{E}[h] = h$, $\mathbf{V}[h] = H p_1 (1-p_1)$, $p_1 = 2^{-n} \sum_{k=0}^{r} \binom{n}{k}$, and $X_i \sim \text{Bernoulli}(p)$. By the central limit theorem, $Z$ is normally distributed.
+So far we have looked only at a single dimension.  Let us think about how the entire bitstring is affected by this result.
+
+\begin{theorem}
+\emph{Given a reading address $x$ and a dimension $i$, the number of activated hard-locations with bitmatches at $i$ follows a normal distribution with }
+\label{T2}
+$\mathbf{E}[Z] = ph$ and $\mathbf{V}[Z] = hp(1-p) + p^2 H p_1 (1-p_1)$.
+
+\end{theorem}
+
+Let $Z$ be the number of activated hard locations with the same bit as the reading address:
+
+$Z = \sum_{i=1}^{h} X_i$,
+
+where $\mathbf{E}[h] = h$, \\
+$\mathbf{V}[h] = H p_1 (1-p_1)$, \\
+$p_1 = 2^{-n} \sum_{k=0}^{r} \binom{n}{k}$, and \\
+$X_i \sim \text{Bernoulli}(p)$. \\
+
+By the central limit theorem, $Z$ is normally distributed.
 
 Applying the law of total average and the law of total variance, $\mathbf{E}[Z] = \mathbf{E}[\mathbf{E}[Z | h]] = \mathbf{E}[ph] = p \mathbf{E}[h] = ph$, and $\mathbf{V}[Z] = \mathbf{E}[\mathbf{V}[Z|h]] + \mathbf{V}[\mathbf{E}[Z|h]] = \mathbf{E}[hp(1-p)] + \mathbf{V}[ph] = p(1-p) \mathbf{E}[h] + p^2 \mathbf{V}[h] = hp(1-p) + p^2 H p_1 (1-p_1)$.
 
@@ -84,7 +104,7 @@ See Figure \ref{fig:sdm-same-bit-histogram} for a comparison between the theoret
   \centering
   \includegraphics[width=0.75\textwidth]{./images02/autocorrelation/same-bit-histogram.png}
 
-  \caption{The histogram was obtained through simulation. The red curve is the theoretical normal distribution.}
+  \caption{The histogram was obtained through simulation. The red curve is the theoretical normal distribution found in \ref{T2}.}
   \label{fig:sdm-same-bit-histogram}
 \end{figure}
 
@@ -105,8 +125,8 @@ During a write operation, the counters are incremented for every bit 1 and decre
 Hence, as $\text{cnt}_i = 2Y_i - \theta$, $\mathbf{E}[2Y_i - \theta] = 2 \mathbf{E}[Y_i] - \theta$, and $\mathbf{V}[2Y_i - \theta] = 4 \mathbf{V}[Y_i]$, then,
 
 \begin{align}
-\left[ \text{cnt}_i | \text{addr}_i=1 \right] &\sim \mathcal{N}(\mu_2 = (2p-1) \theta, \sigma_2^2 = 4 \sigma_1^2) \\
-\left[ \text{cnt}_i | \text{addr}_i=0 \right] &\sim \mathcal{N}(\mu_2 = -(2p-1) \theta, \sigma_2^2 = 4 \sigma_1^2)
+\left[ \text{cnt}_i | \text{addr}_i=1 \right] &\sim \mathcal{N}(\mu_2 = (2p-1) \theta, \sigma_2^2 = 4 \sigma_1^2)\label{cntaddr1} \\
+\left[ \text{cnt}_i | \text{addr}_i=0 \right] &\sim \mathcal{N}(\mu_2 = -(2p-1) \theta, \sigma_2^2 = 4 \sigma_1^2)\label{cntaddr0}
 \end{align}
 
 In our case, $p=0.5529$, $s=10,000$, $h=1,071.85$, and $H=1,000,000$, so $\theta = 10.7185$ and $\text{cnt}_i \sim \mathcal{N}(\mu=1.1341, \sigma^2 = 10.7294)$. For ``random at x'', $p=0.5$, so $\mu = 0$ and $\sigma^2 = 10.8255$. See Figure \ref{fig:sdm-corr-counters}.
@@ -116,7 +136,7 @@ In our case, $p=0.5529$, $s=10,000$, $h=1,071.85$, and $H=1,000,000$, so $\theta
   \subfloat[$\text{addr}_i=1$]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/x_at_x_addr1.png}}
   \subfloat[$\text{addr}_i=0$]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/x_at_x_addr0.png}}
 
-  \caption{The value of the counters after $s=10,000$ writes shows the autocorrelation in the counters in autoassociative memories (``x at x''). The histogram was obtained through simulation. The red curve is the theoretical normal distribution.}
+  \caption{The value of the counters after $s=10,000$ writes shows the autocorrelation in the counters in autoassociative memories (``x at x''). The histogram was obtained through simulation. The red curve is the theoretical normal distribution found in (\ref{cntaddr1}) and (\ref{cntaddr0}).}
   \label{fig:sdm-corr-counters}
 \end{figure}
 
