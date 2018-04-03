@@ -316,7 +316,7 @@ Here are interesting questions that have been considered during this work, but h
 
 \section{``i'' versus ``l''}
 
-The classification algorithm had some problems classifying the letters ``i'' and ``l''. It may have happened because of the low distance between them. In this case, SDM could not differentiate the details --- it has only considered the big picture. Although this behavior is close to how humans see things, we also have the ability to zoom and focus on the details, clearly discerning letter ``i'' from letter ``l''.
+The classification algorithm had some problems classifying the patterns ``i'' and ``l'', due to the low distance between them. In this case, SDM could not discriminate the differences --- it has only considered the big picture. Although this behavior is close to how humans see things, we also have the ability to zoom and focus on the details, clearly discerning letter ``i'' from letter ``l''.
 
 I have run the classification algorithm under the MNIST database of handwritten digits \citep{deng2012mnist}. First, SDM has been trained with the 60,000 training images, and then it classified the 10,000 testing images. In these initial tests, the memory has given the correct classification for 79.22\% of the images, which is inferior to the specialized algorithms. For instance, in 1998, \citet{lecun1998gradient} have developed algorithms which achieve from 88\% through a linear classifier, to 99.7\% through a convolutional net. For a review of algorithms' performance in the MNIST database, see \cite{mnist}.
 
@@ -324,7 +324,9 @@ Looking into the reason behind images incorrectly classified, I have found that 
 
 An unexplored idea is to use multiple SDMs which communicate. A first SDM would write the whole picture, just like we have done. Another SDM would write specific regions of the image, just like our eye focusing on specific regions. When reading, they may compose the counters and give a more precise classification.
 
-% \subsection{Multiple levels}
+% \subsection{Deep learning, multiple SDMs, and the animal behavior of Dr. Linhares}
+
+
 
 % Deep neural networks, alphaGo, alphazero
 
@@ -346,7 +348,7 @@ How should these parameters be compared?  What are the tradeoffs that should be 
 
 \section{Symmetrical, rapidly accessible, hard locations}
 
-A hypercube with n dimensions can be divided by two hypercubes with $n-1$ dimensions. Is there an algorithm that separates the area of each hard location in such a form that there exists a function mapping each bitstring in $\{0,1\}^n$ to the set of hard locations it `belongs to'?  Though this would break Kanerva's assumption of a randomly yet uniformly distributed set of hard locations --- for a perfectly symmetrical set of hard locations ---, there could be large performance gains if such a mapping function from a bitstring to its corresponding set of nearest hard locations exists.
+A hypercube with n dimensions can be divided by two hypercubes with $n-1$ dimensions. Is there an algorithm that separates the area of each hard location in such a form that there exists a function mapping each bitstring in $\{0,1\}^n$ to the set of hard locations it `belongs to'?  Though this would break Kanerva's assumption of a randomly yet uniformly distributed set of hard locations --- for a perfectly symmetrical set of hard locations ---, there could be large performance gains if such a mapping function from a bitstring to its corresponding set of nearest hard locations exists. Note that others have attempted heuristic approaches to this\footnote{\citet{Kanerva2009} has recently mentioned that `The computationally most efficient implementation of it, by \citet{Karlsson95afast}, is equivalent to the RAM-based WISARD of  \citet{aleksander1982computer}.' Note, however, that Karlsson's model seems to require $O(2^n)$ hard-locations, and may introduce non-uniform asymmetries in the space.}.
 
 Consider the hypercube with $n$ dimensions.  We want to select a subset of its vertices with cardinality $2^{20}$ that is symmetrically distributed over the space. Afterward, $\forall b \in \{ 0,1\} ^n$, we want an algorithm $A$ that yields the particular list of hard locations for $b$ and all hard locations respect the desired properties of the memory.
 
