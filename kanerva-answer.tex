@@ -39,22 +39,54 @@ P(x_i = y_i | d(x, y) \le r) = \frac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}^{
 
 This equation is valid for both ``x at x'' (autoassociative memory) and ``random at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905498137$.
 
+Hence, let $Z$ be the number of activated hard location with the same bit as the reading address, then: $Z = \sum_{i=1}^{h} X_i$, where $\mathbf{E}[h] = h$, $\mathbf{V}[h] = H p_1 (1-p_1)$, $p_1 = 2^{-n} \sum_{k=0}^{r} \binom{n}{k}$, and $X_i \sim \text{Bernoulli}(p)$. By the central limit theorem, $Z$ is normally distributed with $\mathbf{E}[Z] = \mathbf{E}[\mathbf{E}[W_i | h]] = \mathbf{E}[ph] = p \mathbf{E}[h] = ph$, and $\mathbf{V}[Z] = \mathbf{E}[\mathbf{V}[X_i|h]] + \mathbf{V}[\mathbf{E}[X_i|h]] = \mathbf{E}[hp(1-p)] + \mathbf{V}[ph] = p(1-p) \mathbf{E}[h] + p^2 \mathbf{V}[h] = hp(1-p) + p^2 H p_1 (1-p_1)$. See Figure \ref{fig:sdm-same-bit-histogram} for a comparison between the theoretical model and a simulation.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.75\textwidth]{./images02/autocorrelation/same-bit-histogram.png}
+
+  \caption{The histogram was obtained through simulation. The red curve is the theoretical normal distribution.}
+  \label{fig:sdm-same-bit-histogram}
+\end{figure}
+
 \section{Counter bias}
 
-The bias begins in the counters. Let's analyze $i$th counter of a hard location.
+The bias begins in the counters. Let's analyze the $i$th counter of a hard location.
 
-Let $s$ be the number of bitstrings written into memory (in our case, $s=10,000$), $h$ be the average number of activated hard locations ($h=1,071.85$), $H$ be the number of hard locations ($H=1,000,000$), and $\text{addr}_i$ be the $i$th bit of the hard location's address. Then,
+Let $s$ be the number of bitstrings written into memory (in our case, $s=10,000$), $h$ be the average number of activated hard locations ($h=1,071.85$), $H$ be the number of hard locations ($H=1,000,000$), and $\text{addr}_i$ be the $i$th bit of the hard location's address.
+
+Let $\theta = \frac{sh}{H}$ be the average number of bitstrings written in each hard location, and $X_k \sim \text{Bernoulli}(p)$ (where $p = P(x_i = y_i | d(x, y) \le r)$). Thus, $Y_i = \sum_{k=1}^{\theta} X_k \sim \mathcal{N}(\mu_1, \sigma_1^2)$ with $\mu_1 = p \theta$, and $\sigma_1^2 = p(1-p) \theta + p^2 s^2 p_1 (1 - p_1) / H$.
+
+During a write operation, the counters are incremented for every bit 1 and decremented for every bit 0. So, after $s$ writes, there will be $\theta$ bitstrings written in each hard location, $Y_i$ bits 1, and $\theta - Y_i$ bits 0. Thus, $[\text{cnt}_i | \text{addr}_i = 1] = (Y_i) - (\theta - Y_i) = 2Y_i - \theta$; and $[\text{cnt}_i | \text{addr}_i = 0] = \theta - 2Y_i$.
+
+Hence, as $\text{cnt}_i = 2Y_i - \theta$, $\mathbf{E}[2Y_i - \theta] = 2 \mathbf{E}[Y_i] - \theta$, and $\mathbf{V}[2Y_i - \theta] = 4 \mathbf{V}[Y_i]$, then,
 
 \begin{align}
-P(\text{cnt}_i > 0 | \text{addr}_i = 1) = P(\text{cnt}_i < 0 | \text{addr}i = 0) = \sum_{k=1}^{\theta} X_k > \frac{sh}{2H}
+\left[ \text{cnt}_i | \text{addr}_i=1 \right] &\sim \mathcal{N}(\mu_2 = (2p-1) \theta, \sigma_2^2 = 4 \sigma_1^2) \\
+\left[ \text{cnt}_i | \text{addr}_i=0 \right] &\sim \mathcal{N}(\mu_2 = -(2p-1) \theta, \sigma_2^2 = 4 \sigma_1^2)
 \end{align}
 
-Where $\theta = \frac{sh}{H}$ is the average number of bitstrings written in each hard location, and $X_k \sim \text{Bernoulli}(p)$ (where $p = P(x_i = y_i | d(x, y) \le r)$). Thus, $\sum_{k=1}^{\theta} X_k \sim \text{Binomial} \left( \theta, p \right)$.
+In our case, $p=0.5529$, $s=10,000$, $h=1,071.85$, and $H=1,000,000$, so $\theta = 10.7185$ and $\text{cnt}_i \sim \mathcal{N}(\mu=1.1341, \sigma^2 = 10.7294)$. For ``random at x'', $p=0.5$, so $\mu = 0$ and $\sigma^2 = 10.8255$. See Figure \ref{fig:sdm-corr-counters}.
 
-Finally, $P(\text{cnt}_i > 0 | \text{addr}_i = 1) = P(\text{cnt}_i < 0 | \text{addr}_i = 0) = \text{Binomial.cdf} \left( \frac{sh}{2H} \right)$.
+\begin{figure}[h!]
+  \centering
+  \subfloat[$\text{addr}_i=1$]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/x_at_x_addr1.png}}
+  \subfloat[$\text{addr}_i=0$]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/x_at_x_addr0.png}}
+
+  \caption{The value of the counters after $s=10,000$ writes shows the autocorrelation in the counters in autoassociative memories (``x at x''). The histogram was obtained through simulation. The red curve is the theoretical normal distribution.}
+  \label{fig:sdm-corr-counters}
+\end{figure}
 
 
-For ``random at x'', $p=0.5$, $P(\text{cnt}_i > 0 | \text{addr}_i = 1) = P(\text{cnt}_i < 0 | \text{addr}_i = 0) = 0.5$, independently of the parameters. But, for ``x at x'', $p=0.5529$ and the probabilities depend on $s$. For $s=10,000$, they are equal to 0.6362. For $s=20,000$, they are equal to 0.6888. For $s=30,000$, they are equal to 0.7268. The more random bitstrings are written into the memory, the more a hard location to point to itself. See Figure \ref{fig:sdm-corr-prob} --- and notice that I still have to figure out why the mean is correct, but the standard deviation is not. As each of the $n$ counters of a hard location may be equal or not with the same probability, I assumed it would follow a Binomial distribution (and it worked for ``random at x'').
+Finally,
+
+\begin{align}
+P(\text{cnt}_i > 0 | \text{addr}_i = 1) = P(\text{cnt}_i < 0 | \text{addr}_i = 0) = 1 - \mathcal{N}.\text{cdf}(0)
+\end{align}
+
+For ``random at x'', $p=0.5$ implies $\mu_2 = 0$, which implies $P(\text{cnt}_i > 0 | \text{addr}_i = 1) = P(\text{cnt}_i < 0 | \text{addr}_i = 0) = 0.5$, independently of the parameters because they will only affect the variance and the normal distribution is symmetrical around the average.
+
+However, for ``x at x'', $p=0.5529$ and the probabilities depend on $s$. For $s=10,000$, they are equal to 0.6354. For $s=20,000$, they are equal to 0.6867. For $s=30,000$, they are equal to 0.7232. The more random bitstrings are written into the memory, the more a hard location to point to itself. See Figure \ref{fig:sdm-corr-prob} --- and notice that I still have to figure out why the mean is correct, but the standard deviation is not. As each of the $n$ counters of a hard location may be equal or not with the same probability, I assumed it would follow a Binomial distribution (and it worked for ``random at x'').
 
 \begin{figure}[h!]
   \centering
@@ -65,26 +97,6 @@ For ``random at x'', $p=0.5$, $P(\text{cnt}_i > 0 | \text{addr}_i = 1) = P(\text
   \label{fig:sdm-corr-prob}
 \end{figure}
 
-
-Not let's analyze the value of the counters for ``x at x''. In write operation, the counters are incremented for every bit 1 and decremented for every bit 0. So, after $s$ writes, there will be $\theta$ bitstrings written in each hard location, $Y_i = \sum_{k=1}^{\theta} X_k$ bits 1, and $\theta - Y_i$ bits 0. Thus, when $\text{addr}_i = 1$, $\text{cnt}_i = (Y_i) - (\theta - Y_i) = 2Y_i - \theta$. And, when $\text{addr}_i = 0$, $\text{cnt}_i = \theta - 2Y_i$.
-
-As $Y_i \sim \text{Binomial}(\theta, p)$, for $\theta$ sufficiently large, we may approximate $Y_i \sim \mathcal{N}(\mu = \theta p, \sigma^2 = \theta p (1-p))$. Hence, as $\text{cnt}_i = 2Y_i - \theta$, $\mathbf{E}[2Y_i - \theta] = 2 \mathbf{E}[Y_i] - \theta$, and $\mathbf{V}[2Y_i - \theta] = 4 \mathbf{V}[Y_i]$, then,
-
-\begin{align}
-\left[ \text{cnt}_i | \text{addr}_i=1 \right] &\sim \mathcal{N}(\mu = (2p-1) \theta, \sigma^2 = 4 \theta p (1-p)) \\
-\left[ \text{cnt}_i | \text{addr}_i=0 \right] &\sim \mathcal{N}(\mu = -(2p-1) \theta, \sigma^2 = 4 \theta p (1-p))
-\end{align}
-
-In our case, $p=0.5529$, $s=10,000$, $h=1,071.85$, and $H=1,000,000$, so $\theta = 10.7185$ and $\text{cnt}_i \sim \mathcal{N}(\mu=1.1341, \sigma^2 = 10.5985)$. For ``random at x'', $p=0.5$, so $\mu = 0$ and $\sigma^2 = \theta$. See Figure \ref{fig:sdm-corr-counters}.
-
-\begin{figure}[h!]
-  \centering
-  \subfloat[$\text{addr}_i=1$]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/x_at_x_addr1.png}}
-  \subfloat[$\text{addr}_i=0$]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/x_at_x_addr0.png}}
-
-  \caption{Autocorrelation in the counters in autoassociative memories (``x at x''). The histogram was obtained through simulation. The red curve is the theoretical normal distribution.}
-  \label{fig:sdm-corr-counters}
-\end{figure}
 
 
 \section{Read bias}
@@ -107,8 +119,8 @@ We may analyze only one case, because the probability of the other is exactly th
 Each sum is a sum of normally distributed random variables, so
 
 \begin{align}
-\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] &\sim \mathcal{N}(\mu = (2p-1) \theta ph, \sigma^2 = 4\theta p(1-p) ph) \label{eqn:sdm-eta1-addr1} \\
-\sum_{k=1}^{(1-p)h} \left[ \text{cnt}_k | \text{addr}_k=0 \right] &\sim \mathcal{N}(\mu = -(2p-1) \theta (1-p)h, \sigma^2 = 4\theta p(1-p) (1-p)h) \label{eqn:sdm-eta1-addr0}
+\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] &\sim \mathcal{N}(\mu_3 = \mu_2 ph, \sigma^2 = \sigma_1^2 ph) \label{eqn:sdm-eta1-addr1} \\
+\sum_{k=1}^{(1-p)h} \left[ \text{cnt}_k | \text{addr}_k=0 \right] &\sim \mathcal{N}(\mu = -\mu_2 (1-p)h, \sigma^2 = \sigma_1^2 (1-p)h) \label{eqn:sdm-eta1-addr0}
 \end{align}
 
 In our case, $\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=672.12, \sigma^2=6281.00)$, and $\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=-543.49, \sigma^2=5078.99)$. See Figure \ref{fig:sdm-read-sums} --- we can notice there a small but significant difference between the theoretical and the simulated mean.
