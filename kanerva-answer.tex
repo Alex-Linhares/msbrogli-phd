@@ -51,37 +51,21 @@ P(x_i = y_i | d(x, y) \le r) = \frac{\sum_{k=0}^{r} \frac{n-k}{n} \binom{n}{k}}{
 
 Finally, as $\frac{n-k}{n} \binom{n}{k} = \binom{n-1}{k}$,
 
+THIS STEP IS A LITTLE WTF TO ME...
+
+$\frac{n-k}{n} \binom{n}{k} = \frac{n-k}{n} \binom{n}{n-k} = \frac{n-k}{n} \frac{n!}{k!(n-k)!}$ \\
+
+$ = \frac{(n-k)(n-1)!}{k!(n-k)!} $
+
+$ = \frac{(n-1)!}{k!(n-k-1)!}$
+
+
 \begin{align}
 P(x_i = y_i | d(x, y) \le r) = \frac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}^{r} \binom{n}{k}}
 \end{align}
 
 This equation is valid for both ``x at x'' (autoassociative memory) and ``random at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905498137$.
 
-<<<<<<< HEAD
-
-
-
-Linhares here...
-
-Finally, as $\frac{n-k}{n} \binom{n}{k} = \binom{n-1}{k}$
-
-is it?
-
-%\begin{align}
-
-  $\frac{n-k}{n} \binom{n}{k} = \frac{n-k}{n} \frac{n!}{k!(n-k)!}$ \\
-  $ = \frac{(n-k)(n-1)!}{k!(n-k)!} $
-  $ = \frac{(n-1)!}{k!(n-k-1)!}$
-
-%\end{align}
-
-
-
-
-
-
-
-=======
 Hence, let $Z$ be the number of activated hard location with the same bit as the reading address, then: $Z = \sum_{i=1}^{h} X_i$, where $\mathbf{E}[h] = h$, $\mathbf{V}[h] = H p_1 (1-p_1)$, $p_1 = 2^{-n} \sum_{k=0}^{r} \binom{n}{k}$, and $X_i \sim \text{Bernoulli}(p)$. By the central limit theorem, $Z$ is normally distributed with $\mathbf{E}[Z] = \mathbf{E}[\mathbf{E}[W_i | h]] = \mathbf{E}[ph] = p \mathbf{E}[h] = ph$, and $\mathbf{V}[Z] = \mathbf{E}[\mathbf{V}[X_i|h]] + \mathbf{V}[\mathbf{E}[X_i|h]] = \mathbf{E}[hp(1-p)] + \mathbf{V}[ph] = p(1-p) \mathbf{E}[h] + p^2 \mathbf{V}[h] = hp(1-p) + p^2 H p_1 (1-p_1)$. See Figure \ref{fig:sdm-same-bit-histogram} for a comparison between the theoretical model and a simulation.
 
 \begin{figure}[h!]
@@ -91,7 +75,6 @@ Hence, let $Z$ be the number of activated hard location with the same bit as the
   \caption{The histogram was obtained through simulation. The red curve is the theoretical normal distribution.}
   \label{fig:sdm-same-bit-histogram}
 \end{figure}
->>>>>>> 4ad6e6f85f4a731a57514ae3c7a0f674578635b1
 
 \section{Counter bias}
 
