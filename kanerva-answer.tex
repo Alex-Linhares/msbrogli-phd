@@ -74,7 +74,7 @@ $P(x_i = y_i | d(x, y) \le r) = \dfrac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}
 
 \end{proof}
 
-Theorem \ref{T1} is valid for both ``x at x'' (autoassociative memory) and ``random at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905498137$.  Each bit of a hard location does indeed have a small pull bias.  What is meant by this is that each particular dimension has a small preference toward positive values if its address bit is set to 1, and negative values otherwise.
+Theorem \ref{T1} is valid for both ``x written at x'' (autoassociative memory) and ``random written at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905498137$.  Each bit of a hard location does indeed have a small pull bias.  What is meant by this is that each particular dimension has a small preference toward positive values if its address bit is set to 1, and negative values otherwise.
 
 So far we have looked only at a single pair of bitstrings, the probability of a single bitmatch between bitstrings within the access radius distance.  Now let us consider the number of activated hard locations exhibiting this bitmatch.
 
@@ -147,16 +147,16 @@ Finally,
 P(\text{cnt}_i > 0 | \text{addr}_i = 1) = P(\text{cnt}_i < 0 | \text{addr}_i = 0) = 1 - \mathcal{N}.\text{cdf}(0)
 \end{align}
 
-For ``random at x'', $p=0.5$ implies $\mu_2 = 0$, which implies $P(\text{cnt}_i > 0 | \text{addr}_i = 1) = P(\text{cnt}_i < 0 | \text{addr}_i = 0) = 0.5$, independently of the parameters because they will only affect the variance and the normal distribution is symmetrical around the average.
+For ``random written at x'', $p=0.5$ implies $\mu_2 = 0$, which implies $P(\text{cnt}_i > 0 | \text{addr}_i = 1) = P(\text{cnt}_i < 0 | \text{addr}_i = 0) = 0.5$, independently of the parameters because they will only affect the variance and the normal distribution is symmetrical around the average.
 
-However, for ``x at x'', $p=0.5529$ and the probabilities depend on $s$. For $s=10,000$, they are equal to 0.6354. For $s=20,000$, they are equal to 0.6867. For $s=30,000$, they are equal to 0.7232. The more random bitstrings are written into the memory, the more the hard locations point to themselves. See Figure \ref{fig:sdm-corr-prob} --- and notice that I still have to figure out why the mean is correct, but the standard deviation is not. As each of the $n$ counters of a hard location may be equal or not with the same probability, I assumed it would follow a Binomial distribution (and it worked for ``random at x'').
+However, for ``x written at x'', $p=0.5529$ and the probabilities depend on $s$. For $s=10,000$, they are equal to 0.6354. For $s=20,000$, they are equal to 0.6867. For $s=30,000$, they are equal to 0.7232. The more random bitstrings are written into the memory, the more the hard locations point to themselves. See Figure \ref{fig:sdm-corr-prob} --- and notice that I still have to figure out why the mean is correct, but the standard deviation is not. As each of the $n$ counters of a hard location may be equal or not with the same probability, I assumed it would follow a Binomial distribution (and it worked for ``random at x'').
 
 \begin{figure}[h!]
   \centering
   \subfloat[``random at x'']{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/random_at_x_counters.png}}
   \subfloat[``x at x'']{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/x_at_x_counters.png}}
 
-  \caption{Autocorrelation in the counters in autoassociative memories (``x at x''). The histogram was obtained through simulation. The red curve is the theoretical distribution.}
+  \caption{Autocorrelation in the counters in autoassociative memories (``x written at x''). The histogram was obtained through simulation. The red curve is the theoretical distribution.}
   \label{fig:sdm-corr-prob}
 \end{figure}
 
