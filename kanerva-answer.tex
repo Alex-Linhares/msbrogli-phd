@@ -74,7 +74,7 @@ $P(x_i = y_i | d(x, y) \le r) = \dfrac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}
 
 \end{proof}
 
-Theorem \ref{T1} is valid for both ``x written at x'' (autoassociative memory) and ``random written at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905498137$.  Each bit of a hard location does indeed have a small pull bias.  What is meant by this is that each particular dimension has a small preference toward positive values if its address bit is set to 1, and negative values otherwise.
+Theorem \ref{T1} is valid for both ``x written at x'' (autoassociative memory) and ``random written at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905498137$.  Each bit of a hard location does indeed have a small pull bias.  What is meant by this is that each particular dimension has a small preference toward positive values if its address bit is set to 1, and negative values if set to 0.
 
 So far we have looked only at a single pair of bitstrings, the probability of a single bitmatch between bitstrings within the access radius distance.  Now let us consider the number of activated hard locations exhibiting this bitmatch.
 
@@ -85,18 +85,19 @@ $\mathbf{E}[Z] = ph$ and $\mathbf{V}[Z] = hp(1-p) + p^2 H p_1 (1-p_1)$.
 
 \end{theorem}
 
-Let $Z$ be the number of activated hard locations with the same bit as the reading address:
 
+\begin{proof}
+Let $Z$ be the number of activated hard locations with the same bit as the reading address:
 $Z = \sum_{i=1}^{h} X_i$,
 
-where $\mathbf{E}[h] = h$, \\
-$\mathbf{V}[h] = H p_1 (1-p_1)$, \\
-$p_1 = 2^{-n} \sum_{k=0}^{r} \binom{n}{k}$, and \\
-$X_i \sim \text{Bernoulli}(p)$. \\
+where $\mathbf{E}[h] = h$, $\mathbf{V}[h] = H p_1 (1-p_1)$, $p_1 = 2^{-n} \sum_{k=0}^{r} \binom{n}{k}$, and $X_i \sim \text{Bernoulli}(p)$.
 
 By the central limit theorem, $Z$ is normally distributed.
 
 Applying the law of total average and the law of total variance, $\mathbf{E}[Z] = \mathbf{E}[\mathbf{E}[Z | h]] = \mathbf{E}[ph] = p \mathbf{E}[h] = ph$, and $\mathbf{V}[Z] = \mathbf{E}[\mathbf{V}[Z|h]] + \mathbf{V}[\mathbf{E}[Z|h]] = \mathbf{E}[hp(1-p)] + \mathbf{V}[ph] = p(1-p) \mathbf{E}[h] + p^2 \mathbf{V}[h] = hp(1-p) + p^2 H p_1 (1-p_1)$.
+
+\end{proof}
+
 
 See Figure \ref{fig:sdm-same-bit-histogram} for a comparison between the theoretical model and a simulation.
 
