@@ -129,7 +129,7 @@ Thus,
 
 \begin{align}
 \mu_1 &= p \theta \\
-\sigma_1^2 &= p^2 s^2 p_1 (1 - p_1) / H
+\sigma_1^2 &= p(1-p) \theta + p^2 s^2 p_1 (1 - p_1) / H
 \end{align}
 
 During a write operation, the counters are incremented for every bit 1 and decremented for every bit 0. So, after $s$ writes, there will be $\theta$ bitstrings written in each hard location, $Y_i$ bits 1, and $\theta - Y_i$ bits 0. Thus, $[\text{cnt}_i | \text{addr}_i = 1] = (Y_i) - (\theta - Y_i) = 2Y_i - \theta$; and $[\text{cnt}_i | \text{addr}_i = 0] = \theta - 2Y_i$.
