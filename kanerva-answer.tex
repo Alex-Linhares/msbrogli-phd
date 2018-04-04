@@ -188,7 +188,7 @@ For ``random written at x'', $p=0.5$ implies $\mu_\text{cnt} = 0$, which implies
 
 However, for ``x written at x'', $p=0.5529$ and the probabilities depend on $s$. For $s=10,000$, they are equal to 0.6354. For $s=20,000$, they are equal to 0.6867. For $s=30,000$, they are equal to 0.7232. The more random bitstrings are written into the memory, the more the hard locations point to themselves.
 
-See Figure \ref{fig:sdm-corr-prob} and notice that I still have to figure out why the mean is correct, but the standard deviation is not. As each of the $n$ counters of a hard location may be equal or not with the same probability, I assumed it would follow a Binomial distribution (and it worked for ``random at x'').
+See Figure \ref{fig:sdm-corr-prob} and notice that I still have to figure out why the mean is correct, but the standard deviation is not. Let $D$ be the number of counters aligned with $\text{addr}_i$. The standard deviation was calculated using the fact that $[D|\theta] \sim \text{Binomial}(1000, P(\text{cnt}_i > 0 | \text{addr}_i=1, \theta))$.
 
 \begin{figure}[h!]
   \centering
@@ -209,20 +209,20 @@ Now that we know the distribution of $\text{cnt}_i | \text{addr}_i$, we may go t
 \text{acc}_i = \sum_{k=1}^{h} \text{cnt}_k
 \end{align}
 
-Let $\eta$ be the reading address and $\eta_i$ the $i$th bit of it. Then, let's split the $h$ activated hard locations into two groups: (i) the ones with the same bit as $\eta_i$ with $ph$ hard locations, and (ii) the ones with the opposite bit as $\eta_i$ with $(1-p)h$ hard locations.
+Let $\eta$ be the reading address and $\eta_i$ the $i$th bit of it. Then, let's split the $h$ activated hard locations into two groups: (i) the ones with the same bit as $\eta_i$ with $Z$ hard locations, and (ii) the ones with the opposite bit as $\eta_i$ with $h-Z$ hard locations.
 
 \begin{align}
-\left[ \text{acc}_i|\eta_i \right] &= \sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=\eta_i \right] + \sum_{k=1}^{(1-p)h} \left[ \text{cnt}_k | \text{addr}_k \ne \eta_i \right]
+\left[ \text{acc}_i|\eta_i \right] &= \sum_{k=1}^{Z} \left[ \text{cnt}_k | \text{addr}_k=\eta_i \right] + \sum_{k=1}^{h-Z} \left[ \text{cnt}_k | \text{addr}_k \ne \eta_i \right]
 \end{align}
 
 Each sum is a sum of normally distributed random variables, so
 
 \begin{align}
-\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=\eta_1 \right] &\sim \mathcal{N}(\mu_3 = \mu_2 ph, \sigma_3^2 = \sigma_2^2 ph + \mu_2^2 h p(1-p)) \label{eqn:sdm-eta1-addr1} \\
-\sum_{k=1}^{(1-p)h} \left[ \text{cnt}_k | \text{addr}_k \ne \eta_1 \right] &\sim \mathcal{N}(\mu_3 = -\mu_2 (1-p)h, \sigma_3^2 = \sigma_2^2 (1-p)h + \mu_2^2 h p (1-p)) \label{eqn:sdm-eta1-addr0}
+\sum_{k=1}^{Z} \left[ \text{cnt}_k | \text{addr}_k=\eta_1 \right] &\sim \mathcal{N}(\mu = \mu_\text{cnt} \mu_Z, \sigma^2 = \sigma_\text{cnt}^2 \mu_Z + \mu_\text{cnt}^2 \sigma^2_Z) \label{eqn:sdm-eta1-addr1} \\
+\sum_{k=1}^{h-Z} \left[ \text{cnt}_k | \text{addr}_k \ne \eta_1 \right] &\sim \mathcal{N}(\mu = -\mu_\text{cnt} (1-p) \mu_h, \sigma^2 = \sigma^2_\text{cnt} (1-p) \mu_h + \mu_\text{cnt}^2 \sigma^2_{h-Z}) \label{eqn:sdm-eta1-addr0}
 \end{align}
 
-In our case, $\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=672.12, \sigma^2=6281.00)$, and $\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=-543.49, \sigma^2=5078.99)$. See Figure \ref{fig:sdm-read-sums} --- we can notice that the average is correct but the variance is too small.
+In our case, $\sum_{k=1}^{Z} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=672.12, \sigma^2=7113.87)$, and $\sum_{k=1}^{Z} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=-543.49, \sigma^2=5752.54)$. See Figure \ref{fig:sdm-read-sums} --- we can notice that the average is correct but the variance is too small.
 
 \begin{figure}[h!]
   \centering
@@ -236,8 +236,8 @@ In our case, $\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim
 Hence,
 
 \begin{align}
-\left[ \text{acc}_i|\eta_i=1 \right] &\sim \mathcal{N}(\mu = (2p-1)^2 \theta h, \sigma^2 = \sigma_2^2 h + 2 \mu_2^2 hp(1-p)) \label{eqn:sdm-eta1} \\
-\left[ \text{acc}_i|\eta_i=0 \right] &\sim \mathcal{N}(\mu = -(2p-1)^2 \theta h, \sigma^2 = \sigma_2^2 h + 2 \mu_2^2 hp(1-p)) \label{eqn:sdm-eta0}
+\left[ \text{acc}_i|\eta_i=1 \right] &\sim \mathcal{N}(\mu = (2p-1)^2 \mu_\theta \mu_h, \sigma^2 = \sigma_\text{cnt}^2 \mu_h + 2 \mu_\text{cnt}^2 \sigma^2_h) \label{eqn:sdm-eta1} \\
+\left[ \text{acc}_i|\eta_i=0 \right] &\sim \mathcal{N}(\mu = -(2p-1)^2 \mu_\theta \mu_h, \sigma^2 = \sigma_\text{cnt}^2 \mu_h + 2 \mu_\text{cnt}^2 \sigma^2_h) \label{eqn:sdm-eta0}
 \end{align}
 
 In our case, $\left[ \text{acc}_i|\eta_i=1 \right] \sim \mathcal{N}(\mu = 128.62, \sigma^2 = 12181.95)$, and $\left[ \text{acc}_i|\eta_i=0 \right] \sim \mathcal{N}(\mu = -128.62, \sigma^2 = 12181.95)$. See Figure \ref{fig:sdm-read} --- we can notice that the variance issue from Figure \ref{fig:sdm-read-sums} has propagated to these images.
