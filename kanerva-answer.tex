@@ -118,7 +118,18 @@ Let $s$ be the number of bitstrings written into memory (in our case, $s=10,000$
 Let $\theta = \frac{sh}{H}$ be the average number of bitstrings written in each hard location, and $X_k \sim \text{Bernoulli}(p)$ (where $p = P(x_i = y_i | d(x, y) \le r)$). Thus,
 
 \begin{align}
-Y_i = \sum_{k=1}^{\theta} X_k \sim \mathcal{N}(\mu_1 = p \theta, \sigma_1^2 = p(1-p) \theta + p^2 s^2 p_1 (1 - p_1) / H)
+Y_i = \sum_{k=1}^{\theta} X_k \sim \mathcal{N}(\mu_1, \sigma_1^2)
+\end{align}
+
+Applying the law of total expectation, $\mathbf{E}[Y] = \mathbf{E}[\mathbf{E}[Y|\theta]] = \mathbf{E}[p \theta] = p \mathbf{E}[\theta] = p \theta$, since $\mathbf{E}[\theta] = \theta$.
+
+Applying the law of total variance, $\mathbf{V}[Y] = \mathbf{E}[\mathbf{V}[Y|\theta]] + \mathbf{V}[\mathbf{E}[Y|\theta]] = \mathbf{E}[\theta p (1-p)] + \mathbf{V}[p \theta] = p(1-p) \mathbf{E}[\theta] + p^2 \mathbf{V}[\theta] = p(1-p) \theta + p^2 s^2 p_1 (1-p_1)/H$, since $\mathbf{V}[\theta] = s^2 p_1 (1-p_1)/H$.
+
+Thus,
+
+\begin{align}
+\mu_1 &= p \theta \\
+\sigma_1^2 &= p^2 s^2 p_1 (1 - p_1) / H
 \end{align}
 
 During a write operation, the counters are incremented for every bit 1 and decremented for every bit 0. So, after $s$ writes, there will be $\theta$ bitstrings written in each hard location, $Y_i$ bits 1, and $\theta - Y_i$ bits 0. Thus, $[\text{cnt}_i | \text{addr}_i = 1] = (Y_i) - (\theta - Y_i) = 2Y_i - \theta$; and $[\text{cnt}_i | \text{addr}_i = 0] = \theta - 2Y_i$.
