@@ -73,6 +73,14 @@ Kanerva's settings according to the parameters of the equation were: $s=10,000$,
 
 As one can easily notice, we have got exactly the same curve as Kanerva. Both his and our model expect that, after reading, say, from 550 bits of distance from a written bitstring, we should obtain the expected $n/2$ equator distance. This question has intrigued us, and here we look for a more analytic explanation than merely interference from the other written attractors. Let us turn back to mathematics to study this anomaly.
 
+
+
+
+
+
+
+
+
 \section{A deviation from the equator distance?}
 
 Kanerva writes\footnote{Email thread `SDM: A puzzling issue and an invitation', started March 16th 2018, in which we discussed the aforementioned discrepancy.  To think that some centuries ago, all scientific publishing was the exchange of such letters.}:
@@ -244,7 +252,11 @@ For ``random written at x'', $p=0.5$ implies $\mu_\text{cnt} = 0$, which implies
 
 However, for ``x written at x'', $p=0.5529$ and the probabilities depend on $s$. For $s=10,000$, they are equal to 0.6354. For $s=20,000$, they are equal to 0.6867. For $s=30,000$, they are equal to 0.7232. The more random bitstrings are written into the memory, the more the hard locations point to themselves.
 
-See Figure \ref{fig:sdm-corr-prob} and notice that I still have to figure out why the mean is correct, but the standard deviation is not. As each of the $n$ counters of a hard location may be equal or not with the same probability, I assumed it would follow a Binomial distribution (and it worked for ``random at x'').
+Let $D$ be the number of counters aligned with $\text{addr}_i$. The standard deviation was calculated using the fact that $[D|\theta] \sim \text{Binomial}(1000, q=P(\text{cnt}_i > 0 | \text{addr}_i=1, \theta))$.
+
+Applying the law of total variance, $\mathbf{V}[D] = \mathbf{E}[\mathbf{V}[D|\theta]] + \mathbf{V}[\mathbf{E}[D|\theta]] = \mathbf{E}[1000 q (1-q)] + \mathbf{V}[1000 q] = 1000 \mathbf{E}[q-q^2] + 1000^2 \mathbf{V}[q] = 1000 \mathbf{E}[q](1-\mathbf{E}[q]) + 1000(1000-1)\mathbf{V}[q]$, where $\mathbf{E}[q] = \sum_\theta P(\text{cnt}_i > 0 | \text{addr}_i=1, \theta) P(\theta)$ and $\mathbf{E}[q^2] = \sum_\theta [P(\text{cnt}_i > 0 | \text{addr}_i=1, \theta)]^2 P(\theta)$.
+
+Doing the math, $\mathbf{E}[q] = 0.402922$ and $\mathbf{E}[q^2] = 0.634433$. Thus, $\mathbf{V}[q] = \mathbf{E}[q^2] - (\mathbf{E}[q])^2 = 0.0004166$. Hence, $\mathbf{V}[D] = 648.2041$. See Figure \ref{fig:sdm-corr-prob} and notice that I still have to figure out why the mean is correct, but the standard deviation is not.
 
 \begin{figure}[h!]
   \centering
@@ -265,20 +277,20 @@ Now that we know the distribution of $\text{cnt}_i | \text{addr}_i$, we may go t
 \text{acc}_i = \sum_{k=1}^{h} \text{cnt}_k
 \end{align}
 
-Let $\eta$ be the reading address and $\eta_i$ the $i$th bit of it. Then, let's split the $h$ activated hard locations into two groups: (i) the ones with the same bit as $\eta_i$ with $ph$ hard locations, and (ii) the ones with the opposite bit as $\eta_i$ with $(1-p)h$ hard locations.
+Let $\eta$ be the reading address and $\eta_i$ the $i$th bit of it. Then, let's split the $h$ activated hard locations into two groups: (i) the ones with the same bit as $\eta_i$ with $Z$ hard locations, and (ii) the ones with the opposite bit as $\eta_i$ with $h-Z$ hard locations.
 
 \begin{align}
-\left[ \text{acc}_i|\eta_i \right] &= \sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=\eta_i \right] + \sum_{k=1}^{(1-p)h} \left[ \text{cnt}_k | \text{addr}_k \ne \eta_i \right]
+\left[ \text{acc}_i|\eta_i \right] &= \sum_{k=1}^{Z} \left[ \text{cnt}_k | \text{addr}_k=\eta_i \right] + \sum_{k=1}^{h-Z} \left[ \text{cnt}_k | \text{addr}_k \ne \eta_i \right]
 \end{align}
 
 Each sum is a sum of normally distributed random variables, so
 
 \begin{align}
-\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=\eta_1 \right] &\sim \mathcal{N}(\mu_3 = \mu_2 ph, \sigma_3^2 = \sigma_2^2 ph + \mu_2^2 h p(1-p)) \label{eqn:sdm-eta1-addr1} \\
-\sum_{k=1}^{(1-p)h} \left[ \text{cnt}_k | \text{addr}_k \ne \eta_1 \right] &\sim \mathcal{N}(\mu_3 = -\mu_2 (1-p)h, \sigma_3^2 = \sigma_2^2 (1-p)h + \mu_2^2 h p (1-p)) \label{eqn:sdm-eta1-addr0}
+\sum_{k=1}^{Z} \left[ \text{cnt}_k | \text{addr}_k=\eta_1 \right] &\sim \mathcal{N}(\mu = \mu_\text{cnt} \mu_Z, \sigma^2 = \sigma_\text{cnt}^2 \mu_Z + \mu_\text{cnt}^2 \sigma^2_Z) \label{eqn:sdm-eta1-addr1} \\
+\sum_{k=1}^{h-Z} \left[ \text{cnt}_k | \text{addr}_k \ne \eta_1 \right] &\sim \mathcal{N}(\mu = -\mu_\text{cnt} (1-p) \mu_h, \sigma^2 = \sigma^2_\text{cnt} (1-p) \mu_h + \mu_\text{cnt}^2 \sigma^2_{h-Z}) \label{eqn:sdm-eta1-addr0}
 \end{align}
 
-In our case, $\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=672.12, \sigma^2=6281.00)$, and $\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=-543.49, \sigma^2=5078.99)$. See Figure \ref{fig:sdm-read-sums} --- we can notice that the average is correct but the variance is too small.
+In our case, $\sum_{k=1}^{Z} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=672.12, \sigma^2=7113.87)$, and $\sum_{k=1}^{Z} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=-543.49, \sigma^2=5752.54)$. See Figure \ref{fig:sdm-read-sums} --- we can notice that the average is correct but the variance is too small.
 
 \begin{figure}[h!]
   \centering
@@ -292,11 +304,11 @@ In our case, $\sum_{k=1}^{ph} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim
 Hence,
 
 \begin{align}
-\left[ \text{acc}_i|\eta_i=1 \right] &\sim \mathcal{N}(\mu = (2p-1)^2 \theta h, \sigma^2 = \sigma_2^2 h + 2 \mu_2^2 hp(1-p)) \label{eqn:sdm-eta1} \\
-\left[ \text{acc}_i|\eta_i=0 \right] &\sim \mathcal{N}(\mu = -(2p-1)^2 \theta h, \sigma^2 = \sigma_2^2 h + 2 \mu_2^2 hp(1-p)) \label{eqn:sdm-eta0}
+\left[ \text{acc}_i|\eta_i=1 \right] &\sim \mathcal{N}(\mu = (2p-1)^2 \mu_\theta \mu_h, \sigma^2 = \sigma_\text{cnt}^2 \mu_h + 2 \mu_\text{cnt}^2 \sigma^2_h) \label{eqn:sdm-eta1} \\
+\left[ \text{acc}_i|\eta_i=0 \right] &\sim \mathcal{N}(\mu = -(2p-1)^2 \mu_\theta \mu_h, \sigma^2 = \sigma_\text{cnt}^2 \mu_h + 2 \mu_\text{cnt}^2 \sigma^2_h) \label{eqn:sdm-eta0}
 \end{align}
 
-In our case, $\left[ \text{acc}_i|\eta_i=1 \right] \sim \mathcal{N}(\mu = 128.62, \sigma^2 = 12181.95)$, and $\left[ \text{acc}_i|\eta_i=0 \right] \sim \mathcal{N}(\mu = -128.62, \sigma^2 = 12181.95)$. See Figure \ref{fig:sdm-read} --- we can notice that the variance issue from Figure \ref{fig:sdm-read-sums} has propagated to these images.
+In our case, $\left[ \text{acc}_i|\eta_i=1 \right] \sim \mathcal{N}(\mu = 128.62, \sigma^2 = 12865.69)$, and $\left[ \text{acc}_i|\eta_i=0 \right] \sim \mathcal{N}(\mu = -128.62, \sigma^2 = 12865.69)$. See Figure \ref{fig:sdm-read} --- we can notice that the variance issue from Figure \ref{fig:sdm-read-sums} has propagated to these images.
 
 \begin{figure}[h!]
   \centering
@@ -333,22 +345,11 @@ Figure \ref{fig:sdm-single-read-dist} shows the new distance between $\eta_d$ an
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.6\textwidth]{./images02/autocorrelation/single-read-dist.png} 
+  \includegraphics[width=0.6\textwidth]{./images02/autocorrelation/single-read-dist.png}
 
   \caption{New distance after a single read operation in a bitstring $\eta_d$, which is $d$ bits away from $\eta$. The new distance was calculated between $\eta_d$ and $\text{read}(\eta_d)$. Notice that when $d \ge 520$, the intersection between $\eta$ and $\eta_d$ is zero, which means there is only random bitstrings written into the activated hard locations. The distance 220 equals $1000 \cdot 0.220$ which is the probability find in Figure \ref{fig:sdm-read-random-bs}.}
   \label{fig:sdm-single-read-dist}
 \end{figure}
-
-%\end{document}
-
-
-
-
-
-
-
-
-
 
 
 
