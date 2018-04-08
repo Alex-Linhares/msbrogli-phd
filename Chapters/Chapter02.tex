@@ -36,13 +36,15 @@ SDM has been applied in many different fields, like pattern recognition \citep{n
 Consider the implementations of SDM present --- as of this writing --- on its wikipedia entry:
 
 \begin{enumerate}
-    \item APL implementation [59]
+    \item The original hardware implementation developed by NASA [4]
 
     \item LISP implementation for the Connection Machine [60]
 
-    \item FPGA implementation \citep{silva_reconfigurable_2004}
+    \item APL implementation [59]
 
-    \item The original hardware implementation developed by NASA [4]
+
+
+    \item FPGA implementation \citep{silva_reconfigurable_2004}
 
     \item C Binary Vector Symbols (CBVS): includes SDM implementation in C as a part of vector symbolic architecture[54] developed by EISLAB at Luleå University of Technology: http://pendicular.net/cbvs.php[55]
 
@@ -52,9 +54,9 @@ Consider the implementations of SDM present --- as of this writing --- on its wi
 
 \end{enumerate}
 
-Let us analyse these.  The Connection Machine is obsolete.  APL, while influential, is not a mainstream language in science. The NASA implementation is hardware-based, hence not open-source.
+Let us analyse these.  The Connection Machine is obsolete.  The NASA implementation is hardware-based, hence not open-source.  APL, while influential, is not a mainstream language in science.
 
-The FPGA implementation by \citet{silva_reconfigurable_2004} has yielded a fast scan of hard locations, provided one has access to the proper hardware. Their article claims a four-fold speedup over assembly language; but it does not deal with parallel processing details.  For example, it is unclear whether there was more than a single thread running on the software implementation.  Note that the framework presented here is also able to reconfigure field-programmable gate arrays, through the OpenCL heterogeneous computing platform ability to interface with Hardware Description Language and hence, reconfigure FPGAs \citep{waidyasooriya2018design}.
+The FPGA implementation by \citet{silva_reconfigurable_2004} has yielded a fast scan of hard locations, provided one has access to the proper hardware. Their article claims a four-fold speedup over assembly language; but it does not deal with parallel processing details.  For example, it is unclear whether there was more than a single thread running on the software implementation.  Note that the framework presented here is also able to reconfigure field-programmable gate arrays, through the OpenCL heterogeneous computing platform ability to interface with Hardware Description Language and hence, reconfigure FPGAs \citep{waidyasooriya2018design, czajkowski_opencl_2012} for our tasks.
 
 It is our belief that a tool such as a framework could bring orders of magnitude more researchers and attention if they were able to use the model, at zero cost, with an easy to use high-level language such as Python, in an intuitive platform such as Juypyter notebooks. Neuroscientists interested in long-term memory storage should not have to worry about high-bandwidth vector parallel computation.  This new tool would provide a ready to use system in which experiments could be executed almost as soon as designed --- and it might accelerate research \citep{shen2014interactive}.
 
