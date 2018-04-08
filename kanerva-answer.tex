@@ -224,7 +224,7 @@ Each sum is a sum of normally distributed random variables, so
 
 In our case, $\sum_{k=1}^{Z} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=672.12, \sigma^2=7113.87)$, and $\sum_{k=1}^{Z} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim \mathcal{N}(\mu=-543.49, \sigma^2=5752.54)$. See Figure \ref{fig:sdm-read-sums} --- we can notice that the average is correct but the variance is too small.
 
-\begin{figure}[h!]
+\begin{figure}[h!]  
   \centering
   \subfloat[Equation \ref{eqn:sdm-eta1-addr1}  ($\text{addr}_k=1)$]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/read-counters-eta1_addr1.png}}
   \subfloat[Equation \ref{eqn:sdm-eta1-addr0} ($\text{addr}_k=0$)]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/read-counters-eta1_addr0.png}}
