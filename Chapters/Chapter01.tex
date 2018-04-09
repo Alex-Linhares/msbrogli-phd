@@ -69,7 +69,7 @@ After the launch of Bitcoin, more than 1,000 other cryptocurrencies have been cr
 
 Iota uses a DAG model, called tangle, which has a different design than Bitcoin's blockchain. It has neither mining nor confirmation blocks and transaction fees. Each transaction has its own proof-of-work and is used to confirm other transactions, forming a directed acyclic graph. In Iota, as transactions confirm transactions, the network benefits from a high volume of new transactions. Hence, theoretically, it scales to any large number of transactions per second. The scaling problem of tangle is exactly the opposite of Bitcoin's. It must have at least a given number of transaction per seconds; otherwise, the transactions are not confirmed, and the cryptocurrency does not work.
 
-The present work intends to analyze a new architecture which lies between Bitcoin and Iota and may be a viable solution to both Bitcoin's scaling, centralization, and spam problems. We also present a mathematical analysis of Bitcoin's mining, forking, and safety.
+The present work intends to analyze a new architecture which lies between Bitcoin's and Iota's and may be a viable solution to both Bitcoin's scaling, centralization, and spam problems. We also present a mathematical analysis of Bitcoin's mining, forking, and safety.
 
 
 \chapter{Bitcoin \& Blockchain}
@@ -732,6 +732,26 @@ The height of a transaction is equal to the maximum height of its parents plus o
 \begin{theorem}
 If new transactions choose randomly the unconfirmed transactions to be confirmed, then no unconfirmed transaction will be left behind, i.e., all transactions will be confirmed in due time.
 \end{theorem}
+
+\section{Hathor's Introduction}
+
+Hathor's architecture lies between Bitcoin's and Iota's and may be a solution to scaling, centralization, and spam issues. Like Iota, new transactions confirm others, forming a Directed Acyclic Graph (DAG). For this, each transaction has its own proof-of-work which is solved by the issuer before propagating the transactions in the network. Like Bitcoin, miners find new ``blocks'' every 10 minutes in which they collect the fees and newly generated tokens. Each transaction has an ``accumulated weight'' which express the required effort to break the transaction, similar to Bitcoin's number of confirmations.
+
+This way, there will be two difficulty levels in the system: one for new transactions which are just moving tokens around, and another one for ``blocks'' which are generating new tokens and collecting fees. The first may be adjusted to prevent spammers, which would spend too many resources to generate a great number of new transactions. The second is adjusted every 2016 blocks to keep the pace of one block every 10 minutes.
+
+There is a trade-off about the required proof-of-work of new transactions. The higher it is, the harder it is to generate new transactions, preventing spammers but also making it harder for IoT devices generate new transactions.
+
+Each transaction has to confirm all its inputs, i.e., there must be a confirmation path between all the transactions of the inputs and the transaction which are spending them. It is always possible given that there is at least one confirmation path between any transaction and a tip.
+
+The transactions are classified into three groups: (i) confirmed transactions, (ii) confirming transactions, and (iii) unconfirmed transactions (tips). The confirmed transaction are the ones which have already been settled, i.e., their accumulated weights have reached a minimum level. The unconfirmed transactions (tips) are the very new transactions which have not been confirmed even once yet, i.e., their accumulated weights are zero. The confirming transactions are in the middle. They have already been confirmed a few times, but not enough to reach the minimum level required to be a confirmed transaction.
+
+A ``block'' is just a regular transaction with no inputs which confirms a previous block and at least two confirming transactions or tips. There may be any number of outputs provided that they comply with the number of newly generated tokens. Each block collects all fees from all transactions confirmed by it which have not been confirmed by another block before.
+
+In the low load scenario, there is a small number of new transactions coming into the network, which means they give a minor contribution to confirmations. In this case, the confirmation is held mostly by ``blocks''. On the other hand, in the high load scenarios, there is a large number of new transactions giving a major contribution to confirmations. In this case, the ``blocks'' strengthen the confirmation, but most of them will have already been confirmed before the new blocks are found. The higher the number of new transaction, the faster the transactions are confirmed. The blocks assure a ``maximum confirmation time''.
+
+The incentive schema which keeps the network running is the same as Bitcoin's. Miners go towards fees and newly generate coins, while users go towards exchanging their tokens.
+
+Let $A$ be a transaction, $w_A$ be its weight, and $\text{acc}_A$ be its accumulated weight. Then, $\text{acc}_A = w_A + \sum_{A \leadsto P} w_P$.
 
 \chapter{Conclusion}
 
