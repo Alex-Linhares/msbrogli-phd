@@ -169,7 +169,7 @@ These results show that the SDM may be used as a supervised classification algor
     basicstyle=\small\ttfamily,
 }
 
-Image noise filtering consists in removing the noise from an input, in our case an image. Our images are black \& white images, and the noise is generated randomly flipping some of their pixels from black to while and vice versa. In Figure \ref{fig-filter-progressive-noise}, we may see an image with different levels of noise, from 0\% to 45\% in steps of 5\%. It makes no sense to apply 50\% of noise because it would absolutely randomize the image.
+Image noise filtering consists in removing the noise from an input, in our case an image. Our images are black \& white images, and the noise is generated randomly flipping some of their pixels from black to while and vice versa. In Figure \ref{fig-filter-progressive-noise}, we may see an image with different levels of noise, from 0\% to 45\% in steps of 5\%. It makes no sense to apply 50\% of noise as it would absolutely randomize the image.
 
 \begin{figure}[!htb]
 \centering\includegraphics[width=\textwidth]{./images02/filter/progressive-noise.png}
@@ -179,7 +179,7 @@ Image noise filtering consists in removing the noise from an input, in our case 
 
 The images have 30 x 30 pixels, totaling 900 pixels per image. Each image is mapped into a bitstring of 1,000 bit in which the bits are set according to the color of each pixel of the image. White pixels are assigned to bit 0, and black pixels to bit 1. The 100 remaining bits are all set to zero. This is a bijective mapping (or one-to-one) from images and bitstrings, i.e., there is one, and only one, bitstring for each image, and vice versa.
 
-In the learning phase, 200 noisy images were generated and written into SDM. Half of the letter ``I'' and half of the letter ``T'' (see Figure \ref{fig:filter-training}). They were written into their own addresses, i.e., \lstinline{write(address=bs_image, datum=bs_image)}.
+In the learning phase, 200 noisy images were generated and written into SDM. Half of the letter ``I'' and half of the letter ``T'' (see Figure \ref{fig:filter-training}). They were written into their own addresses, i.e., \lstinline{write(address=bs_image, datum=bs_image)}, following, for instance, \citet{hong_character_1991, marshall_technical_1989}.
 
 \begin{figure}[!htb]
   \subfloat[Letter ``I'' with 15\% of noise. ]{\includegraphics[width=\textwidth]{./images02/filter/training-i.png}}
