@@ -50,15 +50,15 @@ Our motivation is our own effort to run our models. As there is no reference imp
 
     \item CommonSense ToolKit (CSTK) for realtime sensor data processing developed at the Lancaster University includes implementation of SDM in C++: http://cstk.sourceforge.net/[56];
 
-    \item Learning Intelligent Distribution Agent (LIDA) developed by Stan Franklin's lab at the University of Memphis includes implementation of SDM in Java: http://ccrg.cs.memphis.edu/framework.html;
+    \item Learning Intelligent Distribution Agent (LIDA) developed by Stan Franklin's lab at the University of Memphis includes implementation of SDM in Java. \footnote{http://ccrg.cs.memphis.edu/framework.html};
 
 \end{enumerate}
 
-Let us analyse these.  The Connection Machine is obsolete.  The NASA implementation is hardware-based, hence not open-source.  APL, while influential, is not a mainstream language in science.
+Let us analyse these.  The Connection Machine is obsolete.  The NASA implementation is hardware-based and obsolete.  APL, while influential, is not a mainstream language in science.
 
 The FPGA implementation by \citet{silva_reconfigurable_2004} has yielded a fast scan of hard locations, provided one has access to the proper hardware. Their article claims a four-fold speedup over assembly language; but it does not deal with parallel processing details.  For example, it is unclear whether there was more than a single thread running on the software implementation.  Note that the framework presented here is also able to reconfigure field-programmable gate arrays, through the OpenCL heterogeneous computing platform ability to interface with Hardware Description Language and hence, reconfigure FPGAs \citep{waidyasooriya2018design, czajkowski_opencl_2012} for our tasks.
 
-Then there is LIDA --- a whole cognitive architecture based on Hofstadter's Fluid Concepts, Kanerva's SDM, and other ideas.  It is developed in Java; which makes it difficult to connect to the lowest levels of hardware; to connect to GPUs or FPGAs, and to other languages --- at least in comparison to Python\footnote{Python is sometimes called a `glue language'. That is, in my opinion, not the best metaphor.  A glue connects two things leaving an inflexible structure.  Python is perhaps best described as the interstate highway system of Programming; if something is out there, there is a way to reach it with Python.  In the comparison with Java, for instance, take the $popcnt(xor(b_i,b_j))$ operation, executed billions of times in SDM. How easy is it to program that for a particular GPU or FPGA with Java?}.  It is not available on an open-source repository.  It has a non-standard license, strange to the open-source community, ``the LIDA Framework Software NonExclusive, Non-Commercial Use License''.  Potential contributors must sign an ``Agreement Regarding Contributory Code for the LIDA Framework Software''... \emph{`before Memphis can accept it'}.
+Then there is LIDA --- a whole cognitive architecture based on Hofstadter's Fluid Concepts, Kanerva's SDM, and other ideas \citep{Anwar2003, snaider_integer_2013, snaider_modular_2014, franklin_lida:_2014}.  It is developed in Java; which makes it difficult to connect to the lowest levels of hardware; to connect to GPUs or FPGAs, and to other languages --- at least in comparison to Python\footnote{Python is sometimes called a `glue language'. That is, in my opinion, not the best metaphor.  A glue connects two things leaving an inflexible structure.  Python is perhaps best described as the interstate highway system of Programming; if something is out there, there is a way to reach it with Python.  In the comparison with Java, for instance, take the $popcnt(xor(b_i,b_j))$ operation, executed billions of times in SDM. How easy is it to program that for a particular GPU or FPGA with Java?}.  It is not available on an open-source repository.  It has a non-standard license, strange to the open-source community, \emph{the LIDA Framework Software NonExclusive, Non-Commercial Use License}.  Moreover, potential contributors must sign an ``Agreement Regarding Contributory Code for the LIDA Framework Software''... \emph{`before Memphis can accept it'} \footnote{What they are attempting to do with this bureaucracy remains unknown, the history of computing has not been kind to those who favored centralization \citep{ferguson_computer_2002}.}.
 
 The closest implementations to ours, in philosophy at least, is the one in `the common sense toolkit'. It is executed in C++, with a normal open-source license, and hosted on an open-source code repository.  It is, however, strikingly dissimilar to ours on the following aspects:
 
@@ -66,7 +66,7 @@ The closest implementations to ours, in philosophy at least, is the one in `the 
     \item SDM is but a part of the system; the description of the system reads that cstk is `A toolkit for processing and visualising sensor data in real time with support for use with embedded platforms.'
 
     \item The whole SDM code is composed of 143 \emph{lines} of C++ in the $cstk/cstk-devonly/sdm$ folder.
-0
+
     \item There is no work on making the system parallel.
 
     \item There is strong coupling between location address and location data, which makes experimentation hard.
@@ -75,7 +75,7 @@ The closest implementations to ours, in philosophy at least, is the one in `the 
 
     \item Finally, the last commit to this repository seems to have been made in 2005?
 
-    \item There are no publishable / published scientific applications or experiments available to be reproduced.
+    \item There are no publishable or published scientific applications or experiments available to be reproduced at installation time.
 
     \item there is no tutorial, installation instructions, performance benchmarks, framework validation or SDM Documentation.
 
@@ -87,7 +87,7 @@ There is obviously a demand for use of SDM; but each group has been tied to thei
 
 The main contribution of this work is a reference implementation which yields (i) orders of magnitude gains in performance, (ii) has several backends\footnote{CPUs, GPUs, FPGAs} and operations, (iii) is fully validated against the mathematical model, (iv) is cross-platform\footnote{Unix, Linux, MacOs, Windows, Amazon Web Services, etc.}, and (v) is easily extensible to test new research ideas --- and to let others replicate the results.
 
-Another issue is \emph{extensibility}: Extensions of SDM have been used in many applications. For example, \citet{Snaider2011} extended SDM to store sequences of vectors and trees efficiently.  \citet{Rajesh1998} used a modified SDM in an autonomous robot. \citet{Meng2009} modified SDM to clean patterns from noisy inputs. \citet{fan1997genetic} extended SDM with genetic algorithms. \citet{chada2016you} extended SDM creating the Rotational Sparse Distributed Memory (RSDM), which is used to modeling network motifs, dynamic flexibility, and hierarchical organization, all results from neuroscience literature.
+Another issue is \emph{extensibility}: Extensions of SDM have been used in many applications. For example, \citet{Snaider2011} extended SDM to store sequences of vectors and trees efficiently.  \citet{Rajesh1998} used a modified SDM in an autonomous robot. \citet{Meng2009} modified SDM to clean patterns from noisy inputs. \citet{fan1997genetic} extended SDM with genetic algorithms. \citet{chada2016you} extended SDM creating the Rotational Sparse Distributed Memory (RSDM), which models network motifs, dynamic flexibility, and hierarchical organization --- reflecting results from the neuroscience literature.
 
 Our reference implementation may, hopefully, accelerate research into the model's dynamics and make it easier for readers to replicate any previous results and easily understand the source-code of the model.  Moreover, it is compatible with Jupyter notebook and researchers may share their notebooks possibly accelerating the advances in their fields \citep{shen2014interactive}.
 
@@ -96,7 +96,7 @@ Other contributions have also been introduced, which include (i) a noise filteri
 Finally, I have striven to provide a visual tour of the theory and application of SDM: whenever possible, detailed figures should tell the story --- or at least do the heavy lifting. In this study, we will see an anomaly in one of Kanerva's predictions, which I believe is related to SDM capacity. We will see tests of a generalized reading operation proposed by Physics Professor Paulo Murilo (personal communication).  We will see what happens when neurons --- and
 all their information --- is simply and suddenly lost.  We will see whether information-theory can improve some of Kanerva's ideas.  From (basic) noise filtering to learning to play tic-tac-toe, we will review the entirety of Dr. Pentti Kanerva's proposal.
 
-This time, however, it will be running on a computer.
+This time, however, it will be running on a computer:  implicit assumptions will emerge; anomalies between expected theory and numerical results will appear; and reproducible experiments will be conducted.
 
 \chapter{Notation}
 
