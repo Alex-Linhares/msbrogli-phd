@@ -65,11 +65,15 @@ Generating new transactions in Bitcoin has a tiny cost because one only has to g
 
 The number of ideas and publications focusing on improving Bitcoin's design and overcoming those challenges is increasing every day. Many of these proposals are organized into BIPs (Bitcoin Improvement Proposals) which are discussed and implemented by the community; while others come in the form of whitepapers and alternative software forks (which would include the need of a protocol upgrade). Other proposals are published in blogs and forums, describing new cryptocurrencies. Bitcoin's community hardly ever publishes their ideas in academic journals, preferring instead, of BIPs, white papers, and web discussions.
 
-After the launch of Bitcoin, more than 1,000 other cryptocurrencies have been created (REF). In general, they are Bitcoin-like, which means they use similar technologies, including the blockchain. Some cryptocurrencies differs a lot from Bitcoin, like the ones which use the DAG model \citep{dagdiscussion2014, tangle2016, dagcoin2015, sompolinsky2013, lewenberg2015, vorick2015}. We are especially interested in one of them: Iota.
+After the launch of Bitcoin, more than 1,000 other cryptocurrencies have been created \citep{coinmarketcap}. In general, they are Bitcoin-like, which means they use similar technologies, including the blockchain. Some cryptocurrencies differs a lot from Bitcoin, like the ones which use the DAG model \citep{dagdiscussion2014, tangle2016, dagcoin2015, sompolinsky2013, lewenberg2015, vorick2015}. We are especially interested in one of them: Iota.
 
-Iota uses a DAG model, called tangle, which has a different design than Bitcoin's blockchain. It has neither mining nor confirmation blocks and transaction fees. Each transaction has its own proof-of-work and is used to confirm other transactions, forming a directed acyclic graph. In Iota, as transactions confirm transactions, the network benefits from a high volume of new transactions. Hence, theoretically, it scales to any large number of transactions per second. The scaling problem of tangle is exactly the opposite of Bitcoin's. It must have at least a given number of transaction per seconds; otherwise, the transactions are not confirmed, and the cryptocurrency does not work.
+Iota uses a DAG model, called tangle, which has a different design than Bitcoin's blockchain. It has neither mining nor confirmation blocks and transaction fees. Each transaction has its own proof-of-work and is used to confirm other transactions, forming a directed acyclic graph of transactions. Thus, a transaction is said to be confirmed when there are enough proof-of-work from the transactions confirming it directly or indirectly. There is no other way to confirm transactions but generating new transactions.
 
-The present work intends to analyze a new architecture which lies between Bitcoin's and Iota's and may be a viable solution to both Bitcoin's scaling, centralization, and spam problems. We also present a mathematical analysis of Bitcoin's mining, forking, and safety.
+In Iota, as transactions confirm transactions, the network benefits from a high volume of new transactions. Hence, theoretically, it scales to any large number of transactions per second. The scaling problem of tangle is exactly the opposite of Bitcoin's: it must have at least a given number of transaction per seconds; otherwise, the transactions are not confirmed, and the cryptocurrency does not work. While Iota's network has not reached this minimum number of transactions per second, it uses a central coordinator which works as a trustworthy node \citep{iotacoordinator}. This central coordinator just elucidates that the tangle does not seem to work properly under a low volume of transactions.
+
+Iota's tokens are pre-mined, which means all of them have been issued in the genesis transaction, and there is no token issuance at all. There is no miners and users can only transfer tokens between themselves. This may lead to some incentive issues, because, on the one hand, users would need to keep transferring tokens to keep the network alive, while, on the other hand, users would need to believe that Iota is a good choice to keep using it. As users perception of quality is significantly affected by ``price and congestion'', the \emph{empty-restaurant syndrome} may keep new users away \citep{debo2010prices}.
+
+The present work intends to analyze a new architecture, named Hathor, which lies between Bitcoin and Iota and may be a viable solution to both scaling, centralization, and spam problems. We also present a mathematical analysis of Bitcoin's architecture.
 
 
 \chapter{Bitcoin \& Blockchain}
@@ -603,56 +607,89 @@ Scenario (ii) is more trick. As $G_2$ accepts $G_1$ blocks, their hashrate will 
 %What would happen if, after a while, the groups agree again. How would the blockchain merge?
 
 
-\chapter{DAG model}
+\chapter{Iota \& Tangle}
 
-DAG model proposes a whole different approach to confirmations. It proposes that there is no need for a block to confirm transactions, as transactions can confirm themselves. Here, each transaction has its own proof-of-work, named weight, and they must confirm two other, previous, transactions. Hence, each transaction has an accumulated weight, which is the accumulated proof-of-work that has confirmed it so far. In this sense, instead of a chain of blocks, the transactions and their confirmations form a directed and acyclic graph, as in Fig. \ref{fig-tangle-example}.
+Iota's underlying technology is Tangle, which has DAG-based architecture with a whole different approach to confirmations. It proposes that there is no need for a block to confirm transactions, as transactions can confirm themselves. Here, each transaction has its own proof-of-work, named weight, and they must confirm two other previous transactions. In this sense, instead of a chain of blocks, the transactions and their confirmations form a directed and acyclic graph (DAG), as in Fig. \ref{fig-tangle-example}.
 
-Like the Blockchain, the DAG model is another technology to store immutable data and may be the underlying technology to different applications, such as cryptocurrencies, digital contracts (Ethereum-like), digital notaries, and so forth. The main question which this work proposes to answer is: Is it reliable to use DAG model? In which conditions?
+Like Blockchain, Tangle is another technology to store immutable data and may be the underlying technology to different applications, such as cryptocurrencies, digital contracts (Ethereum-like), digital notaries, and so forth.
 
-The transactions may be either confirmed or unconfirmed. The confirmed transactions have been already confirmed by at least one more transaction. It does not mean they are already irreversible and protected against a double spend attack --- it just means at least one transaction has done some work to confirm it. The unconfirmed transactions are called tips and they are eager to be confirmed. Usually a new transaction selects two tips to confirm, but this rule may not be followed.
+Transactions may be either confirmed or unconfirmed. The confirmed transactions have been already confirmed by at least one more transaction. It does not mean they are already irreversible and protected against a double spend attack --- it just means at least one transaction has done some work to confirm it. The unconfirmed transactions are called tips and they are eager to be confirmed. Usually a new transaction selects two tips to confirm, but this rule may not be followed.
 
-Transactions may have any format, including Bitcoin-like transactions---with inputs, outputs, and scripts. But it also may be completely different, just like in the cryptocurrency Iota \citep{tangle2016}. This work will not discuss details of the transactions' format, because we understand that it does not affect exactly the network scalability and security.
+Different from Bitcoin, transactions does not have scripts to check whether one may spend the tokens. Instead, it uses a fixed Winternitz hash-based digital signature \citep{dods2005hash}, i.e., whoever correctly signs the transaction may tranfer the tokens. It also supports multi-signature scheme (see \cite{iotamultisign}). Not allowing scripts is a disadvantage when compared to Bitcoin because future applications are limited and changing it would require a major modification in transaction format.
+
+At the beginning, the digital signature algorithm relied on the Curl hash function, which is a ternary hash function designed by Iota's developers. This hash function was replaced by the Kerl hash function after \cite{heilman2017iota} has found a critical vulnerability which enabled practical signature forgery attacks. The Kerl hash function is a variation of SHA-3 also designed by Iota's developers \citep{iotakerl}. Like the Curl hash function, Kerl has not been deeply studied by cryptography researchers and may have critical vulnerabilities.
+
+Iota's tokens are pre-mined, which means they have been issued in the genesis transaction and no more tokens will ever be issued. This means there are no miners in Iota's network and only the users keep the network alive through their new transactions. If, for any reason, the number of transactions per second plummet, the time to confirmed the most recent transactions will increase significantly. This possibly poses a serious risk to the network stability and users' trustworthy.
+
+As there are no miners, there are also no fees, which is a major incentive to new comers. Tokens may be freely transfered without any loses, even for tiny amounts, enabling micropayments. For example, online workers paid per hour may receive their payments every hour, reducing the default risk. This allows untrusted parties to work together reducing the risk for both. The contractor always wants to pay in the end, while the workers always wants to get paid in the beginning.
+
+Not having fees is also also an important feature to the Internet-Of-Things (IoT) technologies. The IoT is a network of smart devices that are connected to the internet and exchange data. It allows, for instance, your refrigerator to do your groceries and automatically pay using your Iota tokens. It also allows your electric car to automatically pay for recharge. For further information, see \cite{fleisch2010internet}.
+
+Theoretically, Iota's network benefits from high volume of transactions. The more transactions are coming, the faster previous transactions are confirmed. This is a major feature of Tangle which contrasts with Bitcoin's difficulty to scale. On the other hand, low volume of transactions is a primary problem for Iota, since it would take too long to confirm previous transactions. As it is a known problem, Iota has created a central coordinator which works as a trustworthy node, clearing transactions. In other words, every transaction directly or indirectly confirmed by the central coordinator is assumed to be cleared. Iota's developers claims that the coordinator will be turned off when the network outgrows a minimum (unknown) size.
+
+An important factor of Iota is how the new transactions choose which transactions they will confirm. There are several possible approaches, such as randomly selecting two of the unconfirmed transactions (tips). In Fig \ref{fig-tangle-example}, the reader may have noticed that transaction 8 will confirm transaction 4, which has already been confirmed by transaction 7. It may be on purpose, or maybe transaction 4 was unconfirmed when it was chosen, but it got confirmed during the calculation of the proof-of-work or the network propagation of the transaction. The selection algorithm seems to be important to protect the network against double spend attacks. For further information, see \cite{tangle2016}.
 
 \begin{figure}[ht]
 \centering\includegraphics[width=\textwidth]{./images01/fig-tangle-example.pdf}
 \caption{White nodes represent transactions that have been confirmed at least once. Green circles represent unconfirmed transactions (tips). Gray and dashed nodes are the transactions currently solving the proof-of-work in order to be propagated.\label{fig-tangle-example}}
 \end{figure}
 
-The accumulated weight of a transaction A is the sum of all weights of the transactions which confirm A, including A itself, i.e., $w_A + \sum_{A \leadsto P} w_P$. For example, in Fig. \ref{fig-tangle-example}, the accumulated weight of transaction 3 is the sum of the weights of the transactions 5, 6, 7, and 8. The accumulated weight may be interpreted as how hard it is to rollback a transaction. It is analogous to the number of confirmations of a block in Bitcoin.
+Transactions have an accumulated weight which may be interpreted as how hard it is to rollback a transaction. It is analogous to the number of confirmations of a block in Bitcoin. The higher the accumulated weight, the safer the transaction. Let $A$ be a transaction, its accumulated weight is the sum of all weights of the transactions which confirm $A$, including A itself, i.e., $w_A + \sum_{A \leadsto P} w_P$. For example, in Figure \ref{fig-tangle-example}, the accumulated weight of transaction 3 is the sum of the weights of the transactions 3, 5, 6, 7, and 8.
 
-The score of a transaction A is the sum of all weights of the transactions which are being confirmed by A, including A itself, i.e., $w_A + \sum_{P \leadsto A} w_P$. For example, in Fig. \ref{fig-tangle-example}, the score of transaction 3 is the sum of the weights of the transactions 1 and 2. It is a measure of how much proof-of-work has been done before confirming this transaction. It may indicate whether the confirmed transactions have received enough attention (and hashpower) or whether it may have received tangential attention.
+The score of a transaction is a measure of how much proof-of-work has been done before the transaction has been created. As the heighest score of the network increases over time, comparing a transaction's score with the highest score of the network indicates the ``age'' of the transaction. The score of a transaction A is the sum of all weights of the transactions which are being confirmed by A, including A itself, i.e., $w_A + \sum_{P \leadsto A} w_P$. For example, in Fig. \ref{fig-tangle-example}, the score of transaction 3 is the sum of the weights of the transactions 1, 2, and 3.
 
-The height of a transaction A is the length of the longest path from transaction A to the genesis transaction. For example, in Fig. \ref{fig-tangle-example}, the height of transaction 5 is four ($5 \rightarrow 3 \rightarrow 2 \rightarrow 1 \rightarrow$ genesis). It may be interpreted as the “`age'' of the transaction. The lower the height, the older the transaction.
+Another measure of the ``age'' of a transaction is its height. The height of a transaction A is the length of the longest path from transaction A to the genesis transaction. For example, in Fig. \ref{fig-tangle-example}, the height of transaction 5 is four ($5 \rightarrow 3 \rightarrow 2 \rightarrow 1 \rightarrow$ genesis). The lower the height, the older the transaction.
 
-The depth of a transaction A is the length of the longest path in the inverted graph from transaction A to any unconfirmed transaction (tip). For example, in Fig. \ref{fig-tangle-example}, the depth of transaction 2 is three ($2 \rightarrow 3 \rightarrow 5 \rightarrow 8$). It is the opposite of the height. It may be interpreted as the youth of the transaction. The lower the depth, the younger the transaction. When a new transaction is confirming two transactions with high depth, it is referred as lazy transaction.
+The depth of a transaction A is a measure of the youth of the transaction. It is the length of the longest path in the inverted graph from transaction A to any unconfirmed transaction (tip). For example, in Fig. \ref{fig-tangle-example}, the depth of transaction 2 is three ($2 \rightarrow 3 \rightarrow 5 \rightarrow 8$). It is the opposite of the height. The lower the depth, the younger the transaction. When a new transaction is confirming two transactions with high depth, it is referred to as lazy transaction.
 
-An important factor of DAG model is how the new transactions choose which transactions they will confirm. There are several possible approaches, such as randomly selecting two of the unconfirmed transactions (tips). In Fig \ref{fig-tangle-example}, the reader may have noticed that transaction 8 will confirm transaction 4, which has already been confirmed by transaction 7. It may be on purpose, or maybe transaction 4 was unconfirmed when it was chosen, but it got confirmed during the calculation of the proof-of-work or the network propagation of the transaction. The selection algorithm seems to be important to protect the network against double spend attacks.
-
-The higher the volume of new transactions, the more unconfirmed transactions will appear. In Fig. \ref{fig-tangle-swarm}, the reader can notice that the number of new transactions was increased for a while, and then decreased back to the original value. The DAG has behaved well when exposed to a high load scenario, since it reduced the number of tips to only three. It is like a moving swarm which gets wider when the number of new transactions increases and gets thinner when the number of new transactions decreases.
+The higher the volume of new transactions, the more unconfirmed transactions will appear. In Fig. \ref{fig-tangle-swarm}, the reader can notice that the number of new transactions was increased for a while, and then decreased back to the original value. The Iota has behaved well when exposed to a high load scenario, since it reduced the number of tips to only three after the high demand has ceased. It is like a moving swarm which gets wider when the number of new transactions increases and gets thinner when the number of new transactions decreases.
 
 \begin{figure}[ht]
 \centering\includegraphics[width=\textwidth]{./images01/fig-tangle-swarm.pdf}
 \caption{Suddenly the number of transactions per second increases and the width of the swarm grows. After a while, the number of transactions per second decreases and the width of the swarm shrinks.\label{fig-tangle-swarm}}
 \end{figure}
 
-Conflicting transactions may happen when two or more transactions try to spend the ``same money'' --- or, in the Bitcoin's transaction format, try to spend the same output. In this case, the network must choose which of the transactions will be accepted and the other one will be invalidated, even when both have already been confirmed. In fact, when one transaction is invalidated, the whole sub-DAG which confirms it is also invalidated. In this case, it may happen to reverse some transactions.
+Conflicting transactions may happen when two or more transactions try to spend the same tokens --- or, in the Bitcoin's transaction format, try to spend the same output. In this case, the network must choose which of the transactions will be accepted and the other one will be invalidated, even when both have already been confirmed. In fact, when one transaction is invalidated, the whole sub-DAG which confirms it is also invalidated. In this case, it may happen to reverse some transactions.
 
-Intuitively, when there is a conflict, the network should accept the transaction which has greater accumulated weight, invalidating the others (see Fig. \ref{fig-tangle-conflict}). But it may be not enough to prevent a nuclear submarine attack.
+Intuitively, when there is a conflict, the network should accept the transaction which has greater accumulated weight, invalidating the others (see Fig. \ref{fig-tangle-conflict}). But it may be not enough to prevent some attacks like the nuclear submarine attack.
 
 \begin{figure}[ht]
 \centering\includegraphics[width=\textwidth]{./images01/fig-tangle-conflict.pdf}
 \caption{The red nodes are transactions which had some conflict with previous transaction and were invalidated by the network. Notice that none of them have been confirmed.\label{fig-tangle-conflict}}
 \end{figure}
 
-\section{Nuclear submarine attack}
-
 The nuclear submarine attack, also known as the parasite chain attack, is when the attacker generates a separate DAG (or a side DAG), with many transactions and a lot of proof-of-work. This side DAG is off the network, i.e., its transactions have not been propagated. Then, at a convenient moment, the attacker suddenly propagates these transactions. The whole network needs to decide how to handle these transactions.
 
-If the transactions have no conflict with any transaction of the main DAG, i.e., there is no transaction spending the ``same money'', then it seems easy to handle the transactions. But, as it is an attack, probably there will be some conflicts, and it is not easy to choose which transaction should be invalidated. As the attacker has been generating a separate DAG, the conflicting transaction may have an accumulated weight similar or greater than the transaction in the main DAG. Thus, using only the accumulated weight may not be enough to prevent this attack.
+If the transactions have no conflict with any transaction of the main DAG, i.e., there is no transaction spending the same tokens, then it is easy to handle the transactions. But, as it is an attack, there will be some conflicts, and it is not easy to choose which transaction should be invalidated. As the attacker has been generating a separate DAG, the conflicting transaction may have an accumulated weight similar or greater than the transaction which is already in the main DAG. Hence, using only the accumulated weight may not be enough to prevent this attack.
 
-For example, the attacker may generate a transaction which transfers all their funds to another address. Then, they start to generate many new transactions which confirms themselves and even confirms some of the transactions in the main DAG. But none of these transactions are propagated to the network. Then, the attacker buys something in the real world, pays with cryptocurrency, and wait until the payment gets the accumulated weight demanded by the merchant. Finally, the attacker suddenly propagates all the transactions to the network in a small window of time. This may cause the network to accept the attacker's original transaction instead of the one used to pay the merchant. Hence, the merchant transaction is invalidated, and the double spend attack has succeeded.
+For example, the attackers generate (and do not propagate) a transaction that transfers all their funds to another address. Then, they start to generate many new transactions which confirm themselves and even confirm some of the transactions in the main DAG, but none of these transactions are also propagated to the network. Afterward, the attacker buys something in the real world, pays with cryptocurrency, and wait until the payment gets the accumulated weight demanded by the merchant. Finally, the attacker suddenly propagates all the transactions to the network in a small window of time. If the criteria is to validate the transaction with higher accumulated weight, the network will accept the attackers' original transaction instead of the one used to pay the merchant. Hence, the merchant transaction is invalidated, and the double spend attack has succeeded.
 
-\section{Proposal: Questions to be explored}
+By default, Iota uses the Markov Chain Monte Carlo (MCMC) algorithm to select the two tips. For further information about attacks and strategies to prevent them, including the MCMC algorithm, see \cite{tangle2016}.
+
+
+\chapter{Hathor's architecture}
+
+This work introduces the Hathor's architecture which lies between Bitcoin's and Iota's and may be a solution to scaling, centralization, and spam issues. Like Iota, new transactions confirm others, forming a Directed Acyclic Graph (DAG). For this, each transaction has its own proof-of-work which is solved by the issuer before propagating the transactions in the network. Like Bitcoin, miners find new ``blocks'' every 10 minutes in which they collect the fees and newly generated tokens. Each transaction has an ``accumulated weight'' which express the required effort to break the transaction, similar to Bitcoin's number of confirmations.
+
+This way, there will be two difficulty levels in the system: one for new transactions which are just moving tokens around, and another one for ``blocks'' which are generating new tokens and collecting fees. The first may be adjusted to prevent spammers, which would spend too many resources to generate a great number of new transactions. The second is adjusted every 2016 blocks to keep the pace of one block every 10 minutes.
+
+There is a trade-off about the required proof-of-work of new transactions. The higher it is, the harder it is to generate new transactions, preventing spammers but also making it harder for IoT devices generate new transactions.
+
+Each transaction has to confirm all its inputs, i.e., there must be a confirmation path between all the transactions of the inputs and the transaction which are spending them. It is always possible given that there is at least one confirmation path between any transaction and a tip.
+
+The transactions are classified into three groups: (i) confirmed transactions, (ii) confirming transactions, and (iii) unconfirmed transactions (tips). The confirmed transaction are the ones which have already been settled, i.e., their accumulated weights have reached a minimum level. The unconfirmed transactions (tips) are the very new transactions which have not been confirmed even once yet, i.e., their accumulated weights are zero. The confirming transactions are in the middle. They have already been confirmed a few times, but not enough to reach the minimum level required to be a confirmed transaction.
+
+A ``block'' is just a regular transaction with no inputs which confirms a previous block and at least two confirming transactions or tips. There may be any number of outputs provided that they comply with the number of newly generated tokens. Each block collects all fees from all transactions confirmed by it which have not been confirmed by another block before.
+
+In the low load scenario, there is a small number of new transactions coming into the network, which means they give a minor contribution to confirmations. In this case, the confirmation is held mostly by ``blocks''. On the other hand, in the high load scenarios, there is a large number of new transactions giving a major contribution to confirmations. In this case, the ``blocks'' strengthen the confirmation, but most of them will have already been confirmed before the new blocks are found. The higher the number of new transaction, the faster the transactions are confirmed. The blocks assure a ``maximum confirmation time''.
+
+The incentive schema which keeps the network running is the same as Bitcoin's. Miners go towards fees and newly generate coins, while users go towards exchanging their tokens.
+
+Let $A$ be a transaction, $w_A$ be its weight, and $\text{acc}_A$ be its accumulated weight. Then, $\text{acc}_A = w_A + \sum_{A \leadsto P} w_P$.
+
+
+\chapter{Proposal: Questions to be explored}
+ The main question which this work proposes to answer is: Is it reliable to use DAG model? In which conditions?
 
 Given these preliminaries, these are some questions with which we will be concerned.
 
@@ -689,6 +726,7 @@ In order to solve the fee distribution problem, we will simulate how the network
 %\item Could new coins be generated demanding a proof-of-work with dynamic difficulty, like in Bitcoin?
 %\item What is the equation of number of tips over time? What is the equation of how long it takes to a transaction to be confirmed for the first time? What is the equation of the accumulated weight of a transaction over time? Some equations have already been proposed by \citet{tangle2016}.
 %\end{enumerate}
+
 
 \chapter{Methodology}
 
@@ -732,26 +770,6 @@ The height of a transaction is equal to the maximum height of its parents plus o
 \begin{theorem}
 If new transactions choose randomly the unconfirmed transactions to be confirmed, then no unconfirmed transaction will be left behind, i.e., all transactions will be confirmed in due time.
 \end{theorem}
-
-\section{Hathor's Introduction}
-
-Hathor's architecture lies between Bitcoin's and Iota's and may be a solution to scaling, centralization, and spam issues. Like Iota, new transactions confirm others, forming a Directed Acyclic Graph (DAG). For this, each transaction has its own proof-of-work which is solved by the issuer before propagating the transactions in the network. Like Bitcoin, miners find new ``blocks'' every 10 minutes in which they collect the fees and newly generated tokens. Each transaction has an ``accumulated weight'' which express the required effort to break the transaction, similar to Bitcoin's number of confirmations.
-
-This way, there will be two difficulty levels in the system: one for new transactions which are just moving tokens around, and another one for ``blocks'' which are generating new tokens and collecting fees. The first may be adjusted to prevent spammers, which would spend too many resources to generate a great number of new transactions. The second is adjusted every 2016 blocks to keep the pace of one block every 10 minutes.
-
-There is a trade-off about the required proof-of-work of new transactions. The higher it is, the harder it is to generate new transactions, preventing spammers but also making it harder for IoT devices generate new transactions.
-
-Each transaction has to confirm all its inputs, i.e., there must be a confirmation path between all the transactions of the inputs and the transaction which are spending them. It is always possible given that there is at least one confirmation path between any transaction and a tip.
-
-The transactions are classified into three groups: (i) confirmed transactions, (ii) confirming transactions, and (iii) unconfirmed transactions (tips). The confirmed transaction are the ones which have already been settled, i.e., their accumulated weights have reached a minimum level. The unconfirmed transactions (tips) are the very new transactions which have not been confirmed even once yet, i.e., their accumulated weights are zero. The confirming transactions are in the middle. They have already been confirmed a few times, but not enough to reach the minimum level required to be a confirmed transaction.
-
-A ``block'' is just a regular transaction with no inputs which confirms a previous block and at least two confirming transactions or tips. There may be any number of outputs provided that they comply with the number of newly generated tokens. Each block collects all fees from all transactions confirmed by it which have not been confirmed by another block before.
-
-In the low load scenario, there is a small number of new transactions coming into the network, which means they give a minor contribution to confirmations. In this case, the confirmation is held mostly by ``blocks''. On the other hand, in the high load scenarios, there is a large number of new transactions giving a major contribution to confirmations. In this case, the ``blocks'' strengthen the confirmation, but most of them will have already been confirmed before the new blocks are found. The higher the number of new transaction, the faster the transactions are confirmed. The blocks assure a ``maximum confirmation time''.
-
-The incentive schema which keeps the network running is the same as Bitcoin's. Miners go towards fees and newly generate coins, while users go towards exchanging their tokens.
-
-Let $A$ be a transaction, $w_A$ be its weight, and $\text{acc}_A$ be its accumulated weight. Then, $\text{acc}_A = w_A + \sum_{A \leadsto P} w_P$.
 
 \chapter{Conclusion}
 
