@@ -1,6 +1,6 @@
 % !TEX root = ../partial-sdm.tex
 
-Performance matters --- and has always mattered. If an experiment takes a few seconds, there is no point arguing whether we should try it. If it takes a few hours, maybe we should think first. If it takes a few days --- or more ---, it is important to devise a good plan. As SDM consumes large processor and memory resources, some experiments may take a long time.
+Performance matters. If an experiment takes a few seconds, there is no point arguing whether we should try it. If it takes a few hours, maybe we should think first. If it takes a few days --- or more ---, it is important to devise a good plan. As SDM consumes large processor and memory resources, some experiments may take a long time.
 
 Each scan on a 1,000-bits SDM with 1,000,000 hard locations executes $10^9$ bit compares through $10^9/64 = 15,625,000$ XORs and calls to the built-in popcount. So, 10,000 writes execute $10^{13}$ bit compares, while a 6-iterative reading executes $6 \cdot 10^{12}$ bit compares. The heatmap of Figure \ref{fig:cir-dist-10k-writes-kanerva} executed $3.05 \cdot 10^{15}$ bit compares. For comparison, the number of seconds since Jesus's birth is 63,639,648,000 = $6.36 \cdot 10^{10}$. The number of people who have ever lived on earth is estimated to be $1,08 \cdot 10^{11}$. There are approximately $1.8 \cdot 10^{9}$ websites on the internet. A modern laptop can increment a counter $5 \cdot 10^{8}$ times per second. Hence, a naive implementation of SDM may take several hours --- or days --- to simply write 10,000 random bitstrings.
 
