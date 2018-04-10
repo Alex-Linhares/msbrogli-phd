@@ -14,11 +14,11 @@ Hence, we have developed a supervised classification algorithm based on a pure S
 \label{fig-classification-examples}}
 \end{figure}
 
-The images had 31 pixels of width and 32 pixels of height, totaling 992 pixels per image. Each image was mapped into a 1,000-bit bitstring in which the bits were set according to the color of each pixel of the image. So, white pixels were equal to bit 0, and black pixels to bit 1. The eight remaining bits were all set to zero. This was a bijective mapping (or one-to-one mapping), i.e., there was only one bitstring for each image, and there was only one image for each bitstring.
+The images had 31 pixels of width and 32 pixels of height, totaling 992 pixels per image\footnote{A crucial note is in order.  While others have proposed similar models \citep{hong_character_1991}, in no way is it claimed here that these bitstrings should form a plausible representation of letters in the human mind (See, for instance, \citet{hofstadter1995seeing} for a marvelous discussion of the subtleties and fluidity involved in that process).  These letters should merely be seen as \emph{invariant patterns} that are processed by the memory, which is able to capture their underlying invariant structure even when presented only under heavy noise.  Recall that any rezising, any rotation, or any mere shifting of these letters will take them out of the critical distance for SDM reading.}. Each image was mapped into a 1,000-bit bitstring in which the bits were set according to the color of each pixel of the image. So, white pixels were equal to bit 0, and black pixels to bit 1. The eight remaining bits were all set to zero. This was a bijective mapping (or one-to-one mapping), i.e., there was only one bitstring for each image, and there was only one image for each bitstring.
 
 % TODO Add image showing the association between pixels and bits.
 
-A total of 62 classification groups have been trained in the SDM. For each of them, it was generated a random bitstring. Thus, the groups' bitstrings were orthogonal between any two of them. There is one image for each of the 62 groups in Figure \ref{fig-classification-groups}. Notice that the SDM has never seen a single image with no noise.
+A total of 62 classification groups have been trained in the SDM. For each of them, it was generated a random bitstring. Thus, the groups' bitstrings were orthogonal between any two of them. There is one image for each of the 62 groups in Figure \ref{fig-classification-groups}. Notice that the memory has never seen a single image without noise.
 
 \begin{figure}[!htb]
 \centering\includegraphics[width=\textwidth]{./images02/classification/groups.png}
@@ -299,7 +299,7 @@ Hence, $\mathbf{E} \left[ \sum_{i \in \mathbb{B}} d(a^i \oplus v_1^i, b^i \oplus
 Finally, $\mathbf{E} \left[ d(a \oplus v_1, b \oplus v_2) \right] = |\mathbb{A}|/2 + |\mathbb{B}|/2 = n/2$, since $|\mathbb{A}| + |\mathbb{B}| = n$
 \end{proof}
 
-A final note is in order.  In no way is it claimed here that these bitstrings should form a plausible representation of letters in the human mind (See, for instance, \citet{hofstadter1995seeing} for a marvelous discussion of the subtleties and fluidity involved in that process).  These letters should merely be seen as \emph{invariant patterns} that are processed by the memory, which is able to capture their underlying invariant structure even when presented only under heavy noise.
+
 
 
 
