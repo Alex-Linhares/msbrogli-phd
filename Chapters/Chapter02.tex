@@ -120,13 +120,11 @@ This time, however, it will be running on a computer:   anomalies between expect
 \chapter{Framework Architecture}
 \input{./Chapters/sdm-architecture.tex}
 
+\chapter{Results (i): Performance}
+\input{./Chapters/sdm-performance.tex}
 
-\chapter{Results (i): Framework validation}
+\chapter{Results (ii): Framework validation}
 \input{./Chapters/sdm-validation.tex}
-
-
-\chapter{Results (ii): Critical distance}
-\input{./Chapters/sdm-critical-distance.tex}
 
 
 \chapter{Results (iii): Loss of neurons}
@@ -181,6 +179,11 @@ We run the same simulation for a 256-bit SDM with 1,000,000 hard locations. The 
 \end{figure}
 
 
+\chapter{Results (iii): Critical distance}
+\input{./Chapters/sdm-critical-distance.tex}
+
+
+
 \chapter{Results (iv): Generalized read operation}
 
 Dr. Murilo observed that the models of Kanerva's read ($z=1$) and Chada's read ($z=0$) were simple variations of a generalized read with an exponent $z$, which suggests experimenting with different values. Mathematically, let $A$ be the set of the counters of the activated hard location, and $c_i$ be the counter of the $i$th bit. Then,
@@ -218,8 +221,8 @@ It is interesting that Kanerva has proposed $z=1$ without realizing the generali
 \end{figure}
 
 
-\chapter{Results (v): Performance}
-\input{./Chapters/sdm-performance.tex}
+%\chapter{Results (v): Performance}
+%\input{./Chapters/sdm-performance.tex}
 
 % Application
 \input{./Chapters/sdm-applications.tex}
