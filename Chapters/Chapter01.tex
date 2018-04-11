@@ -685,9 +685,11 @@ In the low load scenario, there is a small number of new transactions coming int
 
 The incentive scheme which keeps the network running is the same as Bitcoin's. Miners go towards fees and newly generate coins, while users go towards exchanging their tokens.
 
+\section{Transaction confirmation}
+
 The concepts of weight and accumulated weight are the same as Iota's, but their equations are different. The weight of a transaction is calculated as $\log_2(k)$ where $k$ is the average number of hashes required to solve its proof-of-work again, while the accumulated weighted of a transaction A with weight $w_A$ is calculated as $\log_2(2^{w_A} + \sum_{A \leadsto P} 2^{w_P})$. The $\log$ function is used to reduce the magnitude of the numbers. Hence, the power-of-2 of the accumulated weight is a measure of the average number of hashes required to solve the proof-of-work of all transactions that are confirming A.
 
-In Bitcoin, it is usually required 6 confirmations before accepting a transaction. Let $H$ be the total hash rate of the network. Then, as $\mathbf{E}(Y_6) = 60 \text{ minutes}$, it will be necessary to calculate, on average, $\mathbf{E}(Y_6) \cdot H = 60 \cdot 60 \cdot H$ hashes to solve the proof-of-work of 6 blocks. Therefore, in order to have the same level of security as Bitcoin, a transaction is said to be confirmed when its accumulated weight is greater than or equal to $\log_2(\mathbf{E}(Y_6) \cdot H) = \log_2(60 \cdot 60 \cdot H) = 4 + \log_2(225) + \log_2(H)$, where $H$ is calculated as the total hash rate of the miners plus the total hash rate of new transactions.
+In Bitcoin, it is usually required 6 confirmations before accepting a transaction. Let $H$ be the total hash rate of the network. Then, as $\mathbf{E}(Y_6) = 60 \text{ minutes}$, it will be necessary to calculate, on average, $\mathbf{E}(Y_6) \cdot H = 60 \cdot 60 \cdot H$ hashes to solve the proof-of-work of 6 blocks. Therefore, in order to have the same level of security as Bitcoin, a transaction is said to be confirmed when its accumulated weight is greater than or equal to $\log_2(\mathbf{E}(Y_6) \cdot H) = \log_2(6 \cdot 128 \cdot H) = 7 + \log_2(6) + \log_2(H)$, where $H$ is calculated as the total hash rate of the miners plus the total hash rate of new transactions.
 
 
 \section{Time between blocks}
@@ -807,33 +809,26 @@ What is better: solves a PoW with $w$, or solves $n$ PoWs with $w/n$?
 
 \chapter{Methodology}
 
-The methodology we have been using is computer simulation. Through the simulation of many scenarios of DAG model with different parameters, we will understand how the network behaves in complex scenarios, mainly when the load is suddenly increased, and when the network is under attack. We will first test our hypothesis through simulation and than prove them mathematically.
+The methodology we have used is computer simulation. Through the simulation of many scenarios of Hathor, we will understand how the network behaves in complex scenarios, including when the load suddenly increases, and when the network is under attack.
 
 The simulator has been developed using an event-based design which is capable of running hours of simulation in just a few minutes. It creates agents who decide to make a transaction, then they select which transactions will be confirmed, then they spend some time working in the proof-of-work, and, finally, they propagate the transaction to the network. The other agents receive the transaction and may accept or deny it. The agents may use different parameters among themselves.
 
-When a new transaction is added to the DAG, it uses a depth-first search \citep{cormen2009introduction} (i) to update the aggregated weight of the directly and indirectly confirmed transactions, (ii) to calculate its own score, and (iii) to generate a topological sort \citep{cormen2009introduction}. The topological sort is used to calculate the longest path from all other transactions to the new transaction, and this longest path is used to update the depth of the whole DAG. If the new transaction confirms only transactions which has already been confirmed, the depth update is skipped thanks to Theorem \ref{theorem-new-tx-not-tip}.
+When a new transaction emerges, it chooses two tips to confirm before solving the proof-of-work. When it finishes solving the proof-of-work, it is propagated and becomes a tip. So, two new transactions may choose the same tips to confirm. If there are $t$ tips, a new transaction will randomly choose 2 out of these $t$ tips, even if they have already been chosen by other new transactions --- in fact, they do not know which have been chosen because these new transactions have not being propagated yet.
 
-The necessary time to generate the proof-of-work is estimated by the function $k \cdot 2^{weight}$, where $k$ is a constant related to the computing power of the agent and weight is randomly chosen.
+When a new transaction is added to the Hathor's network, it uses a depth-first search \citep{cormen2009introduction} (i) to update the aggregated weight of the directly and indirectly confirmed transactions, (ii) to calculate its own score, and (iii) to generate a topological sort \citep{cormen2009introduction}. The topological sort is used to calculate the longest path from all other transactions to the new transaction, and this longest path is used to update the depth of the whole DAG. If the new transaction confirms only transactions which has already been confirmed, the depth update is skipped thanks to Theorem \ref{theorem-new-tx-not-tip}.
 
-The time between two new transactions is sampled from the exponential distribution with parameter $\lambda$. The value of $\lambda$ is changed over time, causing changes in the load of the network. We consider 1 tx/s to be a low load, and 15 tx/s to be a high load. Even though we have already tested up to 100 tx/s.
+The amount of time spent to solve the proof-of-work is a sample from an exponential distribution.
+
+The time between two new transactions is sampled from an exponential distribution with parameter $\lambda$. The value of $\lambda$ is changed over time, causing changes in the load of the network. We consider 1 tx/s to be a low load, and 15 tx/s to be a high load. Even though we have already tested up to 100 tx/s.
 
 The simulator will output different reports: (i) snapshots of the DAG at interesting moments, such as Fig. \ref{fig-tangle-example}, \ref{fig-tangle-swarm}, and \ref{fig-tangle-conflict}; (ii) histogram of confirmation time, such as Fig. \ref{fig-tangle-hist} and \ref{fig-tangle-hist-2}; and many others.
+
 
 \chapter{Analysis of Hathor}
 
 In order to a further understanding of the DAG Model, we will analyze the mathematical model behind it.
 
-The DAG Model's mining starts just like Bitcoin's, i.e., $\mathbf{P}(h(x) < A) = \frac{A}{2^{256}}$. Then, it follows that solving a transaction proof-of-work follows a geometric distribution. Let $X$ be the number of attempts until a success, then $\mathbf{P}(X=k) = (1-p)^{k-1}p$, where $p=\frac{A}{2^{256}}$. Also, $\mathbf{P}(X \leq k)=1-(1-p)^k$. The average number of attempts is $\mathbf{E}(X)=1/p$.
-
-Let $w$ be the transaction's weight, i.e., $\mathbf{E}(X)=w \Rightarrow w = 1/p$. Let $T = X/H$ be the time required to solve the transaction's proof-of-work, where $H$ is the hash rate of the transaction's owner. Then, $\mathbf{P}(T < t) = \mathbf{P}(X < tH) = 1 - (1 - p)^{tH} = 1 - \left( 1 - \frac{1}{w} \right)^{tH} = 1 - e^{tH \log\left(1 - \frac{1}{w} \right)}$, i.e., $T$ follows an exponential distribution with $\lambda = -H \log\left(1 - \frac{1}{w} \right)$.
-
-% https://math.stackexchange.com/questions/635443/sum-of-exponential-random-variable-with-different-means
-
 The number of transactions solving the proof-of-work may be modeled by a Birth and Death process, since if we have $k$ transactions solving the proof-of-work only two things may happen: either a new transaction will be created or one the transactions will finish solving the proof-of-work. Let the time between new transactions follows an exponential distribution with $\mu$ parameter, then the probability of a new transaction emerges before any transaction finishes its proof-of-work is $q_k = \mathbf{P}(T_{\text{new tx}} = \min\{T_{\text{new tx}}, T_1, T_2, \dots, T_k\}) = \frac{\mu}{\mu + \sum_{i=1}^k \lambda_i}$. Hence, the probability of any transaction finishes its proof-of-work before a new transaction emerges is $p_k = 1 - q_k = \frac{\sum_{i=1}^k \lambda_i}{\mu + \sum_{i=1}^k \lambda_i}$.
-
-Every time a new transaction emerges, it chooses two tips to confirm before solving the proof-of-work. When it finishes solving the proof-of-work, it is propagated and becomes a tip. So, two new transactions may choose the same tips to confirm. If there are $t$ tips, a new transaction will randomly choose 2 out of these $t$ tips, even if they have already been chosen by other new transactions --- in fact, they do not know which have been chosen because these new transactions have not being propagated yet.
-
-The following theorems will be mathematically proved. They have already been used in the implementation of the simulator.
 
 \begin{theorem}
 \label{theorem-new-tx-not-tip}
