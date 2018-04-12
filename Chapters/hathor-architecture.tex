@@ -1,0 +1,100 @@
+
+This work introduces the Hathor's architecture which lies between Bitcoin's and Iota's and may be a solution to scaling, centralization, and spam issues. Like Iota, new transactions confirm others, forming a Directed Acyclic Graph (DAG). For this, each transaction has its own proof-of-work which is solved by the issuer before propagating the transactions in the network. Like Bitcoin, miners find new ``blocks'' every 10 minutes in which they collect the fees and newly generated tokens. Each transaction has an ``accumulated weight'' which express the required effort to break the transaction, similar to Bitcoin's number of confirmations.
+
+This way, there will be two difficulty levels in the system: one for new transactions which are just moving tokens around, and another one for ``blocks'' which are generating new tokens and collecting fees. The first may be adjusted to prevent spammers, which would spend too many resources to generate a great number of new transactions. The second is adjusted every 2,016 blocks to keep the pace of block on every 2 minutes.
+
+There is a trade-off about the required proof-of-work of new transactions. The higher it is, the harder it is to generate new transactions, preventing spammers but also making it harder for IoT devices generate new transactions.
+
+Each transaction has to confirm all its inputs, i.e., there must be a confirmation path between all the transactions of the inputs and the transaction which are spending them. It is always possible since there is at least one confirmation path between any transaction and a tip. This is important for security reasons.
+
+The transactions are classified into three groups: (i) confirmed transactions, (ii) in-progress transactions, and (iii) unconfirmed transactions (tips). The confirmed transaction are the ones which have already been settled, i.e., their accumulated weights have reached a minimum level. The unconfirmed transactions (tips) are the brand new transactions which have not been confirmed even once yet, i.e., their accumulated weights are zero. The in-progress transactions are in the middle. They have already been confirmed a few times, but not enough to reach the minimum level required to be a confirmed transaction.
+
+A ``block'' is just a regular transaction with no inputs which confirms a previous block and at least two in-progress transactions or tips. There may be any number of outputs provided that they comply with the number of newly generated tokens. Each block collects all fees from all transactions confirmed by it which have not been confirmed by another block before.
+
+In the low load scenario, there is a small number of new transactions coming into the network, which means they give a minor contribution to confirmations. In this case, the confirmation is held mostly by ``blocks''. On the other hand, in the high load scenarios, there is a large number of new transactions giving a major contribution to confirmations. In this case, the ``blocks'' strengthen the confirmation, but most of them will have already been confirmed before the new blocks are found. The higher the number of new transaction, the faster the transactions are confirmed. The blocks assure a ``maximum confirmation time''.
+
+The incentive scheme which keeps the network running is the same as Bitcoin's. Miners go towards fees and newly generate coins, while users go towards exchanging their tokens.
+
+\section{Transaction confirmation}
+
+The concepts of weight and accumulated weight are the same as Iota's, but their equations are different. The weight of a transaction is calculated as $\log_2(k)$ where $k$ is the average number of hashes required to solve its proof-of-work again, while the accumulated weighted of a transaction A with weight $w_A$ is calculated as $\log_2(2^{w_A} + \sum_{A \leadsto P} 2^{w_P})$. The $\log$ function is used to reduce the magnitude of the numbers. Hence, the power-of-2 of the accumulated weight is a measure of the average number of hashes required to solve the proof-of-work of all transactions that are confirming A.
+
+In Bitcoin, it is well-known that one should wait at least ``six confirmations'' before accepting a transaction. This Bitcoin's criteria is based on some math presented in Satoshi's seminal work \citep{nakamoto2008bitcoin}. Adopting six confirmations is the same as demanding from attackers a minimal effort of six times the network's hash rate to successfully double spend those tokens. Let $H$ be the total hash rate of the network. Then, as $\mathbf{E}(Y_6) = 60 \text{ minutes}$, it will be necessary to calculate, on average, $\mathbf{E}(Y_6) \cdot H = 60 \cdot 60 \cdot H$ hashes to solve the proof-of-work of 6 blocks.
+
+Therefore, in order to have the same level of security as Bitcoin, a transaction is said to be confirmed when its accumulated weight is greater than or equal to $\log_2(\mathbf{E}(Y_6) \cdot H) = \log_2(6 \cdot 128 \cdot H) = 7 + \log_2(6) + \log_2(H)$, where $H$ is calculated as the total hash rate of the miners plus the total hash rate of new transactions.
+
+
+\section{Time between blocks}
+
+The hash function used for the proof-of-work (PoW) is the same as Bitcoin: \emph{SHA-256} applied twice. Thus, most of the math analysis we have done before is just the same.
+
+Let $X$ be the number of trials to solve the PoW and $T$ be the time between blocks. We already know that $X$ follows a geometric distribution with $p = \frac{A}{2^{256}}$, where $A$ is inversely proportional to the difficulty, i.e., the smaller the $A$, the higher the difficulty. We also know that $T$ follows an exponential distribution with $\lambda = \frac{1}{\eta}$, where $\eta$ is the average time between blocks. As proved before, $\eta p H = 1$, thus let's define $w = \log_2(\mathbf{E}(X)) = \log_2(1/p) = \log_2(\eta H) = \log_2(\eta) + \log_2(H)$.
+
+For the blocks, $\eta = 128$, thus, $\mathbf{E}(T) = 128 \text{ seconds}$, and $\mathbf{V}(T) = 16,384$. The symmetrical confidence interval with $\alpha = 10\%$ is $[6.56, 383.45]$, i.e., 90\% of the cases the distance between blocks will be between 6 seconds and just under 7 minutes.
+
+Let $H$ be the hash rate of the miners, then, the weight of the blocks is calculated by
+
+$$w_\text{blocks} = \log_2(128) + \log_2(H) = 7 + \log_2(H)$$
+
+This weight will be updated every 2,016 blocks to take into consideration the change of $H$. First, $H$ will be estimated using the fact that $\mathbf{E}(Y_{2016}) = \frac{2016}{\lambda} = 2016 \eta = \frac{2016}{pH} = \frac{2016 \cdot 2^w}{H}$. Thus, $H = \frac{2016 \cdot 2^w}{\Delta t} \Rightarrow \log_2(H) = w + \log_2(2016) - \log_2(\Delta t)$, where $\Delta t$ is the time between the latest weight update and now. Finally,
+
+$$w_\text{new} = 7 + w_\text{old} + \log_2(2016) - \log_2(\Delta t)$$
+
+Notice that, if the hash rate does not change, then $\Delta t = 128 \cdot 2016$ and $w_\text{new} = w_\text{old}$.
+
+
+\section{Weight of the transactions}
+
+There is a trade-off which must be considered in the weight of the transactions: the higher the weight, the better to prevent spams, but the worse to microtransactions. So, trying to fulfill both necessities, the weight will be a function of the transaction's size (in bytes) and total amount:
+
+$$w_\text{tx} = \left\lfloor \log_2(\text{size}) + \log_2(\text{amount}) + 0.5 \right\rfloor$$
+
+Although the transaction size may change a bit depending on the implementation, a typical transaction with 2 inputs and 2 outputs would have 188 bytes. So, for instance, transfering 50,000 tokens would require a weight of 23, which means an average of $2^{23}$ trials to solve the PoW.
+
+
+\section{Issuance rate}
+
+Bitcoin issuance rate started in 50 tokens per block and decreases over time. Every 210,000 blocks---4 years, on average---it halves the number of tokens issued per block. As Bitcoin smallest fraction is $10^{-8}$, after the 33th reduction it will stop issuing new tokens since $2^{33} > 50 \cdot 10^{-8}$. In total, the number of issued tokens will never exceed 21 million. For further information, see \cite{bitcoinsupply}.
+
+Using the same strategy, Hathor's issuance rate starts in 50,000 tokens per block and decreases over time. Different from Bitcoin, Hathor's tokens are always integers and cannot be split. Every 1,000,000 blocks, the number of tokens issued per block is halved. Thus, the supply is limited to 100 billion issued tokens during its whole life. To calculate the supply limit use the following equation:
+
+\begin{align*}
+    \sum_{k=0}^{\infty} 1,000,000 \cdot \left\lfloor \frac{50000}{2^k} \right\rfloor \approx
+    \sum_{k=0}^{\infty} 1,000,000 \cdot \frac{50000}{2^k} = 100 \text{ billion}
+\end{align*}
+
+As the average time between blocks is 128 seconds, it will take around 3 years, 9 months and 20 days between halves.
+
+
+\section{Transaction fees}
+
+The value of the fee is calculate as the difference between the transaction's outputs and the inputs. For instance, a transaction with inputs summing 10,000 HTR and outputs summing 9,000 HTR are paying 1,000 HTR of fees.
+
+Each transaction may pay a fee to the next block which confirms it. But, even if the fee is zero, the miners are forced to confirm at least two pending transactions (in-progress or unconfirmed), and these pending transactions confirms other transactions which may have no fees. In summary, transactions with no fees cannot be left behind and will always be confirmed by both blocks and other transactions.
+
+One may arguee that it allows the whole network to never pay fees and they are right. In the beginning, miners' incentive is driven by new tokens instead of fees. In the long term, it may be necessary to require a minimum fee to keep the miners working.
+
+
+\section{Transaction validation}
+
+A transaction will be considered valid when it complies with the following rules: (i) it spends only unspent outputs; (ii) the sum of the inputs is greater than or equal to the sum of the outputs; (iii) the number of inputs is at most 256; (iv) the number of outputs is at most 256; (v) it confirms at least two pending transactions; (vi) it solves the PoW with the correct weight.
+
+The transaction has a time field which is used to inform when the transaction was generated. The time field must be in UTC time and may be within at most 60 minutes from the current time. Otherwise, the transaction will be discarded.
+
+In case of transaction conflict, in which two transactions try to spend the same tokens, the one with higher accumulated weight is chosen and the other is invalidated. Although it is not possible in Iota because of the submarine attack, Hathor does not have the same problem. In Hathor, like in Bitcoin, the submarine attack is only possible if the attacker has a hash rate higher than the whole network, including the miners. In other words, when analysing the double spending attack, Hathor is as safe as Bitcoin.
+
+The digital signature is used to ensure that only the owners may spend their tokens. It will be calculated signing the transaction's input and output only. This allows the transaction to be signed in one device and to be sent to another device that will choose which transaction will be confirmed and will solve the proof-of-work.
+
+Services of solving proof-of-work may also be offered by companies. They give their customers a wallet address and they send the payment inside of the transaction itself. This allows IoT devices to save energy or to delegate the task of solving the PoW to whoever is receiving the tokens.
+
+
+\section{Orphan blocks}
+
+There is no orphan blocks in Hathor. Unless a block confirms either directly or indirectly an invalid transaction, every block is valid. There is no need to left a block behind since its proof-of-work is also protecting transactions.
+
+
+\section{Network}
+
+Like in all other cryptocurrencies, nodes will communicate through a peer-to-peer network. They will exchange transactions and blocks, verifying whether they are valid or not, while they will also answer queries.
+
+Thus, if a thin client wants to transfer some tokens, it just connects to the network and queries for the tips. With the response, it solves the proof-of-work and propagates the new transaction. In order to avoid malicious nodes, the thin client may ask to more than one node and randomly pick two transactions.
