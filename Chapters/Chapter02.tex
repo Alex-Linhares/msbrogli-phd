@@ -28,6 +28,10 @@ patterns of micro-events, thanks to beautiful mathematics.} \\ \medskip
 
 
 
+% TODO GARY KLEIN !!!
+GARY KLEIN!!!!
+
+
 
 Suddenly, you feel the danger.  You tighten your grip on the child's hand and step up your walking.  In these large cities, walking on a dark alley was never recommended, but somehow that's what you did, and now everthing you think of is to get out to safety.  You are afraid of something, but you cannot explain --- in rigorous detail, at least --- what exactly is causing your fear. One just feels it. We may interpret this situation as clues of the present --- a dark alley; a giant metropolitan area; people going on about their lives mostly indifferent from each other; constrained routes ahead and behind you; a general lack of activity; that very feeling that something isn't right... without knowing precisely what isn't right, or even what `right' means... etc. --- recalling past experiences from memory and thus generating the feeling. Our memory is able to make a parallel between previous experiences and the clues. Although one has never been in the exactly same situation, one's brain involuntarily makes an analogy and recognizes the possibility of danger. The whole process happens so fast it feels like it only took a single unit of psychological time.
 
@@ -39,9 +43,14 @@ This flexibility into mapping one situation in another is an essential human fea
 
 \section{Desiderata for a theory of memory}
 
+% TODO Venn Diagram Psychology, Neuroscience, Cognitive modelling
+% TODO Graph between these disciplines and how they might interact.
+
+
 
 Psychological
-miller magic number; when it instantly remembers; when it doesn't recall anything at all; when tip-of-the-tongue... how does this recall process work?
+orthogonality of concepts; life flashing before one's eyes; miller magic number; when it instantly remembers; when it doesn't recall anything at all; when tip-of-the-tongue... how does this recall process work?
+
 
 
 
@@ -49,7 +58,7 @@ Neuroscientific (bioplausible)
 neurons can die; what do neurons do?  how are things stored?  how are they recalled?
 
 
-Computational (fully experimental, with no voodoo-like mysterious properties)
+Cognitive modelling (fully experimental, with no voodoo-like mysterious properties)
 
 
 
@@ -130,10 +139,9 @@ application
 
 
 
-\section{The wasted effort of duplicated work}
+\section{The wasted effort of duplicated, AD-HOC, work}
 
-
-As expected for such an important thery, SDM has been applied in many different fields, like pattern recognition \citep{norman2003modeling, rao1995natural}, noise reduction \citep{Meng2009}, handwriting recognition \citep{fan1997genetic}, robot automation \citep{Rajesh1998, mendes2008robot}, and so forth. \citet{Linhares2011} has shown that SDM respects the limits of short-term memory discussed by \citet{Miller1955} and \citet{Cowan2001}. Despite this, there is not a reference implementation which would allow one to replicate the results published in a paper, to check the source code for details, and to improve it. Thus, even though intriguing results have been achieved using SDM, it requires counter-productive, duplicate effort from researchers to build on top of previous work.
+As expected for such an important thery, SDM has been applied in many different fields, like pattern recognition \citep{norman2003modeling, rao1995natural}, noise reduction \citep{Meng2009}, handwriting recognition \citep{fan1997genetic}, robot automation \citep{Rajesh1998, mendes2008robot}, and so forth. \citet{Linhares2011} has shown that SDM respects the limits of short-term memory \citep{Miller1955, Cowan2001}. Despite this, there is not a reference implementation which would allow one to replicate the results published in a paper, to check the source code for details, and to improve it. Thus, even though intriguing results have been achieved using SDM, it requires counter-productive, duplicate effort from researchers to build on top of previous work.
 
 Our motivation is our own effort to run our models. As there is no reference implementation, we had to develop our own and run several simulations to ensure that our implementation was correct and bug-free. Thus, we had to deviate from our primary goal --- which was to test our hypothesis and explore the `ideas space' --- and to focus on the implementation itself. Furthermore, new members of our research group had to go through different source code developed by former members, in different languages.  Consider the implementations of SDM present --- as of this writing --- on its wikipedia entry\citep{noauthor_sparse_2018}:
 
@@ -150,7 +158,7 @@ Our motivation is our own effort to run our models. As there is no reference imp
 
     \item  a 2015 `C Binary Vector Symbols (CBVS)':  includes SDM implementation as a part of  vector symbolic architecture developed by \citet{emruli_vector_2015} from EISLAB at Luleå University of Technology \footnote{The code is available at http://pendicular.net/cbvs.php};
 
-    \item a 2013 Java implementation `Learning Intelligent Distribution Agent' (LIDA) developed by \citep{franklin_lida:_2014, snaider_integer_2013, snaider_modular_2014} Stan Franklin from the University of Memphis includes implementation. \footnote{http://ccrg.cs.memphis.edu/framework.html};
+    \item a 2013 Java implementation `Learning Intelligent Distribution Agent' (LIDA) developed by \citep{franklin_lida:_2014, snaider_integer_2013, snaider_modular_2014} Stan Franklin's group from the University of Memphis includes implementation. \footnote{http://ccrg.cs.memphis.edu/framework.html; see also http://ccrg.cs.memphis.edu/projects.html where they link to a github repository.};
 
 \end{enumerate}
 
@@ -158,7 +166,7 @@ Let us analyze these.  The Connection Machine is obsolete.  The NASA implementat
 
 The FPGA implementation by \citet{silva_reconfigurable_2004} has yielded a fast scan of hard locations at low energy costs, provided one has access to the proper hardware. Their article claims a four-fold speedup over assembly language; but it does not deal with parallel processing details.  For example, it is unclear whether there was more than a single thread running on the software implementation.  Note that the framework presented here is also able to reconfigure field-programmable gate arrays, through the OpenCL heterogeneous computing platform ability to interface with Hardware Description Language and hence, reconfigure FPGAs \citep{waidyasooriya2018design, czajkowski_opencl_2012} for our tasks.
 
-Then there is LIDA --- a whole cognitive architecture based on Hofstadter's Fluid Concepts, Kanerva's SDM, and other ideas \citep{Anwar2003, snaider_integer_2013, snaider_modular_2014, franklin_lida:_2014}.  It is developed in Java; which makes it difficult to connect to the lowest levels of hardware; to connect to GPUs or FPGAs, and to other languages --- at least in comparison to Python\footnote{Python is sometimes called a `glue language'. That is, in my opinion, not the best metaphor.  A glue connects two things leaving an inflexible structure.  Python is perhaps best described as the interstate highway system of Programming; if something is out there, there is a way to reach it with Python.  In the comparison with Java, for instance, take the $popcnt(xor(b_i,b_j))$ operation, executed billions of times in SDM. How easy is it to program that for a particular GPU or FPGA with Java?}.  It is not available on an open-source repository.  It has a non-standard license, strange to the open-source community, \emph{the LIDA Framework Software NonExclusive, Non-Commercial Use License}.  Moreover, potential contributors must sign an ``Agreement Regarding Contributory Code for the LIDA Framework Software''... \emph{`before Memphis can accept it'} \footnote{What they are attempting to do with this bureaucracy remains unknown, the history of computing has not been kind to those who favored centralization \citep{ferguson_computer_2002}.}.
+Then there is LIDA --- a whole cognitive architecture based on Hofstadter's Fluid Concepts, Kanerva's SDM, and other ideas \citep{Anwar2003, snaider_integer_2013, snaider_modular_2014, franklin_lida:_2014}.  It is developed in Java; which makes it difficult to connect to the lowest levels of hardware; to connect to GPUs or FPGAs, and to other languages --- at least in comparison to the combination Python and OpenCL proposed here\footnote{Python is sometimes called a `glue language'. That is, in my opinion, not the best metaphor.  A glue connects two things leaving an inflexible structure.  Python is perhaps best described as the interstate highway system of Programming; if something is out there, there is a way to reach it with Python.  In the comparison with Java, for instance, take the $popcnt(xor(b_i,b_j))$ operation, executed billions of times in SDM. How easy is it to program that for a particular GPU or FPGA with Java?}.  It has a non-standard license, strange to the open-source community, \emph{the LIDA Framework Software NonExclusive, Non-Commercial Use License}.  We have not found any parallelism in their code \citep{ccrg_ccrg_nodate}, which may make simulations slow or unfeasible. Moreover, potential contributors must sign an ``Agreement Regarding Contributory Code for the LIDA Framework Software''... \emph{`before Memphis can accept it'} \footnote{What they are attempting to do with this bureaucracy remains unclear, the history of computing has not been kind to those who favored centralization \citep{ferguson_computer_2002}.  We certainly refrain from contributing given the legal uncertainties of non-standard licenses and dubious processes --- even as we would like to link these libraries}.
 
 The closest implementations to ours, in philosophy at least, is the one in `the common sense toolkit'. It is executed in C++, with a normal open-source license, and hosted on an open-source code repository.  It is, however, strikingly dissimilar to ours on the following aspects:
 
@@ -270,7 +278,7 @@ Although there is some decrease in SDM recall after 600,000 neuron deaths, it is
 \label{fig:sdm-neuron-death-details}}
 \end{figure}
 
-We run the same simulation for a 256-bit SDM with 1,000,000 hard locations. The results were even more surprising, as the 256-bit SDM seems to be more robust to loss of neurons than the 1,000-bit SDM (see Figure \ref{fig:sdm-neuron-death-256bits}). Notice that the loss of 50\% of neurons barely affected the 256-bit SDM which remained functional even facing an enormous loss of 90\% of neurons.
+We run the same simulation for a 256-bit SDM with 1,000,000 hard locations. The results were even more surprising, as the 256-bit SDM seems to be more robust to loss of neurons than the 1,000-bit SDM (see Figure \ref{fig:sdm-neuron-death-256bits}). Notice that the loss of 50\% of neurons barely affected the 256-bit SDM... and it even remained functional when facing an enormous loss of 90\% of neurons!  What these results seem to imply is not only that the memory is extremely robust, but that a very small expected number of neurons activated in each access radius would preserve the most valueable information.  This may have implications as to the number of standard deviations to define the access radius, as we will discuss in Section \ref{Magic numbers}.  Is there a thing such as excessive robustness, and, if so, when does robustness become waste?\footnote{Consider, for instance, error-correcting codes in Information Theory or the analogous computer ECC memory in Electrical Engineering: tradeoffs between robustness and waste must be considered at each design decision; Why should it be different in the modeling of human memory?}
 
 \begin{figure}[!p]
 \centering
@@ -337,6 +345,30 @@ It is interesting that Kanerva has proposed $z=1$ without realizing the generali
 
 \chapter{Results (ix): Information-theoretical write operation}
 
+\begin{figure}[h!]
+  \centering
+  \subfloat[$w(d), d \in \{ 1, 2, ..., n\}.$]{\includegraphics[width=3.2in]{./images02/info-theory/weights.png}}
+
+  \subfloat[$w(d)$ for the desired range.]{\includegraphics[width=3.2in]{./images02/info-theory/weights-region.png}}
+
+  \subfloat[Stepwise $\left \lfloor{w(d)}\right \rfloor$ for fast integer computation.]{\includegraphics[width=3.2in]{./images02/info-theory/weights-region-stepwise.png}}
+
+  \caption{Shannon write operation:  Computing the amount of information of a signal to each hard location in its access radius. (a) entirety of the space; (b) region of interest; (c) Fast integer computation is possible through a stepwise function.}
+  \label{fig:info-theory-hypothesis}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \subfloat[Write process weighted by the amount of information contained in the distance between the written bitstring and each hard location \label{fig:info-theory-figure73} ]{\includegraphics[width=0.7\textwidth]{./images02/info-theory/shannon-figure73.png}}
+
+  \subfloat[Zoom in Figure \ref{fig:info-theory-figure73} ]{\includegraphics[width=0.7\textwidth]{./images02/info-theory/shannon-figure73-zoom.png}}
+
+  \subfloat[Behavior of weighted write operation according to the distance from the center and the number of items previously stored in the memory]{\includegraphics[width=0.7\textwidth]{./images02/info-theory/shannon-heatmap.png}}
+
+  \caption{Behavior of the critical distance under the information-theoretic weighted write operation when $n=1,000$, $H=1,000,000$ and $r=451$.}
+  \label{fig:info-theory-experiments}
+\end{figure}
+
 
 My advisor, Alexandre Linhares, has proposed another write operation: an information-theoretical weighted write. In it, the sum of the counter's value is weighted based on the distance between each hard location's address and the reading address. The logic behind it is to vary the importance of each hard location inside the circle.  It is only natural that one encodes an item in closer hard locations with a stronger signal, and a natural candidate for this signal function is the amount of information contained in the distance between the item and each hard location.  Closer hard locations have lower probabilities and therefore should encode more information.
 
@@ -378,17 +410,6 @@ $$
 w(d) = -\log_2 \left( P(X = d | X \leq r) \right) = - \log_2 \binom{n}{d} + \log_2 \sum_{i=0}^{r} \binom{n}{i}, \quad d \leq r
 $$
 
-\begin{figure}[h!]
-  \centering
-  \subfloat[$w(d), d \in \{ 1, 2, ..., n\}.$]{\includegraphics[width=3.2in]{./images02/info-theory/weights.png}}
-
-  \subfloat[$w(d)$ for the desired range.]{\includegraphics[width=3.2in]{./images02/info-theory/weights-region.png}}
-
-  \subfloat[Stepwise $\left \lfloor{w(d)}\right \rfloor$ for fast integer computation.]{\includegraphics[width=3.2in]{./images02/info-theory/weights-region-stepwise.png}}
-
-  \caption{Shannon write operation:  Computing the amount of information of a signal to each hard location in its access radius. (a) entirety of the space; (b) region of interest; (c) Fast integer computation is possible through a stepwise function.}
-  \label{fig:info-theory-hypothesis}
-\end{figure}
 
 
 The initial results of this \emph{Shannon write} operation can be seen in Figure \ref{fig:info-theory-experiments} and seem promising. It seems that, when $n=1,000$, $H=1,000,000$, $r=451$, and 10,000 written random bitstrings, the critical distance increased from around 221 to around 250. This increase may be interpreted as an improvement in SDM, because it would converge to the correct bitstring even for farther bitstrings. Note that 29 additional bits imply an attractor area $2^{29}$ times larger than the original. This Shannon write may affect memory capacity \citep{chou_capacity_1989, chou_capacity_1988, sjodin_improving_1995} --- possibly increasing it. Another point to keep in mind is that, since the modulus of the vectors are not uniform in this approach, the shape of the attractor may have asymmetries. Whereas these are just some initial tests, the idea seems meritorious so far.  As for future research, we will execute all tests in the thesis and compare this Shannon write with the original Kanerva model.
@@ -396,17 +417,6 @@ The initial results of this \emph{Shannon write} operation can be seen in Figure
 
 
 
-\begin{figure}[h!]
-  \centering
-  \subfloat[Write process weighted by the amount of information contained in the distance between the written bitstring and each hard location \label{fig:info-theory-figure73} ]{\includegraphics[width=0.7\textwidth]{./images02/info-theory/shannon-figure73.png}}
-
-  \subfloat[Zoom in Figure \ref{fig:info-theory-figure73} ]{\includegraphics[width=0.7\textwidth]{./images02/info-theory/shannon-figure73-zoom.png}}
-
-  \subfloat[Behavior of weighted write operation according to the distance from the center and the number of items previously stored in the memory]{\includegraphics[width=0.7\textwidth]{./images02/info-theory/shannon-heatmap.png}}
-
-  \caption{Behavior of the critical distance under the information-theoretic weighted write operation when $n=1,000$, $H=1,000,000$ and $r=451$.}
-  \label{fig:info-theory-experiments}
-\end{figure}
 
 
 
@@ -473,22 +483,6 @@ We provide a new, open-source, cross-platform, highly parallel framework in whic
 
 Here are interesting questions that have been considered during this work, but have had to be left for future research.
 
-\section{``i'' versus ``l''}
-
-The classification algorithm had some problems classifying the patterns ``i'' and ``l'', due to the low distance between them. In this case, SDM could not discriminate the differences --- it has only considered the big picture. Although this behavior is close to how humans see things, we also have the ability to zoom and focus on the details, clearly discerning letter ``i'' from letter ``l''.
-
-I have run the classification algorithm under the MNIST database of handwritten digits \citep{deng2012mnist}. First, SDM has been trained with the 60,000 training images, and then it classified the 10,000 testing images. In these initial tests, the memory has given the correct classification for 79.22\% of the images, which is inferior to the specialized algorithms. For instance, in 1998, \citet{lecun1998gradient} have developed algorithms which achieve from 88\% through a linear classifier, to 99.7\% through a convolutional net. For a review of algorithms' performance in the MNIST database, see \cite{mnist}.
-
-Looking into the reason behind images incorrectly classified, I have found that the issue is very related to the ``i'' versus ``l'' issue. Some handwritten digits are very close to others, and a ``2'' or a ``7'' may look like a ``1'', for instance. So, how can we solve this issue without using anything specific to images?  Machine learning algorithms use specific techniques to improve performance. I would like to unveil a solution psychologically closer to how we behave --- even if that eventually leads to lower performance.
-
-An unexplored idea is to use multiple SDMs which communicate. A first SDM would write the whole picture, just like we have done. Another SDM would write specific regions of the image, just like our eye focusing on specific regions. When reading, they may compose the counters and give a more precise classification.
-
-% \subsection{Deep learning, multiple SDMs, and the animal behavior of Dr. Linhares}
-
-
-
-% Deep neural networks, alphaGo, alphazero
-
 
 
 \section{Magic numbers}
@@ -498,6 +492,12 @@ Kanerva suggests, in his book, the use of 1,000 dimensions and 1,000,000 hard lo
 Each parameter set choice like this will lead to particular numbers --- many of them emergent ---, such as the access radius size, critical distance, memory capacity, and so forth.  For example, the number of dimensions $n$ leads to the number of standard deviations available on the space: $2 \sqrt{n}$.  One then must choose a proper multiple $m\times\sigma$: Kanerva (and most in the literature) have been using $m=3$, as $\mu-3\sigma$ selects approximately $1/1000$ of the space. These constants will determine the size of the access radius.  Then one must choose the number of hard locations, which will determine how many hard-locations are activated on average; and so on and so forth...
 
 One intriguing question here is:  is there a `better' number of dimensions and hard locations?  If so, can such numbers be better studied algebraically or numerically? How should these parameters be compared?  What are the tradeoffs that should be considered?  What are the `best' benchmarks possible?
+
+% Post-defense TODO: Use the robustness of neurons as a guide.  A more quantitative study of this loss of neurons... between d=0 and d=critical_distance
+% Post-defense TODO: magic numbers
+% Post-defense TODO: mu - m sigma, in which the expected number of neurons is, say, 256 (instead of >1000).
+% Post-defense TODO: study this.  The marginal increase of 10% of Hard locations increases by how many percentage points the critical distance? In fact, is there a way to study this algebrically?  That would be so cool!
+
 
 % \subsection{Classification with context using sequences --- for words instead of only letters}
 
@@ -513,7 +513,150 @@ A reduction from measuring the distance to $2^{20}$ hard locations to a computat
 
 
 
-\section{Illuminating, paving, clearing}
+
+
+
+
+
+
+
+
+
+
+\section{Flow versus flash:  blind driving; life flashing before one's eyes; and temperature}
+
+NOT FOR THE THESIS; move this.  Lots of blah-blah here about psychologicallymodelling these things etc.
+
+\begin{table}
+\begin{tabular}{|c|c|}
+\hline
+English & My whole life flashed before my eyes\tabularnewline
+\hline
+\hline
+Arabic & Wa mana shereet hayaty endance raayt al mawt beayny\tabularnewline
+\hline
+Dutch & Het leven aan je voorbij zien gaan\tabularnewline
+\hline
+French & J'ai vu toute ma vie défiler\tabularnewline
+\hline
+German & Mein ganzes Leben passierte Revue\tabularnewline
+\hline
+Italian & Mi é passata tutta la vita davanti agli occhi\tabularnewline
+\hline
+Latin Script & Zendegiam dar yek lahzeh az joloyeh Cheshmhayam gozasht\tabularnewline
+\hline
+Norwegian & Livet passerte (i revy) foran øynene mine\tabularnewline
+\hline
+Persian & \tabularnewline
+\hline
+Portuguese & A vida passou diante dos meus olhos\tabularnewline
+\hline
+Romanian & Mie mi-a trecut toata viata prin fata ochilor\tabularnewline
+\hline
+Russian & \tabularnewline
+\hline
+Spanish & Toda mi vida me pasó delante de los ojos\tabularnewline
+\hline
+Swedish & Livet passerade revy framför mina ögon\tabularnewline
+\hline
+\end{tabular}\caption{An expression that seems universal. Could it be that these are merely
+conscious, psychological reports, of what one feels to have experienced?
+Could this be explained by a theory of human memory?  It seems to be related to Hofstadter's temperature, here at truly high levels... Is it possible to simulate this?}
+% TODO include persian and russian back, through inkscape pdf
+% https://tex.stackexchange.com/a/370073/33832
+\end{table}\label{table:lflashing}
+
+% TODO look at previous paper on this and speculate it here in SDM, somewhere
+% TODO include on book from the following:
+%
+
+\begin{quote}
+.. body leaning in, until he just collapsed dead before completing his little circle in the grass. The NVA were right behind Sergeant Jefferson, coming through the hedgerow, and Power's life flashed before his eyes. He saw it all in a second, and he realized then and there that everything he had ever done, every decision he had ever made, it had all been to get him in this hole on this day. I'm dying' right here. That's it. It's over. Power shot an NVA who burst through the hedgerow with his ...
+\end{quote}
+
+Consider the above and that the expression on table \ref{table:lflashing} seem to be universal...
+
+% https://books.google.com.br/books?id=OURuAAAAMAAJ&q=%22life+flashed+before+his+eyes%22+subject:%22History%22&dq=%22life+flashed+before+his+eyes%22+subject:%22History%22&hl=en&sa=X&ved=0ahUKEwjdr9aiu7faAhWHvJAKHdlGC7IQ6AEIXDAJ
+
+% https://www.amazon.com/gp/offer-listing/044021310X/ref=olp_page_1?ie=UTF8&f_all=true
+%
+
+
+
+\section{``i'' versus ``l''}
+
+The classification algorithm had some problems classifying the patterns ``i'' and ``l'', due to the low distance between them. In this case, SDM could not discriminate the differences --- it has only considered the big picture. Although this behavior is close to how humans see things, we also have the ability to zoom and focus on the details, clearly discerning letter ``i'' from letter ``l''.
+
+I have run the classification algorithm under the MNIST database of handwritten digits \citep{deng2012mnist}. First, SDM has been trained with the 60,000 training images, and then it classified the 10,000 testing images. In these initial tests, the memory has given the correct classification for 79.22\% of the images, which is inferior to the specialized algorithms. For instance, in 1998, \citet{lecun1998gradient} have developed algorithms which achieve from 88\% through a linear classifier, to 99.7\% through a convolutional net. For a review of algorithms' performance in the MNIST database, see \cite{mnist}.
+
+Looking into the reason behind images incorrectly classified, I have found that the issue is very related to the ``i'' versus ``l'' issue. Some handwritten digits are very close to others, and a ``2'' or a ``7'' may look like a ``1'', for instance. So, how can we solve this issue without using anything specific to images?  Machine learning algorithms use specific techniques to improve performance. I would like to unveil a solution psychologically closer to how we behave --- even if that eventually leads to lower performance.
+
+An unexplored idea is to use multiple SDMs which communicate. A first SDM would write the whole picture, just like we have done. Another SDM would write specific regions of the image, just like our eye focusing on specific regions. When reading, they may compose the counters and give a more precise classification.
+
+% Post-Defense TODO:  SDM creating Voronoi Tesselations of concepts, with different sized areas for each.  This should solve i versus l.
+
+
+\section{Deep learning, multiple SDMs, and the incredible animal behavior of Dr. Linhares}
+
+In the name of all that is sacred, it is probably advisable to leave the following comments as originally made by my advisor, Dr. Linhares. To quote:
+
+
+\begin{figure}[h!]
+  \centering
+
+  \subfloat[Bongard problem 71]{\includegraphics[width=0.7\textwidth]{./images02/Bongard-problemp071.png}}
+
+  \subfloat[Bongard problem 72]{\includegraphics[width=0.7\textwidth]{./images02/Bongard-problemp072.png}}
+
+  \subfloat[Bongard problem 73]{\includegraphics[width=0.7\textwidth]{./images02/Bongard-problemp073.png}}
+
+  \caption{Bongard problems 71 - 73, courtesy of noted Bongardologist, Dr. Harry Foundalis.  What distinguishes the boxes on the left hand side to those on the right hand side?}
+  \label{fig:bongard-problems-71}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+
+  \subfloat[Bongard problem 74]{\includegraphics[width=0.7\textwidth]{./images02/Bongard-problemp074.png}}
+
+  \subfloat[Bongard problem 75]{\includegraphics[width=0.7\textwidth]{./images02/Bongard-problemp075.png}}
+
+  \subfloat[Bongard problem 76]{\includegraphics[width=0.7\textwidth]{./images02/Bongard-problemp076.png}}
+
+  \label{fig:bongard-problems-74}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+
+  \subfloat[Bongard problem 77]{\includegraphics[width=0.7\textwidth]{./images02/Bongard-problemp077.png}}
+
+  \subfloat[Bongard problem 78]{\includegraphics[width=0.7\textwidth]{./images02/Bongard-problemp078.png}}
+
+  \subfloat[Bongard problem 79]{\includegraphics[width=0.7\textwidth]{./images02/Bongard-problemp079.png}}
+
+  \label{fig:bongard-problems-77}
+\end{figure}
+
+\begin{quote}
+
+    Those deep neural networks... alphaGo... alphazero... very impressive, and to me very right and proper in a sense and also very wrong and misguided in another. I have not seriously studied the topic. Eric Nichols explained it to me in a napkin, and I watched some youtube videos and browsed the books. So what follows, like all great science, is completely based on gossip, hearsay, prejudice and anecdote.  Or at least that's how I believe all great \emph{hunches} over what is promising and what is a dead-end come from; that aesthetic sense that forms over time and seems to guide us towards what feels beautiful and correct and away from what seems foolish and wasteful...
+
+    You know those animals that create those burrows underground, creatures like the prairie dogs?  There, underground, they build all sorts of passageways from here to where they want to go; and in the process they discover all that \emph{can't be passageway}.  What can't be passageway --- what can't be corridor --- will never be used as passageway, by definition.  And most of the world can't be passageway.  Think about the animal behavior: the beast won't give up! To me it's all very similar to what these systems seem to be doing... it seems they are molding a model of their problem; discovering what can't be passageway and finding some other route, very tortuous if need be...  You have these monstrous networks creating layers upon layers in which they differentiate and distribute the errors throughout all the nooks and cranies of, say, a domain like the game of Go.  Then, after some biblical number-crunching, it seems that there may be a very subtle way... however tortuous, however tight, however inprobable, however unconfortable.
+
+    And these machines are exhibiting intelligence.  The victories in the game of Go seem to have shown that alphaGo did have vague, non-explicit, non-formal, but very strong intuitions about what the Go universe looks like.  So here is what I like and I find beautiful:  These gigantic clusters of inter-related micro impressions that the system has acquired and can relate to.  I imagine multiple SDMs exchanging information; gossiping about all the dead-ends out there and trying to find some tiny tortuous pathway, and it feels to me that that's a good and proper way to move forward in research.
+
+    But it feels like a mistake to say that that is thinking.  It's not.  It is to me a great model of someone getting so attuned into an area that they are able to simply flow through tasks; in the positive psychology sense of the word flow.  It's very powerful and very intelligent:  but it is a form of intelligence without thinking.  Intelligence that can't make leaps from one arena to another; Intelligence that can't work on Bongard problems.  So what I would fear as a dead-end in research would be to have decades of massive, massive number-crunching and machine learning of this type... in disregard to big questions such as the interaction of short-term memory with SDM and, again, tasks like Bongard problems (Figures \ref{fig:bongard-problems-71, fig:bongard-problems-71, fig:bongard-problems-71}).
+
+    Cognitive Science is, to me, the study of plausible interaction between system 1 and system 2.  We can't continue to study, say, a silly, implausible, model of system 1 and a great model of system 2 (or vice-versa). We need both system 1 and system 2 to be plausible, in the psychological sense and in the neuroscientific sense.  AlphaGo, for instance, has this wonderful model of the game, reflecting many of the properties of system 1... but then falls back into silliness as soon as it turns to the other side of the problem:  it uses some montecarlo methods in very efficient fashion to go on to to the next probing of this wonderful system 1...
+
+    Hofstadter has nailed the interactions and the content... analogies, fluid concepts, things seen through a different perspective, variations on a theme, etc.  Kanerva has nailed system 1, long-term-memory, and its  theoretical neuroscience; micro neuro-firings bringing a memory back to life.  Attaching something as beautiful as SDM to, say, some hyper-efficient alpha-beta pruning algorithm is nothing short of heresy against all the gods of science and must be punished with death without mercy. Seems like the most reasonable path going forward...
+
+\end{quote}
+
+
+
+\section{Not a real Conclusion}
 
 Let us revisit, in these concluding thoughts, the emphasis employed over speed of computation.  At first sight, that might seem like a typical objective of efficiency in computer science. But we are not only interested in the computer science effects here --- the ambition is different. More important than this `computer-sciency' goal, i.e., a beautiful, clean, efficient algorithm with the primary effect of enhanced speed, however, is the secondary effect on the sociology of science:  communities form around open-source code, specialists in a particular arena magnify the capabilities of the code, debates and meetings are regularly held, and deep divisive disagreements lead to community splits in multiple potential directions of exploration.  In a very real sense, given a shared code to work and experiment on, we can see farther.
 
@@ -543,7 +686,7 @@ Ralph Waldo Emerson once said: \emph{do not go where the path may lead. Go, inst
 
 
 
-% TODO
+% TODO  Appendix?
 
 \chapter{Appendix}
 %\section{Generating Kanerva's table 7.3}

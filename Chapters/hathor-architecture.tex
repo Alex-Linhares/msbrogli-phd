@@ -4,7 +4,7 @@ This work introduces the Hathor's architecture which lies between Bitcoin's and 
 This way, there will be two difficulty levels in the system: one for new transactions which are just moving tokens around, and another one for ``blocks'' which are generating new tokens and collecting fees. The first may be adjusted to prevent spammers, which would spend too many resources to generate a great number of new transactions. The second is adjusted every 2,016 blocks to keep the pace of block on every 2 minutes.
 
 There is a trade-off about the required proof-of-work of new transactions. The higher it is, the harder it is to generate new transactions, preventing spammers but also making it harder for IoT devices generate new transactions.
-
+ 
 Each transaction has to confirm all its inputs, i.e., there must be a confirmation path between all the transactions of the inputs and the transaction which are spending them. It is always possible since there is at least one confirmation path between any transaction and a tip. This is important for security reasons.
 
 The transactions are classified into three groups: (i) confirmed transactions, (ii) in-progress transactions, and (iii) unconfirmed transactions (tips). The confirmed transaction are the ones which have already been settled, i.e., their accumulated weights have reached a minimum level. The unconfirmed transactions (tips) are the brand new transactions which have not been confirmed even once yet, i.e., their accumulated weights are zero. The in-progress transactions are in the middle. They have already been confirmed a few times, but not enough to reach the minimum level required to be a confirmed transaction.

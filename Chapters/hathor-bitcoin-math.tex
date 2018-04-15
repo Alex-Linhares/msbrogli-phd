@@ -3,7 +3,7 @@ The primary objective of this chapter is to increase our understanding of the Bi
 
 \section{Hash function}
 
-Hash functions has been widely studied in computer science. In short, a hash function $h: \{0, 1\}^\infty \rightarrow \{0, 1\}^{n}$ has the following properties:
+Hash functions has been widely studied in computer science. In short, a hash function $h: \{0, 1\}^\infty \rightarrow \{0, 1\}^{n}$ has the following properties: 
 
 \begin{enumerate}
 	\item $x = y \Rightarrow h(x) = h(y)$
@@ -475,7 +475,7 @@ When a disagreement between miners' rules happens, that is referred as either a 
 
 Suppose that the miners' are split in two groups, $G_1$ and $G_2$, with different rules. Let's say $H_1$ and $H_2$ are their hash rate, respectively. We have two different scenarios to analyze: (i) when neither of them accepts other's blocks; and (ii) when $G_2$ accepts $G_1$'s blocks, but not the other way around.
 
-Scenario (i) is easy to analyze, because the network would just split and, after a while, both difficulties will be adjusted. Then, they will be just like two different Bitcoin networks.
+Scenario (i) is easy to analyze, as the network would split and, after a while, both difficulties will be adjusted. Then, they will be just like two different Bitcoin networks.
 
 Scenario (ii) is more trick. As $G_2$ accepts $G_1$ blocks, their hashrate will matter. If $H_1 > H_2$, then $G_2$ will frequently skip their blockchain, because $G_1$'s blockchain will be longer most of the time. If $H_1 < H_2$, then $G_2$ may have its own blockchain after a while --- a true fork. But what would happen if $H_1$ keeps increasing and eventually gets larger than $H_2$? It if happens for sufficient time, the whole $G_2$'s blockchain may be discarded in order to move to $G_1$'s blockchain when $G_1$'s gets longer.
 

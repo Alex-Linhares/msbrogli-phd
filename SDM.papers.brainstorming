@@ -5,15 +5,14 @@ O objetivo seria ganhar prestígio i) acadêmico e ii) industrial/open-source/sc
 
     *  Paper sobre o erro de Kanerva
 
-Mto técnico, matemático, pouca gente interessada.  Poucos vão ler e menos ainda vão entender.  Por outro lado toca num ponto de extremo prestígio... corrigir o modelo.  Essa combinação de high-prestige com poucos interessados/qualificados sugere um journal top & fechado.
+Mto técnico, matemático, pouca gente interessada.  Poucos vão ler e menos ainda vão entender.  Por outro lado toca num ponto de extremo prestígio... corrigir o modelo.  Essa combinação de high-prestige com poucos interessados/qualificados sugere um journal top & fechado.  Não são devs, são acadêmicos.
 
 Brainstorming....
 ? IEEE Transactions on Neural Networks and Learning Systems
 ? IEEE Transactions on Pattern Analysis and Machine Intelligence
+? Nature neuroscience
+? Nature Machine Learning
 ? "Sparse Distributed Memory:  the pull exerted by hard locations"
-
-
-
 
 
 
@@ -32,7 +31,7 @@ PeerJ Computer Science --> onde saiu o paper do sympy
 
     * Paper sobre o Framework em si
 
-o 1o paper acima trata da SDM validation; o 2o de performance; este 3o de capability, ease of use, & extensibility.  Terá leitores da galera de open-source... por isso eu sugeriria
+o 1o paper acima trata da SDM validation; o 2o de performance; este 3o de capability, ease of use, & extensibility.  Terá leitores da galera de open-source... por isso eu sugeriria um journal aberto de devs
 
 Journal of Machine Learning Research --> onde saiu o paper do scikit learn, entre outros
 
@@ -47,6 +46,10 @@ Journal of Machine Learning Research --> onde saiu o paper do scikit learn, entr
     o ideal seria um journal aberto...  Frontiers in Psychology ?
 
     * Paper sobre Shannon write ?
+
+
+
+
     * Paper sobre loss of neurons ?
     * Paper sobre letter recognition ?
     * Paper sobre reinforcement learning ?
