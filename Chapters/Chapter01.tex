@@ -182,6 +182,34 @@ By default, Iota uses the Markov Chain Monte Carlo (MCMC) algorithm to select th
 \chapter{Hathor's architecture}
 \input{./Chapters/hathor-architecture.tex}
 
+\section{Governance}
+
+- Punishment for miners/transactions which does not comply with the rules.
+
+- Rule change policy.
+
+
+\section{Expected number of tips}
+
+Explain transient and stationary state. The balance happens in the stationary state.
+
+In order to estimate the balance in the number of tips, let's consider the system in which the rate of inward tips is $\lambda_\text{TX}$, while the rate of outward tips is $\rho$. Let $K$ be the number of tips in the system. Thus, after $\Delta t$ seconds, $\Delta \text{tips} = \lambda_\text{TX} \Delta t - \rho K \Delta t$. In the balance, $\Delta \text{tips} = 0$, hence $K = \frac{\lambda_\text{TX}}{\rho}$.
+
+Finally, the rate of outward tips is twice the rate in which devices solve the proof-of-work of transactions. Let $H$ be the devices' hash rate, then, $\rho = 2 \cdot H \cdot 2^{-w_\text{TX}}$.
+
+Twice?! It is a number between 1 and 2, but none of them.
+
+Therefore, in the balance,
+
+$$K = \frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{2H}$$
+
+$$\frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{2H} \le K \le \frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{H}$$
+
+
+\section{Attacks \& Conflicting transactions}
+
+
+
 \chapter{Methodology}
 
 The methodology we have used is computer simulation. Through the simulation of many scenarios of Hathor, we will understand how the network behaves in complex scenarios, including when the load suddenly increases, and when the network is under attack.
