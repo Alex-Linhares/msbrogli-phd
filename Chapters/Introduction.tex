@@ -33,7 +33,7 @@ This humble beginnings date from almost 100 years ago. Today the field has advan
 
 Applied mathematics and computer science serve simultaneously as a theoretical foundation and the major tool available to the field.  Though this is a doctoral thesis concerning business, in this document one should expect to find the language and nomenclature of mathematical modeling and computer science as our primary and most natural language.
 
-This thesis will explore three different topics related to \emph{computing business platforms} (Figure \ref{fig:onelife}). Though the range of the topics is large, as it usually is in management science, it is my hope to convince readers of the value of this doctoral thesis brought by three specific, self-contained, scientific papers.  The first of which studies the possibility of distributed financial ledgers.
+This thesis will explore three different topics related to \emph{computing business platforms} (Figure \ref{fig:onelife}). Though the range of the topics is large, as it usually is in management science, it is my hope to convince readers of the value of this doctoral thesis brought by three specific, self-contained, scientific papers --- the first of which studies the possibility of distributed financial ledgers.
 
 \section{Distributed financial ledgers}
 
@@ -55,9 +55,60 @@ Our analysis suggests an architecture for a distributed currency which is inspir
 
 In this first study we will investigate some issues regarding this possibility, namely: (i) cryptographic security and game-theoretical attacks; (ii) scalability; (iii) self-governance of the system; (iv) appropriate incentive system to all participants.
 
-A second topic that may have an outsized influence on business and that we will be taking a closer look is a model of artificial intelligence.
+A second topic that may have an outsized influence on business and that we will be taking a closer look is a model of artificial intelligence --- and of human decision making.
 
-\section{Artificial intelligence}
+\section{Sparse Distributed Memory}
+
+A significant part of the thesis is devoted to \emph{Sparse Distributed Memory}, or SDM for short.  There are two reasons for that: first, it is an important topic in artificial intelligence and computational cognitive science --- a crucial piece of technology that may eventually have vast influence throughout society.
+
+But it is perhaps more than that.  Perhaps it is a crucial item in understanding human decision making.  SDM may, perhaps, bring us a formal model of \emph{recognition-primed decision}, put forth by Gary Klein as a theory of decision-making.
+
+\subsection{Decisions with serious skin in the game}
+
+The recent field of \emph{naturalistic decision making} stands as a new alternative model of study of decision-making.  It bears contrast to both the classical model of rational choice and to the program of heuristics and biases.
+
+The classical model of \emph{rational choice} and optimization which has been the basis of studies in economics (for instance, in game theory), management science and operations research (in for example mathematical programming models), and in artificial intelligence (the symbols and search paradigm), proposes a set of standard, quantitative, methods in order to `rationally' select a choice.  Under this theory, the decision-maker:
+
+\begin{enumerate}
+	\item identifies a set of options,
+	\item identifies ways of evaluating these options,
+	\item weighs each evaluation dimension,
+	\item calculates a rating of each option, and, finally,
+	\item selects the one with the maximum score.
+\end{enumerate}
+
+Note that this model implies that, in order to have a number of choices to choose from, one must first have (i) perceived a problem, and (ii) perceived a set of alternative choices --- where do the choices come from?  What psychological process brings forth their emergence?  The rational model will deal only with the phase of (iii) selecting one choice from the set.
+
+Despite its widespread use in a number of distinct areas, the rational choice model has not found to be psychologically plausible, for a number of reasons \citep{plous_psychology_1993}.  One of the reasons is that the chosen alternative depends on how decision-makers initially frame a problem (Kahneman and Tversky, 1979). There has been strong criticism of the rational choice model from the heuristics and biases research program, in which problems are carefully devised to show that one's intuitions generally depart from the expected optima, and are generally inconsistent with what would be expected as rational.  A large number of biases that depart from rational choice have been found (see, for instance, \citet{plous_psychology_1993}), placing strain on the traditional rational actor doctrine.  Yet the heuristics and biases studies are concentrated on carefully devised questionnaires applied mostly to undergraduate students --- not on real world settings with serious skin in the game.
+
+Thus a new field of naturalistic decision-making emerged, in which the focus is centered around real life settings and decisions being made under rapidly changing circumstances.  A number of studies have been conducted, from firefighters to nurses to chess players to military personnel.  One of the most interesting theories to emerge from naturalistic decision-making, the recognition-primed decision model, was devised by Gary Klein and his colleagues (Klein, 1999).
+
+\subsubsection{Recognition-primed decision}
+
+Consider the following cases:
+
+EXAMPLE \#1. The Cuban World Chess Champion José Raoul Capablanca once remarked about his personal, subjective, experience: `I know at sight what a position contains. What could happen? What is going to happen? You figure it out, I know it!' In another occasion, talking about the numerous possibilities that less-skilled players usually consider on each board position, he bluntly remarked: `I see only one move: The best one.'  Perhaps the reader may think that Capablanca was quite simply being arrogant.  But there is evidence to the contrary, that expert decision-makers actually are biased towards very high quality choices.  We believe that, in fact, Capablanca was telling us an important fact about expert human psychology and decision-making, which would later be documented in recognition-primed decision studies.
+
+EXAMPLE \#2. A baby at an infirmary suddenly turns blue.  Within seconds, a nurse has a diagnosis and a potential action.  In this case, the nurse thinks the baby has a pneumopericardium, which means the sac surrounding the baby's heart is inflated with air, and the resulting pressure detracts from the heart's pumping of blood.  There is a problem with this diagnosis, though.  The electrocardiogram is showing a healthy 80 beats per minute.  If nothing is done, the baby will die within a few minutes.  The doctor walks into the room to find the nurse screaming for silence and listening to the baby's heart with an stethoscope.  She is now sure of her diagnosis, and she gives the doctor a syringe: ``stick the heart, it's a pneumopericardium, I know it''.  Given the electrocardiogram, other nurses are skeptical, until the x-ray operator screams out: ``she's right!''  Her intuitive diagnosis ultimately saves the baby's life.
+
+Klein (1999) conducted a series of studies with decision-makers under rapidly changing scenarios. During interviews, when questioned how a specific decision (or course of action) was adopted, decision-makers such as the nurse would proclaim, to Klein's frustration, that they `did not make decisions'.  One experienced firefighter proclaimed `I don't make decisions--I don't remember when I've ever made a decision' (Klein, 1999, p.10).   Decision-makers did not seem to be comparing alternative courses of actions, as classical models would predict.  `It is usually obvious what to do in any given situation' (p.11).  Repeated statements of the sort by different decision-makers led Klein to propose a psychologically plausible model of decision-making which radically departed from the established view of `comparing alternatives and selecting the optimum'.
+
+Klein (1999) proposed a model of recognition-primed decision, in which experienced decision-makers would find themselves immersed in complex situations and rapidly take adequate courses of action.  Decision-makers would rapidly perceive cues from any situation and retrieve from episodic memory similar situations (Tulving 1983), which would bring assessments and diagnoses and plausible courses of action.  Because priming mechanisms are automatic and unconscious (Bargh and Chartrand 1999, Bargh et al. 2001), these decision-makers reported doing `the obvious' action in different situations.  This `obvious' course of action, Klein proposes, is brought from long-term episodic memory by priming mechanisms.  Hence, decision-makers would not be selecting among distinct alternatives, but rather simply performing the automatically-provided action.
+
+Even if the `obvious' action seemed plausible for a theory, another problem remained:  if decision-makers did not compare alternatives, then how could they know that a course of action was good?  In subsequent interviews, evidence emerged that decision-makers would be using the simulation heuristic, proposed by Kahneman and Tversky (1982).  That is, facing a particular situation, experienced decision-makers would be primed towards a particular course of action, to the detriment of most alternative courses of action.  This primed alternative would be `simulated', or `run through', one's mind, and, if found acceptable during the simulation processing, would be acted upon without further deliberation.  If problems emerged during mental simulation, another different course of action would be primed. Thus was born a theory of intuitive decision-making, in which experienced people would not be selecting choices from a vast set of alternatives, but instead `testing' their initially primed predispositions with a simulation heuristic.
+
+This model, of course, applied only to expert decision-makers with years of experience.  It involves access to a large episodic memory in order to rapidly retrieve a suitable course of action.  This was initially found surprising by Klein:
+
+\begin{quote}
+	Before we did this study, we believed the novices impulsively jumped at the first option they could think of, whereas experts carefully deliberated about the merits of different courses of action.  Now it seemed that it was the experts who could generate a single course of action, while novices needed to compare different approaches. --- Klein (1999, p.21)
+\end{quote}
+
+Because priming mechanisms that brought plausible actions to mind are unconscious, people would report having ``done the obvious thing to do''.  Decision-makers would be unable to visualize the cognitive processes underlying their decisions, and would in many cases even believe that they had skills of the `fantastic' variety:  One firefighter demands that his whole crew abandon operations inside a house, just to see it collapse seconds afterward.  A radar operator would `chill' after spotting a new track, and would fire counter missiles against it, based on the `feeling' that it was a hostile missile.  It took over a year for this radar operator, after being interviewed by Klein, to understand the incredibly subtle cues that he was responding to whenever he perceived the new radar track.  Unable to reasonably explain their life-saving, rapid, decisions, both the firefighter and the radar operator thought that they had ESP or other fantastic abilities. Careful probing would show that they were able to unconsciously perceive subtle cues, which primed them towards adequate responses.
+
+Beyond a formalization of this process of memory recall, Sparse Distributed Memory will offer us a plausible, both psychologically and neuroscientifically, path towards artificial intelligence.
+
+\subsection{Artificial Intelligence}
+
 % Technology > Computer Science > Artificial Intelligence > Pattern Recognition > SDM.
 
 Technology has been one of the underlying engines behind economic growth. It has been changing the whole society -- people, companies, and governments. Cities and houses had to be rethought when cars became popular. Trains allowed distant places to exchange high volume of goods. Airplanes and boats opened countries to overseas business. And, finally, the internet has had a profound impact in nearly everyone's life, as it changed everything -- from the way we communicate, behave, do business, do shopping, share ideas, and so forth.
@@ -72,7 +123,7 @@ Behind artificial intelligence systems, there is pattern recognition: The capaci
 
 The second paper lies at the intersection of cognitive psychology, computer science, neuroscience, and artificial intelligence.  Sparse Distributed Memory, or SDM for short, is a theoretical mathematical construct that seems to reflect a number of neuroscientific and psychologically plausible characteristics of a human memory. SDM has already been used to different pattern recognition problems, like noise reduction, handwriting recognition, robot automation, and so forth.
 
-We implement a RB-Complete\footnote{`Ridiculously Buzzword Complete: the model is (i) Open-Source, (ii) Cross-Platform; (iii) highly parallel; (iv) able to execute on CPUs and/or GPUs; (v) it can be run on the `cloud'; etc.} SDM framework that not only shows small discrepancies from previous theoretical expectations, but also may be of use to other researchers interested in testing their own hypotheses and theories of SDM. The computer code has been used in a previous Ph.D. Thesis; the code has shown some small discrepancies from theoretical expectations; the code has been run on a number of different architectures and information-processing devices (e.g., CPUs, GPUs).  The framework enables us to have a visual exploration previous experiments and new possibilities for SDM.
+We implement a BW-Complete\footnote{`BuzzWord-Complete: the model is (i) Open-Source, (ii) Cross-Platform; (iii) highly parallel; (iv) able to execute on CPUs and/or GPUs; (v) it can be run on the `cloud'; etc.} SDM framework that not only shows small discrepancies from previous theoretical expectations, but also may be of use to other researchers interested in testing their own hypotheses and theories of SDM. The computer code has been used in a previous Ph.D. Thesis; the code has shown some small discrepancies from theoretical expectations; the code has been run on a number of different architectures and information-processing devices (e.g., CPUs, GPUs).  The framework enables us to have a visual exploration previous experiments and new possibilities for SDM.
 
 \section{Diffusion of innovation}
 
@@ -83,7 +134,7 @@ In 2014, a group of Princeton's researchers predicted that Facebook's users woul
 \end{quote}
 
 
-Whilst this brouhaha reminds one of the dangers of extrapolation, our third paper will revisit the prospects of our esteemed colleagues in Facebook. Lying at the intersection of Marketing, Diffusion of Technological Innovation, and modeling, the Bass model of diffusion of innovation will be extended, in order to account for users who, after adopting the innovation for a while, decide to reject it later on (possibly bringing down the number of active users---something impossible in Bass' original model). Four alternative mathematical models are presented and discussed with the Facebook's users dataset.  
+Whilst this brouhaha reminds one of the dangers of extrapolation, our third paper will revisit the prospects of our esteemed colleagues in Facebook. Lying at the intersection of Marketing, Diffusion of Technological Innovation, and modeling, the Bass model of diffusion of innovation will be extended, in order to account for users who, after adopting the innovation for a while, decide to reject it later on (possibly bringing down the number of active users---something impossible in Bass' original model). Four alternative mathematical models are presented and discussed with the Facebook's users dataset.
 
 \section{The fine print...}
 
