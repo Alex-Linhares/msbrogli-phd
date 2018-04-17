@@ -46,102 +46,22 @@ This flexibility into mapping one situation in another is an essential human fea
 % TODO Venn Diagram Psychology, Neuroscience, Cognitive modelling
 % TODO Graph between these disciplines and how they might interact.
 
+Sparse Distributed Memory reads like a \emph{desiderata} of a theory for human memory.  To understand the breadth of topics that SDM encompasses, consider the following questions:
+\begin{enumerate}
+    \item Why are most concepts orthogonal, unrelated to each other?
+    \item Why is there Miller's magic number, i.e., we can't hold too many things in mind at once?
+    \item Why do we at times instantly recall an experience; other times we can't recall anything at all; and still other times we get into this strange tip-of-the-tongue situation... it is clearly `there'... but where?  (and `what' is `there'?)
+    \item How does this recall process work?  What is remembering?
+    \item Why do neurons die and we still remember most everything?
+    \item What do neurons actually do?
+\end{enumerate}
 
-
-Psychological
-orthogonality of concepts; life flashing before one's eyes; miller magic number; when it instantly remembers; when it doesn't recall anything at all; when tip-of-the-tongue... how does this recall process work?
-
-
-
-
-Neuroscientific (bioplausible)
-neurons can die; what do neurons do?  how are things stored?  how are they recalled?
-
-
-Cognitive modelling (fully experimental, with no voodoo-like mysterious properties)
-
-
-
-
-
-3 sparse distributed memory 11
-
-3.1 Neurons as pointers 17
-
-3.2 Concepts 17
-
-3.3 Read operation 18
-
-3.3.1 Generalized read operation
-
-3.4 Critical Distance 20
-
-4 framework architecture 23
-
-4.1 Bitstring 24
-
-4.2.2 OpenCL kernels
-
-4.3 Counters 27
-
-4.4 Read and write operations
-
-5 results (i): performance
-
-5.1 Kernels comparison 38
-
-5.2 Scanners comparison 39
-
-5.3 Read and write operations
-
-6.1 Distance between random bitstrings
-
-6.2 Number of activated hard locations
-
-6.3 Intersection of two circles 63
-
-6.4 Storage and retrieval of sequences
-
-5.3.1 Summary of results
-
-6 results (ii): framework validation
-
-4.1.1 The distance between two bitstrings 24
-
-4.2 Address space 25
-
-4.2.1 Scanning for activated hard locations 25
-
-6.4.1 k-fold memory using only one SDM
-
-7 results (iii): loss of neurons 67
-
-8 results (iv): critical distance 73
-
-8.1 A deviation from the equator distance? 77
-
-8.2 Counter bias 80
-
-8.3 Read bias 83
-
-8.4 Critical distance of 209 85
-
-9 results (v): generalized read operation 87
-
-10 results (vi): supervised classification
-application
-
-11 results (vii): image noise filtering application 101
-
-12 results (viii): the possibility of unsupervised reinforcement learning 107
-
-13 results (ix): information-theoretical write operation 115
-
+These are some of the questions touched by SDM.  It is a theory of long-term memory that constructs the process of recall from a very microscopic level of neuron-firings. While there are numerous groups working on related research, it seems that most are simply bypassing each other; starting from scratch instead of building on top of what already exists.
 
 
 \section{The wasted effort of duplicated, AD-HOC, work}
 
-As expected for such an important thery, SDM has been applied in many different fields, like pattern recognition \citep{norman2003modeling, rao1995natural}, noise reduction \citep{Meng2009}, handwriting recognition \citep{fan1997genetic}, robot automation \citep{Rajesh1998, mendes2008robot}, and so forth. \citet{Linhares2011} has shown that SDM respects the limits of short-term memory \citep{Miller1955, Cowan2001}. Despite this, there is not a reference implementation which would allow one to replicate the results published in a paper, to check the source code for details, and to improve it. Thus, even though intriguing results have been achieved using SDM, it requires counter-productive, duplicate effort from researchers to build on top of previous work.
+As expected for such an important theory, SDM has been applied in many different fields, like pattern recognition \citep{norman2003modeling, rao1995natural}, noise reduction \citep{Meng2009}, handwriting recognition \citep{fan1997genetic}, robot automation \citep{Rajesh1998, mendes2008robot}, and so forth. \citet{Linhares2011} has argued that SDM respects the limits of short-term memory \citep{Miller1955, Cowan2001}. Kanerva's book has over 1,000 citations in Google Scholar.  Despite this, there is not a reference implementation which would allow one to replicate the results published in a paper, to check the source code for details, and to improve it. Thus, even though intriguing results have been achieved using SDM, it requires counter-productive, duplicate effort from researchers to build on top of previous work.
 
 Our motivation is our own effort to run our models. As there is no reference implementation, we had to develop our own and run several simulations to ensure that our implementation was correct and bug-free. Thus, we had to deviate from our primary goal --- which was to test our hypothesis and explore the `ideas space' --- and to focus on the implementation itself. Furthermore, new members of our research group had to go through different source code developed by former members, in different languages.  Consider the implementations of SDM present --- as of this writing --- on its wikipedia entry\citep{noauthor_sparse_2018}:
 
@@ -651,7 +571,7 @@ Parallel	& Serial\tabularnewline
 
     And these machines are exhibiting intelligence.  The victories in the game of Go seem to have shown that alphaGo did have vague, non-explicit, non-formal, but very strong intuitions about what the nooks and cranies of the Go universe looks like.  So here is what I like and I find beautiful:  These gigantic clusters of inter-related micro impressions that the system has acquired and can relate to.  I imagine multiple SDMs exchanging information; gossiping to each other about all the dead-ends out there and trying to find some tiny tortuous pathway, and it feels to me that that's a good and proper way to move forward in research.
 
-    But it feels like a mistake to say that that is thinking.  It's not.  It is to me a great model of someone getting so attuned into an area that they are able to simply flow through tasks; in the positive psychology sense of the word flow.  It's very powerful and very intelligent:  but it is a form of intelligence without thinking.  Intelligence that can't make leaps from one arena to another; Intelligence that can't work on Bongard problems.  So what I would fear as a dead-end in research would be to have another AI winter... decades of massive, massive number-crunching and machine learning of this type... in disregard to big questions such as the interaction of short-term memory with SDM and, again, tasks like Bongard problems (Figure \ref{fig:bongard-problems-71}).  Bongard problems demand high-gossip between system 1 and system 2; they demand a high dose of imagination and mental imagery manipulation; they demand discrimination and demand clusterization, among many other things that have been spelled out before by \citet{bongard_recognition_1968, douglas1980godel, Linhares2000} and the only serious, deep, study being citet{foundalis_phaeaco:_2006}.
+    But it feels like a mistake to say that that is thinking.  It's not.  It is to me a great model of someone getting so attuned into an area that they are able to simply flow through tasks; in the positive psychology sense of the word flow.  It's very powerful and very intelligent:  but it is a form of intelligence without thinking.  Intelligence that can't make leaps from one arena to another; Intelligence that can't work on Bongard problems.  So what I would fear as a dead-end in research would be to have another AI winter... decades of massive, massive number-crunching and machine learning of this type... in disregard to big questions such as the interaction of short-term memory with SDM and, again, tasks like Bongard problems (Figure \ref{fig:bongard-problems-71}).  Bongard problems demand high-gossip between system 1 and system 2; they demand a high dose of imagination and mental imagery manipulation; they demand discrimination and demand clusterization, among many other things that have been spelled out before by \citet{bongard_recognition_1968, douglas1980godel, Linhares2000} and the landmark, deep, study being \citet{foundalis_phaeaco:_2006}.
 
     Cognitive Science has to study the \emph{plausible} interaction between system 1 and system 2.  We can't continue to study, say, a silly, implausible, model of system 1 and a great model of system 2 (or vice-versa). We need both system 1 and system 2 to be plausible, in the psychological sense and in the neuroscientific sense.  AlphaGo, for instance, has this wonderful model of the game, reflecting many of the properties of system 1... but then falls back into silliness as soon as it turns to the other side of the problem:  it uses montecarlo methods in very efficient fashion to probe some 70,000 thousands of positions per second and go on to to the next probing of this wonderful system 1...
 
