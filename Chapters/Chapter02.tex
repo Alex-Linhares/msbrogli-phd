@@ -13,13 +13,13 @@
 
     \bigskip
     \bigskip
-    {Pentti Kanerva's memory model was a revelation for me: \\
+    {\slshape Pentti Kanerva's memory model was a revelation for me: \\
 it was the very first piece of research I had ever come across\\
 that made me feel I could glimpse the distant goal of understanding \\
 how the brain works as a whole. It gave me a concrete sense for\\
 how familiar mental phenomena could be thought of as distributed\\
-patterns of micro-events, thanks to beautiful mathematics.} \\ \medskip
---- Douglas Hofstadter
+patterns of micro-events, thanks to beautiful mathematics. \\ \medskip
+--- Douglas Hofstadter}
 
 
 \end{flushright}
@@ -477,6 +477,25 @@ The initial results of this \emph{Shannon write} operation can be seen in Figure
 
 \chapter{Conclusion}
 
+\begin{flushright}{\slshape
+
+    \begin{quote}
+    The most exciting phrase to hear in science, the one that heralds new discoveries, is not `Eureka!' (I found it!) but ``That's funny...''
+    — Isaac Asimov
+    \end{quote}
+
+    \bigskip
+\begin{quote}
+Alexander Fleming, while explaining the staphylococcal work to Pryce, to demonstrate a point, picked up one of the top layer of the discarded plates when he noticed the lysis of the staphylococci (his cry of Eureka was ‘That’s funny!’) and then and there made a subculture of the mould.
+\end{quote}
+
+\bigskip
+\bigskip
+
+}
+\end{flushright}
+
+
 Sparse Distributed Memory is a viable model of human memory, yet it does require researchers to (re-)implement a number of parallel algorithms in different architectures.
 
 We provide a new, open-source, cross-platform, highly parallel framework in which researchers may be able to create hypotheses and test them computationally with minimal effort. The framework is well-documented for public release at this time (http://sdm-framework.readthedocs.io), it has already served as the backbone of Chada's Ph.D. thesis \citep{chada2016you}. The single-line command ``pip install sdm'' will install the framework on posix-like systems, and single-line commands will let users test the framework, generate some of the figures from Kanerva's theoretical predictions in their own machines, and --- if interested enough ---, test their own theories and improve the framework, and the benchmarks used to evaluate the framework, in open-source fashion. It is our belief that such work is a necessary component towards accelerating research in this promising field.
@@ -484,6 +503,11 @@ We provide a new, open-source, cross-platform, highly parallel framework in whic
 Here are interesting questions that have been considered during this work, but have had to be left for future research.
 
 
+\section{Another `funny thing'...}
+
+Over the course of this work we looked into a `funny thing' that had appeared in my master's thesis:  the graphs of convergence did not reflect the original expectations put forth by Kanerva, and neither my own previous calculations.  These numerical results pointed us back to the math and to some interesting random variables not studied before.
+
+Another funny thing that has appeared in my master's thesis was that the critical distance collapsed when the network was exclusively writing `random-at-x'.  This is something I would like to look into but have not had the time to conduct a proper study yet.
 
 \section{Magic numbers}
 
@@ -509,80 +533,8 @@ A hypercube with n dimensions can be divided by two hypercubes with $n-1$ dimens
 
 Consider the hypercube with $n$ dimensions.  We want to select a subset of its vertices with cardinality $2^{20}$ that is symmetrically distributed over the space. Afterward, $\forall b \in \{ 0,1\} ^n$, we want an algorithm $A$ that yields the particular list of hard locations for $b$ and all hard locations respect the desired properties of the memory.
 
-A reduction from measuring the distance to $2^{20}$ hard locations to a computation of $2^{10}$ hard locations might yield astonishing performance gains, depending, of course, on our optimistic assumptions concerning existence and complexity of such algorithm.  At large scales of computing, the very ability to perform some experiments is a function of sheer performance. The horizon of experiments --- and possibly of knowledge --- expands \emph{as a function of computational demands}. A little more on this in my closing words.
+A reduction from measuring the distance to $2^{20}$ hard locations to a computation of $2^{10}$ hard locations might yield astonishing performance gains, depending, of course, on our optimistic assumptions concerning existence and complexity of such algorithm.  At large scales of computing, the very ability to perform some experiments is a function of sheer performance. The horizon of experiments --- and possibly of knowledge --- expands \emph{as a function of computational demands}. A little more on this will follow below.
 
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Flow versus flash:  blind driving; life flashing before one's eyes; and temperature}
-
-highway hypnosis; absentminded driving; Going on Autopilot; PNAS study
-
-
-NOT FOR THE THESIS; move this.  Lots of blah-blah here about psychologicallymodelling these things etc.
-
-\begin{table}
-\begin{tabular}{|c|c|}
-\hline
-English & My whole life flashed before my eyes\tabularnewline
-\hline
-\hline
-Arabic & Wa mana shereet hayaty endance raayt al mawt beayny\tabularnewline
-\hline
-Dutch & Het leven aan je voorbij zien gaan\tabularnewline
-\hline
-French & J'ai vu toute ma vie défiler\tabularnewline
-\hline
-German & Mein ganzes Leben passierte Revue\tabularnewline
-\hline
-Italian & Mi é passata tutta la vita davanti agli occhi\tabularnewline
-\hline
-Latin Script & Zendegiam dar yek lahzeh az joloyeh Cheshmhayam gozasht\tabularnewline
-\hline
-Norwegian & Livet passerte (i revy) foran øynene mine\tabularnewline
-\hline
-Persian & \tabularnewline
-\hline
-Portuguese & A vida passou diante dos meus olhos\tabularnewline
-\hline
-Romanian & Mie mi-a trecut toata viata prin fata ochilor\tabularnewline
-\hline
-Russian & \tabularnewline
-\hline
-Spanish & Toda mi vida me pasó delante de los ojos\tabularnewline
-\hline
-Swedish & Livet passerade revy framför mina ögon\tabularnewline
-\hline
-\end{tabular}\caption{An expression that seems universal. Could it be that these are merely
-conscious, psychological reports, of what one feels to have experienced?
-Could this be explained by a theory of human memory?  It seems to be related to Hofstadter's temperature, here at truly high levels... Is it possible to simulate this?}
-% TODO include persian and russian back, through inkscape pdf
-% https://tex.stackexchange.com/a/370073/33832
-\end{table}\label{table:lflashing}
-
-% TODO look at previous paper on this and speculate it here in SDM, somewhere
-% TODO include on book from the following:
-%
-
-\begin{quote}
-.. body leaning in, until he just collapsed dead before completing his little circle in the grass. The NVA were right behind Sergeant Jefferson, coming through the hedgerow, and Power's life flashed before his eyes. He saw it all in a second, and he realized then and there that everything he had ever done, every decision he had ever made, it had all been to get him in this hole on this day. I'm dying' right here. That's it. It's over. Power shot an NVA who burst through the hedgerow with his ...
-\end{quote}
-
-Consider the above and that the expression on table \ref{table:lflashing} seem to be universal...
-
-% https://books.google.com.br/books?id=OURuAAAAMAAJ&q=%22life+flashed+before+his+eyes%22+subject:%22History%22&dq=%22life+flashed+before+his+eyes%22+subject:%22History%22&hl=en&sa=X&ved=0ahUKEwjdr9aiu7faAhWHvJAKHdlGC7IQ6AEIXDAJ
-
-% https://www.amazon.com/gp/offer-listing/044021310X/ref=olp_page_1?ie=UTF8&f_all=true
-%
 
 
 
@@ -601,8 +553,53 @@ An unexplored idea is to use multiple SDMs which communicate. A first SDM would 
 
 \section{Deep learning, multiple SDMs --- and the incredible animal behavior of Dr. Linhares}
 
-In the name of all that is sacred, it is probably advisable to leave the following comments as originally made by my advisor, Dr. Linhares. To quote:
+There is the intention of studying what, if any, capabilities do multiple SDMs have...  yet it is probably advisable to leave the following comments as originally made by my advisor, Dr. Linhares. To quote:
 
+\begin{table}[ht]
+\begin{tabular}{|p{4cm}|p{7cm}|}  %{|c|c|}
+\hline
+System 1	& System 2\tabularnewline
+\hline
+\hline
+Unconscious Reasoning	& Conscious Reasoning\tabularnewline
+\hline
+Implicit	& Explicit\tabularnewline
+\hline
+Automatic	& Controlled\tabularnewline
+\hline
+Low Effort	& High Effort\tabularnewline
+\hline
+Large Capacity	& Small Capacity\tabularnewline
+\hline
+Rapid	& Slow\tabularnewline
+\hline
+Default Process	& Inhibitory\tabularnewline
+\hline
+Associative	& Rule-Based\tabularnewline
+\hline
+Contextualized	& Abstract\tabularnewline
+\hline
+Domain Specific	& Domain General\tabularnewline
+\hline
+Evolutionarily Old	& Evolutionarily Recent\tabularnewline
+\hline
+Nonverbal	& Linked to language\tabularnewline
+\hline
+Includes recognition, perception, orientation	& Includes rule following, comparisons, weighing of options\tabularnewline
+\hline
+Modular Cognition	& Fluid Intelligence\tabularnewline
+\hline
+Independent of working memory	& Limited by working memory capacity\tabularnewline
+\hline
+Non-Logical	& Logical\tabularnewline
+\hline
+Parallel	& Serial\tabularnewline
+\hline
+\end{tabular}
+
+\caption{Dual process theories.}
+
+\end{table}\label{table:twosys}
 
 \begin{figure}[h!]
   \centering
@@ -641,19 +638,26 @@ In the name of all that is sacred, it is probably advisable to leave the followi
   \label{fig:bongard-problems-77}
 \end{figure}
 
+
+
+
 \begin{quote}
 
     Those deep neural networks... alphaGo... alphazero... very impressive, and to me very right and proper in a sense and also very wrong and misguided in another. I have not seriously studied the topic. Eric Nichols explained it to me in a napkin, and I watched some youtube videos and browsed the books. So what follows, like all great science, is completely based on gossip and hearsay, prejudice and anecdote.  Or at least that's how I believe all great \emph{hunches} over what is promising and what is a dead-end come from; that aesthetic sense that forms over time and seems to guide us towards what feels beautiful and correct and away from what seems foolish and wasteful...
 
-    You know those animals that create those burrows underground, creatures like the prairie dogs?  There, underground, they build all sorts of passageways from here to where they want to go; and in the process they discover all that \emph{can't be passageway}.  What can't be passageway --- what can't be corridor --- will never be used as passageway, by definition.  And most of the world can't be passageway.  Think about the animal behavior: endless dead-end nooks and cranies yet the beast won't give up! To me it's all very similar to what these systems seem to be doing... it seems they are molding a model of their problem; discovering what can't be passageway and finding some other route, very tortuous if need be...  You have these monstrous networks creating layers upon layers in which they differentiate and distribute the errors throughout all the nooks and cranies of, say, a domain like the game of Go.  Then, after some biblical number-crunching, it seems that there may be a very subtle way... however tortuous, however tight, however inprobable, however unconfortable.
+    So here is my hunch:  \emph{SDM is System 1 and System 1 is SDM} (e.g., as in Table \ref{table:twosys}). I haven't seen anyone say this out loud, but Kanerva has pretty much nailed system 1 --- I feel he is at least 90\% right.
 
-    And these machines are exhibiting intelligence.  The victories in the game of Go seem to have shown that alphaGo did have vague, non-explicit, non-formal, but very strong intuitions about what the Go universe looks like.  So here is what I like and I find beautiful:  These gigantic clusters of inter-related micro impressions that the system has acquired and can relate to.  I imagine multiple SDMs exchanging information; gossiping about all the dead-ends out there and trying to find some tiny tortuous pathway, and it feels to me that that's a good and proper way to move forward in research.
+    You know those animals that create those burrows underground, creatures like the prairie dogs?  There, underground, they build all sorts of passageways from here to where they want to go; and in the process they discover all that \emph{can't be passageway}.  What can't be passageway --- what can't be corridor --- will never be used as passageway, by definition.  And most of the world can't be passageway.  Think about the animal behavior: endless dead-end nooks and cranies yet the beast won't give up! To me it's all very similar to what these systems seem to be doing... it seems they are crafting and molding a model of their problem; discovering what can't be passageway and finding some other route, very tortuous if need be...  You have these monstrous networks creating layers upon layers in which they differentiate and distribute the errors throughout all the nooks and cranies of, say, a domain like the game of Go.  Then, after some biblical number-crunching, it seems that there may be a very subtle way... however tortuous, however tight, however improbable, however unconfortable.
 
-    But it feels like a mistake to say that that is thinking.  It's not.  It is to me a great model of someone getting so attuned into an area that they are able to simply flow through tasks; in the positive psychology sense of the word flow.  It's very powerful and very intelligent:  but it is a form of intelligence without thinking.  Intelligence that can't make leaps from one arena to another; Intelligence that can't work on Bongard problems.  So what I would fear as a dead-end in research would be to have decades of massive, massive number-crunching and machine learning of this type... in disregard to big questions such as the interaction of short-term memory with SDM and, again, tasks like Bongard problems (Figures \ref{fig:bongard-problems-71} \ref{fig:bongard-problems-74} \ref{fig:bongard-problems-77}; see \citet{bongard_recognition_1968, douglas1980godel, Linhares2000, foundalis_phaeaco:_2006, lupyan_difficulties_2013}).
+    And these machines are exhibiting intelligence.  The victories in the game of Go seem to have shown that alphaGo did have vague, non-explicit, non-formal, but very strong intuitions about what the nooks and cranies of the Go universe looks like.  So here is what I like and I find beautiful:  These gigantic clusters of inter-related micro impressions that the system has acquired and can relate to.  I imagine multiple SDMs exchanging information; gossiping to each other about all the dead-ends out there and trying to find some tiny tortuous pathway, and it feels to me that that's a good and proper way to move forward in research.
 
-    Cognitive Science has to study the plausible interaction between system 1 and system 2.  We can't continue to study, say, a silly, implausible, model of system 1 and a great model of system 2 (or vice-versa). We need both system 1 and system 2 to be plausible, in the psychological sense and in the neuroscientific sense.  AlphaGo, for instance, has this wonderful model of the game, reflecting many of the properties of system 1... but then falls back into silliness as soon as it turns to the other side of the problem:  it uses some montecarlo methods in very efficient fashion to go on to to the next probing of this wonderful system 1...
+    But it feels like a mistake to say that that is thinking.  It's not.  It is to me a great model of someone getting so attuned into an area that they are able to simply flow through tasks; in the positive psychology sense of the word flow.  It's very powerful and very intelligent:  but it is a form of intelligence without thinking.  Intelligence that can't make leaps from one arena to another; Intelligence that can't work on Bongard problems.  So what I would fear as a dead-end in research would be to have another AI winter... decades of massive, massive number-crunching and machine learning of this type... in disregard to big questions such as the interaction of short-term memory with SDM and, again, tasks like Bongard problems (Figure \ref{fig:bongard-problems-71}).  Bongard problems demand high-gossip between system 1 and system 2; they demand a high dose of imagination and mental imagery manipulation; they demand discrimination and demand clusterization, among many other things that have been spelled out before by \citet{bongard_recognition_1968, douglas1980godel, Linhares2000, foundalis_phaeaco:_2006, lupyan_difficulties_2013} and others.
 
-    Hofstadter has nailed the interactions and the content... analogies, fluid concepts, things seen through a different perspective, variations on a theme, etc.  Kanerva has nailed system 1, long-term-memory, and its  theoretical neuroscience; micro neuro-firings bringing a memory back to life.  Attaching something as beautiful as SDM to, say, some hyper-efficient centralized alpha-beta pruning algorithm is nothing short of heresy against all the gods of science for which the villain shall be put to death without clemency or mercy. Seems like the only reasonable path going forward...
+    Cognitive Science has to study the \emph{plausible} interaction between system 1 and system 2.  We can't continue to study, say, a silly, implausible, model of system 1 and a great model of system 2 (or vice-versa). We need both system 1 and system 2 to be plausible, in the psychological sense and in the neuroscientific sense.  AlphaGo, for instance, has this wonderful model of the game, reflecting many of the properties of system 1... but then falls back into silliness as soon as it turns to the other side of the problem:  it uses montecarlo methods in very efficient fashion to probe some 70,000 thousands of positions per second and go on to to the next probing of this wonderful system 1...
+
+    It works; it is impressive; it is intelligent; but it is not thinking; and it hasn't thought us much about our cognition.
+
+    Hofstadter has nailed the interactions and the content... analogies, fluid concepts, things seen through a different perspective, abstract roles, variations on a theme, etc.  Kanerva has nailed system 1, long-term-memory, and its  theoretical neuroscience; micro neuro-firings bringing a memory back to life.  Isn't it time to work on System 2 models that are counterparts to SDM --- in fact, isn't it obvious that that's our glaring omission?  Attaching something as beautiful as SDM to, say, some centralized hyper-efficient montecarlo algorithm is nothing short of heresy against all the gods of science for which the villain shall be put to death without clemency or mercy. Seems like the only reasonable path going forward...
 
 \end{quote}
 
@@ -688,7 +692,7 @@ Videos following the Course Slides  & online course, currently in planning phase
 \hline
 \end{tabular}
 
-\caption{Desiderata of open-source, creative-common deliverables, longer-term.  Some of these items are mature for wide dissemination, whereas others are in planning phase.  For an online SDM course, for instance, we might partner with a Ph.D. program in the Teaching of Mathematics and Physics, such as \citet{im/ufrj_programa_nodate}.}
+\caption{Desiderata of open-source, creative-common deliverables, longer-term.  Some of these items are mature for wide dissemination, whereas others are in planning phase.  For an online SDM course, for instance, we might partner with a Ph.D. program in the Teaching of Mathematics and Physics, such as \citet{im/ufrj_programa_nodate}, who are intent on developing and measuring the effects of new educational tools.}
 
 \end{table}
 
@@ -703,18 +707,18 @@ Beyond speed, I have also strived for \emph{ease of use} and \emph{replicable st
 
 The overarching intention here is to not only provide a starting point, but to provide a documented Framework in which SDM research can be conducted.  Consider having the ability to compare the results of a new (‘forked’) model to the previous `best' (under a particular benchmark set).  For example, some of the benchmarks that we plan to develop in future research are: how fast is convergence through iterative reading?  How large is the attractor of the critical distance?  How well does the system filter noise?  How well does the system work under the supervised learning task?  And other authors may be able to improve this benchmark set themselves, as is usual in open source development.  It is perhaps this facility of ease to build on top of previous work that seems most exciting at this stage.
 
-Consider the misunderstanding concerning the SDM read operation:  Dr. Stan Franklin describes Kanerva's read operation in a way that each hard location, at each dimension, provides only a single bit of information to the read operation (instead of Kanerva's full counter).  We have referred to this modified read operation as Chada read\footnote{Legend has it that my friend \text{\&} colleague, Dr. Daniel de Magalhães Chada, along with Linhares, did not consult and re-check with Kanerva's book and only discovered the discrepancy in code and ideas a couple of years afterward.}.  Having an open, testable, codebase reduces the possibilities of such misunderstandings in the long run.  Indeed, a high-quality codebase seems to have become a scientific community's form of unequivocally standing behind a consensus. For example, the journal Nature analyzed the top-100 cited papers in history, to find:
+Consider the misunderstanding concerning the SDM read operation:  Dr. Stan Franklin describes Kanerva's read operation in a way that each hard location, at each dimension, provides only a single bit of information to the read operation (instead of Kanerva's full counter).  We have referred to this modified read operation as Chada read\footnote{Legend has it that my friend \text{\&} colleague, Dr. Daniel de Magalhães Chada, along with Linhares, did not consult and re-check with Kanerva's book and only discovered the discrepancy in code and ideas a couple of years afterward.}.  Having an open, testable, codebase reduces the possibilities of such misunderstandings in the long run.  Indeed, a high-quality codebase seems to have become a scientific community's form of unequivocally standing behind a consensus. For example, the journal \emph{Nature} analyzed the top-100 cited papers in history, to find:
 
 \begin{quote}
 ... some surprises, not least that it takes a staggering 12,119 citations to rank in the top 100 — and that many of the world’s most famous papers do not make the cut. A few that do, such as the first observation of carbon nanotubes (number 36) are indeed classic discoveries. But the vast majority describe experimental methods or \emph{software that have become essential in their fields. [...] The list reveals just how powerfully research has been affected by computation and the analysis of large data sets.} \\
 \hfill --- \citet{van2014top}, emphasis mine.
 \end{quote}
 
-It is no coincidence that scientific journals such as BMC Neuroscience, or the Journal of Machine Learning Research have specific sections on open-source software. The journal Neurocomputing states, bluntly: “software is scientific method by machine”.
+It is no coincidence that scientific journals such as \emph{BMC Neuroscience}, or the \emph{Journal of Machine Learning Research} have specific sections on open-source software. The journal \emph{Neurocomputing} states, bluntly: “software is scientific method by machine”.
 
 Of course, for the skeptical reader who may consider software a less worthy pursuit, there is also new work here.  The mathematics of the model has been shown to be correct numerically (with a single, small, anomaly); we have shown how to execute unsupervised learning with nothing besides operations original to the SDM; we have studied the generalized Murilo read; we have seen noise filtering; the death of neurons; how information-theory may be of use; and finally, we have reproduced numerous of the original propositions put forth by Kanerva.  The emphasis might have been on the \emph{breadth of topics}, in detriment of depth here or there.  The work on, say, reinforcement learning, is most definitely not the last word we will see on the subject, but a challenge left for readers to contemplate. But this is due to our research group's enthusiasm for the topic; we do indeed believe that SDM is --- if not correct --- extremely close to a full scientific understanding of human long-term memory.  If so, it is such a monumental achievement that we want readers to be able to see all of what we see and imagine the vastness of possibilities.
 
-Ralph Waldo Emerson once said: \emph{do not go where the path may lead. Go, instead, where there is no path, and leave a trail.}  Professor Pentti Kanerva has left the trail.  It is my job to illuminate it and to pave it and to clear it; to try to deliver an easier pathway for the next generation.  Some essays completely shut the door close at the end; this one intends to leave it wide open. This is not a real conclusion.  As the reader might have noticed, this final section does not read as an analysis of the work done; it reads, instead, as a \emph{desideratum}, a prologue, a yearning for others to join me in imagining the shape of things to come.
+Ralph Waldo Emerson once said: \emph{do not go where the path may lead. Go, instead, where there is no path, and leave a trail.}  Professor Pentti Kanerva has left the trail.  It is my job to illuminate it and to pave it and to clear it; to try to deliver an easier pathway for the next generation.  Some essays completely shut the door close at the end; this one intends to leave it wide open.  As the reader might have noticed, this final section does not read as an analysis of the work done; it reads, instead, as a \emph{desideratum}, a prologue, a yearning for others to join me in imagining the shape of things to come.
 
 
 
@@ -725,7 +729,6 @@ Ralph Waldo Emerson once said: \emph{do not go where the path may lead. Go, inst
 
 
 
-% TODO  Appendix?
 
 \chapter{Appendix}
 %\section{Generating Kanerva's table 7.3}
