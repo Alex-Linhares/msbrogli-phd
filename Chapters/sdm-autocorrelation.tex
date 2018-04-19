@@ -91,13 +91,13 @@ Let $\Phi(x)$ be the cdf of the standard normal distribution. Then, $n \rightarr
 From the approximation of the Binomial distribution $B(a, 0.5)$ by the Normal distribution $\mathcal{N}(\mu = a/2, \sigma^2 = a/4)$, we conclude that, for $a$ sufficiently large, the cdf of the Binomial is approximately equal to the cdf of the Normal distribution. Thus,
 
 $$
-\frac{1}{2^a} \sum_{k=0}^{b} \binom{a}{k} = \Phi \left( \frac{b-a/2}{\sqrt{a}/2} \right) = \Phi \left( \frac{2b-a}{\sqrt{a}} \right)$
+\frac{1}{2^a} \sum_{k=0}^{b} \binom{a}{k} = \Phi \left( \frac{b-a/2}{\sqrt{a}/2} \right) = \Phi \left( \frac{2b-a}{\sqrt{a}} \right)
 $$
 
 Thus,
 
 $$
-\sum_{k=0}^{b} \binom{a}{k} = 2^a \Phi \left( \frac{2b-a}{\sqrt{a}} \right)$
+\sum_{k=0}^{b} \binom{a}{k} = 2^a \Phi \left( \frac{2b-a}{\sqrt{a}} \right)
 $$
 
 The result comes directly from applyting the equation above in $P(x_i = y_i | d(x, y) \le r)$.
@@ -146,13 +146,13 @@ When $n$ is an odd integer, the steps of the proof are similar. Therefore, the p
 
 \end{proof}
 
-In Figure \ref{fig:sdm-10kbits-figure-7-3}, with $n=10,000$ and $r=4,845$, we can notice that the autocorrelation has vanished as predicted by Theorem \ref{thm:sdm-autocorrelation-convergence}. In fact, in this case, $P(x_i = y_i | d(x, y) \le r) = 0.5039895557907589$.
+In Figure \ref{fig:sdm-10kbits-figure-7-3}, with $n=10,000$ and $r=4,845$, we can notice that the autocorrelation has reduced significantly as predicted by Theorem \ref{thm:sdm-autocorrelation-convergence}. In fact, in this case, using Lemma \ref{thm:sdm-T1-n-large}, $P(x_i = y_i | d(x, y) \le r) = 0.5168761116022098$.
 
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=0.75\textwidth]{./images02/sdm-10000bits-10000w-table-7-2.png}
 
-  \caption{The same setup as in Figure \ref{fig:sdm-10000w-table-7-2}, but for $n=10,000$. It shows that the interference has gone away when $n$ is sufficiently large.}
+  \caption{The same setup as in Figure \ref{fig:sdm-10000w-table-7-2}, but for $n=10,000$. It shows that the interference has almost gone away when $n$ is sufficiently large.}
   \label{fig:sdm-10kbits-figure-7-3}
 \end{figure}
 
