@@ -60,51 +60,63 @@ $P(x_i = y_i | d(x, y) \le r) = \dfrac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}
 Theorem \ref{T1} is valid for both ``x written at x'' (autoassociative memory) and ``random written at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905498137$.  Each bit of a hard location does indeed have a small pull bias.  What is meant by this is that each particular dimension has a small preference toward positive values if its address bit is set to 1, and negative values if set to 0.
 
 
-\begin{theorem}
+\begin{lemma}
 Let $r$ be the access radius given that $f$ percent of the hard locations are activated. Then, $\lim_{n \rightarrow \infty} r/n = 1/2$.
 \label{thm:sdm-access-radius}
-\end{theorem}
+\end{lemma}
 \begin{proof}
-Let $\text{ppf}$ be the inverse of the cdf of the standard normal distribution. Then,
+
+As the bits of the hard locations' addresses are randomly chosen, the distance between two hard locations follow a Binomial distribution with $n$ samples and probability 0.5 ($B(n, 0.5)$). For $n$ sufficiently large, the Binomial distribution can be approximated by a Normal distribution, i.e., $B(n, 0.5) \rightarrow \mathcal{N}(\mu = n/2, \sigma^2 = n/4)$.
+
+Let $\Phi(x)$ be the cdf of the standard normal distribution. Let $z = \frac{r - n/2}{\sqrt{n}/2}$. Thus, $P(d(x, y) \le r) = \Phi(z)$. As $f = P(d(x, y) \le r)$, then, $f = \Phi(z)$.
+
+Calculating the inverse, $z = \Phi^{-1}(f)$. Then,
 
 \begin{align}
-r &= \frac{d}{2} + \text{ppf}(f) \frac{\sqrt{d}}{2} \\
-\frac{r}{d} &= \frac{1}{2} + \text{pff}(f) \frac{1}{2 \sqrt{d}}
+z &= \Phi^{-1}(f) \\
+\frac{r - n/2}{\sqrt{n}/2} &= \Phi^{-1}(f) \\
+r &= \frac{n}{2} + \Phi^{-1}(f) \frac{\sqrt{n}}{2} \\
+\frac{r}{n} &= \frac{1}{2} + \Phi^{-1}(f) \frac{1}{2 \sqrt{n}}
 \end{align}
 
-Thus, $d \rightarrow \infty \Rightarrow r/d \rightarrow 1/2$.
+Therefore, $n \rightarrow \infty \Rightarrow r/n \rightarrow 1/2$.
 \end{proof}
 
 \begin{theorem}
-$\lim_{n \rightarrow \infty} P(x_i = y_i | d(x, y) \le r) = 1/2$
+The autocorrelation vanishes when $n \rightarrow \infty$, i.e., $\lim_{n \rightarrow \infty} P(x_i = y_i | d(x, y) \le r) = 1/2$.
 \label{thm:sdm-autocorrelation-convergence}
 \end{theorem}
 \begin{proof}
 
-From \ref{thm:sdm-access-radius}, we know that $\lim_{n \rightarrow \infty} = d/2$.
+From Lemma \ref{thm:sdm-access-radius}, we know that $r = n/2$ for $n$ sufficiently large.
 
-For $k$ even, then:
-
-$$
-\sum_{k=0}^{r} \binom{n}{k} = \sum_{k=0}^{n/2} \binom{n}{k} = \frac{2^d}{2} = 2^{d-1}
-$$
+Suppose that $n$ is an even integer, then,
 
 $$
-\sum_{k=0}^{r} \binom{n-1}{k} = \sum_{k=0}^{n/2} \binom{n}{k} = \frac{2^{d-1}}{2} - \frac{1}{2} \binom{d-1}{d/2}
+\sum_{k=0}^{r} \binom{n}{k} = \sum_{k=0}^{n/2} \binom{n}{k} = \frac{1}{2} \sum_{k=0}^{n} \binom{n}{k} = \frac{2^n}{2} = 2^{n-1}
 $$
+
+And, also,
+
+\begin{align*}
+\sum_{k=0}^{r} \binom{n-1}{k} &= \sum_{k=0}^{n/2} \binom{n-1}{k} \\
+    &= \frac{1}{2} \left[ \sum_{k=0}^{n-1} \binom{n-1}{k} - \binom{n-1}{n/2} \right] \\
+    &= \frac{1}{2} \left[ 2^{n-1} - \binom{n-1}{n/2} \right] \\
+    &= 2^{n-2} - \frac{1}{2} \binom{n-1}{n/2}
+\end{align*}
 
 Finally,
 
 \begin{align}
 P(x_i = y_i | d(x, y) \le r) &= \frac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}^{r} \binom{n}{k}} \\
-    &= \frac{2^{d-2} - \frac{1}{2} \binom{d-1}{d/2}}{2^{d-1}} \\
-    &= \frac{2^{d-2}}{2^{d-1}} - \frac{1}{2^d} \binom{d-1}{d/2} \\
-    &= \frac{1}{2} - \frac{1}{2^d} \binom{d-1}{d/2}
+    &= \frac{2^{n-2} - \frac{1}{2} \binom{n-1}{n/2}}{2^{n-1}} \\
+    &= \frac{2^{n-2}}{2^{n-1}} - \frac{1}{2^n} \binom{n-1}{n/2} \\
+    &= \frac{1}{2} - \frac{1}{2^n} \binom{n-1}{n/2}
 \end{align}
 
-As $d \rightarrow \infty \Rightarrow \frac{1}{2^d} \binom{d-1}{d/2} \rightarrow 0$, the proof is done.
+As $n \rightarrow \infty \Rightarrow \frac{1}{2^n} \binom{n-1}{n/2} \rightarrow 0$, the proof is done for $n$ even.
 
-For $k$ odd, the proof is equivalent.
+When $n$ is an odd integer, the steps of the proof are similar. Therefore, the proof is complete.
 
 \end{proof}
 
