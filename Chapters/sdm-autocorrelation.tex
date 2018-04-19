@@ -59,6 +59,65 @@ $P(x_i = y_i | d(x, y) \le r) = \dfrac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}
 
 Theorem \ref{T1} is valid for both ``x written at x'' (autoassociative memory) and ``random written at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905498137$.  Each bit of a hard location does indeed have a small pull bias.  What is meant by this is that each particular dimension has a small preference toward positive values if its address bit is set to 1, and negative values if set to 0.
 
+
+\begin{theorem}
+Let $r$ be the access radius given that $f$ percent of the hard locations are activated. Then, $\lim_{n \rightarrow \infty} r/n = 1/2$.
+\label{thm:sdm-access-radius}
+\end{theorem}
+\begin{proof}
+Let $\text{ppf}$ be the inverse of the cdf of the standard normal distribution. Then,
+
+\begin{align}
+r &= \frac{d}{2} + \text{ppf}(f) \frac{\sqrt{d}}{2} \\
+\frac{r}{d} = \frac{1}{2} + \text{pff}(f) \frac{1}{2 \sqrt{d}}
+\end{align}
+
+Thus, $d \rightarrow \infty \Rightarrow r/d \rightarrow 1/2$.
+\end{proof}
+
+\begin{theorem}
+$\lim_{n \rightarrow \infty} P(x_i = y_i | d(x, y) \le r) = 1/2$
+\label{thm:sdm-autocorrelation-convergence}
+\end{theorem}
+\begin{proof}
+
+From \ref{thm:sdm-access-radius}, we know that $\lim_{n \rightarrow \infty} = d/2$.
+
+For $k$ even, then:
+
+$$
+\sum_{k=0}^{r} \binom{n}{k} = \sum_{k=0}^{n/2} \binom{n}{k} = \frac{2^d}{2} = 2^{d-1}
+$$
+
+$$
+\sum_{k=0}^{r} \binom{n-1}{k} = \sum_{k=0}^{n/2} \binom{n}{k} = \frac{2^{d-1}}{2} - \frac{1}{2} \binom{d-1}{d/2}
+$$
+
+Finally,
+
+\begin{align}
+P(x_i = y_i | d(x, y) \le r) &= \frac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}^{r} \binom{n}{k}} \\
+    &= \frac{2^{d-2} - \frac{1}{2} \binom{d-1}{d/2}}{2^{d-1}} \\
+    &= \frac{2^{d-2}}{2^{d-1}} - \frac{1}{2^d} \binom{d-1}{d/2} \\
+    &= \frac{1}{2} - \frac{1}{2^d} \binom{d-1}{d/2}
+\end{align}
+
+As $d \rightarrow \infty \Rightarrow \frac{1}{2^d} \binom{d-1}{d/2} \rightarrow 0$, the proof is done.
+
+For $k$ odd, the proof is equivalent.
+
+\end{proof}
+
+In Figure \ref{fig:sdm-10kbits-figure-7-3}, $n=10,000$ and we can notice that the autocorrelation has vanished as predicted by Theorem \ref{thm:sdm-autocorrelation-convergence}.
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=0.75\textwidth]{./images02/sdm-10000bits-10000w-table-7-2.png}
+
+  \caption{Given an address $x$ and a dimension $i$, how many hard locations with bitmatches in $i$ are activated by reading at $x$?  The histogram was obtained through numerical simulation. The red curve is the theoretical normal distribution found in Theorem \ref{T2}.}
+  \label{fig:sdm-10kbits-figure-7-3}
+\end{figure}
+
 So far we have looked only at a single pair of bitstrings, the probability of a single bitmatch between bitstrings within the access radius distance.  Now let us consider the number of activated hard locations exhibiting this bitmatch.
 
 Let $h$ be the number of activated hard locations. As the probability of activating a specific hard location is constant, $h \sim \text{Binomial}(H, p_1)$. Thus, $\mathbf{E}[h] = \mu_h = Hp_1$ and $\mathbf{V}[h] = \sigma^2_h = Hp_1(1-p_1)$, where $p_1 = 2^{-n} \sum_{k=0}^{r} \binom{n}{k}$.
