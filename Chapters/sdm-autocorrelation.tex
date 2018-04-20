@@ -140,7 +140,7 @@ P(x_i = y_i | d(x, y) \le r) &= \frac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}^
     &= \frac{1}{2} - \frac{1}{2^n} \binom{n-1}{n/2}
 \end{align}
 
-As $n \rightarrow \infty \Rightarrow \frac{1}{2^n} \binom{n-1}{n/2} \rightarrow 0$, the proof is done for $n$ even.
+Stirling's approximation yields that, for $n$ sufficiently large, $\binom{n}{n/2} \sim \frac{2^n}{\sqrt{\pi n/2}}$. Thus, $\frac{1}{2^n} \binom{n}{n/2} \sim \frac{\sqrt{2}}{\sqrt{\pi n}}$, which yields $\lim_{n \rightarrow \infty} \frac{1}{2^n} \binom{n}{n/2} = 0$. Finally, as $\binom{n-1}{n/2} \le \binom{n}{n/2}$, by the squeeze theorem, $\lim_{n \rightarrow \infty} \frac{1}{2^n} \binom{n-1}{n/2} = 0$, which closes the proof for $n$ even.
 
 When $n$ is an odd integer, the steps of the proof are similar. Therefore, the proof is complete.
 
