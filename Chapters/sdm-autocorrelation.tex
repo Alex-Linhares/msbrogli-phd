@@ -12,7 +12,10 @@ Kanerva writes\footnote{Email thread `SDM: A puzzling issue and an invitation', 
    I think that is correct.  It also brings to mind a comment Louis Jaeckel made when we worked at NASA Ames.  He pointed out that autoassociative storage (each vector is stored with itself as the address) introduces autocorrelation that my formula for Figure 7.2 did not take into account.  When we read from memory, each stored vector exerts a pull toward itself, which also means that each bit of a retrieved vector is slightly biased toward the same bit of the read address, regardless of the read address.  We never worked out the math.
 \end{quote}
 
-This is an important observation. A hard location is activated because it shares many dimensions with the items read from or written onto it. Imagine the `counter's eye view':  each individual counter `likes'\footnote{If you are a cell I then I have some serious piece of advice to you.  I would strongly suggest avoiding the neighborhood of a neuron. Neurons have serious authoritarian tendencies, bossing around --- generally electrifying --- the hopeless innocent cells around them just because.} to write on its own corresponding bit-address value more than it likes the opposite; as each hard-location has a say in its own area --- and nowhere else.
+This is an important observation. A hard location is activated because it shares many dimensions with the items read from or written onto it. Imagine the `counter's eye view':  each individual counter `likes' to write on its own corresponding bit-address value more than it likes the opposite; as each hard-location has a say in its own area --- and nowhere else.
+
+%\footnote{If you are a cell I then I have some serious piece of advice to you.  I would strongly suggest avoiding the neighborhood of a neuron. Neurons have serious authoritarian tendencies, bossing around --- generally electrifying --- the hopeless innocent cells around them just because.}
+
 
 Let $x$ and $y$ be random bitstrings and $n$ be the number of dimensions in the memory; let $x_i$ and $y_i$ be the $i$-th bit of $x$ and $y$, respectively; and $d(x, y)$ be the Hamming distance. Whilst the probability of a shared bit-value between same dimension-bits in two random addresses is $1/2$, an address only activates hard-locations close to it.  Let us call these shared bitvalues a \emph{bitmatch in dimension $i$}.
 
@@ -100,7 +103,7 @@ $$
 \sum_{k=0}^{b} \binom{a}{k} = 2^a \Phi \left( \frac{2b-a}{\sqrt{a}} \right)
 $$
 
-The result comes directly from applying the equation above in $P(x_i = y_i | d(x, y) \le r)$.
+The result comes directly from applyting the equation above in $P(x_i = y_i | d(x, y) \le r)$.
 
 \end{proof}
 
