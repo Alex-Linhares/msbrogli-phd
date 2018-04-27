@@ -9,6 +9,12 @@
 
 % TODO Lightning network, é uma solução de scaling? Parece que não.
 
+% TODO Governance (!!!)
+% TODO Rule change policy (maybe PoS)
+% TODO Miner/transaction punishment
+% TODO Different hash function for miners and transactions (!!!)
+%      Scrypt and SHA-256?
+
 \chapter{Introduction}
 
 
@@ -45,23 +51,33 @@
 \bigskip
 \bigskip
 
-The main problem with digital money is how to prevent double spending. As the money is digital, and copies can be made \textit{ad nauseam}, what can prevent counterfeiting? That is, what would prevent users from sending copies of the same money to two (or more) people? That is precisely the problem solved by Bitcoin and its underlying blockchain technology. The current solution behind fiat money is having a single issuer, a central bank --- then trusting the financial institutions.
+The primary problem for creating digital money is how to prevent double spending. As the money is digital, and copies can be made \textit{ad nauseam}, what can prevent counterfeiting? That is, what would prevent users from sending copies of the same money to two (or more) people? That is precisely the problem solved by Bitcoin and its underlying Blockchain technology. The current solution behind fiat money is having a single issuer, a central bank --- then trusting the financial institutions and regulators.
 
-Bitcoin (BTC) is the first digital currency, also known as digital money, internet money, and cryptocurrency. It is the first currency based on cryptography techniques, distributed and decentralized, and with no central bank. Bitcoin is distributed since its ledger is public and is stored in thousands of computers. It is decentralized because there is no authority (or government) who decides its future --- any decision must be accepted by its community. The security of Bitcoin relies on digital signature technology and network agreement. While digital signature ensures ownership, i.e., the funds may only be spent by their owners, and nobody else; the network agreement both prevents double spending and ensures that all processed transactions have sufficient funds. In short, every transaction must spend only unspent funds, must have enough funds available, and must be signed by its owners, authorizing its execution. When all these requirements are met, the funds are transferred.
+The concept of transfering money using cryptography as an underlying technology was shortly presented in 1983 by \citet{chaum1983blind} and was deepened in a theoretical paper in 1985 \citep{chaum1985security}. However, it was only in 1988 that \citet{chaum1988untraceable} created the term \emph{electronic cash} and also proposed a basic and practical scheme which yielded untraceability yet allowed to trace double spendings.
 
-According to \citet{barber2012bitter}, despite the 30-year literature on e-cash, most of the proposed schemes requires a central authority which controls the currency issuance and prevents double spending. The no central point of trust and predictable money supply together with a clever solution to the double-spending problem is what separates Bitcoin from the previous e-cash philosophies. % literature
+According to \citet{barber2012bitter}, despite the 30-year literature on e-cash, most of the proposed schemes requires a central authority which controls the currency issuance and prevents double spending \citep{chaum1983blind, okamoto1995efficient, camenisch2005compact, canard2007divisible}. The no central point of trust and predictable money supply together with a clever solution to the double-spending problem is what separates Bitcoin from the previous e-cash philosophies.
 
-Bitcoin provides interesting incentives to all players, namely the users and the miners. On the one hand, users may have incentives to use Bitcoin because of the following: (i) the fees are small and does not depend on the amount being transfered --- but only in the size (in bytes) of the transaction --- (ii) the transfers will be confirmed in a well-known period; (iii) it is not possible to revert an already confirmed transfer, not even with a judicial order; and (iv) and the currency issuance rate is well-known and preset in Bitcoin's rules, which makes the Bitcoin supply predictable and trustworthy, different from fiat currencies which depends on decisions of their central banks --- i.e., it would be virtually impossible to face a hyper inflation in Bitcoin due to currency issuance. On the other hand, miners have incentive to mine Bitcoin because new Bitcoins are found every ten minutes, and they may also receive the fees of unconfirmed transactions. These incentives have kept the Bitcoin network up and running since 2009 with barely any interruptions (99.99\% uptime).
+Bitcoin (BTC) is a digital currency, also known as digital money, internet money, and cryptocurrency. It is the first currency based on cryptography techniques which is distributed, decentralized, and with no central bank.
+
+Bitcoin is a computer network in which nodes act like clerks performing clearing. A transaction clearing consists of ensuring that the transaction is settled according to the rules. In order to do that, every node stores a copy of Bitcoin's ledger, which records both all transactions and users' balance. When new transactions are added to the ledger, the balances are updated. It is said that Bitcoin is distributed because its ledger is public and is stored in thousands of computers. Even though the ledger is public, balances are anonymous and no one knows who owns which funds.
+
+Bitcoin is considered decentralized because there is no authority (or government) who decides its future. Every decision must be accepted by its community. When the majority of Bitcoin's network agrees on a decision, they just have to update their clearing process accordingly.
+
+The security of Bitcoin relies on digital signature technology and network agreement. While digital signature ensures ownership, i.e., the funds may only be spent by their owners, and nobody else; the network agreement both prevents double spending and ensures that all processed transactions have sufficient funds. In short, every transaction must spend only unspent funds, must have enough funds available, and must be signed by its owners, authorizing its execution. Only when all these requirements are met, the funds are transferred.
+
+Bitcoin provides interesting incentives to all players, users and miners. On the one hand, users may have incentives to use Bitcoin because (i) the fees are small and does not depend on the amount being transfered --- but only in the size (in bytes) of the transaction ---; (ii) the transfers will be confirmed in a well-known period; (iii) it is not possible to revert an already confirmed transfer, not even with a judicial order; and (iv) and the currency issuance rate is well-known and preset in Bitcoin's rules, which makes Bitcoin's supply predictable and trustworthy, different from fiat currencies which depends on decisions of their central banks --- i.e., it would be virtually impossible to face a hyper inflation in Bitcoin due to currency issuance. On the other hand, miners have incentive to mine Bitcoin because new Bitcoins are found every ten minutes, and they may also collect the fees of unconfirmed transactions. It is important to highlight that anyone can become a miner, and there is no entry cost besides the mining equipment. These incentives have kept the Bitcoin network up and running since 2009 with barely any interruptions (99.99\% uptime). For further information about incentives, see \citet{ma2018market, catalini2016some}.
 
 Since 2009, Bitcoin has been growing and becoming more and more used all around the world. It started as an experiment based on a seminal work by \citet{nakamoto2008bitcoin} and expanded to the most important and successful cryptocurrency with a highly volatile \$192 billion market capitalization, as of this writing \citep{coinmarketcapbtc}. There are hundreds of companies investing in different uses of the technology, from exchanges to debit cards, and billions of dollars being invested in the new markets based on Bitcoin's technology.
 
-Despite Bitcoin's huge success, there are still many challenges to be overcome. We will focus on a specific subset of those challenges, namely the scaling, decentralization, and spam challenges. One important challenge that we will skip is to reduce the size of the ledger (or blockchain), which today is around 125GB and is growing at a rate of 4.5GB per month \citep{blockchaininfosize}.
+Despite Bitcoin's huge success, there are still many challenges to be overcome. We will focus on the following of those challenges: scaling, spamming, and centralization. One important challenge that we will skip is to reduce the size of the ledger (or blockchain), which today is around 125GB and is growing at a rate of 4.5GB per month \citep{blockchaininfosize}.
 
 The network must scale to support hundreds of transactions per second, while its capacity is around only eight transactions per second. Thus, the more Bitcoin becomes popular, the more saturated the network is. Network saturation has many side effects and may affect the players' incentive to keep the network running. The transaction fees have to be increased to compete for faster confirmation. The pool of unconfirmed transactions grows indefinitely, which may cause some transactions to be discarded due to low memory space available, as the previously predictable confirmation time of transactions becomes unpredictable.
 
-Bitcoin seems to have the most decentralized network between the cryptocurrencies, even so, there are few miners and mining pools which together control over 50\% of the network’s computing (hash)power. Thus, they have an oversized influence when it comes to changes in the Bitcoin protocol's behavior, and it is also seen as a problem to be solved. The more decentralized, the more trustworthy Bitcoin is.
+The scaling problem is not precisely an issue of Bitcoin, but an issue of the Blockchain technology. Hence, all other Blockchain-based cryptocurrencies have the same limitations, such as Litecoin, Bitcoin Cash, and Ethereum. One may arguee that increasing the block size is a feasible solution to scaling, but I would reply that it is a temporary solution which buys some time until the next network saturation.
 
-Generating new transactions in Bitcoin has a tiny cost because one only has to generate the transaction itself, digitally sign it, and propagate in the Bitcoin network. On the one hand, it means that any device is capable of generating new transactions, but, on the other hand, it makes Bitcoin susceptible to spam attacks. One may generate hundreds of thousands of new valid transactions, overloading the unconfirmed transactions pool and saturating the network.
+Bitcoin seems to have the most decentralized network between the cryptocurrencies, even so, there are few miners and mining pools which together control over 50\% of the network’s computing (hash)power (see \citet{gencer2018decentralization}). Thus, they have an oversized influence when it comes to changes in the Bitcoin protocol's behavior, and it is also seen as a problem to be solved. The more decentralized, the more trustworthy Bitcoin is.
+
+Generating new transactions in Bitcoin has a tiny computational cost because one only has to generate the transaction itself, digitally sign it, and propagate it in the Bitcoin network. On the one hand, it means that any device is capable of generating new transactions, but, on the other hand, it makes Bitcoin susceptible to spam attacks. One may generate hundreds of thousands of new valid transactions, overloading the unconfirmed transactions pool and saturating the network.
 
 The number of ideas and publications focusing on improving Bitcoin's design and overcoming those challenges is increasing every day. Many of these proposals are organized into BIPs (Bitcoin Improvement Proposals) which are discussed and implemented by the community; while others come in the form of whitepapers and alternative software forks (which would include the need of a protocol upgrade). Other proposals are published in blogs and forums, describing new cryptocurrencies. Bitcoin's community hardly ever publishes their ideas in academic journals, preferring instead, of BIPs, white papers, and web discussions.
 
@@ -207,6 +223,9 @@ $$\frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{2H} \le K \le \frac{\lambda_\te
 
 
 \section{Attacks \& Conflicting transactions}
+
+
+\section{Scripts \& Contracts}
 
 
 

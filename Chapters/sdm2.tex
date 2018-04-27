@@ -153,13 +153,13 @@ Daniel Chada, one member of our research group, proposed another way to read in 
 
 The main difference between Kanerva's read and Chada's is that, in the former, a hard location that has more bitstrings written has a greater weight in the decision of each bit. In the latter, all hard locations have the same weight, because they can contribute to the sum with only one bitstring.
 
-It is important to say that Chada's read came from \citet{anwar2003sparse} which gave a misguided description of the read operation. The original description is the following:
+It is important to say that Chada's read came from \citet{Anwar2003} which gave a misguided description of the read operation. The original description is the following:
 
 \begin{samepage}
 \begin{quote}
-%Similar to writing, retrieving from SDM involves the same concept of access sphere --- you read all the hardlocations within the access sphere of location Y, pool the bit vectors read from all these hard locations and let each of the kth bits of those locations participate in a majority vote for the kth bit of Y. \hfill --- \citet{anwar2003sparse}
+%Similar to writing, retrieving from SDM involves the same concept of access sphere --- you read all the hardlocations within the access sphere of location Y, pool the bit vectors read from all these hard locations and let each of the kth bits of those locations participate in a majority vote for the kth bit of Y. \hfill --- \citet{Anwar2003}
 With our datum distributively stored, the next question is how to retrieve it. With this in mind, let us ask first how one reads from a single hard location, $x$. Compute $\zeta$, the bit vector read at $x$, by assigning its $i$th bit the value 1 or 0 according to the $i$th counter at $x$ is positive or negative. Thus, each bit of $\zeta$ results from a majority rule decision of all the data that have been written at $x$. [...] Knowing how to read from a hard location allows us to read from any of the $2^{1000}$ arbitrary locations. Suppose $\zeta$ is any location. The bit vector, $\xi$, to be read at $\zeta$, [...] Put another way, pool the bit vectors read from hard locations accessible from $\zeta$, and let each of their $i$th bits vote on the $i$th bit of $\xi$. \\
-\hfill --- \citet[p.342]{anwar2003sparse}
+\hfill --- \citet[p.342]{Anwar2003}
 \end{quote}
 \end{samepage}
 
