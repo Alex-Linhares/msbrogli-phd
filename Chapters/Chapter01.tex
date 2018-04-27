@@ -55,13 +55,13 @@ The primary problem for creating digital money is how to prevent double spending
 
 The concept of transfering money using cryptography as an underlying technology was shortly presented in 1983 by \citet{chaum1983blind} and was deepened in a theoretical paper in 1985 \citep{chaum1985security}. However, it was only in 1988 that \citet{chaum1988untraceable} created the term \emph{electronic cash} and also proposed a basic and practical scheme which yielded untraceability yet allowed to trace double spendings.
 
-According to \citet{barber2012bitter}, despite the 30-year literature on e-cash, most of the proposed schemes requires a central authority which controls the currency issuance and prevents double spending \citep{chaum1983blind, okamoto1995efficient, camenisch2005compact, canard2007divisible}. The no central point of trust and predictable money supply together with a clever solution to the double-spending problem is what separates Bitcoin from the previous e-cash philosophies.
+According to \citet{barber2012bitter}, despite the 30-year literature on e-cash, most of the proposed schemes requires a central authority which controls the currency issuance and prevents double spending \citep{chaum1983blind, okamoto1995efficient, camenisch2005compact, canard2007divisible}. Some papers even propose solutions in a similar trajectory to Bitcoin, such as hash chain \citep{zongkai2004new} and preventing double spending using peer-to-peer networks \citet{osipkov2007combating, hoepman2007distributed}. The no central point of trust and predictable money supply together with a clever solution to the double-spending problem is what separates Bitcoin from the previous e-cash philosophies.
 
 Bitcoin (BTC) is a digital currency, also known as digital money, internet money, and cryptocurrency. It is the first currency based on cryptography techniques which is distributed, decentralized, and with no central bank.
 
-Bitcoin is a computer network in which nodes act like clerks performing clearing. A transaction clearing consists of ensuring that the transaction is settled according to the rules. In order to do that, every node stores a copy of Bitcoin's ledger, which records both all transactions and users' balance. When new transactions are added to the ledger, the balances are updated. It is said that Bitcoin is distributed because its ledger is public and is stored in thousands of computers. Even though the ledger is public, balances are anonymous and no one knows who owns which funds.
+Bitcoin is a computer network in which nodes act like clerks performing clearing. A transaction clearing consists of ensuring that the transaction is settled according to the rules. In order to do that, every node stores a copy of Bitcoin's ledger, which records both all transactions and users' balance. When new transactions are added to the ledger, the balances are updated. It is said that Bitcoin is distributed because its ledger is public and is stored in thousands of computers. Even though the ledger is public, balances are anonymous and no one knows who owns which funds. If an attacker tries to change anything, the remaining of the network is able to detect it and ignore the change.
 
-Bitcoin is considered decentralized because there is no authority (or government) who decides its future. Every decision must be accepted by its community. When the majority of Bitcoin's network agrees on a decision, they just have to update their clearing process accordingly.
+Bitcoin is considered decentralized because there is no authority (or government) who decides its future. Every decision must be accepted by its community and no one can enforce their will. Every change proposal must be submitted to the community who will discuss the matter and come to a verdict. If the majority of Bitcoin's community agrees on a decision, they just have to update their clearing process accordingly and the changes are applied.
 
 The security of Bitcoin relies on digital signature technology and network agreement. While digital signature ensures ownership, i.e., the funds may only be spent by their owners, and nobody else; the network agreement both prevents double spending and ensures that all processed transactions have sufficient funds. In short, every transaction must spend only unspent funds, must have enough funds available, and must be signed by its owners, authorizing its execution. Only when all these requirements are met, the funds are transferred.
 
@@ -69,25 +69,25 @@ Bitcoin provides interesting incentives to all players, users and miners. On the
 
 Since 2009, Bitcoin has been growing and becoming more and more used all around the world. It started as an experiment based on a seminal work by \citet{nakamoto2008bitcoin} and expanded to the most important and successful cryptocurrency with a highly volatile \$192 billion market capitalization, as of this writing \citep{coinmarketcapbtc}. There are hundreds of companies investing in different uses of the technology, from exchanges to debit cards, and billions of dollars being invested in the new markets based on Bitcoin's technology.
 
-Despite Bitcoin's huge success, there are still many challenges to be overcome. We will focus on the following of those challenges: scaling, spamming, and centralization. One important challenge that we will skip is to reduce the size of the ledger (or blockchain), which today is around 125GB and is growing at a rate of 4.5GB per month \citep{blockchaininfosize}.
+Despite Bitcoin's huge success, there are still many challenges to be overcome. We will focus on the following challenges: scaling, spamming, and centralization. One important challenge that we will skip is to reduce the size of the ledger (or blockchain), which today is around 125GB and is growing at a rate of 4.5GB per month \citep{blockchaininfosize}.
 
 The network must scale to support hundreds of transactions per second, while its capacity is around only eight transactions per second. Thus, the more Bitcoin becomes popular, the more saturated the network is. Network saturation has many side effects and may affect the players' incentive to keep the network running. The transaction fees have to be increased to compete for faster confirmation. The pool of unconfirmed transactions grows indefinitely, which may cause some transactions to be discarded due to low memory space available, as the previously predictable confirmation time of transactions becomes unpredictable.
 
-The scaling problem is not precisely an issue of Bitcoin, but an issue of the Blockchain technology. Hence, all other Blockchain-based cryptocurrencies have the same limitations, such as Litecoin, Bitcoin Cash, and Ethereum. One may arguee that increasing the block size is a feasible solution to scaling, but I would reply that it is a temporary solution which buys some time until the next network saturation.
+The scaling problem is not precisely an issue of Bitcoin, but an issue of the Blockchain technology. Hence, all other Blockchain-based cryptocurrencies have the same limitations, such as Litecoin, Bitcoin Cash, and Ethereum. One may arguee that increasing the maximum block size is a feasible solution to scaling, but I would say that it is just a temporary solution which buys some time until the next network saturation.
 
-Bitcoin seems to have the most decentralized network between the cryptocurrencies, even so, there are few miners and mining pools which together control over 50\% of the network’s computing (hash)power (see \citet{gencer2018decentralization}). Thus, they have an oversized influence when it comes to changes in the Bitcoin protocol's behavior, and it is also seen as a problem to be solved. The more decentralized, the more trustworthy Bitcoin is.
+Bitcoin seems to have the most decentralized network among the cryptocurrencies, even so, there are few miners and mining pools which together control over 50\% of the network’s computing (hash)power (for details, see \citet{gencer2018decentralization}). Hence, they have an oversized influence when it comes to changes in the Bitcoin protocol's behavior. They may also cooperate in an attack, avoiding transactions which seemed confirmed. The more decentralized, the more trustworthy Bitcoin is. This centralization problem is seem as an important challenge.
 
-Generating new transactions in Bitcoin has a tiny computational cost because one only has to generate the transaction itself, digitally sign it, and propagate it in the Bitcoin network. On the one hand, it means that any device is capable of generating new transactions, but, on the other hand, it makes Bitcoin susceptible to spam attacks. One may generate hundreds of thousands of new valid transactions, overloading the unconfirmed transactions pool and saturating the network.
+Generating new transactions in Bitcoin has a tiny computational cost because one only has to generate the transaction itself, digitally sign it, and propagate it in the Bitcoin network. On the one hand, it means that any device is capable of generating new transactions, but, on the other hand, it makes Bitcoin susceptible to spam attacks. One may generate hundreds of thousands of new valid transactions, overloading the unconfirmed transactions pool and saturating the network. This spam problem has happened several times and affects Bitcoin's trustworthy. \citet{bitcoinspam2017} reports a possible spam attack lasting at least 18 months.
 
 The number of ideas and publications focusing on improving Bitcoin's design and overcoming those challenges is increasing every day. Many of these proposals are organized into BIPs (Bitcoin Improvement Proposals) which are discussed and implemented by the community; while others come in the form of whitepapers and alternative software forks (which would include the need of a protocol upgrade). Other proposals are published in blogs and forums, describing new cryptocurrencies. Bitcoin's community hardly ever publishes their ideas in academic journals, preferring instead, of BIPs, white papers, and web discussions.
 
 After the launch of Bitcoin, more than 1,000 other cryptocurrencies have been created \citep{coinmarketcap}. In general, they are Bitcoin-like, which means they use similar technologies, including the blockchain. Some cryptocurrencies differs a lot from Bitcoin, like the ones which use the DAG model \citep{dagdiscussion2014, tangle2016, dagcoin2015, sompolinsky2013, lewenberg2015, vorick2015}. We are especially interested in one of them: Iota.
 
-Iota uses a DAG model, called tangle, which has a different design than Bitcoin's blockchain. It has neither mining nor confirmation blocks and transaction fees. Each transaction has its own proof-of-work and is used to confirm other transactions, forming a directed acyclic graph of transactions. Thus, a transaction is said to be confirmed when there are enough proof-of-work from the transactions confirming it directly or indirectly. There is no other way to confirm transactions but generating new transactions.
+Iota uses a DAG model, called tangle, which has a different design than Bitcoin's blockchain. It has neither mining nor confirmation blocks and transaction fees. Each transaction has its own proof-of-work and is used to confirm other transactions, forming a directed acyclic graph of transactions. Thus, a transaction is said to be confirmed when there is enough proof-of-work from the transactions confirming it directly or indirectly. There is no other way to confirm transactions but generating new transactions.
 
-In Iota, as transactions confirm transactions, the network benefits from a high volume of new transactions. Hence, theoretically, it scales to any large number of transactions per second. The scaling problem of tangle is exactly the opposite of Bitcoin's: it must have at least a given number of transaction per seconds; otherwise, the transactions are not confirmed, and the cryptocurrency does not work. While Iota's network has not reached this minimum number of transactions per second, it uses a central coordinator which works as a trustworthy node \citep{iotacoordinator}. This central coordinator just elucidates that the tangle does not seem to work properly under a low volume of transactions.
+In Iota, as transactions confirm transactions, the network benefits from a high volume of new transactions. Therefore, theoretically, it scales to any large number of transactions per second. The scaling problem of tangle is exactly the opposite of Bitcoin's: it must have at least a given number of transaction per seconds; otherwise, the transactions are not confirmed, and the cryptocurrency does not work. While Iota's network has not reached this minimum number of transactions per second, it uses a central coordinator which works as a trustworthy node \citep{iotacoordinator}.
 
-Iota's tokens are pre-mined, which means all of them have been issued in the genesis transaction, and there is no token issuance at all. There is no miners and users can only transfer tokens between themselves. This may lead to some incentive issues, because, on the one hand, users would need to keep transferring tokens to keep the network alive, while, on the other hand, users would need to believe that Iota is a good choice to keep using it. As users perception of quality is significantly affected by ``price and congestion'', the \emph{empty-restaurant syndrome} may keep new users away \citep{debo2010prices}.
+Every transaction confirmed by the central coordinator is assumed to be valid and cannot be reverted. The remaining of the network can verify a confirmation through the central coordinator's digital signature. The coordinator will not be necessary anymore when the number of transactions per second reaches a minimum value, but Iota's developers cannot say precisely what is this minimum value. This just elucidates that the tangle does not seem to work properly under a low volume of transactions (and fluctuations in the number of transactions per second may severily affect Iota's trustworthy).
 
 The present work intends to propose and analyze a new architecture, named Hathor, which lies between Bitcoin and Iota and may be a viable solution to both scaling, centralization, and spam problems. We also present a mathematical analysis of Bitcoin's architecture.
 
@@ -98,19 +98,21 @@ In \citeauthor{nakamoto2008bitcoin}'s (2009) seminal paper, there is no distinct
 
 But, in practice, it is interesting to separate these concepts. Bitcoin uses the blockchain technology to create a distributed ledger, while the blockchain is a technology which allows information to be stored in an immutable and distributed way.
 
-The blockchain technology works through the creation of new blocks. Each new block confirms that all the previous blocks are valid and have not been tampered with. The mechanism that assures the immutability is proof-of-work, which makes it computationally infeasible to tamper with previous transaction records without having to recalculate all the previous proof-of-works faster than all of the remaining machines of the network. The network agrees that work should be done in the block at the longest chain in the blockchain.
+The blockchain technology works through the creation of new blocks. Each new block confirms that all previous blocks are valid and have not been tampered with. The mechanism that assures the immutability is the proof-of-work, which makes it computationally infeasible to tamper with previous transaction records without having to recalculate all the previous proof-of-works faster than all of the remaining machines of the network. The network agrees that work should be done in the block at the longest chain in the blockchain.
 
 The proof-of-work is a mathematical problem with the following characteristics: (i) it is hard to find a solution; (ii) this hardness level may be adjusted; and (iii) it is fast to check whether the proposed solution is correct.
 
-Bitcoin's blockchain uses the mathematical problem of finding a random number which, after being applied to the hash function SHA-256 twice, results in a number smaller than a given threshold $A$. As SHA-256 is a pseudo-random function, its output is uniformly distributed between 0 and $2^{256}-1$ \citep{gilbert2003security}. Thus, if the given number is $A = 2^{255}$, one has probability 50\% of finding a solution (just the most significant bit of the hash needs to be zero). But if the given number is $A = 2^{240}$, one has probability 0.0015\% of finding a solution (as the ~16 most significant bits of the hash must equal zero). Hence, finding a solution is a hard problem which difficulty depends on the given number $A$. The lesser the given threshold $A$, the higher the difficulty. On the other side, checking whether a solution is correct is fast, one just has to apply the SHA-256 twice and compare.
+Bitcoin's blockchain uses the mathematical problem of finding a random number which, after being applied to the hash function SHA-256 twice, results in a number smaller than a given threshold $A$. As SHA-256 is a pseudo-random function, its output is uniformly distributed between 0 and $2^{256}-1$ \citep{gilbert2003security}. Thus, if the given number is $A = 2^{255}$, one has probability 50\% of finding a solution (just the most significant bit of the hash needs to be zero). But if the given number is $A = 2^{240}$, one has probability 0.0015\% of finding a solution (as the ~16 most significant bits of the hash must equal zero). Hence, finding a solution is a hard problem which difficulty depends on the given number $A$. The lesser the given threshold $A$, the higher the difficulty. On the other hand, checking whether a solution is correct is fast since one just has to apply the SHA-256 twice and compare.
+
+When miners are finding a solution to a new block, they are mining or working in the new block. A block is found when a solution to the proof-of-work is found. When a new block is found, it indirectly confirms all the previous blocks in the chain and their transactions.
+
+It may happen that two miners find two different blocks in a small interval of time. In this case, miners will propagate their blocks and part of the network will choose one of them as the next block, whereas the other part of the network will choose the other one. This phenomenon is called a fork. Thus, when the next block is found, one of those blocks will be confirmed, and the other will be ignored and referred to as an orphan block. As blocks confirm transactions, all the transactions in the orphan block which have not been confirmed by another block will return to the unconfirmed transaction pool. Hence, it is not safe to accept a transaction when it is confirmed by only one block. It is the idea behind the rule of thumb of waiting for at least six confirmations before accepting a transaction.
 
 By design, Bitcoin's blockchain proof-of-work difficulty is dynamically adjusted every 2016 blocks to keep an average pace of 10 minutes between block creation. Thus, the goal is to adjust the difficulty every 14 days. If it takes less than 14 days to find 2016 blocks, that means the network's hash power has increased; thus the difficulty is increased. If it takes more than 14 days to find 2016 blocks, it means the network's hash power has decreased; thus the difficulty is decreased.
 
-When miners are finding a solution to a new block, they are mining or working in the new block. A block is found when a solution to the proof-of-work is found. When a new block is found, it indirectly confirms all the previous blocks in the chain and their transactions. It may happen that two miners find two different blocks in a small interval of time. In this case, both miners will propagate their blocks, and the network will randomly choose one of them as the next block. This phenomenon is called a fork. Thus, when the next block is found, one of those blocks will be confirmed, and the other will be ignored and referred to as an orphan block. As blocks confirm transactions, all the transactions in the orphan block which have not been confirmed by another block will return to the unconfirmed transaction pool. Hence, it is not safe to accept a transaction when it is confirmed by only one block. It is the idea behind the rule of thumb of waiting for at least six confirmations before accepting a transaction.
-
 Newly propagated blocks are validated by the Bitcoin's network. If the solution of the proof-of-work is incorrect or if any transaction included in the block has any issue, then the block is discarded. In order to work properly, the whole network must agree in what is allowed and what is not. Should one think that something should be allowed and accept it in their blocks, the remaining of the network will discard their newly propagated blocks. That is why Bitcoin's network is distributed and decentralized. Everything depends on the agreement of the network, or, precisely, the agreement of the owners of at least 50\% of the hash power. Even if the remaining 49\% disagrees, the 50\% or more who agree will generate, on average, more blocks than the remaining of the network and their rules will prevail on the longest chain. If a disagreement between miners' rules happens, that is referred as either a hard-fork or a soft-fork (in general, a hard-fork relaxes the constraints, while the latter hardens them).
 
-A practical example of a network disagreement is the increase of the block size. No group with more than 50\% of the network's hash power agreed into increasing the maximum block size to increase the number of transactions confirmed by a block and thus increasing the network's capacity. Hence, the capacity remains the same, and the community has been discussing the issue in search of a consensus.
+A practical example of a network disagreement is the increase of the block size. No group with more than 50\% of the network's hash power agreed into increasing the maximum block size to increase the number of transactions confirmed by a block and thus increasing the network's capacity. Hence, the capacity remains the same, and the community has been discussing the issue in search of a consensus. For further details of the discussion, see \citet{bitcoinblocksize}.
 
 Bitcoin uses the blockchain technology to create a distributed ledger. It allows every new block to generate new bitcoins and also to collect the fees from the confirmed transactions within the block. Bitcoin's transactions have two main parts: (i) inputs, and (ii) outputs. Each transaction sends bitcoins from one or more input addresses to one or more output addresses. In order to prove that one is the owner of the input bitcoins, one must digitally sign the transaction proving such ownership.
 
@@ -130,10 +132,8 @@ Those users accustomed to block explorers may have been misled by the transactio
 
 After lookup, the miner knows how many BTC tokens are available at that unspent output.  But, in order to certify ownership of that output, the miner receives instructions in the form of a script with the rules that lead to the desired unspent output address (and this one is displayed as the input address by those websites). Because this process requires a digital signature, only the holder of the corresponding private key is able to sign such transaction.
 
-Next, we will do a mathematical analysis of Bitcoin in order to better understand its minings properties, how a fork would affect the network and its security against attackers.
+Next, we will describe the dynamics of Iota and its underlying technology Tangle. Its major difference from Bitcoin is that it has neither miners nor blocks.
 
-\chapter{Analysis of Bitcoin}
-\input{./Chapters/hathor-bitcoin-math.tex}
 
 \chapter{Iota \& Tangle}
 
@@ -147,11 +147,11 @@ Different from Bitcoin, transactions does not have scripts to check whether one 
 
 At the beginning, the digital signature algorithm relied on the Curl hash function, which is a ternary hash function designed by Iota's developers. This hash function was replaced by the Kerl hash function after \cite{heilman2017iota} has found a critical vulnerability which enabled practical signature forgery attacks. The Kerl hash function is a variation of SHA-3 also designed by Iota's developers \citep{iotakerl}. Like the Curl hash function, Kerl has not been deeply studied by cryptography researchers and may have critical vulnerabilities.
 
-Iota's tokens are pre-mined, which means they have been issued in the genesis transaction and no more tokens will ever be issued. This means there are no miners in Iota's network and only the users keep the network alive through their new transactions. If, for any reason, the number of transactions per second plummet, the time to confirmed the most recent transactions will increase significantly. This possibly poses a serious risk to the network stability and users' trustworthy.
+Iota's tokens are pre-mined, which means they have been issued in the genesis transaction and no more tokens will ever be issued. This means that there are no miners in Iota's network and only the users keep the network alive through their new transactions. This may lead to some incentive issues, because, on the one hand, users would need to keep transferring tokens to keep the network alive, while, on the other hand, users would need to believe that Iota is a good choice to keep using it. As users perception of quality is significantly affected by ``price and congestion'', the \emph{empty-restaurant syndrome} may keep new users away, making it even harder to reach the minimum required to work properly \citep{debo2010prices}. Even if the minimum has been reached, if the number of transactions per second plummet, the time to confirm the most recent transactions will increase significantly. This possibly poses a serious risk to the network stability and users' trustworthy.
 
-As there are no miners, there are also no fees, which is a major incentive to new comers. Tokens may be freely transfered without any loses, even for tiny amounts, enabling micropayments. For example, online workers paid per hour may receive their payments every hour, reducing the default risk. This allows untrusted parties to work together reducing the risk for both. The contractor always wants to pay in the end, while the workers always wants to get paid in the beginning.
+As there are no miners, there are also no fees, which is a major incentive to newcomers. Tokens may be freely transfered without any loses, even for tiny amounts, enabling micropayments. For example, online workers paid per hour may receive their payments every hour, reducing the default risk. This allows untrusted parties to work together reducing the risk for both. The contractor always wants to pay in the end, while the workers always wants to get paid in the beginning.
 
-Not having fees is also also an important feature to the Internet-Of-Things (IoT) technologies. The IoT is a network of smart devices that are connected to the internet and exchange data. It allows, for instance, your refrigerator to do your groceries and automatically pay using your Iota tokens. It also allows your electric car to automatically pay for recharge. For further information, see \cite{fleisch2010internet}.
+The Internet-Of-Things (IoT) technologies, which is a network of smart devices that are connected to the internet and exchange data, also benefits from not having fees. Imagine your refrigerator doing your groceries and automatically paying using your Iota tokens, or your electric car automatically paying for recharge. In both situations, transactions with no fees are interesting because these devices can freely make many microtransactions without any loss. For further information, see \cite{fleisch2010internet}.
 
 Theoretically, Iota's network benefits from high volume of transactions. The more transactions are coming, the faster previous transactions are confirmed. This is a major feature of Tangle which contrasts with Bitcoin's difficulty to scale. On the other hand, low volume of transactions is a primary problem for Iota, since it would take too long to confirm previous transactions. As it is a known problem, Iota has created a central coordinator which works as a trustworthy node, clearing transactions. In other words, every transaction directly or indirectly confirmed by the central coordinator is assumed to be cleared. Iota's developers claims that the coordinator will be turned off when the network outgrows a minimum (unknown) size.
 
@@ -194,39 +194,15 @@ For example, the attackers generate (and do not propagate) a transaction that tr
 
 By default, Iota uses the Markov Chain Monte Carlo (MCMC) algorithm to select the two tips. For further information about attacks and strategies to prevent them, including the MCMC algorithm, see \cite{tangle2016}.
 
+Next, we will do a mathematical analysis of Bitcoin in order to better understand its minings properties, how a fork would affect the network and its security against attackers.
+
+
+\chapter{Analysis of Bitcoin}
+\input{./Chapters/hathor-bitcoin-math.tex}
+
 
 \chapter{Hathor's architecture}
 \input{./Chapters/hathor-architecture.tex}
-
-\section{Governance}
-
-- Punishment for miners/transactions which does not comply with the rules.
-
-- Rule change policy.
-
-
-\section{Expected number of tips}
-
-Explain transient and stationary state. The balance happens in the stationary state.
-
-In order to estimate the balance in the number of tips, let's consider the system in which the rate of inward tips is $\lambda_\text{TX}$, while the rate of outward tips is $\rho$. Let $K$ be the number of tips in the system. Thus, after $\Delta t$ seconds, $\Delta \text{tips} = \lambda_\text{TX} \Delta t - \rho K \Delta t$. In the balance, $\Delta \text{tips} = 0$, hence $K = \frac{\lambda_\text{TX}}{\rho}$.
-
-Finally, the rate of outward tips is twice the rate in which devices solve the proof-of-work of transactions. Let $H$ be the devices' hash rate, then, $\rho = 2 \cdot H \cdot 2^{-w_\text{TX}}$.
-
-Twice?! It is a number between 1 and 2, but none of them.
-
-Therefore, in the balance,
-
-$$K = \frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{2H}$$
-
-$$\frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{2H} \le K \le \frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{H}$$
-
-
-\section{Attacks \& Conflicting transactions}
-
-
-\section{Scripts \& Contracts}
-
 
 
 \chapter{Methodology}
@@ -235,20 +211,22 @@ The methodology we have used is computer simulation. Through the simulation of m
 
 The simulator has been developed using an event-based design which is capable of running hours of simulation in just a few minutes. It creates agents who decide to make a transaction, then they select which transactions will be confirmed, then they spend some time working in the proof-of-work, and, finally, they propagate the transaction to the network. The other agents receive the transaction and may accept or deny it. The agents may use different parameters among themselves.
 
-When a new transaction emerges, it chooses two tips to confirm before solving the proof-of-work. When it finishes solving the proof-of-work, it is propagated and becomes a tip. So, two new transactions may choose the same tips to confirm. If there are $t$ tips, a new transaction will randomly choose 2 out of these $t$ tips, even if they have already been chosen by other new transactions --- in fact, they do not know which have been chosen because these new transactions have not being propagated yet.
+When a new transaction emerges, it chooses two tips to confirm before solving the proof-of-work. When it finishes solving the proof-of-work, the transaction is propagated and becomes a tip. So, two new transactions may choose the same tips to confirm. If there are $t$ tips, a new transaction will randomly choose 2 out of these $t$ tips, even if they have already been chosen by other new transactions --- in fact, they do not know which have been chosen because these new transactions have not being propagated yet.
 
-When a new transaction is added to the Hathor's network, it uses a depth-first search \citep{cormen2009introduction} (i) to update the aggregated weight of the directly and indirectly confirmed transactions, (ii) to calculate its own score, and (iii) to generate a topological sort \citep{cormen2009introduction}. The topological sort is used to calculate the longest path from all other transactions to the new transaction, and this longest path is used to update the depth of the whole DAG. If the new transaction confirms only transactions which has already been confirmed, the depth update is skipped thanks to Theorem \ref{theorem-new-tx-not-tip}.
+When a new transaction is added to the Hathor's network, it uses a depth-first search \citep{cormen2009introduction} (i) to update the aggregated weight of the directly and indirectly confirmed transactions. The depth-first search is interrupted when it reaches a transaction which the accumulated weight is bigger than a threshold. This interruption increases the overall performance of the simulation.
 
-The amount of time spent to solve the proof-of-work is a sample from an exponential distribution.
+%, (ii) to calculate its own score, and (iii) to generate a topological sort \citep{cormen2009introduction}. The topological sort is used to calculate the longest path from all other transactions to the new transaction, and this longest path is used to update the depth of the whole DAG. If the new transaction confirms only transactions which has already been confirmed, the depth update is skipped thanks to Theorem \ref{theorem-new-tx-not-tip}.
 
-The time between two new transactions is sampled from an exponential distribution with parameter $\lambda$. The value of $\lambda$ is changed over time, causing changes in the load of the network. We consider 1 tx/s to be a low load, and 15 tx/s to be a high load. Even though we have already tested up to 100 tx/s.
+The amount of time spent to solve the proof-of-work is sampled from an exponential distribution.
 
-The simulator will output different reports: (i) snapshots of the DAG at interesting moments, such as Fig. \ref{fig-tangle-example}, \ref{fig-tangle-swarm}, and \ref{fig-tangle-conflict}; (ii) histogram of confirmation time, such as Fig. \ref{fig-tangle-hist} and \ref{fig-tangle-hist-2}; and many others.
+The time between two new transactions is also sampled from an exponential distribution with parameter $\lambda$. The value of $\lambda$ is changed over time, causing changes in the load of the network.
+
+%The simulator will output different reports: (i) snapshots of the DAG at interesting moments, such as Fig. \ref{fig-tangle-example}, \ref{fig-tangle-swarm}, and \ref{fig-tangle-conflict}; (ii) histogram of confirmation time, such as Fig. \ref{fig-tangle-hist} and \ref{fig-tangle-hist-2}; and many others.
 
 
 \chapter{Analysis of Hathor}
 
-Hathor's architecture lies between Iota and Bitcoin's architectures. It is similar to Bitcoin's architecture when the number of transactions per second is low, while it is similar to Iota's architecture when the number of transactions per second is high. In order to check this statement, I have run some simulations.
+Hathor's architecture lies between Iota and Bitcoin's architectures. It is similar to Bitcoin's architecture when the number of transactions per second is low, while it is similar to Iota's architecture when the number of transactions per second is high. In order to check this statement, I have performed some simulations.
 
 First, two simulations with the extreme cases: (i) no miners, (ii) no transactions. The first should have exactly the same behavior as Bitcoin's blocks with one block after the other forming a long chain. The latter should have a similar behavior as Iota's structure, forming a Direct Acyclic Graph (DAG) with transactions confirming transactions. We can notice in Figure \ref{fig:hathor-similarities} that both cases seem to be correct.
 
@@ -320,18 +298,18 @@ Afterward, to a better visualization of a Hathor's network, I run a simulation c
 
 %The number of transactions solving the proof-of-work may be modeled by a Birth and Death process, since if we have $k$ transactions solving the proof-of-work only two things may happen: either a new transaction will be created or one the transactions will finish solving the proof-of-work. Let the time between new transactions follows an exponential distribution with $\mu$ parameter, then the probability of a new transaction emerges before any transaction finishes its proof-of-work is $q_k = \mathbf{P}(T_{\text{new tx}} = \min\{T_{\text{new tx}}, T_1, T_2, \dots, T_k\}) = \frac{\mu}{\mu + \sum_{i=1}^k \lambda_i}$. Hence, the probability of any transaction finishes its proof-of-work before a new transaction emerges is $p_k = 1 - q_k = \frac{\sum_{i=1}^k \lambda_i}{\mu + \sum_{i=1}^k \lambda_i}$.
 
-\begin{theorem}
-\label{theorem-new-tx-not-tip}
-When a new transaction confirms an already confirmed transaction, the depth of all transactions remains the same, i.e., the depth of the transactions are only changed when a new transaction confirm an unconfirmed transaction.
-\end{theorem}
+%\begin{theorem}
+%\label{theorem-new-tx-not-tip}
+%When a new transaction confirms an already confirmed transaction, the depth of all transactions remains the same, i.e., the depth of the transactions are only changed when a new transaction confirm an unconfirmed transaction.
+%\end{theorem}
 
-\begin{theorem}
-The height of a transaction is equal to the maximum height of its parents plus one.
-\end{theorem}
+%\begin{theorem}
+%The height of a transaction is equal to the maximum height of its parents plus one.
+%\end{theorem}
 
-\begin{theorem}
-If new transactions choose randomly the unconfirmed transactions to be confirmed, then no unconfirmed transaction will be left behind, i.e., all transactions will be confirmed in due time.
-\end{theorem}
+%\begin{theorem}
+%If new transactions choose randomly the unconfirmed transactions to be confirmed, then no unconfirmed transaction will be left behind, i.e., all transactions will be confirmed in due time.
+%\end{theorem}
 
 \chapter{Conclusion}
 
