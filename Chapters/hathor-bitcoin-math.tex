@@ -1,9 +1,9 @@
 
-The primary objective of this chapter is to increase our understanding of the Bitcoin through mathematical tools.
+The primary objective of this chapter is to increase the understanding of the Bitcoin through mathematical tools.
 
 \section{Hash function}
 
-Hash functions has been widely studied in computer science. In short, a hash function $h: \{0, 1\}^\infty \rightarrow \{0, 1\}^{n}$ has the following properties: 
+Hash functions has been widely studied in computer science. In short, a hash function $h: \{0, 1\}^\infty \rightarrow \{0, 1\}^{n}$ has the following properties:
 
 \begin{enumerate}
 	\item $x = y \Rightarrow h(x) = h(y)$
@@ -445,6 +445,8 @@ For $k=6$, $p=0.7$, $\mathbf{P}(\text{successful attack}) = 0.15644958192000014$
 \centering\includegraphics[width=\textwidth]{./images01/fig-bitcoin-attack.png}
 \caption{Probability of a successful attack according to the network's hash rate of the attacker ($\beta$).\label{fig-bitcoin-attack}}
 \end{figure}
+
+Analyze when $k=2$ (for instance, Binance requires only two confirmations for deposits with less than $1,000$).
 
 %The number of blocks found in a given time interval $\Delta t$ is given by the Poisson distribution. So, the number of blocks found by the attackers $N_{\text{attacker}}$ follows a Poisson distribution with parameter $\lambda_{\text{attacker}} \Delta t = \frac{\beta \Delta t}{600}$, and the number of blocks found by the network $N_{\text{network}}$ follows a Poission distribution with parameter $\lambda_{\text{network}} \Delta t = \frac{\gamma \Delta t}{600}$. We would like to calculate $\mathbf{P}(N_{\text{attackers}} - N_{\text{network}} \geq k)$.
 
