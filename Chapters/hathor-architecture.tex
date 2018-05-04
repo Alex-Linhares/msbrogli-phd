@@ -6,11 +6,11 @@ Like Iota, new transactions confirm others, forming a Directed Acyclic Graph (DA
 
 In Hathor, there are two difficulty levels: (i) one for new transactions which are just moving tokens around, and (ii) another one for ``blocks'' which are generating new tokens and collecting fees. The first may be adjusted to prevent spammers, which would spend too many resources to generate a great number of new transactions, whereas the latter is adjusted every 2,016 blocks to keep the pace of blocks on every 2 minutes.
 
-Both miners and users will be working on proof-of-work, decentralizing even more the network's hash rate. Even though the users' difficulty is less than the miners', the hash rate will increase every new user. The more transactions arrive, the higher the total hash rate. It may have good consequences in governance, which we will further discuss.
+Both miners and users will be working on proof-of-work, decentralizing even more the network's hash rate. Even though the users' difficulty is less than the miners', the hash rate will increase with every new user. The more transactions arrive, the higher the total hash rate. This may have good consequences in governance, which we will further discuss.
 
-There is a trade-off about the difficulty of new transactions. The higher it is, the harder it is to generate new transactions, preventing spammers but also making it harder for IoT devices generate new transactions. This difficulty may even be increased when a spam attack is in course and reduced when it is gone. If the difficulty is too high, IoT devices may sign their transactions and send them to another devices which have a greater hash rate and will solve their proof-of-work faster.
+There is a trade-off about the \textit{difficulty} of new transactions. The higher it is, the harder it is to generate new transactions, preventing spammers but also making it harder for IoT devices generate new transactions. This difficulty may even be increased when a spam attack is in course and reduced when it is gone. If the difficulty is too high, IoT devices may sign their transactions and send them to another devices which have a greater hash rate and will solve their proof-of-work faster.
 
-It also seems interesting to have this difficulty depending on new transaction's size (in bytes) and amount being moved. The idea here is to require more work when high amounts are at stake. It would not affect IoT devices, which are expected to usually move smaller amounts. Regarding the transaction's size, requiring more work for bigger transactions may make sense because they may prevent abuses, such as a denial-of-service attack using enormous transactions which would consume a lot of node's bandwidth and disk space.
+It also seems interesting to have this difficulty depending on new transaction's size (in bytes) and amount being moved. The idea here is to require more work when high amounts are at stake. It would not affect IoT devices, which are expected to usually move smaller amounts. Regarding the transaction's size, requiring more work for larger transactions may make sense because they may prevent abuses, such as a denial-of-service attack using enormous transactions which would consume a lot of node's bandwidth and disk space.
 
 Another important security matter is that each transaction has to confirm all its inputs, i.e., there must be a confirmation path between all the transactions of the inputs and the transaction which are spending them. It is always possible since there is at least one confirmation path between any transaction and a tip. It ensures that, when a conflict is resolved, only the sub-DAG with root at the invalidated transaction will be affected. The remaining of the DAG remains the same.
 
@@ -20,7 +20,7 @@ A \emph{block} is just a regular transaction with no inputs which confirms a pre
 
 In the low load scenario, there is a small number of new transactions coming into the network, which means they give a minor contribution to confirmations. In this case, the confirmation is held mostly by blocks. On the other hand, in the high load scenarios, there is a large number of new transactions giving a major contribution to confirmations. In this case, the blocks strengthen the confirmations, but many of them will have already been confirmed before the next blocks are found. The higher the number of new transaction, the faster the transactions are confirmed. The blocks assure a ``maximum confirmation time''.
 
-The incentive scheme which keeps the network running is the same as Bitcoin's. Miners go towards fees and newly generate coins, whereas users just want to exchange their tokens. When there is no new transcation to be confirmed, the miners keep the network up and running while they find new blocks.
+The incentive scheme which keeps the network running is the same as Bitcoin's. Miners go towards fees and newly generate coins, whereas users just want to exchange their tokens. When there is no new transaction to be confirmed, the miners keep the network up and running while they find new blocks.
 
 
 \section{Transaction confirmation}
@@ -130,22 +130,23 @@ I believe that the solution to a good governance will come from financial incent
 
 \section{Expected number of tips}
 
-Explain transient and stationary state. The balance happens in the stationary state.
+It is intuitive that the number of tips depends on the number of transactions per second. The higher the number of transactions per second, the higher the number of tips. We can model the number of tips at time $t$ as a stochastic process, which means it changes over time following some probability distribution. Stochastic processes have two important states: transient and steady. A process is in transient state when its properties are changing over time, whereas it is in steady state when its properties has already converged.
 
-In order to estimate the balance in the number of tips, let's consider the system in which the rate of inward tips is $\lambda_\text{TX}$, while the rate of outward tips is $\rho$. Let $K$ be the number of tips in the system. Thus, after $\Delta t$ seconds, $\Delta \text{tips} = \lambda_\text{TX} \Delta t - \rho K \Delta t$. In the balance, $\Delta \text{tips} = 0$, hence $K = \frac{\lambda_\text{TX}}{\rho}$.
+Let's assume that the number of transactions per second is constant and does not change over time. Thus, at the beginning, there will be no tips, and the number will increase until it converges to its stable quantity. The process is in transient state until it reaches the stability. Then, it reaches the steady state. Notice that the number of tips also change in steady state, but its average does not change. It just floats around the average.
+
+If the number of transactions per second increases, the process returns to the transient state and moves towards the new steady state. In practice, the number of transactions per second is always changing, so is the steady state.
+
+In order to estimate the number of tips in the steady state, let's consider the process in which the rate of inward tips is $\lambda_\text{TX}$, while the rate of outward tips is $\rho$. Let $K$ be the number of tips at a given time. Thus, after $\Delta t$ seconds, $\Delta \text{tips} = \lambda_\text{TX} \Delta t - \rho K \Delta t$. In the steady state, $\Delta \text{tips} = 0$, hence $K = \frac{\lambda_\text{TX}}{\rho}$.
 
 Finally, the rate of outward tips is twice the rate in which devices solve the proof-of-work of transactions. Let $H$ be the devices' hash rate, then, $\rho = 2 \cdot H \cdot 2^{-w_\text{TX}}$.
+%Twice?! It is a number between 1 and 2, but none of them.
 
-Twice?! It is a number between 1 and 2, but none of them.
-
-Therefore, in the balance,
+Therefore, in the steady state,
 
 $$K = \frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{2H}$$
 
-$$\frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{2H} \le K \le \frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{H}$$
+%$$\frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{2H} \le K \le \frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{H}$$
+For further information about the stochastic process of the total number of tips, see \citet{tangle2016}.
 
-
-\section{Attacks \& Conflicting transactions}
-
-
-\section{Scripts \& Contracts}
+%\section{Attacks \& Conflicting transactions}
+%\section{Scripts \& Contracts}

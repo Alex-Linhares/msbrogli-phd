@@ -28,13 +28,13 @@
     \medskip
 
     This is military-grade cryptography and full-blown paranoia.\\
-    Whoever did it hears voices whispering `they know everything.' \\
+    %Whoever did it hears voices whispering `they know everything.' \\
     \medskip
 
     Other than that, it's a get-rich-quick-scheme \\
     that looks exactly like a get-rich-quick-scheme.}
 	\\ \medskip
-    --- Alex Linhares, EBAPE/FGV
+    --- Alexandre Linhares, EBAPE/FGV
 
         \bigskip
         \bigskip
@@ -51,7 +51,7 @@
 \bigskip
 \bigskip
 
-The primary problem for creating digital money is how to prevent double spending. As the money is digital, and copies can be made \textit{ad nauseam}, what can prevent counterfeiting? That is, what would prevent users from sending copies of the same money to two (or more) people? That is precisely the problem solved by Bitcoin and its underlying Blockchain technology. The current solution behind fiat money is having a single issuer, a central bank --- then trusting the financial institutions and regulators.
+The primary problem for creating digital money is how to prevent double spending. As the money is digital, and copies can be made \textit{ad nauseam}, what can prevent counterfeiting? What would prevent users from sending copies of the same money to two (or more) people? That is precisely the problem solved by Bitcoin and its underlying Blockchain technology. The current solution behind fiat money is having a single issuer, a central bank --- then trusting the financial institutions and regulators.
 
 The concept of transfering money using cryptography as an underlying technology was shortly presented in 1983 by \citet{chaum1983blind} and was deepened in a theoretical paper in 1985 \citep{chaum1985security}. However, it was only in 1988 that \citet{chaum1988untraceable} created the term \emph{electronic cash} and also proposed a basic and practical scheme which yielded untraceability yet allowed to trace double spendings.
 
@@ -74,21 +74,21 @@ Despite Bitcoin's huge success, there are still many challenges to be overcome. 
 
 The network must scale to support hundreds of transactions per second, while its capacity is around only eight transactions per second. Thus, the more Bitcoin becomes popular, the more saturated the network is. Network saturation has many side effects and may affect the players' incentive to keep the network running. The transaction fees have to be increased to compete for faster confirmation. The pool of unconfirmed transactions grows indefinitely, which may cause some transactions to be discarded due to low memory space available, as the previously predictable confirmation time of transactions becomes unpredictable.
 
-The scaling problem is not precisely an issue of Bitcoin, but an issue of the Blockchain technology. Hence, all other Blockchain-based cryptocurrencies have the same limitations, such as Litecoin, Bitcoin Cash, and Ethereum. One may arguee that increasing the maximum block size is a feasible solution to scaling, but I would say that it is just a temporary solution which buys some time until the next network saturation.
+The scaling problem is not precisely an issue of Bitcoin, but an issue of the Blockchain technology. Hence, all other Blockchain-based cryptocurrencies have the same limitations, such as Litecoin, Bitcoin Cash, and Ethereum. One may argue that increasing the maximum block size is a feasible solution to scaling, but I would say that it is just a temporary solution which buys some time until the next network saturation.
 
-Bitcoin seems to have the most decentralized network among the cryptocurrencies, even so, there are few miners and mining pools which together control over 50\% of the network’s computing (hash)power (for details, see \citet{gencer2018decentralization}). Hence, they have an oversized influence when it comes to changes in the Bitcoin protocol's behavior. They may also cooperate in an attack, avoiding transactions which seemed confirmed. The more decentralized, the more trustworthy Bitcoin is. This centralization problem is seem as an important challenge.
+Bitcoin seems to have the most decentralized network among the cryptocurrencies, even so, there are few miners and mining pools which together control over 50\% of the network’s computing (hash)power (for details, see \citet{gencer2018decentralization}). Hence, they have an oversized influence when it comes to changes in the Bitcoin protocol's behavior. They may also cooperate in an attack, voiding transactions which seemed confirmed. The more decentralized, the more trustworthy Bitcoin is. This centralization problem is seen as an important challenge.
 
 Generating new transactions in Bitcoin has a tiny computational cost because one only has to generate the transaction itself, digitally sign it, and propagate it in the Bitcoin network. On the one hand, it means that any device is capable of generating new transactions, but, on the other hand, it makes Bitcoin susceptible to spam attacks. One may generate hundreds of thousands of new valid transactions, overloading the unconfirmed transactions pool and saturating the network. This spam problem has happened several times and affects Bitcoin's trustworthy. \citet{bitcoinspam2017} reports a possible spam attack lasting at least contiguous 18 months.
 
 The number of ideas and publications focusing on improving Bitcoin's design and overcoming those challenges is increasing every day. Many of these proposals are organized into BIPs (Bitcoin Improvement Proposals) which are discussed and implemented by the community; while others come in the form of whitepapers and alternative software forks (which would include the need of a protocol upgrade). Other proposals are published in blogs and forums, describing new cryptocurrencies. Bitcoin's community hardly ever publishes their ideas in academic journals, preferring instead, of BIPs, white papers, and web discussions.
 
-After the launch of Bitcoin, more than 1,000 other cryptocurrencies have been created \citep{coinmarketcap}. In general, they are Bitcoin-like, which means they use similar technologies, including the blockchain. Some cryptocurrencies differs a lot from Bitcoin, like the ones which use the DAG model \citep{dagdiscussion2014, tangle2016, dagcoin2015, sompolinsky2013, lewenberg2015, vorick2015}. We are especially interested in one of them: Iota.
+After the launch of Bitcoin, more than 1,000 other cryptocurrencies have been created \citep{coinmarketcap}. In general, they are Bitcoin-like, which means they use similar technologies, including the blockchain. Some cryptocurrencies differs a lot from Bitcoin, like the ones which use the Directed Acyclic Graph (DAG) model \citep{dagdiscussion2014, tangle2016, dagcoin2015, sompolinsky2013, lewenberg2015, vorick2015}. We are especially interested in one of them: Iota.
 
 Iota uses a DAG model, called tangle, which has a different design than Bitcoin's blockchain. It has neither mining nor confirmation blocks and transaction fees. Each transaction has its own proof-of-work\footnote{The mechanism that assures the immutability is the proof-of-work, which makes it computationally infeasible to tamper with transactions. It will be explained later in details.} and is used to confirm other transactions, forming a directed acyclic graph of transactions. Thus, a transaction is said to be confirmed when there is enough proof-of-work from the transactions confirming it directly or indirectly. There is no other way to confirm transactions but generating new transactions.
 
 In Iota, as transactions confirm transactions, the network benefits from a high volume of new transactions. Therefore, theoretically, it scales to any large number of transactions per second. The scaling problem of tangle is exactly the opposite of Bitcoin's: it must have at least a given number of transaction per seconds; otherwise, the transactions are not confirmed, and the cryptocurrency does not work. While Iota's network has not reached this minimum number of transactions per second, it uses a central coordinator which works as a trustworthy node \citep{iotacoordinator}.
 
-Every transaction confirmed by the central coordinator is assumed to be valid and cannot be reverted. The remaining of the network can verify a confirmation through the central coordinator's digital signature. The coordinator will not be necessary anymore when the number of transactions per second reaches a minimum value, but Iota's developers cannot say precisely what is this minimum value. This just elucidates that the tangle does not seem to work properly under a low volume of transactions (and fluctuations in the number of transactions per second may severily affect Iota's trustworthy).
+Every transaction confirmed by the central coordinator is assumed to be valid and cannot be reverted. The remaining of the network can verify a confirmation through the central coordinator's digital signature. The coordinator will not be necessary anymore when the number of transactions per second reaches a minimum value, but Iota's developers cannot say precisely what is this minimum value. This just elucidates that the tangle does not seem to work properly under a low volume of transactions (and fluctuations in the number of transactions per second may severily affect Iota's trustworthiness).
 
 The present work intends to propose and analyze a new architecture, named Hathor, which lies between Bitcoin and Iota and may be a viable solution to both scaling, centralization, and spam problems. We also present a mathematical analysis of Bitcoin's architecture.
 
