@@ -314,9 +314,9 @@ Finally, $\mathbf{E} \left[ d(a \oplus v_1, b \oplus v_2) \right] = |\mathbb{A}|
 
 \chapter{Results (viii): The possibility of unsupervised reinforcement learning}
 
-Reinforcement learning has increasing prominence in the media after AlphaZero has won all games from both the best chess grandmasters in the world and the best chess engines. What is incredible about these victories is that AlphaZero has almost no knowledge about chess game and has learned all its movement playing against itself for 4 hours. Basically, it knows only the valid movements and had to learn everything from scratch, which it did using a reinforcement learning algorithm.
+Reinforcement learning has increasing prominence in the media after AlphaZero has won all games from both the best chess grandmasters in the world and the best chess engines. What is incredible about these victories is that AlphaZero has almost no knowledge about chess game and has learned all its movement playing against itself for 4 hours. Basically, it knows only the valid movements and had to learn everything from scratch, which it did using a reinforcement learning algorithm \citep{silver2017mastering, silver2017masteringchess}.
 
-Reinforcement learning is a machine learning algorithm which learns from the rewards of its actions. So, it receives the game state as input, it decides which action will be taken, and then it learns from the rewards of all the actions it has chosen. In theory, it learns after each reward feedback it receives, improving its decision over time and presenting intelligent behavior. A positive reward would indicate that the chosen action should be encouraged, while a negative reward would indicate the opposite. In some algorithms, there may be a neutral reward which would indicate that the chosen action was neither positive nor negative. How each type of reward should be handled depends on each algorithm.
+Reinforcement learning is a machine learning algorithm which learns from the rewards of its actions. So, it receives the game state as input, it decides which action will be taken, and then it learns from the rewards of all the actions it has chosen. In theory, it learns after each reward feedback it receives, improving its decision over time and presenting intelligent behavior. A positive reward would indicate that the chosen action should be encouraged, while a negative reward would indicate the opposite. In some algorithms, there may be a neutral reward which would indicate that the chosen action was neither positive nor negative. How each type of reward should be handled depends on each algorithm. For further information, see \citet{sutton1998reinforcement}.
 
 We have done some experiments with an SDM as a memory for a TicTacToe player. Basically, it receives the current board state and returns which action should be played. At the end of the game, it receives both the sequences of boards and the winner and is supposed to learn from them.
 
@@ -537,7 +537,7 @@ In more details, the next movement decision consists in one read from SDM, resul
 
 Our algorithm learned playing games against opponents. We had four types of opponents: (i) another SDM player, (ii) a random player whose actions are always random; (iii) a smart player whose actions wins when it can, block the opponent when it can, or are random; and (iv) a human player.
 
-The weights of the rewards were chosen to prevent losing. Thus the weight of the negative reward was 5, while the weight of the positive reward was 2 and the neutral was 1.
+The weights of the rewards were chosen to prevent losing. Thus the weight of the negative reward was 5, while the weight of the positive reward was 2 and the neutral was 1. This choice are in accordance to Prospect Theory, which is a behavioral economic theory and states that losses hurt more than gains feel good \citep{kahneman2013prospect}.
 
 Every learn cycle had two parts: (i) 100 games learning and (ii) 100 games testing. So, it has never learned during the testing phase and has not affected the measure of the statistics.
 
