@@ -43,7 +43,7 @@ This flexibility into mapping one situation in another is an essential human fea
 % TODO Venn Diagram Psychology, Neuroscience, Cognitive modelling
 % TODO Graph between these disciplines and how they might interact.
 
-Sparse Distributed Memory reads like a \emph{desiderata} of a theory for human memory.  To understand the breadth of topics that SDM encompasses, consider the following questions:
+Sparse Distributed Memory reads like a \emph{desiderata} of a theory for human long-term memory.  To understand the breadth of topics that SDM encompasses, consider the following questions:
 \begin{enumerate}
     \item Why are most concepts orthogonal, unrelated to each other?
     \item Why is there Miller's magic number, i.e., we can't hold too many things in mind at once?
@@ -454,7 +454,7 @@ A reduction from measuring the distance to $2^{20}$ hard locations to a computat
 
 The classification algorithm had some problems classifying the patterns ``i'' and ``l'', due to the low distance between them. In this case, SDM could not discriminate the differences --- it has only considered the big picture. Although this behavior is close to how humans see things, we also have the ability to zoom and focus on the details, clearly discerning letter ``i'' from letter ``l''.
 
-I have run the classification algorithm under the MNIST database of handwritten digits \citep{deng2012mnist}. First, SDM has been trained with the 60,000 training images, and then it classified the 10,000 testing images. In these initial tests, the memory has given the correct classification for 79.22\% of the images, which is inferior to the specialized algorithms. For instance, in 1998, \citet{lecun1998gradient} have developed algorithms which achieve from 88\% through a linear classifier, to 99.7\% through a convolutional net. For a review of algorithms' performance in the MNIST database, see \cite{mnist}.
+I have run the classification algorithm under the MNIST database of handwritten digits \citep{deng2012mnist}. First, SDM has been trained with the 60,000 training images, and then it classified the 10,000 testing images. In these initial tests, the memory has given the correct classification for 79.22\% of the images, which is inferior to the specialized algorithms. For instance, in 1998, \citet{lecun1998gradient} have developed algorithms which achieve from 88\% through a linear classifier, to 99.7\% through a convolutional net. For a review of algorithms' performance in the MNIST database, see \cite{deng2012mnist}.
 
 Looking into the reason behind images incorrectly classified, I have found that the issue is very related to the ``i'' versus ``l'' issue. Some handwritten digits are very close to others, and a ``2'' or a ``7'' may look like a ``1'', for instance. So, how can we solve this issue without using anything specific to images?  Machine learning algorithms use specific techniques to improve performance. I would like to unveil a solution psychologically closer to how we behave --- even if that eventually leads to lower performance.
 
