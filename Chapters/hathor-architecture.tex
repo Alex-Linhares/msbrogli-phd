@@ -134,21 +134,15 @@ I believe that the solution to a good governance will come from financial incent
 
 It is intuitive that the number of tips depends on the number of transactions per second. The higher the number of transactions per second, the higher the number of tips. We can model the number of tips at time $t$ as a stochastic process, which means it changes over time following some probability distribution. Stochastic processes have two important states: transient and steady. A process is in transient state when its properties are changing over time, whereas it is in steady state when its properties has already converged.
 
-Let's assume that the number of transactions per second is constant and does not change over time. Thus, at the beginning, there will be no tips, and the number will increase until it converges to its stable quantity. The process is in transient state until it reaches the stability. Then, it reaches the steady state. Notice that the number of tips also change in steady state, but its average does not change. It just floats around the average.
+Let's assume that the number of transactions per second is constant and does not change over time. Thus, at the beginning, there will be no tips, and the number will increase until it converges to its stable quantity. The process is in transient state until it reaches stability. Then, it is in the steady state. Notice that the number of tips also change in steady state, but its average does not. It just floats around the average.
 
 If the number of transactions per second increases, the process returns to the transient state and moves towards the new steady state. In practice, the number of transactions per second is always changing, so is the steady state.
 
-In order to estimate the number of tips in the steady state, let's consider the process in which the rate of inward tips is $\lambda_\text{TX}$, while the rate of outward tips is $\rho$. Let $K$ be the number of tips at a given time. Thus, after $\Delta t$ seconds, $\Delta \text{tips} = \lambda_\text{TX} \Delta t - \rho K \Delta t$. In the steady state, $\Delta \text{tips} = 0$, hence $K = \frac{\lambda_\text{TX}}{\rho}$.
+\citet{tangle2016} has modeled the stochatic process of the total number of tips. It proves that the average number of tips, in the steady state, is:
 
-Finally, the rate of outward tips is twice the rate in which devices solve the proof-of-work of transactions. Let $H$ be the devices' hash rate, then, $\rho = 2 \cdot H \cdot 2^{-w_\text{TX}}$.
-%Twice?! It is a number between 1 and 2, but none of them.
-
-Therefore, in the steady state,
-
-$$K = \frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{2H}$$
+$$\frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{\log(2)H}$$
 
 %$$\frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{2H} \le K \le \frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{H}$$
-For further information about the stochastic process of the total number of tips, see \citet{tangle2016}.
 
 %\section{Attacks \& Conflicting transactions}
 %\section{Scripts \& Contracts}
