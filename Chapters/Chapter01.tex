@@ -214,7 +214,7 @@ The simulator has been developed using an event-based design which is capable of
 
 When a new transaction emerges, it chooses two tips to confirm before solving the proof-of-work. When it finishes solving the proof-of-work, the transaction is propagated and becomes a tip. So, two new transactions may choose the same tips to confirm. If there are $t$ tips, a new transaction will randomly choose 2 out of these $t$ tips, even if they have already been chosen by other new transactions --- in fact, they do not know which have been chosen because these new transactions have not been propagated yet.
 
-When a new transaction is added to the Hathor's network, it uses a depth-first search \citep{cormen2009introduction} to update the aggregated weight of the directly and indirectly confirmed transactions. The depth-first search is interrupted when it reaches a transaction which the accumulated weight is larger than a given threshold. This interruption significantly increases the overall performance of the simulation. If the accumulated weight is an important metric, the whole network may be updated in specific times to get a measurement (instead of every new transaction).
+When a new transaction is added to the Hathor's network, it uses a depth-first search \citep{cormen2009introduction} to update the aggregated weight of the directly and indirectly confirmed transactions. The depth-first search is interrupted when it reaches a transaction which the accumulated weight is larger than a given threshold. This interruption significantly increases the overall performance of the simulation. If the accumulated weight of the whole DAG is an important metric, the whole DAG may be updated in specific times to get a measurement (instead of every new transaction).
 
 %, (ii) to calculate its own score, and (iii) to generate a topological sort \citep{cormen2009introduction}. The topological sort is used to calculate the longest path from all other transactions to the new transaction, and this longest path is used to update the depth of the whole DAG. If the new transaction confirms only transactions which has already been confirmed, the depth update is skipped thanks to Theorem \ref{theorem-new-tx-not-tip}.
 
@@ -223,6 +223,10 @@ Simulator's random variables simulator are all sampled from their distributions.
 Transactions (and blocks) do not have inputs, outputs, and scripts. They have only pointers to other transactions, which form the DAG. They also store their weight, accumulated weight, timestamp, and some statistics used for reports.
 
 New miners or users may be added or removed any time during a simulation. This allows the simulation of many different scenarios, such as increasing the number of miners, a sudden increase in the number of transactions per second, a sudden decrease in the number of miners, and so forth.
+
+It is also possible to create metrics, which sample a statistic every $\Delta t$ seconds. There are two metrics available: (i) TipsMetric, which stores the number of tips at a given simulation time, and (ii) UtterlyAcceptanceMetric, which finds the new utterly accepted transactions and store how long it took.
+
+To find the network validated transactions, I run a breadth-first search (bfs) for each tip. Transactions visited in all searches are being confirmed by all tips and, by definition, are network validated transactions.
 
 %The simulator will output different reports: (i) snapshots of the DAG at interesting moments, such as Fig. \ref{fig-tangle-example}, \ref{fig-tangle-swarm}, and \ref{fig-tangle-conflict}; (ii) histogram of confirmation time, such as Fig. \ref{fig-tangle-hist} and \ref{fig-tangle-hist-2}; and many others.
 
@@ -248,6 +252,9 @@ Next, I have run a more realistic simulation, with both miners and transactions.
 \centering\includegraphics[width=\textwidth]{./images01/sim/hathor.pdf}
 \caption{Visualization of a Hathor's graph with transactions and blocks. Red boxes are blocks, and white circles are simple transactions. The arrows show the confirmations.\label{fig:hathor-dag}}
 \end{figure}
+
+
+\section{Confirmation time}
 
 Another evidence that Hathor lies between Iota and Bitcoin is found when comparing the time to confirm a transaction. In this context, a transaction is said to be confirmed when it has reached an accumulated weight similar to six times the hash rate of the whole network (miners and new transactions). This criteria is equivalent to the well-known ``6 confirmations'' of Bitcoin, which is adopted by almost the whole ecosystem.
 
@@ -283,7 +290,7 @@ But, what would happen if, instead of changing the number of transactions per se
 \caption{Confirmation time with miners' hash rate ten times the transactions'. \label{fig:hathor-tct-100k-10k}}
 \end{figure}
 
-Finally, even with both blocks and transactions, Hathor's blocks are similar to Bitcoin's blocks, and they share the same math. To confirm that, see Figure {fig:hathor-tbb}, where the red curve is Bitcoin's distribution of time between blocks and the blue histogram is Hathor's time between blocks. I also made several tests adding and removing miners to check the difficulty adjustment and it worked properly.
+Finally, even with both blocks and transactions, Hathor's blocks are similar to Bitcoin's blocks, and they share the same math. To confirm that, see Figure \ref{fig:hathor-tbb}, where the red curve is Bitcoin's distribution of time between blocks and the blue histogram is Hathor's time between blocks. I also made several tests adding and removing miners to check the difficulty adjustment and it worked properly.
 
 \begin{figure}[!htb]
 \centering
@@ -293,12 +300,75 @@ Finally, even with both blocks and transactions, Hathor's blocks are similar to 
 \caption{Histogram of time between blocks. The red curve the Bitcoin's theoretical distribution of time between blocks. As we can notice, the fit is very good. \label{fig:hathor-tbb}}
 \end{figure}
 
-Afterward, to a better visualization of a Hathor's network, I run a simulation classifying the transactions in either confirmed, in-progress, or unconfirmed (tips). I also showed the transactions solving the proof-of-work which had not been propagated yet. See Figure \ref{fig:hathor-dag-big} and notice the chain of blocks inside the DAG.
+\clearpage
 
 \begin{figure}[!htb]
 \centering\includegraphics[width=\textwidth]{./images01/sim/hathor-2.pdf}
 \caption{Visualization of a Hathor's graph with transactions and blocks. Red boxes are blocks; green circles are confirmed transactions; white circles are in-progress transactions; yellow circles are unconfirmed transactions (tips); and grey circles are transactions solving the proof-of-work which have not been propagated yet. The arrows show the confirmation chain. Block's arrows are in bold. \label{fig:hathor-dag-big}}
 \end{figure}
+
+\clearpage
+
+
+\section{Visualizing the network}
+
+Visualizing the network is not simple because the number of transactions and blocks is high, thus, arranging them and their edges is a non-trivial task. Therefore, most of the visualization are just part of the DAG which shows a window of time.
+
+To a better visualization of a Hathor's network, I run a simulation classifying the transactions in either confirmed, in-progress, or unconfirmed (tips). I also showed the transactions solving the proof-of-work which had not been propagated yet. See Figure \ref{fig:hathor-dag-big} and notice the chain of blocks inside the DAG. Confirmed transactions are in green circles, while in-progress transactions are in white circles and tips are in yellow circles. The blocks are in red boxes form a chain inside the DAG. Finally, the new transactions which are solving the proof-of-work and had not been propagated are in grey dashed circles.
+
+As new transactions have to chose two previous transactions to confirm, and just after they start to work in the proof-of-work, two new transactions eventually may chose the same tip because they do not know each other yet. So, if new transactions are coming in a low pace, the width of the swarm is small because the number of new transactions simultaneously solving the proof-of-work is also small. But, when new transactions are coming in a high volume, the width of the swarm increases because new transactions are choosing the same tip over and over.
+
+In summary, the width of the swarm depends on the number of transactions per second. The greater the number of new transactions per second, the larger the width of the swarm.
+
+To visualize the change in the width of the swarm, I run a simulation with a constant number of transactions per second, which was increased only in a specific window of time. The result can be seen in Figure \ref{fig:hathor-load-changing}, where the number of transactions per second suddenly increases, and the width increases until it reaches a stable value. Then, the number of transactions per second decreases, and the width returns to the previous value.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{./images01/new/many-loadings.pdf}
+
+\caption{DAG visualization when the loading is changed over time. \label{fig:hathor-load-changing}}
+\end{figure}
+
+
+
+
+
+
+\section{Number of tips}
+
+The number of tips at a given time also depends on the number of new transactions per second. The relationship between them was empirically measured in several simulations with different $\lambda_\text{TX}$.
+
+Analyzing Figure \ref{fig:hathor-tips}, it is easy to notice that both the average and the standard deviation of the number of tips increase when $\lambda_\text{TX}$ increases. According to \citet{tangle2016}, the average has the following equation:
+
+$$\frac{\lambda_\text{TX}}{\log(2)} \frac{2^{w_\text{TX}}}{H}$$
+
+In our simulation, $H = 100,000$ and $w_\text{TX} = 17$, so, the average number of tips should be equal to $1.89 \cdot \lambda_\text{TX}$. This model works best for low values of $\lambda_\text{TX}$, but diverges a little for higher values. For instance, if $\lambda_\text{TX} = 32$, the equation predicts $60.48$ tips on average yet we can check that the average is around $55$ tips.
+
+When $\lambda_\text{TX} \Rightarrow 0$, the number of tips goes towards one. The explanation is that there will be only one new transaction solving the proof-of-work per turn. So, new transactions will always confirm two tips, reducing the number of tips by one---each transaction confirms two tips and create one new one, hence the balance is -1. As it is impossible to have less to have less than one tip, it converges to one.
+
+When the number of tips is one, new transactions must chose a tip and another in-progress transaction. It should only happen in very low load scenarios, like during the launch of the network itself.
+
+\begin{figure}[!htb]
+\centering
+\subfloat[All load scenarios]{\includegraphics[width=\textwidth]{./images01/new2/tips_aggregate.png}}
+
+\subfloat[Zoom in the left side of (a)]{\includegraphics[width=\textwidth]{./images01/new2/tips_aggregate2.png}}
+
+\caption{Histogram of the number of tips for different load scenarios. As expected, the number of tips increases with $\lambda_\text{TX}$. \label{fig:hathor-tips}}
+\end{figure}
+
+
+\section{Network validated transactions}
+
+\begin{figure}[!htb]
+\centering
+\subfloat[Only low load scenarios]{\includegraphics[width=\textwidth]{./images01/new2/nv_low.png}}
+
+\subfloat[All load scenarios]{\includegraphics[width=\textwidth]{./images01/new2/nv_all.png}}
+
+\caption{Histogram of the time it takes for a transaction to be network validated. \label{fig:hathor-tips}}
+\end{figure}
+
 
 %The number of transactions solving the proof-of-work may be modeled by a Birth and Death process, since if we have $k$ transactions solving the proof-of-work only two things may happen: either a new transaction will be created or one the transactions will finish solving the proof-of-work. Let the time between new transactions follows an exponential distribution with $\mu$ parameter, then the probability of a new transaction emerges before any transaction finishes its proof-of-work is $q_k = \mathbf{P}(T_{\text{new tx}} = \min\{T_{\text{new tx}}, T_1, T_2, \dots, T_k\}) = \frac{\mu}{\mu + \sum_{i=1}^k \lambda_i}$. Hence, the probability of any transaction finishes its proof-of-work before a new transaction emerges is $p_k = 1 - q_k = \frac{\sum_{i=1}^k \lambda_i}{\mu + \sum_{i=1}^k \lambda_i}$.
 
