@@ -1,3 +1,4 @@
+% !TEX root = ../partial-blockchain.tex
 
 The primary objective of this chapter is to increase the understanding of the Bitcoin through mathematical tools.
 
@@ -155,6 +156,8 @@ The difficulty, given by the number $A$, is adjusted every 2016 blocks. As, $\ma
 
 Let $H \cdot u(t)$ be the network's total hash rate over time. So, the number of hashes calculated in $t$ seconds is $H \int_0^t u(t) dt$. Hence, $\mathbf{P}(T \leq t) = \mathbf{P}(X \leq H \int_0^t u(t)dt)$. When $H \rightarrow +\infty$, $\mathbf{P}(T \leq t) = 1 - e^{-\frac{1}{\eta} \int_0^t u(t) dt}$, and the pdf of $T$ is $\frac{u(t)}{\eta} \cdot e^{-\frac{1}{\eta} \int_0^t u(t)dt}$.
 
+\subsection{Hash rate suddenly changing}
+
 Let's say that the network's total hash rate has suddenly multiplied by $\alpha$. So, $u(t) = \alpha$, $\int_0^t u(t) dt = \alpha t$, and $T$ also follows an exponential distribution, but with $\lambda = \frac{\alpha}{\eta}$. Thus, $Y_n^\alpha = \sum_{i=1}^{n} T_i^\alpha \sim \text{Erlang}(n, \frac{\alpha}{\eta})$. Thus, $\mathbf{E}[Y_{n}^\alpha] = \frac{\mathbf{E}[Y_{n}]}{\alpha}$, i.e., the average total time required to find $n$ blocks will be divided by $\alpha$, while $\mathbf{V}[Y_{n}^\alpha] = \frac{\mathbf{V}[Y_n]}{\alpha^2}$ and the variance will be divided by $\alpha^2$. Hence, on one hand, when the network's hash rate increases ($\alpha > 1$), the 2016 blocks will be found earlier. On the other hand, when the network's hash rate decreases ($\alpha < 1$), the 2016 blocks will be found later.
 
 For example, if the network's total hash rate suddenly doubles ($\alpha = 2$), then $\mathbf{P}(6.5 \text{ days} < Y_{2016} < 7.5 \text{ days}) = 0.9986$, and the time required to find 2016 blocks halved. On the other side, if the network's total hash rate suddenly halves ($\alpha = 0.5$), then $\mathbf{P}(27 \text{ days} < Y_{2016} < 29 \text{ days}) = 0.9469$, and the time required to find 2016 blocks doubled. It is an important conclusion, since it shows that even if half of the network stops mining, it will only double the time to the next difficulty adjustment, i.e., the time between blocks will be 20 minutes for, at most, the next 29 days, at which point the adjustment will occur and everything will be back to the normal 10 minutes between blocks.
@@ -165,14 +168,14 @@ For example, if the network's total hash rate suddenly doubles ($\alpha = 2$), t
 
 Let $u(t) = \frac{1+abx}{1+bx}$. It is an useful function because $u(0) = 1$ and $\lim_{t \rightarrow \infty} u(t) = a$. The bigger the $b$, the faster $u(t) \rightarrow a$. For example, if $a=2$, it means $H$ would be smoothly doubling. If $a=0.5$, it means $H$ would be smoothly halving.
 
-It is easy to integrate $u(t)$ because $\frac{1+abx}{1+bx} = \frac{1-a}{1+bx} + a \Rightarrow \int_0^t u(x) dx = at + \frac{1-a}{b} \log(1+bt)$. So,
+It is easy to integrate $u(t)$ because $\frac{1+abx}{1+bx} = \frac{1-a}{1+bx} + a$, which yields $\int_0^t u(x) dx = at + \frac{1-a}{b} \log(1+bt)$. So,
 $$F_T(t) = 1 - (1+bt)^{\frac{\lambda(a-1)}{b}} e^{-\lambda at}.$$
 $$f_T(t) = \lambda \left( \frac{1+abt}{1+bt} \right) (1+bt)^{\frac{\lambda(a-1)}{b}} e^{-\lambda at}.$$
 
 Assuming that $n = \frac{\lambda(a-1)}{b}$ is integer, we have:
 $$F_T(t) = 1 - (1+bt)^n e^{-\lambda at}$$
 
-Thus,
+Let $\mathcal{L}$ be the Laplace Transform. Thus,
 \begin{align*}
 \mathcal{L}\{F_T(t)\} &= \mathcal{L}\{1 - (1+bt)^n e^{-\lambda at}\} \\
 	&= \mathcal{L}\{1\} - \mathcal{L}\{(1+bt)^n e^{-\lambda at}\} \tag{$\mathcal{L}$ is a linear operator} \\
@@ -204,7 +207,7 @@ Then,
 Finally, as $\mathbf{E}[T] = -\mathcal{L}\{f_T(t)\}|_{s=0}$,
 $$\mathbf{E}[T] = \frac{1}{\lambda a} \left[ n! \left(\frac{b}{\lambda a}\right)^n \sum_{k=0}^n \frac{1}{k!} \left( \frac{\lambda a}{b} \right)^{k} \right] \text{, where $n = \frac{\lambda(a-1)}{b}$}$$
 
-Let's check this equation for already known scenarios. When $a=1$, then $n=0$ and $\mathbf{E}[T] = 1/\lambda$. When $b \rightarrow +\infty$, it reduces to the case in which the hash rate is multiplied by $a$, which we have already studied. In fact, $n \rightarrow 0$, $u(t) \rightarrow a$, and $\mathbf{E}[T] = \frac{1}{\lambda a}$.
+Let's check this equation for already known scenarios. When $a=1$, then $n=0$ and $\mathbf{E}[T] = 1/\lambda$. When $b \rightarrow +\infty$, it reduces to the case in which the hash rate is multiplied by $a$, which we have already studied. In fact, $b \rightarrow +\infty$ yields $n \rightarrow 0$, $u(t) \rightarrow a$, and $\mathbf{E}[T] = \frac{1}{\lambda a}$.
 
 \begin{theorem}
 	$$a > 1 \text{ and } x > M \Rightarrow \left| \frac{1+abx}{1+bx} - a \right| < \frac{a-1}{1+bM}$$
@@ -213,7 +216,7 @@ Let's check this equation for already known scenarios. When $a=1$, then $n=0$ an
 $x > M \Rightarrow \frac{1}{1+bx} < \frac{1}{1+bM}$. As $1-a<0$, $\frac{1-a}{1+bx} > \frac{1-a}{1+bM}$. Thus, $\frac{1-a}{1+bM} < \frac{1-a}{1+bx} + a - a = \frac{1+abx}{1+bx} - a < 0 < \frac{a-1}{1+bM}$. Hence, $-\frac{a-1}{1+bM} < \frac{1+abx}{1+bx} - a < \frac{a-1}{1+bM}$.
 \end{proof}
 
-For instance, if we would like to know the impact of smoothly double the hash rate in the next week, then the parameters would be $\lambda = 1/600$, $a=2$, $M=1\text{ week}=3600\cdot24\cdot7 = 604,800$, $b$ can be calculated using $\epsilon = \frac{a-1}{1+bM} < 0.01 \Leftarrow b > 0.000163690 \Leftarrow n < 10.1818$. So, for $n=10$, then $b=0.000166666$ and $\epsilon = 0.009823 < 0.01$, as expected. Finally, $\mathbf{E}[T] = 557.65$. In other words, during the next week, the average time between blocks will be 9 minutes and 17 seconds, instead of the normal 10 minutes. If the hash rate had suddenly doubled, the average time between blocks would be 5 minutes.
+For instance, if we would like to know the impact of smoothly double the hash rate in the next week, then the parameters would be $\lambda = 1/600$, $a=2$, $M=1\text{ week}=3600\cdot24\cdot7 = 604,800$, $b$ can be calculated using $\epsilon = \frac{a-1}{1+bM} < 0.01$, which yields $b > 0.000163690$ and $n < 10.1818$. So, for $n=10$, then $b=0.000166666$ and $\epsilon = 0.009823 < 0.01$, as expected. Finally, $\mathbf{E}[T] = 557.65$. In other words, during the next week, the average time between blocks will be 9 minutes and 17 seconds, instead of the normal 10 minutes. If the hash rate had suddenly doubled, the average time between blocks would be 5 minutes.
 
 %$$\mathbf{E}[T] = -\mathcal{L}\{f_T(t)\}|_{s=0} = \frac{b^n n! 600^{n+1}}{a^{n+1}} e^{\frac{a}{600b}} \text{, where $n = \frac{a-1}{600b}$}$$
 
@@ -242,9 +245,35 @@ $$
 \mathbf{E}(T) = \frac{\sqrt{2 \pi \eta}}{2a} \exp \left( \frac{b^2}{2a^2 \eta} \right) \left[1 - \erf\left(\frac{1}{a \sqrt{2 \eta}}\right)\right]
 $$
 
-The function $\mathbf{E}(T)|_{t_1}^{t_2}$ may be used to a piecewise linear analysis of any hash rate change. Let's analyze the hash doubling in one week. Then, $u(1 \text{week}) = u(604800) = 2$, thus $a^2 = \frac{1}{604800} \Rightarrow a = \frac{1}{120 \sqrt{42}}$. Let's sample the interval $[0, 1 \text{week}]$ every hour, i.e., ($t_0$, $t_1$, $t_2$, \dots, $t_168$), where $t_i = i \cdot 1 \text{hour} = i \cdot 3600$.
 
-For each point $t_i$, let $g_i(t) = [H(t-t_i) - H(t-604800)] u(t) + 2 H(t-604800)$, then $\mathbf{E}(T) = \mathbf{E}(T)|_{t_i}^{t_{i+1}} + 1 - e^{\frac{t}{\eta}}$. The result is presented in Figure .
+\subsection{Comparison of the models}
+
+In order to compare the hash rate change models, namely (i) suddenly change, (ii) smoothly change, and (iii) linear change, I have applied each of them to the same scenarios. In the first scenario, the hashrate will double in the next week, whereas, in the second scenario, it will halve in the next week.
+
+In both the smoothly change model and the linear change model, I could have calculated the average time between blocks during the whole week. It would not give us much information, because the time between models would be increasing (or reducing) more and more as the days goes by. And we are really interested in the average time between blocks throughout the days, and not the average of the whole week.
+
+Thus, I have analyzed a piecewise hash rate change, i.e., I have calculated the average time between blocks for each hour throughout the week. First, I split the whole week into $24 \cdot 7$ intervals, $(t_0, t_1, t_2, \dots, t_168)$, where $t_i = 3600i$. Then, I calculated the average for each interval $(t_k, t_{k+1})$. Let $H_k^0$ and $H_k^1$ be the initial and final hash rate of the $(t_k, t_{k+1})$ interval. So, I also ensured the continuity of the hash rate between consecutive intervals, i.e., $H_k^1 = H_{k+1}^0$.
+
+I compared both the smoothly change model and the linear change model with the suddenly change model. The difference between them is negligible. Let $\epsilon$ be the maximum absolute error between the models, than $\epsilon < 0.8$ and $\epsilon/H < 0.2\%$, for all intervals. The maximum absolute error between the linear and the suddenly change models can be seen in Figure \ref{fig:bitcoin-H-change-error}.
+
+\begin{figure}[!htb]
+\centering \includegraphics[width=0.7\textwidth]{./images01/H-max-abs-error.png}
+
+\caption{Maximum absolute error between the linear and the suddently change models. \label{fig:bitcoin-H-change-error}}
+\end{figure}
+
+Therefore, we may conclude that it is reasonable to approximate the average time between blocks using only the suddenly change model in each interval of one hour.
+
+The average time between blocks throughout the days can be seen in Figure \ref{fig:bitcoin-H-change}. It was calculated using the suddenly change model with the hash rate changing linearly during the week.
+
+\begin{figure}[!htb]
+\centering
+\subfloat[Doubling the hash rate]{\includegraphics[width=\textwidth]{./images01/H-double-week.pdf}}
+
+\subfloat[Halving the hash rate]{\includegraphics[width=\textwidth]{./images01/H-halves-week.pdf}}
+
+\caption{The average time between blocks when the hash rate changes over time. \label{fig:bitcoin-H-change}}
+\end{figure}
 
 %In order to obtain $\mathbf{E}(T)$, we will use the formula $\frac{d}{ds}T^*(s)|_{s=0} = -\mathbf{E}(T)$, where $T^*$ is the Laplace transform of the pdf of T.
 %
@@ -284,19 +313,17 @@ For each point $t_i$, let $g_i(t) = [H(t-t_i) - H(t-604800)] u(t) + 2 H(t-604800
 %
 %\textcolor{red}{I do not know how to interpret this.}
 
-\begin{figure}[ht]
-\centering\includegraphics[width=\textwidth]{./images01/bitcoin-H-increasing.png}
-\caption{$\mathbf{E}[T]$ when H increases linearly with $u(t) = 1 + at$.\label{fig-bitcoin-H-increase}}
-\end{figure}
+%\begin{figure}[ht]
+%\centering\includegraphics[width=\textwidth]{./images01/bitcoin-H-increasing.png}
+%\caption{$\mathbf{E}[T]$ when H increases linearly with $u(t) = 1 + at$.\label{fig-bitcoin-H-increase}}
+%\end{figure}
 
 
 \section{Attack in the Bitcoin network}
 % Ataque submarino
 % Probabilidade de "correr por fora"
 
-\citet{karame2012two}
-
-There are many possible ways to attack the Bitcoin (REF). In this section, we are interested in a particular attack: the double spending attack.
+There are many possible ways to attack the Bitcoin \citep{karame2012two, heilman2015eclipse, bahack2013theoretical, bonneau2016buy, neudecker2015simulation}. In this section, we are interested in a particular attack: the double spending attack.
 
 In the double spending attack, the attacker's send some funds to the victim, let's say a merchant. They wait for $k$ confirmations of the transaction, and the victim delivers the good or the service to the attacker. Then, the attacker mine enough blocks with a conflicting transaction, double spending the funds which was sent to the victim. If the attacker is successful, the original transaction will be \textit{erased} and the victim will be left with no funds at all. In order to be successful, the attacker must propagate more blocks than the network in the same period, propagating a chain longer than the main chain. Hence, we would like to understand what the odds are that the attacker will be successful. This attack was originally discussed by \citet{nakamoto2008bitcoin}.
 
@@ -446,7 +473,7 @@ For $k=6$, $p=0.7$, $\mathbf{P}(\text{successful attack}) = 0.15644958192000014$
 \caption{Probability of a successful attack according to the network's hash rate of the attacker ($\beta$).\label{fig-bitcoin-attack}}
 \end{figure}
 
-Analyze when $k=2$ (for instance, Binance requires only two confirmations for deposits with less than $1,000$).
+% TODO Analyze when $k=2$ (for instance, Binance requires only two confirmations for deposits with less than $1,000$).
 
 %The number of blocks found in a given time interval $\Delta t$ is given by the Poisson distribution. So, the number of blocks found by the attackers $N_{\text{attacker}}$ follows a Poisson distribution with parameter $\lambda_{\text{attacker}} \Delta t = \frac{\beta \Delta t}{600}$, and the number of blocks found by the network $N_{\text{network}}$ follows a Poission distribution with parameter $\lambda_{\text{network}} \Delta t = \frac{\gamma \Delta t}{600}$. We would like to calculate $\mathbf{P}(N_{\text{attackers}} - N_{\text{network}} \geq k)$.
 
@@ -458,15 +485,27 @@ Analyze when $k=2$ (for instance, Binance requires only two confirmations for de
 
 Let's say that when a new transaction is propagated it is enqueued in the unconfirmed transaction queue. Then, when a new block is found, some of these transactions in the queue are confirmed. We are interested in some measures of the queue, like the expected time to confirm a transaction and the queue's length.
 
-Let's assume that all transactions have exactly the same size $S$ and pay exactly the same fee. If the Bitcoin block's maximum size is $M$, there would be room for $s = \lfloor M/S \rfloor$ transactions in each block. Using the results from \citet{bailey1954queueing}, we have found that $\pi_n = \frac{z_s-1}{z_s^{n+1}}$ is the probability of having $n$ unconfirmed transactions in the pool subjected to $s > m$, where $m=\frac{\lambda_{\text{TX}}}{\lambda_{\text{blocks}}}$ and $z_s$ is the single root of the polynomial $z^s(1+m(1-z))-1$ with $|z_s|>1$. The average size of the unconfirmed transaction pool is $\mathbf{E}(\pi) = \frac{1}{z_s - 1}$. Thus, $s > m \Rightarrow \lambda_{\text{TX}} < s \lambda_{\text{blocks}}$. The probabilities form a simple geometric series, and so they are exponentially decreasing. We may interpret it as a stable system, i.e., the unconfirmed transactions pool size is finite. In the Bitcoin's network, $\lambda_{\text{blocks}} = 1/\eta$ and the average number of transactions per block is $s=2,250$, so, this solution is valid when $\lambda_{\text{TX}} < 2,250/600 = 3.75$. Hence, $3.75$ is the maximum number of new transactions per second that the Bitcoin's network may handle. When $\lambda_{\text{TX}} > 3.75$, the unconfirmed transaction pool starts to grow indefinitely.
+Let's assume that all transactions have exactly the same size $S$ and pay exactly the same fee. If the Bitcoin block's maximum size is $M$, there would be room for $s = \lfloor M/S \rfloor$ transactions in each block.
 
-The average waiting time of a transaction to be confirmed, when $m < s$, is $\mathbf{E}(w) = \frac{1}{\lambda_{\text{TX}} (z_s-1)}$.
+Using the results from \citet{bailey1954queueing}, we have found that $\pi_n = \frac{z_s-1}{z_s^{n+1}}$ is the probability of having $n$ unconfirmed transactions in the pool subjected to $s > m$, where $m=\frac{\lambda_{\text{TX}}}{\lambda_{\text{blocks}}}$ and $z_s$ is the single root of the polynomial $z^s(1+m(1-z))-1$ with $|z_s|>1$. In this case, the average size of the unconfirmed transaction pool is $\mathbf{E}(\pi) = \frac{1}{z_s - 1}$.
 
-When $m \ll s$, $z_s \rightarrow 1 + 1/m$. So, the average number of unconfirmed transactions is $\mathbf{E}(\pi) \rightarrow m$ and the average waiting time $\mathbf{E}(w) \rightarrow \frac{1}{\lambda_{\text{blocks}}} = \eta = 600 \text{ seconds}$. In the Bitcoin's network, $s \gg m \Rightarrow \lambda_{\text{TX}} \ll 3.75$.
+When $s > m$, the probabilities $\pi_n$ form a simple geometric series with common ratio smaller than one, which means the probabilities are exponentially decreasing. Since $\pi_n \rightarrow 0$ when $n \rightarrow \infty$, we may interpret it as a stable system, i.e., the unconfirmed transactions pool size is finite.
 
-When $\lambda_{\text{TX}} \rightarrow s$, $z_s \rightarrow 1$. So, $\mathbf{E}(\pi) \rightarrow +\infty$.
+When $s \le m$, the system is unstable, which means the unconfirmed transactions pool size keeps growing towards infinity. In this case, the system is not capable of processing the demand for a long period of time.
 
-Finally, we conclude that the Bitcoin's network capacity is $\lambda_{\text{blocks}} s = s/\eta = s/600$ transactions per second, where $s$ is the average number of transactions per block.
+Using the fact that $m=\frac{\lambda_{\text{TX}}}{\lambda_{\text{blocks}}}$ and $\lambda_{\text{blocks}} = 1/\eta$, the stability condition $s > m$ is reached when $\lambda_{\text{TX}} < s/\eta$.
+
+In the Bitcoin's network, the average number of transactions per block is $s=2,250$, so, the system is stable when $\lambda_{\text{TX}} < 2,250/600 = 3.75$ tx/s. Therefore, $3.75$ is the maximum number of new transactions per second that the Bitcoin's network may handle. When $\lambda_{\text{TX}} > 3.75$ tx/s, the unconfirmed transaction pool starts to grow indefinitely.
+
+When the system is stable, the average waiting time of a transaction to be confirmed is $\mathbf{E}(w) = \frac{1}{\lambda_{\text{TX}} (z_s-1)}$.
+
+$m \ll s$ yields $z_s \rightarrow 1 + 1/m$. Thus, the average number of unconfirmed transactions $\mathbf{E}(\pi) \rightarrow m$ and the average waiting time $\mathbf{E}(w) \rightarrow \frac{1}{\lambda_{\text{blocks}}} = \eta = 600 \text{ seconds}$. In the Bitcoin's network, $m \ll s$ is reached when $\lambda_{\text{TX}} \ll 3.75$ tx/s. In other words, when the number of new transactions per second is way smaller than 3.75 tx/s, the average waiting time of a transaction to be confirmed is 600 seconds, which means, on average, all transactions will be confirmed in the next block.
+
+But, $\lambda_{\text{TX}} \rightarrow s/\eta$ yields $z_s \rightarrow 1$. Hence, $\mathbf{E}(\pi) \rightarrow +\infty$, which means the system is going towards instability.
+
+Therefore, we conclude that the Bitcoin's network capacity is $\lambda_{\text{blocks}} = s/\eta = s/600$ transactions per second, where $s$ is the average number of transactions per block.
+
+For instance, in order to be a stable system and process 15 transactions per second, each block would have to confirm, on average, 9,000 transactions. Bitcoin's network is really far from this point.
 
 
 %\section{Fork analysis}
