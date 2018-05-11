@@ -342,11 +342,11 @@ Analyzing Figure \ref{fig:hathor-tips}, it is easy to notice that both the avera
 
 $$\frac{\lambda_\text{TX}}{\log(2)} \frac{2^{w_\text{TX}}}{H}$$
 
-In our simulation, $H = 100,000$ and $w_\text{TX} = 17$, so, the average number of tips should be equal to $1.89 \cdot \lambda_\text{TX}$. This model works best for low values of $\lambda_\text{TX}$, but diverges a little for higher values. For instance, if $\lambda_\text{TX} = 32$, the equation predicts $60.48$ tips on average yet we can check that the average is around $55$ tips.
+In our simulation, $H = 100,000$ and $w_\text{TX} = 17$, so, the average number of tips should be equal to $1.89 \cdot \lambda_\text{TX}$. This model works best for low values of $\lambda_\text{TX}$ and diverges a little for higher values. For instance, if $\lambda_\text{TX} = 32$ tx/s, this equation predicts $60.48$ tips on average yet we can check in the empirical result that the average is around $55$ tips.
 
-When $\lambda_\text{TX} \Rightarrow 0$, the number of tips goes towards one. The explanation is that there will be only one new transaction solving the proof-of-work per turn. So, new transactions will always confirm two tips, reducing the number of tips by one---each transaction confirms two tips and create one new one, hence the balance is -1. As it is impossible to have less to have less than one tip, it converges to one.
+When $\lambda_\text{TX} \rightarrow 0$, the number of tips goes towards one. The explanation is that there will be only one new transaction solving the proof-of-work per turn. So, new transactions will always confirm two tips, reducing the number of tips by one---each transaction confirms two tips and create one new one, hence the balance is -1. As it is impossible to have less to have less than one tip, it converges to one.
 
-When the number of tips is one, new transactions must chose a tip and another in-progress transaction. It should only happen in very low load scenarios, like during the launch of the network itself.
+When there is only one tip, new transactions must chose this only tip and another in-progress transaction. It should only happen in very low load scenarios, like during the launch of the network itself.
 
 \begin{figure}[!htb]
 \centering
@@ -360,13 +360,38 @@ When the number of tips is one, new transactions must chose a tip and another in
 
 \section{Network validated transactions}
 
+When all tips are confirming a transaction directly or indirectly, it is said that the transaction is network validated. It means that the whole network has checked the transactions and agrees that it is valid.
+
+When a transaction is network validated, all new transactions and blocks will confirm that transaction. Thus, its aggregated weight will increase as fast as possible.
+
+Let $\lambda_\text{TX}$ be the number of new transactions per second. If $\lambda_\text{TX}$ is constant, it means that, on average, there will be $\lambda_\text{TX} \Delta t$ new transactions after $\Delta t$ seconds (because the number of new transactions after $\Delta t$ seconds follows a Poisson distribution). All these transactions will confirm the network validated transactions. Hence, the number of transactions confirming a network validated transactions grows linearly. This result was also predicted by \citet[p.14]{tangle2016}.
+
+Suppose a transaction has just become network validated. Let $\text{acc}_0$ be its accumulated weight when it became network validated, $\eta$ be the average time between blocks, $w_\text{TX}$ be the average transaction weight, and $w_\text{BLK}$ be the average block weight. Then,
+
+\begin{align*}
+\text{acc}(\Delta t)
+&= \log_2 \left(2^{\text{acc}_0} + \lambda_\text{TX} \Delta t \cdot 2^{w_\text{TX}} + \left\lfloor \frac{\Delta t}{\eta} \right\rfloor 2^{w_\text{BLK}} \right) \\
+&= \text{acc}_0 + \log_2 \left(1 + \lambda_\text{TX} \Delta t \cdot 2^{w_\text{TX} - \text{acc}_0} + \left\lfloor \frac{\Delta t}{\eta} \right\rfloor 2^{w_\text{BLK} - \text{acc}_0} \right) \\
+&\simeq \text{acc}_0 + \log_2 \left(1 + \lambda_\text{TX} \Delta t \cdot 2^{w_\text{TX} - \text{acc}_0} + \frac{\Delta t}{\eta} 2^{w_\text{BLK} - \text{acc}_0} \right) \\
+&= \text{acc}_0 + \log_2 \left(1 + \lambda_\text{TX} \Delta t \cdot 2^{w_\text{TX} - \text{acc}_0} + \Delta t \cdot \eta^{-1} 2^{w_\text{BLK} - \text{acc}_0} \right) \\
+&= \text{acc}_0 + \log_2 \left[1 + \Delta t \cdot 2^{-\text{acc}_0} \cdot ( \lambda_\text{TX} 2^{w_\text{TX}} + \eta^{-1} 2^{w_\text{BLK}} ) \right]
+\end{align*}
+
+Therefore, after being network validated, the accumulated weight of a transaction grows logarithmically.
+
+In Figure \ref{fig:hathor-network-validated}, we can see how long it takes for a transaction to be network validated in different scenarios. The time is quite the same for $\lambda_\text{TX}$ below than one, but it changes for higher values.
+
+It is interesting to notice that there is a trade-off when $\lambda_\text{TX}$ increases. On the one hand, new transactions grow the DAG and accelerate the network validation, whereas, on the other hand, both the number of tips and the width of the swarm increases, dispercing this acceleration. The results show that, in fact, the time to be network validated increases with $\lambda_\text{TX}$.
+
+Anyway, for up to 32 tx/s (and $\eta=128$), it is reasonable to state that most transactions will be network validated after 35 seconds.
+
 \begin{figure}[!htb]
 \centering
-\subfloat[Only low load scenarios]{\includegraphics[width=\textwidth]{./images01/new2/nv_low.png}}
-
 \subfloat[All load scenarios]{\includegraphics[width=\textwidth]{./images01/new2/nv_all.png}}
 
-\caption{Histogram of the time it takes for a transaction to be network validated. \label{fig:hathor-tips}}
+\subfloat[Only low load scenarios]{\includegraphics[width=\textwidth]{./images01/new2/nv_low.png}}
+
+\caption{Histogram of the time it takes for a transaction to be network validated. A transaction is said to be network validated when all tips are confirming it directly or indirectly. \label{fig:hathor-network-validated}}
 \end{figure}
 
 

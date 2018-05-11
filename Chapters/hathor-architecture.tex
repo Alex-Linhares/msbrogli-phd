@@ -142,6 +142,18 @@ If the number of transactions per second increases, the process returns to the t
 
 $$\frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{\log(2)H}$$
 
+A simple idea to get to this equation is through flow analysis: In steady state, we may say that the number of new tips must equal the number of tips being confirmed in a given time window. Thus, in order to estimate the number of tips in the steady state, let's consider the process in which the rate of inward tips is $\lambda_\text{TX}$, whereas the rate of outward tips is $\rho$.
+
+Let $K$ be the number of tips at a given time. Thus, after $\Delta t$ seconds, $\Delta \text{tips} = \lambda_\text{TX} \Delta t - \rho K \Delta t$. In the steady state, $\Delta \text{tips} = 0$, hence $K = \frac{\lambda_\text{TX}}{\rho}$.
+
+The rate of outward tips is proportional to the rate in which devices solve the proof-of-work of transactions. Let $H$ be the devices' hash rate, then, $\rho = \alpha \cdot H \cdot 2^{-w_\text{TX}}$, where $\alpha$ is the coefficient of proportionality.
+
+Finally,
+
+$$K = \frac{\lambda_\text{TX}}{\alpha} \frac{2^{w_\text{TX}}}{H}$$
+
+If new transactions would always confirm two tips, then $\alpha$ would equal 2. But, it may confirm one or even zero tips because concurrent new transactions may confirm their tips first. Thus, $0 < \alpha \le 2$. According to the equation found in \citet{tangle2016}, $\alpha = \log(2) = 0.693147$.
+
 %$$\frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{2H} \le K \le \frac{\lambda_\text{TX} \cdot 2^{w_\text{TX}}}{H}$$
 
 %\section{Attacks \& Conflicting transactions}
