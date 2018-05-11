@@ -33,7 +33,7 @@ The weight of a transaction is calculated as $w = \log_2(k)$ where $k$ is the av
 
 The accumulated weight is the average number of hashes required to solve the proof-of-work of the transaction itself plus all the transactions which confirm it. Let $A$ be a transaction, its accumulated weight $w_A$ is calculated as $\log_2(2^{w_A} + \sum_{A \leadsto P} 2^{w_P})$.
 
-In Bitcoin, it is well-known that one should wait at least ``six confirmations'' before accepting a transaction. This Bitcoin's criteria is based on some math presented in Satoshi's seminal work \citep{nakamoto2008bitcoin}. Adopting six confirmations is the same as demanding from attackers a minimal effort of six times the network's hash rate to successfully double spend those tokens. Let $H$ be the total hash rate of the network. Then, as $\mathbf{E}(Y_6) = 60 \text{ minutes}$, it will be necessary to calculate, on average, $\mathbf{E}(Y_6) \cdot H = 60 \cdot 60 \cdot H$ hashes to solve the proof-of-work of 6 blocks.
+In Bitcoin, it is well-known that one should wait at least ``six confirmations'' before accepting a transaction. This Bitcoin's criteria is based on some results presented in Satoshi's seminal work \citep{nakamoto2008bitcoin} and derived here in more detail in Chapter \ref{ch:hathor-bitcoin-math}. Adopting six confirmations is the same as demanding from attackers a minimal effort of six times the network's hash rate to successfully double spend those tokens. Let $H$ be the total hash rate of the network. Then, as $\mathbf{E}(Y_6) = 60 \text{ minutes}$, it will be necessary to calculate, on average, $\mathbf{E}(Y_6) \cdot H = 60 \cdot 60 \cdot H$ hashes to solve the proof-of-work of 6 blocks.
 
 Therefore, in order to have the same level of security as Bitcoin, a transaction is said to be confirmed when its accumulated weight is greater than or equal to $\log_2(\mathbf{E}(Y_6) \cdot H) = \log_2(6 \cdot 128 \cdot H) = 7 + \log_2(6) + \log_2(H)$, where $H$ is calculated as the total hash rate of the miners plus the total hash rate of new transactions.
 
@@ -44,13 +44,13 @@ The hash function used for the proof-of-work (PoW) is the same as Bitcoin: \emph
 
 Let $X$ be the number of trials to solve the PoW and $T$ be the time between blocks. We already know that $X$ follows a geometric distribution with $p = \frac{A}{2^{256}}$, where $A$ is inversely proportional to the difficulty, i.e., the smaller the $A$, the higher the difficulty. We also know that $T$ follows an exponential distribution with $\lambda = \frac{1}{\eta}$, where $\eta$ is the average time between blocks. As proved before, $\eta p H = 1$, thus let's define $w = \log_2(\mathbf{E}(X)) = \log_2(1/p) = \log_2(\eta H) = \log_2(\eta) + \log_2(H)$.
 
-For the blocks, $\eta = 128$, thus, $\mathbf{E}(T) = 128 \text{ seconds}$, and $\mathbf{V}(T) = 16,384$. The symmetrical confidence interval with $\alpha = 10\%$ is $[6.56, 383.45]$, i.e., 90\% of the cases the distance between blocks will be between 6 seconds and just under 7 minutes.
+For the blocks, $\eta = 128$, thus, $\mathbf{E}(T) = \eta = 128 \text{ seconds}$, and $\mathbf{V}(T) = \eta^2 = 16,384$, where $T$ is the random variable of the time between two consecutive blocks. The symmetrical confidence interval of $T$ with $\alpha = 10\%$ is $[6.56, 383.45]$, i.e., 90\% of the cases the distance between blocks will be between 6 seconds and just under 7 minutes.
 
 Let $H$ be the hash rate of the miners, then, the weight of the blocks is calculated by
 
 $$w_\text{blocks} = \log_2(128) + \log_2(H) = 7 + \log_2(H)$$
 
-This weight will be updated every 2,016 blocks to take into consideration the change of $H$. First, $H$ will be estimated using the fact that $\mathbf{E}(Y_{2016}) = \frac{2016}{\lambda} = 2016 \eta = \frac{2016}{pH} = \frac{2016 \cdot 2^w}{H}$. Thus, $H = \frac{2016 \cdot 2^w}{\Delta t} \Rightarrow \log_2(H) = w + \log_2(2016) - \log_2(\Delta t)$, where $\Delta t$ is the time between the latest weight update and now. Finally,
+This weight will be updated every 675 blocks (which should happen every 24 hours) to take into consideration the change of $H$. First, $H$ will be estimated using the fact that $\mathbf{E}(Y_{2016}) = \frac{2016}{\lambda} = 2016 \eta = \frac{2016}{pH} = \frac{2016 \cdot 2^w}{H}$. Thus, $H = \frac{2016 \cdot 2^w}{\Delta t} \Rightarrow \log_2(H) = w + \log_2(2016) - \log_2(\Delta t)$, where $\Delta t$ is the time between the latest weight update and now. Finally,
 
 $$w_\text{new} = 7 + w_\text{old} + \log_2(2016) - \log_2(\Delta t)$$
 
