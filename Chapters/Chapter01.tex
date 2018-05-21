@@ -150,7 +150,7 @@ At the beginning, the digital signature algorithm relied on the Curl hash functi
 
 Iota's tokens are pre-mined, which means they have been issued in the genesis transaction and no more tokens will ever be issued. This means that there are no miners in Iota's network and only the users keep the network alive through their new transactions. This may lead to some incentive issues, because, on the one hand, users would need to keep transferring tokens to keep the network alive, while, on the other hand, users would need to believe that Iota is a good choice to keep using it. As users perception of quality is significantly affected by ``price and congestion'', the \emph{empty-restaurant syndrome} may keep new users away, making it even harder to reach the minimum required to work properly \citep{debo2010prices}. Even if the minimum has been reached, if the number of transactions per second plummet, the time to confirm the most recent transactions will increase significantly. This possibly poses a serious risk to the network stability and users' trustworthy.
 
-As there are no miners, there are also no fees, which is a major incentive to newcomers. Tokens may be freely transfered without any loses, even for tiny amounts, enabling micropayments. For example, online workers paid per hour may receive their payments every hour, reducing the default risk. This allows untrusted parties to work together reducing the risk for both. The contractor always wants to pay in the end, while the workers always wants to get paid in the beginning.
+As there are no miners, there are also no fees, which is a major incentive to newcomers. Tokens may be freely transferred without any losses, even for tiny amounts, enabling micropayments. For example, online workers paid per hour may receive their payments every hour, reducing the default risk. This allows untrusted parties to work together reducing the risk for both. The contractor always wants to pay in the end, while the workers always wants to get paid in the beginning.
 
 The Internet-Of-Things (IoT) technologies, which is a network of smart devices that are connected to the internet and exchange data, also benefits from not having fees. Imagine your refrigerator doing your groceries and automatically paying using your Iota tokens, or your electric car automatically paying for recharge. In both situations, transactions with no fees are interesting because these devices can freely make many microtransactions without any loss. For further information, see \cite{fleisch2010internet}.
 
@@ -219,7 +219,7 @@ When a new transaction is added to the Hathor's network, it uses a depth-first s
 
 %, (ii) to calculate its own score, and (iii) to generate a topological sort \citep{cormen2009introduction}. The topological sort is used to calculate the longest path from all other transactions to the new transaction, and this longest path is used to update the depth of the whole DAG. If the new transaction confirms only transactions which has already been confirmed, the depth update is skipped thanks to Theorem \ref{theorem-new-tx-not-tip}.
 
-Simulator's random variables simulator are all sampled from their distributions. The time between two transactions is sampled from an exponential distribution with $\lambda_\text{TX}$. The number of attempts to find a solution of the proof-of-work is sampled from a geometric distribution with $p=2^{w}$, where $w$ can be either $w_\text{TX}$ or $w_\text{block}$. The amount of time spent to solve the proof-of-work is calculated dividing the number of attempts by the hash rate of the device (which could be either a miner or an user). The time between blocks is just the amount of time spent to solve the proof-of-work with $w_\text{block}$.
+Simulator's random variables are all sampled from their distributions. The time between two transactions is sampled from an exponential distribution with $\lambda_\text{TX}$. The number of attempts to find a solution of the proof-of-work is sampled from a geometric distribution with $p=2^{w}$, where $w$ can be either $w_\text{TX}$ or $w_\text{block}$. The amount of time spent to solve the proof-of-work is calculated dividing the number of attempts by the hash rate of the device (which could be either a miner or an user). The time between blocks is just the amount of time spent to solve the proof-of-work with $w_\text{block}$.
 
 Transactions (and blocks) do not have inputs, outputs, and scripts. They have only pointers to other transactions, which form the DAG. They also store their weight, accumulated weight, timestamp, and some statistics used for reports.
 
@@ -238,7 +238,7 @@ To find the network validated transactions, I run a breadth-first search (bfs) f
 
 Hathor's architecture lies between Iota and Bitcoin's architectures. It is similar to Bitcoin's architecture when the number of transactions per second is low, while it is similar to Iota's architecture when the number of transactions per second is high. There is no ``switching'' between Bitcoin and Iota. It just behaves like one or another according to the network. In order to check this statement, I have performed some simulations.
 
-First, two simulations in the extreme cases: (i) no miners, (ii) no transactions. The first should have precisely the same behavior as Bitcoin's blocks with one block after the other forming a long chain. The latter should have a similar behavior as Iota's, forming a Direct Acyclic Graph (DAG) with new transactions confirming previous ones. We can see in Figure \ref{fig:hathor-similarities} that both cases seem to be correct.
+First, two simulations in the extreme cases: (i) no transactions, (ii) no miners. The first should have precisely the same behavior as Bitcoin's blocks with one block after the other forming a long chain. The latter should have a similar behavior as Iota's, forming a Direct Acyclic Graph (DAG) with new transactions confirming previous ones. We can see in Figure \ref{fig:hathor-similarities} that both cases seem to be correct.
 
 Next, I have run a more realistic simulation, with both miners and transactions. As we can see in Figure \ref{fig:hathor-dag}, Hathor's structure is a mix of Iota and Bitcoin's structure. The transactions are forming a DAG while, in parallel, the blocks are forming a chain inside the DAG.
 
@@ -345,7 +345,7 @@ $$\frac{\lambda_\text{TX}}{\log(2)} \frac{2^{w_\text{TX}}}{H}$$
 
 In our simulation, $H = 100,000$ and $w_\text{TX} = 17$, so, the average number of tips should be equal to $1.89 \cdot \lambda_\text{TX}$. This model works best for low values of $\lambda_\text{TX}$ and diverges a little for higher values. For instance, if $\lambda_\text{TX} = 32$ tx/s, this equation predicts $60.48$ tips on average yet we can check in the empirical result that the average is around $55$ tips.
 
-When $\lambda_\text{TX} \rightarrow 0$, the number of tips goes towards one. The explanation is that there will be only one new transaction solving the proof-of-work per turn. So, new transactions will always confirm two tips, reducing the number of tips by one---each transaction confirms two tips and create one new one, hence the balance is -1. As it is impossible to have less to have less than one tip, it converges to one.
+When $\lambda_\text{TX} \rightarrow 0$, the number of tips goes towards one. The explanation is that there will be only one new transaction solving the proof-of-work per turn. So, new transactions will always confirm two tips, reducing the number of tips by one---each transaction confirms two tips and create one new one, hence the balance is -1. As it is impossible to have less than one tip, it converges to one.
 
 When there is only one tip, new transactions must chose this only tip and another in-progress transaction. It should only happen in very low load scenarios, like during the launch of the network itself.
 
@@ -380,9 +380,9 @@ Suppose a transaction has just become network validated. Let $\text{acc}_0$ be i
 
 Therefore, after being network validated, the accumulated weight of a transaction grows logarithmically.
 
-In Figure \ref{fig:hathor-network-validated}, we can see how long it takes for a transaction to be network validated in different scenarios. The time is quite the same for $\lambda_\text{TX}$ below than one, but it changes for higher values.
+In Figure \ref{fig:hathor-network-validated}, we can see how long it takes for a transaction to be network validated in different scenarios. The time is quite the same for $\lambda_\text{TX}$ less than one, but it changes for higher values.
 
-It is interesting to notice that there is a trade-off when $\lambda_\text{TX}$ increases. On the one hand, new transactions grow the DAG and accelerate the network validation, whereas, on the other hand, both the number of tips and the width of the swarm increases, dispercing this acceleration. The results show that, in fact, the time to be network validated increases with $\lambda_\text{TX}$.
+It is interesting to notice that there is a trade-off when $\lambda_\text{TX}$ increases. On the one hand, new transactions grow the DAG and accelerate the network validation, whereas, on the other hand, both the number of tips and the width of the swarm increases, dispersing this acceleration. The results show that, in fact, the time to be network validated increases with $\lambda_\text{TX}$.
 
 Anyway, for up to 32 tx/s (and $\eta=128$), it is reasonable to state that most transactions will be network validated after 35 seconds.
 
