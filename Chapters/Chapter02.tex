@@ -112,7 +112,7 @@ The closest implementations to ours, in philosophy at least, is the one in `the 
 
 Note that all these criticisms apply to the implementations in both the `common sense toolkit' and the `C Binary Vector Symbols' \citep{berchtold_processing_2005, noauthor_cstk:_nodate, emruli_vector_2015}.  While these implementations have around 150 lines of C++; at last count, the \emph{documentation of our implementation} had \emph{over 100 pages} \citep{linhares_sparse_2018}: they have aimed at running code, and we aim at improving a community and industry standard.
 
-There is obviously a demand for use of SDM; but each group has been tied to their own \emph{ad-hoc} needs, and there has not been the emergence of a community centered on a tool. It is our belief that a tool such as standard open-source framework could bring orders of magnitude more researchers and attention if they were able to use the model, at zero cost, with an easy to use high-level language such as Python, in an intuitive platform such as Juypyter notebooks. Neuroscientists interested in long-term memory storage should not have to worry about high-bandwidth vector parallel computation.  This new tool would provide a ready to use system in which experiments could be executed almost as soon as designed --- and provide the needed replication of studies \citep{shen2014interactive}.
+There is obviously a demand for use of SDM; but each group has been tied to their own \emph{ad-hoc} needs, and there has not been the emergence of a community centered on a tool. It is our belief that a tool such as standard open-source framework could bring orders of magnitude more researchers and attention if they were able to use the model, at zero cost, with an easy to use high-level language such as Python, in an intuitive platform such as Jupyter notebooks. Neuroscientists interested in long-term memory storage should not have to worry about high-bandwidth vector parallel computation.  This new tool would provide a ready to use system in which experiments could be executed almost as soon as designed --- and provide the needed replication of studies \citep{shen2014interactive}.
 
 The main contribution of this work is a reference implementation which yields (i) orders of magnitude gains in performance, (ii) has several backends\footnote{CPUs, GPUs, FPGAs} and operations, (iii) is fully validated against the mathematical model, (iv) is cross-platform\footnote{Unix, Linux, MacOs, Windows, Amazon Web Services, etc.}, and (v) is easily extensible to test new research ideas --- and to let others replicate the studies.
 
@@ -397,6 +397,8 @@ The initial results of this \emph{Shannon write} operation can be seen in Figure
 
 
 \chapter{Conclusion}
+
+% Jamil: De maneira geral, achei muito ensaístico e pouco "paper". Me parece que vai precisar de retrabalho para submissão se encarar um reviewer mais tradicional. Eu gostei, no entanto.
 
 \begin{flushright}{\slshape
 
