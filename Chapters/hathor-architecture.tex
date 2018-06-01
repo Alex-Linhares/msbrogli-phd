@@ -1,6 +1,6 @@
 % !TEX root = ../partial-blockchain.tex
 
-This work introduces the Hathor's architecture, which lies between Bitcoin's and Iota's and may be a solution to scaling, centralization, and spam issues.
+This work introduces Hathor's architecture, which lies between Bitcoin's and Iota's and may be a solution to scaling, centralization, and spam issues.
 
 Like Iota, new transactions confirm previous ones, forming a Directed Acyclic Graph (DAG). For this, each transaction has its own proof-of-work which is solved by the issuer before propagating the transactions in the network. Like Bitcoin, miners find new ``blocks'' every 10 minutes in which they collect the fees and newly generated tokens. Each transaction has an ``accumulated weight'' which express the required effort to break the transaction, similar to Bitcoin's number of confirmations.
 
@@ -108,7 +108,7 @@ In case of transaction conflict, in which two transactions try to spend the same
 
 \section{Orphan blocks}
 
-Different from Bitcoin, there is no orphan blocks in Hathor. Unless a block confirms either directly or indirectly an invalid transaction, every block is valid. There is no need to left a block behind since its proof-of-work is increasing transactions' accumulated weight.
+Different from Bitcoin, there is no orphan blocks in Hathor. Unless a block confirms either directly or indirectly an invalid transaction, every block is valid. There is no need to leave a block behind since its proof-of-work is increasing transactions' accumulated weight.
 
 If two blocks are trying to collect fees from the same transactions, the one with higher timestamp will be discarded.
 
