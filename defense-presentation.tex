@@ -4,6 +4,9 @@
     \usepackage{inputenc}
 
 \usepackage{graphicx}
+\usepackage{subfig}
+\usepackage[export]{adjustbox}
+
 
 \usetheme{Boadilla}
 
@@ -31,13 +34,6 @@ The corporate biography of Tonny Martins, President of IBM Brasil, mentions his 
 Professor Andrew Ng tells students at Stanford's Graduate School of Business that ``AI is the new electricity'', as his hyperbolic way to emphasize the potential transformational power of the technology.
 \end{frame}
 
-\begin{frame}
-\frametitle{Introduction}
-
-Both iPhone (and competitors) and Bitcoin (and competitors) have created giant platforms on top of which immense wealth has been created.
-
-\end{frame}
-
 
 \begin{frame}
 \frametitle{Outline}
@@ -53,38 +49,6 @@ Both iPhone (and competitors) and Bitcoin (and competitors) have created giant p
 \begin{frame}
 \frametitle{Hathor: An alternative towards a scalable cryptocurrency}
 
-The problems: lack of scalability, centralization, and spam attacks.
-
-
-
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Cryptocurrency issues}
-
-\begin{figure}
-\includegraphics[width=\textwidth]{./images-defense/bitcoin-congestion.png}
-\end{figure}
-
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Contributions}
-
-The main contributions are:
-\begin{enumerate}[i]
-\item Mathematical analysis of Bitcoin
-\item Proposal of Hathor
-\item Analysis of Hathor
-\end{enumerate}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Bitcoin}
-
 The primary problem for creating digital money is how to prevent double spending.
 
 As the money is digital, and copies can be made \emph{ad nauseam}, what can prevent counterfeiting? What would prevent users from sending copies of the same money to two (or more) people?
@@ -95,7 +59,72 @@ The no central point of trust and predictable money supply together with a cleve
 
 
 \begin{frame}
-\frametitle{Blockchain (1)}
+\frametitle{Bitcoin}
+
+\begin{figure}
+\includegraphics[width=0.9\textwidth]{./images-defense/bitcoin-blockchain.png}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Problems of Bitcoin}
+
+Lack of scalability (up to 3.7 tx/s for 1MB per block)? Spam attacks?
+
+\begin{figure}
+\includegraphics[width=0.8\textwidth]{./images-defense/bitcoin-congestion.png}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Iota}
+
+\begin{figure}
+\centering\includegraphics[width=0.8\textwidth]{./images01/fig-tangle-example.pdf}
+\caption{White nodes represent transactions that have been confirmed at least once. Green circles represent unconfirmed transactions (tips). Gray and dashed nodes are the transactions currently solving the proof-of-work in order to be propagated.\label{fig-tangle-example}}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Problems of Iota}
+
+Iota does not work in low load scenarios. It uses a central coordinator to prevent attacks.
+
+They does not know what is the minimum number of transactions per seconds so that they can disable the central coordinator.
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Contributions}
+
+The main contributions are:
+\begin{enumerate}[i]
+\item Mathematical analysis of Bitcoin
+\item Proposal of Hathor, \small{an architecture which seems to work in both low and high load scenarios.}
+\item Analysis of Hathor
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Hathor's architecture}
+
+\begin{figure}
+\centering\includegraphics[width=0.45\textwidth]{./images01/sim/hathor-2.pdf}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Mining the next block}
 
 Each attempt to find a new block is equivalent to a random sample from a discrete uniform distribution in the interval $[0, 2^{256}-1]$. A new block is only found when the sample is less than a given number $A$.
 
@@ -108,15 +137,7 @@ As $H$ changes over time, the given number $A$ is adjusted so that the network w
 
 
 \begin{frame}
-\frametitle{Bitcoin's hashpower history}
-\begin{figure}
-\includegraphics[width=\textwidth]{./images-defense/bitcoin-H-history.png}
-\end{figure}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Blockchain (2)}
+\frametitle{Mining the next block (2)}
 
 \begin{theorem}
     For $H$ large enough, the time between blocks may be approximated by an exponential distribution, i.e., $P(T \le t) = 1 - e^{t/\eta}$.
@@ -134,7 +155,15 @@ For comparison, Bitcoin's hashpower is around 35,000,000 TH/s = 35,000,000,000,0
 
 
 \begin{frame}
-\frametitle{Blockchain (3)}
+\frametitle{Bitcoin's hashpower history}
+\begin{figure}
+\includegraphics[width=\textwidth]{./images-defense/bitcoin-H-history.png}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Mining consecutive blocks}
 
 Let $Y_n = \sum_{i=1}^n T_i$ be the total time to find $n$ consecutive blocks. From probability literature, $Y_n$ follows an Erlang distribution.
 
@@ -142,6 +171,20 @@ Let $Y_n = \sum_{i=1}^n T_i$ be the total time to find $n$ consecutive blocks. F
 \includegraphics[width=0.7\textwidth]{./images01/time-6-blocks.pdf}
 \caption{PDF of $Y_6$, i.e., probability of finding 6 consecutive blocks.}
 \end{figure}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{The double-spending attack}
+
+In the double spending attack, the attacker's send some funds to the victim, let's say a merchant.
+
+They wait for $k$ confirmations of the transaction, and the victim delivers the good or the service to the attacker.
+
+Then, the attacker mine enough blocks with a conflicting transaction, double spending the funds which was sent to the victim.
+
+If the attacker is successful, the original transaction will be \textit{erased} and the victim will be left with no funds at all.
 
 \end{frame}
 
@@ -176,19 +219,275 @@ For $k=6$, $p=0.7$, $\mathbf{P}(\text{successful attack}) = 0.15644958192000014$
 \end{frame}
 
 
+\begin{frame}
+\frametitle{Analysis of Hathor: boundary cases}
+
+\begin{figure}
+\centering
+\subfloat[No miners]{\includegraphics[width=0.5\textwidth]{./images01/sim/no_miners.pdf}}
+\subfloat[No transactions]{\includegraphics[width=0.5\textwidth]{./images01/sim/only_miners.pdf}}
+\caption{Visualization of a Hathor's graph in two particular cases: (a) no miners, (b) no transactions.}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Analysis of Hathor: confirmation time}
+\begin{figure}
+\centering
+\subfloat[Low load]{\includegraphics[width=0.5\textwidth]{./images01/sim/tct-low-load.png}}
+\subfloat[Mid load]{\includegraphics[width=0.5\textwidth]{./images01/sim/tct-mid-load.png}}
+
+\caption{Confirmation time in two scenarios: (a) low load, (b) mid load. The red curve is the distribuion of the time to find six blocks in Bitcoin (which follows an Erlang distribution).}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Analysis of Hathor: confirmation time (2)}
+\begin{figure}
+\includegraphics[width=0.75\textwidth]{./images01/sim/tct-many-loads-2.png}
+
+\caption{Confirmation time in many scenarios, moving from a low load ($\lambda_\text{TX} = 0.015625$) to a high load ($\lambda_\text{TX} = 2$). \label{fig:hathor-tct-many}}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Analysis of Hathor: load changing over time}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{./images01/new/many-loadings.pdf}
+\caption{DAG visualization when the loading is changed over time.}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Analysis of Hathor: number of unconfirmed transactions}
+\begin{figure}
+\includegraphics[width=0.7\textwidth]{./images01/new2/tips_aggregate.png}
+\caption{Histogram of the number of tips for different load scenarios.}
+\end{figure}
+\end{frame}
+
 
 \part{An invitation to Sparse Distributed Memory: from the theoretical model to the system dynamics}
 \begin{frame}
 \frametitle{An invitation to Sparse Distributed Memory: from the theoretical model to the system dynamics}
 
+SDM is a mathematical model of long-term memory that has a number of neuroscientific and psychologically plausible dynamics.
+
+This model is used in all sort of applications due to its ability to closely reflect the human capacity to remember past experiences.
+
+This flexibility into mapping one situation in another is an essential human feature which is hard to replicate in computers.
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{SDM: How does it work?}
+
+\begin{figure}
+\centering\includegraphics[scale=0.75]{./images02/p_circle_r.pdf}
+\caption{Activated addresses inside access radius $r$ around the center address.}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{SDM: How does it work?}
+\begin{figure}
+\centering\includegraphics[scale=0.75]{./images02/p1_inter_p2.pdf}
+\caption{Shared addresses between the target datum $\eta$ and the cue $\eta_{x}$.}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{SDM: How does it work?}
+\begin{figure}
+\centering\includegraphics[scale=0.75]{./images02/p1_p2_iter_read.pdf}
+\caption{In this example, four iterative readings were required to converge from $\eta_{x}$ to $\eta$.}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{SDM: How does it work?}
+\begin{figure}
+\centering\includegraphics[scale=0.75]{./images02/p1_after_write.pdf}
+\caption{Hard-locations pointing, approximately, to the target bitstring.}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Contributions}
+
 The main contributions are:
 \begin{enumerate}[i]
-\item A validated, open-source, cross-platform framework
+\item A validated, open-source, cross-platform framework in which researchers are able to replicate someone else's results
 \item Identification and modeling of the autocorrelation in the counters
+\item Loss of neurons resilience
 \item Noise filtering application
 \item Classification application
 \item Reinforcement learning application
 \end{enumerate}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Loss of neurons resilience}
+\begin{figure}
+\centering\includegraphics[width=0.7\textwidth]{./images02/new-images/sdm-neuron-death-500k.png}
+\caption{This graph shows the SDM's robustness against loss of neurons in a SDM with $n=1,000$ and $H=1,000,000$. Even when 50\% of neurons are dead, SDM recall is barely affected, which is an impressive result and matches with some clinical results of children submitted to hemispherectomy.
+\label{fig:sdm-neuron-death-500k}}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Loss of neurons resilience}
+\begin{figure}
+\centering\includegraphics[width=0.7\textwidth]{./images02/new-images/sdm-neuron-death-1m.png}
+\caption{This graph shows the SDM's robustness against loss of neurons in a SDM with $n=1,000$ and $H=1,000,000$. The more neurons are lost, the smaller the critical distance, i.e., the worse the SDM recall.
+\label{fig:sdm-neuron-death-1m}}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Critical distance \& Autocorrelation}
+\begin{figure}
+\subfloat{\includegraphics[width=0.46\textwidth,valign=t]{./images02/kanerva-table-7-2-original.png}}
+\subfloat{\includegraphics[width=0.54\textwidth,valign=t]{./images02/sdm-10000w-table-7-2-6-samples.png}}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Critical distance \& Autocorrelation}
+\begin{theorem}
+\emph{Each dimension has a small pull bias, which can be measured by}
+$P(x_i = y_i | d(x, y) \le r) = \dfrac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}^{r} \binom{n}{k}}$
+\end{theorem}
+
+\begin{theorem}
+The autocorrelation vanishes when $n \rightarrow \infty$, i.e., $\lim_{n \rightarrow \infty} P(x_i = y_i | d(x, y) \le r) = 1/2$.
+\end{theorem}
+
+When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = 0.552905498137$.
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Critical distance \& Autocorrelation}
+\begin{figure}
+\includegraphics[width=0.75\textwidth]{./images02/autocorrelation/read-random-bs.png}
+\caption{The histogram was obtained through simulation. The red curve is the theoretical normal distribution.}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Critical distance \& Autocorrelation}
+The analytical model which does not consider autocorrelation predicts a critical distance of 209 bits.
+
+\begin{figure}
+\centering\includegraphics[width=0.5\textwidth]{./images02/figure-73-eq-zoom.png}
+\caption{Zoom-in around $d=209$.}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Classification application: training}
+\begin{figure}
+\centering\includegraphics[width=0.6\textwidth]{./images02/classification/groups.png}
+\caption{One noisy image for each of the 62 classification groups.
+\label{fig-classification-groups}}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Classification application: confusing cases}
+\begin{figure}
+  \centering
+  \subfloat[``i'', ``l'', and ``r'' with 20\% noise.]{\includegraphics[width=\textwidth]{./images02/classification/ilr-high-noise.png}}
+
+  \subfloat[``i'', ``l'', and ``r'' with 5\% noise.]{\includegraphics[width=\textwidth]{./images02/classification/ilr-low-noise.png}}
+
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Classification application: confusing cases}
+\begin{figure}
+  \centering
+  \subfloat[``c'', ``d'', and ``o'' with 20\% noise.]{\includegraphics[width=\textwidth]{./images02/classification/cdo-high-noise.png}}
+
+  \subfloat[``c'', ``d'', and ``o'' with 5\% noise.]{\includegraphics[width=\textwidth]{./images02/classification/cdo-low-noise.png}}
+
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Classification application: confusing cases}
+\begin{figure}
+  \centering
+  \subfloat[``G'', ``O'', and ``Q'' with 20\% noise.]{\includegraphics[width=\textwidth]{./images02/classification/GOQ-high-noise.png}}
+
+  \subfloat[``G'', ``O'', and ``Q'' with 5\% noise.]{\includegraphics[width=\textwidth]{./images02/classification/GOQ-low-noise.png}}
+
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Classification application: results}
+Generally speaking, the classification algorithm made some mistakes in the 20\% noise scenario, and just a few mistakes in the 5\% noise scenario.
+
+When the training set has 1,000 samples instead of 100 samples of each letter, the algorithm correctly classify almost all letters in both 20\% and 5\% noise scenarios, except for letters ``e'' and ``o''.
+
+It could not differentiate letters ``e'' and ``o'' because their differences are smaller than the critical distance. It would have to be trained more and more times in order to learn to differentiate them (because the critical distance decreases when more items are written into the memory).
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Noise filtering: results}
+\begin{figure}
+\captionsetup[subfigure]{labelformat=empty}
+\subfloat[]{\includegraphics[width=0.5\textwidth]{./images02/filter/labelB-20noise.png}}
+
+\subfloat[]{\includegraphics[width=0.5\textwidth]{./images02/filter/labelC-20noise.png}}
+
+\subfloat[]{\includegraphics[width=0.5\textwidth]{./images02/filter/labelD-20noise.png}}
+
+\subfloat[]{\includegraphics[width=0.5\textwidth]{./images02/filter/label8-20noise.png}}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Reinforcement learning: TicTacToe}
+\begin{figure}
+\centering\includegraphics[width=\textwidth]{./images-defense/ttt-example.png}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Reinforcement learning: Results}
+\begin{figure}
+\includegraphics[width=0.7\textwidth]{./images02/ttt/results-smart.png}
+\caption{Results playing against the smart player. Each cycle was made of 100 games for training, and then 100 games for measuring statistics.
+\label{fig:ttt-results-smart}
+}
+\end{figure}
 \end{frame}
 
 
@@ -203,10 +502,5 @@ The main contributions are:
 \item The possibility of reducing the number of active users (instead of only increase)
 \end{enumerate}
 \end{frame}
-
-\begin{frame}
-\frametitle{Conclusion}
-\end{frame}
-
 
 \end{document}
