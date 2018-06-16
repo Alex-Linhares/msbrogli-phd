@@ -9,6 +9,7 @@
 
 
 \usetheme{Boadilla}
+%\usetheme{Berlin}
 
 \title{Essays in Computational Management Science}
 \author{Marcelo Salhab Brogliato}
@@ -24,15 +25,15 @@
 \end{frame}
 
 
-\begin{frame}
-\frametitle{Introduction}
-
-Modern management and high technology interact in multiple, profound, ways. A whole new ecosystem seems to have emerged within computing and business.
-
-The corporate biography of Tonny Martins, President of IBM Brasil, mentions his successes with blockchain, AI, and cognitive technology \emph{as an executive}, not as a research scientist or specialized engineer.
-
-Professor Andrew Ng tells students at Stanford's Graduate School of Business that ``AI is the new electricity'', as his hyperbolic way to emphasize the potential transformational power of the technology.
-\end{frame}
+%\begin{frame}
+%\frametitle{Introduction}
+%
+%Modern management and high technology interact in multiple, profound, ways. A whole new ecosystem seems to have emerged within computing and business.
+%
+%The corporate biography of Tonny Martins, President of IBM Brasil, mentions his successes with blockchain, AI, and cognitive technology \emph{as an executive}, not as a research scientist or specialized engineer.
+%
+%Professor Andrew Ng tells students at Stanford's Graduate School of Business that ``AI is the new electricity'', as his hyperbolic way to emphasize the potential transformational power of the technology.
+%\end{frame}
 
 
 \begin{frame}
@@ -45,21 +46,26 @@ Professor Andrew Ng tells students at Stanford's Graduate School of Business tha
 \end{frame}
 
 
-\part{Hathor: An alternative towards a scalable cryptocurrency}
+\section{Hathor: An alternative towards a scalable cryptocurrency}
+\begin{frame}
+\sectionpage
+\end{frame}
+
+
 \begin{frame}
 \frametitle{Hathor: An alternative towards a scalable cryptocurrency}
 
-The primary problem for creating digital money is how to prevent double spending.
+The primary problem for creating digital money is \textbf{how to prevent double spending}.
 
 As the money is digital, and copies can be made \emph{ad nauseam}, what can prevent counterfeiting? What would prevent users from sending copies of the same money to two (or more) people?
 
-The no central point of trust and predictable money supply together with a clever solution to the double-spending problem is what separates Bitcoin from the 30-year literature on e-cash.
+The \textbf{no central point of trust} and \textbf{predictable money supply} together with a \textbf{clever solution to the double-spending problem} is what separates Bitcoin from the 30-year literature on e-cash.
 
 \end{frame}
 
 
 \begin{frame}
-\frametitle{Bitcoin}
+\frametitle{Bitcoin \& Blockchain}
 
 \begin{figure}
 \includegraphics[width=0.9\textwidth]{./images-defense/bitcoin-blockchain.png}
@@ -71,7 +77,7 @@ The no central point of trust and predictable money supply together with a cleve
 \begin{frame}
 \frametitle{Problems of Bitcoin}
 
-Lack of scalability (up to 3.7 tx/s for 1MB per block)? Spam attacks?
+Lack of scalability (up to 3.75 tx/s for 1MB per block)? Spam attacks?
 
 \begin{figure}
 \includegraphics[width=0.8\textwidth]{./images-defense/bitcoin-congestion.png}
@@ -81,7 +87,7 @@ Lack of scalability (up to 3.7 tx/s for 1MB per block)? Spam attacks?
 
 
 \begin{frame}
-\frametitle{Iota}
+\frametitle{Iota \& Tangle}
 
 \begin{figure}
 \centering\includegraphics[width=0.8\textwidth]{./images01/fig-tangle-example.pdf}
@@ -94,22 +100,10 @@ Lack of scalability (up to 3.7 tx/s for 1MB per block)? Spam attacks?
 \begin{frame}
 \frametitle{Problems of Iota}
 
-Iota does not work in low load scenarios. It uses a central coordinator to prevent attacks.
+\textbf{Iota is not safe in low load scenarios.} It must use a central coordinator to prevent attacks.
 
-They does not know what is the minimum number of transactions per seconds so that they can disable the central coordinator.
+They plan to turn off the central coordinator, but \textbf{they do not know} what is the minimum number of transactions per seconds so that it is safe to do it.
 
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Contributions}
-
-The main contributions are:
-\begin{enumerate}[i]
-\item Mathematical analysis of Bitcoin
-\item Proposal of Hathor, \small{an architecture which seems to work in both low and high load scenarios.}
-\item Analysis of Hathor
-\end{enumerate}
 \end{frame}
 
 
@@ -120,6 +114,18 @@ The main contributions are:
 \centering\includegraphics[width=0.45\textwidth]{./images01/sim/hathor-2.pdf}
 \end{figure}
 
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Contributions}
+
+The main contributions are:
+\begin{enumerate}[i]
+\item Mathematical analysis of Bitcoin
+\item Proposal of Hathor, \emph{a novel architecture} which seems to work in both low and high load scenarios.
+\item Analysis of Hathor
+\end{enumerate}
 \end{frame}
 
 
@@ -178,13 +184,13 @@ Let $Y_n = \sum_{i=1}^n T_i$ be the total time to find $n$ consecutive blocks. F
 \begin{frame}
 \frametitle{The double-spending attack}
 
-In the double spending attack, the attacker's send some funds to the victim, let's say a merchant.
+In the double spending attack, \textbf{the attacker's send some funds to the victim}, let's say a merchant.
 
-They wait for $k$ confirmations of the transaction, and the victim delivers the good or the service to the attacker.
+They wait for $k$ confirmations of the transaction, and \textbf{the victim delivers the good or the service to the attacker}.
 
-Then, the attacker mine enough blocks with a conflicting transaction, double spending the funds which was sent to the victim.
+Then, the attacker mine enough blocks \textbf{with a conflicting transaction}, double spending the funds which was sent to the victim.
 
-If the attacker is successful, the original transaction will be \textit{erased} and the victim will be left with no funds at all.
+If the attacker is successful, the original transaction will be \textit{erased} and \textbf{the victim will be left with no funds at all}.
 
 \end{frame}
 
@@ -220,7 +226,17 @@ For $k=6$, $p=0.7$, $\mathbf{P}(\text{successful attack}) = 0.15644958192000014$
 
 
 \begin{frame}
-\frametitle{Analysis of Hathor: boundary cases}
+\frametitle{Analysis of Hathor}
+
+\begin{figure}
+\centering\includegraphics[width=0.45\textwidth]{./images01/sim/hathor-2.pdf}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Analysis of Hathor: Boundary cases}
 
 \begin{figure}
 \centering
@@ -233,7 +249,7 @@ For $k=6$, $p=0.7$, $\mathbf{P}(\text{successful attack}) = 0.15644958192000014$
 
 
 \begin{frame}
-\frametitle{Analysis of Hathor: confirmation time}
+\frametitle{Analysis of Hathor: Confirmation time}
 \begin{figure}
 \centering
 \subfloat[Low load]{\includegraphics[width=0.5\textwidth]{./images01/sim/tct-low-load.png}}
@@ -245,7 +261,7 @@ For $k=6$, $p=0.7$, $\mathbf{P}(\text{successful attack}) = 0.15644958192000014$
 
 
 \begin{frame}
-\frametitle{Analysis of Hathor: confirmation time (2)}
+\frametitle{Analysis of Hathor: Confirmation time (2)}
 \begin{figure}
 \includegraphics[width=0.75\textwidth]{./images01/sim/tct-many-loads-2.png}
 
@@ -255,7 +271,7 @@ For $k=6$, $p=0.7$, $\mathbf{P}(\text{successful attack}) = 0.15644958192000014$
 
 
 \begin{frame}
-\frametitle{Analysis of Hathor: load changing over time}
+\frametitle{Analysis of Hathor: Load changing over time}
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{./images01/new/many-loadings.pdf}
@@ -265,7 +281,7 @@ For $k=6$, $p=0.7$, $\mathbf{P}(\text{successful attack}) = 0.15644958192000014$
 
 
 \begin{frame}
-\frametitle{Analysis of Hathor: number of unconfirmed transactions}
+\frametitle{Analysis of Hathor: Number of unconfirmed transactions}
 \begin{figure}
 \includegraphics[width=0.7\textwidth]{./images01/new2/tips_aggregate.png}
 \caption{Histogram of the number of tips for different load scenarios.}
@@ -273,15 +289,25 @@ For $k=6$, $p=0.7$, $\mathbf{P}(\text{successful attack}) = 0.15644958192000014$
 \end{frame}
 
 
-\part{An invitation to Sparse Distributed Memory: from the theoretical model to the system dynamics}
+%=============================================
+%=============================================
+%=============================================
+
+
+\section{An invitation to Sparse Distributed Memory: from the theoretical model to the system dynamics}
+\begin{frame}
+\sectionpage
+\end{frame}
+
+
 \begin{frame}
 \frametitle{An invitation to Sparse Distributed Memory: from the theoretical model to the system dynamics}
 
-SDM is a mathematical model of long-term memory that has a number of neuroscientific and psychologically plausible dynamics.
+SDM is a mathematical \textbf{model of long-term memory} that has a number of neuroscientific and psychologically plausible dynamics.
 
-This model is used in all sort of applications due to its ability to closely reflect the human capacity to remember past experiences.
+This model is used in all sort of applications due to its ability to closely reflect \textbf{the human capacity to remember past experiences}.
 
-This flexibility into mapping one situation in another is an essential human feature which is hard to replicate in computers.
+This flexibility into \textbf{mapping one situation in another} is an essential human feature which is hard to replicate in computers.
 
 \end{frame}
 
@@ -403,7 +429,7 @@ The analytical model which does not consider autocorrelation predicts a critical
 
 
 \begin{frame}
-\frametitle{Classification application: training}
+\frametitle{Classification application: Training}
 \begin{figure}
 \centering\includegraphics[width=0.6\textwidth]{./images02/classification/groups.png}
 \caption{One noisy image for each of the 62 classification groups.
@@ -412,7 +438,7 @@ The analytical model which does not consider autocorrelation predicts a critical
 \end{frame}
 
 \begin{frame}
-\frametitle{Classification application: confusing cases}
+\frametitle{Classification application: Confusing cases}
 \begin{figure}
   \centering
   \subfloat[``i'', ``l'', and ``r'' with 20\% noise.]{\includegraphics[width=\textwidth]{./images02/classification/ilr-high-noise.png}}
@@ -424,7 +450,7 @@ The analytical model which does not consider autocorrelation predicts a critical
 
 
 \begin{frame}
-\frametitle{Classification application: confusing cases}
+\frametitle{Classification application: Confusing cases (2)}
 \begin{figure}
   \centering
   \subfloat[``c'', ``d'', and ``o'' with 20\% noise.]{\includegraphics[width=\textwidth]{./images02/classification/cdo-high-noise.png}}
@@ -436,7 +462,7 @@ The analytical model which does not consider autocorrelation predicts a critical
 
 
 \begin{frame}
-\frametitle{Classification application: confusing cases}
+\frametitle{Classification application: Confusing cases (3)}
 \begin{figure}
   \centering
   \subfloat[``G'', ``O'', and ``Q'' with 20\% noise.]{\includegraphics[width=\textwidth]{./images02/classification/GOQ-high-noise.png}}
@@ -448,26 +474,45 @@ The analytical model which does not consider autocorrelation predicts a critical
 
 
 \begin{frame}
-\frametitle{Classification application: results}
+\frametitle{Classification application: Results}
 Generally speaking, the classification algorithm made some mistakes in the 20\% noise scenario, and just a few mistakes in the 5\% noise scenario.
 
-When the training set has 1,000 samples instead of 100 samples of each letter, the algorithm correctly classify almost all letters in both 20\% and 5\% noise scenarios, except for letters ``e'' and ``o''.
+When the training set has 1,000 samples (instead of 100) of each letter, the algorithm correctly classify almost all letters in both 20\% and 5\% noise scenarios, except for letters ``e'' and ``o''.
 
-It could not differentiate letters ``e'' and ``o'' because their differences are smaller than the critical distance. It would have to be trained more and more times in order to learn to differentiate them (because the critical distance decreases when more items are written into the memory).
+It seems that the algorithm could not differentiate letters ``e'' and ``o'' because their differences are \textbf{smaller than the critical distance}. I believe it would just have to be trained more and more in order to learn to differentiate them (because the critical distance decreases when more items are written into the memory).
 \end{frame}
 
 
 \begin{frame}
-\frametitle{Noise filtering: results}
+\frametitle{Noise filtering: Interference}
 \begin{figure}
-\captionsetup[subfigure]{labelformat=empty}
-\subfloat[]{\includegraphics[width=0.5\textwidth]{./images02/filter/labelB-20noise.png}}
+\includegraphics[height=0.15\textheight]{./images02/filter/case2-b-10noise.png}
+\end{figure}
+\begin{figure}
+\includegraphics[height=0.15\textheight]{./images02/filter/case2-c-10noise.png}
+\end{figure}
+\begin{figure}
+\includegraphics[height=0.15\textheight]{./images02/filter/case2-d-10noise.png}
+\end{figure}
+\begin{figure}
+\includegraphics[height=0.15\textheight]{./images02/filter/case2-8-10noise.png}
+\end{figure}
+\end{frame}
 
-\subfloat[]{\includegraphics[width=0.5\textwidth]{./images02/filter/labelC-20noise.png}}
 
-\subfloat[]{\includegraphics[width=0.5\textwidth]{./images02/filter/labelD-20noise.png}}
-
-\subfloat[]{\includegraphics[width=0.5\textwidth]{./images02/filter/label8-20noise.png}}
+\begin{frame}
+\frametitle{Noise filtering: After using labels}
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{./images02/filter/labelB-20noise.png}
+\end{figure}
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{./images02/filter/labelC-20noise.png}
+\end{figure}
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{./images02/filter/labelD-20noise.png}
+\end{figure}
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{./images02/filter/label8-20noise.png}
 \end{figure}
 \end{frame}
 
@@ -491,16 +536,100 @@ It could not differentiate letters ``e'' and ``o'' because their differences are
 \end{frame}
 
 
-\part{Diffusion and dismissal of innovation: forecasting the number of Facebook’s active users}
+%=============================================
+%=============================================
+%=============================================
+
+
+\section{Diffusion and dismissal of innovation: forecasting the number of Facebook’s active users}
+\begin{frame}
+\sectionpage
+\end{frame}
+
+
 \begin{frame}
 \frametitle{Diffusion and dismissal of innovation: forecasting the number of Facebook’s active users}
 
+Based on the Bass Model, which is in the Top 10 Most Influential Papers in 50 years of the Management Science journal.
+
+The Bass model assumes that there are two types of people: \textbf{the innovators} and \textbf{the imitators}---a simplification of Rogers' famous five classes (innovators, early adopters, early majority, late majority, and laggards).
+
+The Bass model would be a good choice to forecast the total number of users. But most companies deem the total number of users as confidential, and \textbf{they only publish the number of active users}.
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{The extended model}
+\begin{align*}
+\text{\textbf{Bass model:}} \\
+\frac{f(t)}{1-F(t)} &= p + qF(t), F(0)=0 \\
+\\
+\text{\textbf{Proposed extension:}} \\
+\frac{f(t)}{1-F(t)} &= p + qF(t) - wR(t), F(0)=0, R(0)=0
+\end{align*}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Contributions}
 The main contributions are:
 \begin{enumerate}[i]
 \item Add a rejection parameter to the model
-\item Estimate the parameters using only the number of active users
-\item The possibility of reducing the number of active users (instead of only increase)
+\item Estimate the parameters using only the number of active users \\(instead of the total number of users)
+\item The possibility of reducing the number of active users \\(instead of only increasing)
 \end{enumerate}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Models of rejection}
+\begin{align*}
+	\text{Model 1: }& r(t) = \nu f(t) \\
+    \\
+	\text{Model 2: }& \frac{r(t)}{1-R(t)} = \nu f(t) \\
+    \\
+	\text{Model 3: }& r(t) = \nu [F(t) - R(t)] \\
+    \\
+	\text{Model 4: }& \frac{r(t)}{1-R(t)} = \nu [F(t) - R(t)]
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\frametitle{Results: Model 2}
+\begin{figure}
+	\centering
+	{\includegraphics*[scale=0.9,width=0.65\textwidth]{images03/fb-model2-1.eps}}
+	\caption{Fit of Model 2 with Facebook's active users dataset.\label{fig:model2fit}
+		{$mF(t)$ is the total users, $mR(t)$ is the inactive users, and $mA(t)$ is the active users. The unit of these functions are thousands of people. The parameters are $m=1,497.50$, $p=0.000331$, $q=0.100088$, $w=0.140595$, and $\nu=0.187188$. The goodness of fit are $R^2=99.84\%$ and BIC=10,566.52.}}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Results: Model 3}
+\begin{figure}
+	\centering
+	{\includegraphics*[scale=0.9,width=0.65\textwidth]{images03/fb-model3-1.eps}}
+	\caption{Fit of Model 3 with Facebook's active users dataset.\label{fig:model3fit}
+		{$mF(t)$ is the total users, $mR(t)$ is the inactive users, and $mA(t)$ is the active users. The unit of these functions are thousands of people. The parameters are $m=1,967.64$, $p=0.000184$, $q=0.097867$, $w=0.330511$, and $\nu=0.006912$. The goodness of fit are $R^2=99.83\%$ and BIC=11,485.68}}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Results: Model 4}
+\begin{figure}
+	\centering
+	{\includegraphics*[scale=0.9,width=0.65\textwidth]{images03/fb-model4-1.eps}}
+	\caption{Fit of Model 4 with Facebook's active users dataset.\label{fig:model4fit}
+		{$mF(t)$ is the total users, $mR(t)$ is the inactive users, and $mA(t)$ is the active users. The unit of these functions are thousands of people. The parameters are $m=1,854.85$, $p=0.000183$, $q=0.099738$, $w=0.334454$, and $\nu=0.007007$. The goodness of fit are $R^2=99.84\%$ and BIC=10,724.55}}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}
+\titlepage
 \end{frame}
 
 \end{document}
