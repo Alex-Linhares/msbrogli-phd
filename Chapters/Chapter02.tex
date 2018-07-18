@@ -112,7 +112,7 @@ The closest implementations to ours, in philosophy at least, is the one in `the 
 
 Note that all these criticisms apply to the implementations in both the `common sense toolkit' and the `C Binary Vector Symbols' \citep{berchtold_processing_2005, noauthor_cstk:_nodate, emruli_vector_2015}.  While these implementations have around 150 lines of C++; at last count, the \emph{documentation of our implementation} had \emph{over 100 pages} \citep{linhares_sparse_2018}: they have aimed at running code, and we aim at improving a community and industry standard.
 
-There is obviously a demand for use of SDM; but each group has been tied to their own \emph{ad-hoc} needs, and there has not been the emergence of a community centered on a tool. It is our belief that a tool such as standard open-source framework could bring orders of magnitude more researchers and attention if they were able to use the model, at zero cost, with an easy to use high-level language such as Python, in an intuitive platform such as Jupyter notebooks. Neuroscientists interested in long-term memory storage should not have to worry about high-bandwidth vector parallel computation.  This new tool would provide a ready to use system in which experiments could be executed almost as soon as designed --- and provide the needed replication of studies \citep{shen2014interactive}.
+There is obviously a demand for use of SDM; but each group has been tied to their own \emph{ad-hoc} needs, and there has not been the emergence of a community centered on a tool. It is our belief that a tool such as standard open-source framework could bring orders of magnitude more researchers and attention if they were able to use the model, at zero cost, with an easy to use high-level language such as Python, in an intuitive platform such as Juypyter notebooks. Neuroscientists interested in long-term memory storage should not have to worry about high-bandwidth vector parallel computation.  This new tool would provide a ready to use system in which experiments could be executed almost as soon as designed --- and provide the needed replication of studies \citep{shen2014interactive}.
 
 The main contribution of this work is a reference implementation which yields (i) orders of magnitude gains in performance, (ii) has several backends\footnote{CPUs, GPUs, FPGAs} and operations, (iii) is fully validated against the mathematical model, (iv) is cross-platform\footnote{Unix, Linux, MacOs, Windows, Amazon Web Services, etc.}, and (v) is easily extensible to test new research ideas --- and to let others replicate the studies.
 
@@ -122,8 +122,7 @@ Our reference implementation may, hopefully, accelerate research into the model'
 
 Other contributions have also been introduced, which include (i) a noise filtering approach, (ii) a supervised classification algorithm, (iii) and a reinforcement learning algorithm, all of them using only the original SDM proposed by Kanerva, i.e., with no additional mechanisms, algorithms, data structures, etc. Although some of these applications have already been explored in previous work \citep{Meng2009, fan1997genetic, rao1995natural}, all of them have adapted SDM to fit their problems, and none of them have used just the ideas introduced by Kanerva. We have presented different approaches with no adaptations whatsoever.
 
-Finally, I have striven to provide a visual tour of the theory and application of SDM: whenever possible, detailed figures should tell the story --- or at least do the heavy lifting. In this study, we will see an anomaly in one of Kanerva's predictions, which I believe is related to SDM capacity. We will see tests of a generalized reading operation proposed by Physics Professor Paulo Murilo (personal communication).  We will see what happens when neurons --- and
-all their information --- is simply and suddenly lost.  We will see whether information-theory can improve some of Kanerva's ideas.  From (basic) noise filtering to learning to play tic-tac-toe, we will review the entirety of Dr. Pentti Kanerva's proposal.
+Finally, I have striven to provide a visual tour of the theory and application of SDM: whenever possible, detailed figures should tell the story --- or at least do the heavy lifting. In this study, we will see an anomaly in one of Kanerva's predictions, which I believe is related to SDM capacity. We will see tests of a generalized reading operation proposed by Physics Professor Paulo Murilo (personal communication).  We will see what happens when neurons --- and all their information --- is simply and suddenly lost.  We will see whether information-theory can improve some of Kanerva's ideas.  From (basic) noise filtering to learning to play tic-tac-toe, we will review the entirety of Dr. Pentti Kanerva's proposal.
 
 This time, however, it will be running on a computer:   anomalies between expected theory and numerical results will appear; implicit, hidden, assumptions will emerge; and reproducible experiments will be conducted.
 
@@ -398,8 +397,6 @@ The initial results of this \emph{Shannon write} operation can be seen in Figure
 
 \chapter{Conclusion}
 
-% Jamil: De maneira geral, achei muito ensaístico e pouco "paper". Me parece que vai precisar de retrabalho para submissão se encarar um reviewer mais tradicional. Eu gostei, no entanto.
-
 \begin{flushright}{\slshape
 
     \begin{quote}
@@ -461,8 +458,6 @@ I have run the classification algorithm under the MNIST database of handwritten 
 Looking into the reason behind images incorrectly classified, I have found that the issue is very related to the ``i'' versus ``l'' issue. Some handwritten digits are very close to others, and a ``2'' or a ``7'' may look like a ``1'', for instance. So, how can we solve this issue without using anything specific to images?  Machine learning algorithms use specific techniques to improve performance. I would like to unveil a solution psychologically closer to how we behave --- even if that eventually leads to lower performance.
 
 An unexplored idea is to use multiple SDMs which communicate. A first SDM would write the whole picture, just like we have done. Another SDM would write specific regions of the image, just like our eye focusing on specific regions. When reading, they may compose the counters and give a more precise classification.
-
-% Post-Defense TODO:  SDM creating Voronoi Tesselations of concepts, with different sized areas for each.  This should solve i versus l.
 
 
 \section{Deep learning, multiple SDMs --- and the incredible animal behavior of Dr. Linhares}
