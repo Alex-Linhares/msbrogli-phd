@@ -348,7 +348,7 @@ P(wrong) &= P(\text{acc}_i < 0 | \eta_i = 1) \cdot P(\eta_i = 1) + P(\text{acc}_
     &= \mathcal{N}_{\eta_i=1}.\text{cdf}(0)
 \end{align}
 
-Using the empirical variance of $\sigma^2 = 27838.3029124$, we calculate $P(wrong) = 0.22037771219874325$.
+Using the empirical variance of $\sigma^2 = 27838.3029$, we calculate $P(wrong) = 0.220377$.
 
 In order to check this probability, I have run a simulation reading from 1,000 random bitstrings (which have never been written into memory) and calculate the distance from the result of a single read. As the $P(wrong) = 0.22037$, I expected to get an average distance of 220.37 with a standard deviation of 13.10. See Figure \ref{fig:sdm-read-random-bs} for the comparison between the simulated and the theoretical outcomes.
 
