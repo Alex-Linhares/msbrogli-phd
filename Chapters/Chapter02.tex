@@ -198,7 +198,7 @@ Although there is some decrease in SDM recall after 600,000 neuron deaths, it is
 \label{fig:sdm-neuron-death-details}}
 \end{figure}
 
-We run the same simulation for a 256-bit SDM with 1,000,000 hard locations. The results were even more surprising, as the 256-bit SDM seems to be more robust to loss of neurons than the 1,000-bit SDM (see Figure \ref{fig:sdm-neuron-death-256bits}). Notice that the loss of 50\% of neurons barely affected the 256-bit SDM... and it even remained functional when facing an enormous loss of 90\% of neurons!  What these results seem to imply is not only that the memory is extremely robust, but that a very small expected number of neurons activated in each access radius would preserve the most valueable information.  This may have implications as to the number of standard deviations to define the access radius, as we will discuss in Section \ref{Magic numbers}.  Is there a thing such as excessive robustness, and, if so, when does robustness become waste?\footnote{Consider, for instance, error-correcting codes in Information Theory or the analogous computer ECC memory in Electrical Engineering: tradeoffs between robustness and waste must be considered at each design decision; Why should it be different in the modeling of human memory?}
+We run the same simulation for a 256-bit SDM with 1,000,000 hard locations. The results were even more surprising, as the 256-bit SDM seems to be more robust to loss of neurons than the 1,000-bit SDM (see Figure \ref{fig:sdm-neuron-death-256bits}). Notice that the loss of 50\% of neurons barely affected the 256-bit SDM... and it even remained functional when facing an enormous loss of 90\% of neurons!  What these results seem to imply is not only that the memory is extremely robust, but that a very small expected number of neurons activated in each access radius would preserve the most valueable information.  This may have implications as to the number of standard deviations to define the access radius, as we will discuss in Section \ref{section:Magic numbers}.  Is there a thing such as excessive robustness, and, if so, when does robustness become waste?\footnote{Consider, for instance, error-correcting codes in Information Theory or the analogous computer ECC memory in Electrical Engineering: tradeoffs between robustness and waste must be considered at each design decision; Why should it be different in the modeling of human memory?}
 
 \begin{figure}[!p]
 \centering
@@ -425,6 +425,7 @@ Over the course of this work we looked into a `funny thing' that had appeared in
 Another funny thing that has appeared in my master's thesis was that the critical distance collapsed when the network was exclusively writing `random-at-x'.  This is something I would like to look into but have not had the time to conduct a proper study yet.
 
 \section{Magic numbers}
+\label{section:Magic numbers}
 
 Kanerva suggests, in his book, the use of 1,000 dimensions and 1,000,000 hard locations.  More recently, he suggested the use of 10,000 dimensions, and on personal discussions suggested that this should be a minimum; as he has been concerned in latent semantic analysis and seems to be the proper scale in that application.
 
