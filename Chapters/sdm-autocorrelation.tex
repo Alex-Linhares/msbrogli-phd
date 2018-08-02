@@ -60,7 +60,7 @@ $P(x_i = y_i | d(x, y) \le r) = \dfrac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}
 
 \end{proof}
 
-Theorem \ref{T1} is valid for both ``x written at x'' (autoassociative memory) and ``random written at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905498137$.  Each bit of a hard location does indeed have a small pull bias.  What is meant by this is that each particular dimension has a small preference toward positive values if its address bit is set to 1, and negative values if set to 0.
+Theorem \ref{T1} is valid for both ``x written at x'' (autoassociative memory) and ``random written at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905$.  Each bit of a hard location does indeed have a small pull bias.  What is meant by this is that each particular dimension has a small preference toward positive values if its address bit is set to 1, and negative values if set to 0.
 
 
 \begin{lemma}
@@ -149,7 +149,7 @@ When $n$ is an odd integer, the steps of the proof are similar. Therefore, the p
 
 \end{proof}
 
-In Figure \ref{fig:sdm-10kbits-figure-7-3}, with $n=10,000$ and $r=4,845$, we can notice that the autocorrelation has reduced significantly as predicted by Theorem \ref{thm:sdm-autocorrelation-convergence}. In fact, in this case, using Lemma \ref{thm:sdm-T1-n-large}, $P(x_i = y_i | d(x, y) \le r) = 0.5168761116022098$.
+In Figure \ref{fig:sdm-10kbits-figure-7-3}, with $n=10,000$ and $r=4,845$, we can notice that the autocorrelation has reduced significantly as predicted by Theorem \ref{thm:sdm-autocorrelation-convergence}. In fact, in this case, using Lemma \ref{thm:sdm-T1-n-large}, $P(x_i = y_i | d(x, y) \le r) = 0.516876$.
 
 \begin{figure}[!htb]
   \centering
@@ -348,7 +348,7 @@ P(wrong) &= P(\text{acc}_i < 0 | \eta_i = 1) \cdot P(\eta_i = 1) + P(\text{acc}_
     &= \mathcal{N}_{\eta_i=1}.\text{cdf}(0)
 \end{align}
 
-Using the empirical variance of $\sigma^2 = 27838.3029124$, we calculate $P(wrong) = 0.22037771219874325$.
+Using the empirical variance of $\sigma^2 = 27838.3029$, we calculate $P(wrong) = 0.220377$.
 
 In order to check this probability, I have run a simulation reading from 1,000 random bitstrings (which have never been written into memory) and calculate the distance from the result of a single read. As the $P(wrong) = 0.22037$, I expected to get an average distance of 220.37 with a standard deviation of 13.10. See Figure \ref{fig:sdm-read-random-bs} for the comparison between the simulated and the theoretical outcomes.
 

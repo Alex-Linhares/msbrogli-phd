@@ -30,7 +30,7 @@ The association of images to groups was stored as sequences in SDM, as detailed 
 
 % TODO Add image showing the pointers.
 
-During the learning phase, we have generated 100 noisy images for each character. The images had 5\% of noise, i.e., 5\% of their pixels have been randomly flipped. For example, see the generated images for letter A in Figure \ref{fig-classification-training-A}. Then, we have written the classification group bitstring into the bitstring associated to each noisy image, i.e., write(bs\_image, bs\_label). For a complete image training set, see Appendix XYZ.
+During the learning phase, we have generated 100 noisy images for each character. The images had 5\% of noise, i.e., 5\% of their pixels have been randomly flipped. For example, see the generated images for letter A in Figure \ref{fig-classification-training-A}. Then, we have written the classification group bitstring into the bitstring associated to each noisy image, i.e., write(bs\_image, bs\_label).
 
 \begin{figure}[!htb]
 \centering\includegraphics[width=\textwidth]{./images02/classification/trainingA.png}
@@ -94,7 +94,7 @@ In the low noise scenario, it has made few mistakes. It correctly classified all
   \label{fig-classification-low-noise-results}
 \end{figure}
 
-The high noise scenario is the most interesting, because, even in a high noise level, the classifier has hit most of the characters. It has hit all images for 44 out of 62 groups and made at least one miss for the other 18 groups. The misses may be seen in details in Figure \ref{fig-classificiation-high-noise-misses}.
+The high noise scenario is the most interesting, because, even in a high noise level, the classifier has hit most of the characters. It has hit all images for 44 out of 62 groups and made at least one miss for the other 18 groups. The misses may be seen in details in Figure \ref{fig-classification-high-noise-misses}.
 
 \begin{figure}[!htb]
   \centering
