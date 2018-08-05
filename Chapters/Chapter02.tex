@@ -48,6 +48,7 @@ This flexibility into mapping one situation in another is an essential human fea
 % TODO Graph between these disciplines and how they might interact.
 
 Sparse Distributed Memory reads like a \emph{desiderata} of a theory for human long-term memory.  To understand the breadth of topics that SDM encompasses, consider the following questions:
+
 \begin{enumerate}
     \item Why are most concepts orthogonal, unrelated to each other?
     \item Why is there Miller's magic number, i.e., we can't hold too many things in mind at once?
@@ -64,7 +65,7 @@ These are some of the questions touched by SDM.  It is a theory of long-term mem
 
 As expected for such an important theory, SDM has been applied in many different fields, like pattern recognition \citep{norman2003modeling, rao1995natural}, noise reduction \citep{Meng2009}, handwriting recognition \citep{fan1997genetic}, robot automation \citep{Rajesh1998, mendes2008robot}, and so forth. \citet{Linhares2011} has argued that SDM respects the limits of short-term memory \citep{Miller1955, Cowan2001}. Kanerva's book has over 1,000 citations in Google Scholar.  Despite this, there is not a reference implementation which would allow one to replicate the results published in a paper, to check the source code for details, and to improve it. Thus, even though intriguing results have been achieved using SDM, it requires counter-productive, duplicate effort from researchers to build on top of previous work.
 
-Our motivation is our own effort to run our models. As there is no reference implementation, we had to develop our own and run several simulations to ensure that our implementation was correct and bug-free. Thus, we had to deviate from our primary goal --- which was to test our hypothesis and explore the `ideas space' --- and to focus on the implementation itself. Furthermore, new members of our research group had to go through different source code developed by former members, in different languages.  Consider the implementations of SDM present --- as of this writing --- on its wikipedia entry\citep{noauthor_sparse_2018}\footnote{There has recently been a surge of hardware implementations to minimize energy expenditure and parallelize processes \citep{kang_energy-efficient_2015, kang_-memory_2016, li_hyperdimensional_2016, montagna_pulp-hd:_2018, salahuddin_energy_nodate}.  While these implementations are extremely interesting, they do not afford the flexibility to experiment that software does.}:
+Our motivation is our own effort to run our models. As there is no reference implementation, we had to develop our own and run several simulations to ensure that our implementation was correct and bug-free. Thus, we had to deviate from our primary goal --- which was to test our hypothesis and explore the `ideas space' --- and to focus on the implementation itself. Furthermore, new members of our research group had to go through different source code developed by former members, in different languages.  Consider the implementations of SDM present --- as of this writing --- on its wikipedia entry\citep{noauthor_sparse_2018}\footnote{There has recently been a plethora of hardware implementations to minimize energy expenditure and parallelize processes \citep{kang_energy-efficient_2015, kang_-memory_2016, li_hyperdimensional_2016, montagna_pulp-hd:_2018, salahuddin_energy_nodate}.  While these implementations are extremely interesting, they do not afford the flexibility to experiment that software does.}:
 
 \begin{enumerate}
     \item The original 1989 hardware implementation developed in NASA by \citet{flynn_sparse_1989};
@@ -122,8 +123,7 @@ Our reference implementation may, hopefully, accelerate research into the model'
 
 Other contributions have also been introduced, which include (i) a noise filtering approach, (ii) a supervised classification algorithm, (iii) and a reinforcement learning algorithm, all of them using only the original SDM proposed by Kanerva, i.e., with no additional mechanisms, algorithms, data structures, etc. Although some of these applications have already been explored in previous work \citep{Meng2009, fan1997genetic, rao1995natural}, all of them have adapted SDM to fit their problems, and none of them have used just the ideas introduced by Kanerva. We have presented different approaches with no adaptations whatsoever.
 
-Finally, I have striven to provide a visual tour of the theory and application of SDM: whenever possible, detailed figures should tell the story --- or at least do the heavy lifting. In this study, we will see an anomaly in one of Kanerva's predictions, which I believe is related to SDM capacity. We will see tests of a generalized reading operation proposed by Physics Professor Paulo Murilo (personal communication).  We will see what happens when neurons --- and
-all their information --- is simply and suddenly lost.  We will see whether information-theory can improve some of Kanerva's ideas.  From (basic) noise filtering to learning to play tic-tac-toe, we will review the entirety of Dr. Pentti Kanerva's proposal.
+Finally, I have striven to provide a visual tour of the theory and application of SDM: whenever possible, detailed figures should tell the story --- or at least do the heavy lifting. In this study, we will see an anomaly in one of Kanerva's predictions, which I believe is related to SDM capacity. We will see tests of a generalized reading operation proposed by Physics Professor Paulo Murilo (personal communication).  We will see what happens when neurons --- and all their information --- is simply and suddenly lost.  We will see whether information-theory can improve some of Kanerva's ideas.  From (basic) noise filtering to learning to play tic-tac-toe, we will review the entirety of Dr. Pentti Kanerva's proposal.
 
 This time, however, it will be running on a computer:   anomalies between expected theory and numerical results will appear; implicit, hidden, assumptions will emerge; and reproducible experiments will be conducted.
 
@@ -199,7 +199,7 @@ Although there is some decrease in SDM recall after 600,000 neuron deaths, it is
 \label{fig:sdm-neuron-death-details}}
 \end{figure}
 
-We run the same simulation for a 256-bit SDM with 1,000,000 hard locations. The results were even more surprising, as the 256-bit SDM seems to be more robust to loss of neurons than the 1,000-bit SDM (see Figure \ref{fig:sdm-neuron-death-256bits}). Notice that the loss of 50\% of neurons barely affected the 256-bit SDM... and it even remained functional when facing an enormous loss of 90\% of neurons!  What these results seem to imply is not only that the memory is extremely robust, but that a very small expected number of neurons activated in each access radius would preserve the most valueable information.  This may have implications as to the number of standard deviations to define the access radius, as we will discuss in Section \ref{Magic numbers}.  Is there a thing such as excessive robustness, and, if so, when does robustness become waste?\footnote{Consider, for instance, error-correcting codes in Information Theory or the analogous computer ECC memory in Electrical Engineering: tradeoffs between robustness and waste must be considered at each design decision; Why should it be different in the modeling of human memory?}
+We run the same simulation for a 256-bit SDM with 1,000,000 hard locations. The results were even more surprising, as the 256-bit SDM seems to be more robust to loss of neurons than the 1,000-bit SDM (see Figure \ref{fig:sdm-neuron-death-256bits}). Notice that the loss of 50\% of neurons barely affected the 256-bit SDM... and it even remained functional when facing an enormous loss of 90\% of neurons!  What these results seem to imply is not only that the memory is extremely robust, but that a very small expected number of neurons activated in each access radius would preserve the most valueable information.  This may have implications as to the number of standard deviations to define the access radius, as we will discuss in Section \ref{section:Magic numbers}.  Is there a thing such as excessive robustness, and, if so, when does robustness become waste?\footnote{Consider, for instance, error-correcting codes in Information Theory or the analogous computer ECC memory in Electrical Engineering: tradeoffs between robustness and waste must be considered at each design decision; Why should it be different in the modeling of human memory?}
 
 \begin{figure}[!p]
 \centering
@@ -426,6 +426,7 @@ Over the course of this work we looked into a `funny thing' that had appeared in
 Another funny thing that has appeared in my master's thesis was that the critical distance collapsed when the network was exclusively writing `random-at-x'.  This is something I would like to look into but have not had the time to conduct a proper study yet.
 
 \section{Magic numbers}
+\label{section:Magic numbers}
 
 Kanerva suggests, in his book, the use of 1,000 dimensions and 1,000,000 hard locations.  More recently, he suggested the use of 10,000 dimensions, and on personal discussions suggested that this should be a minimum; as he has been concerned in latent semantic analysis and seems to be the proper scale in that application.
 
@@ -433,10 +434,6 @@ Each parameter set choice like this will lead to particular numbers --- many of 
 
 One intriguing question here is:  is there a `better' number of dimensions and hard locations?  If so, can such numbers be better studied algebraically or numerically? How should these parameters be compared?  What are the tradeoffs that should be considered?  What are the `best' benchmarks possible?
 
-% Post-defense TODO: Use the robustness of neurons as a guide.  A more quantitative study of this loss of neurons... between d=0 and d=critical_distance
-% Post-defense TODO: magic numbers
-% Post-defense TODO: mu - m sigma, in which the expected number of neurons is, say, 256 (instead of >1000).
-% Post-defense TODO: study this.  The marginal increase of 10% of Hard locations increases by how many percentage points the critical distance? In fact, is there a way to study this algebrically?  That would be so cool!
 
 
 % \subsection{Classification with context using sequences --- for words instead of only letters}
@@ -463,8 +460,6 @@ I have run the classification algorithm under the MNIST database of handwritten 
 Looking into the reason behind images incorrectly classified, I have found that the issue is very related to the ``i'' versus ``l'' issue. Some handwritten digits are very close to others, and a ``2'' or a ``7'' may look like a ``1'', for instance. So, how can we solve this issue without using anything specific to images?  Machine learning algorithms use specific techniques to improve performance. I would like to unveil a solution psychologically closer to how we behave --- even if that eventually leads to lower performance.
 
 An unexplored idea is to use multiple SDMs which communicate. A first SDM would write the whole picture, just like we have done. Another SDM would write specific regions of the image, just like our eye focusing on specific regions. When reading, they may compose the counters and give a more precise classification.
-
-% Post-Defense TODO:  SDM creating Voronoi Tesselations of concepts, with different sized areas for each.  This should solve i versus l.
 
 
 \section{Deep learning, multiple SDMs --- and the incredible animal behavior of Dr. Linhares}

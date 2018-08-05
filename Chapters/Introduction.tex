@@ -45,17 +45,17 @@ One of the interesting parts of Bitcoin are the incentives. On one hand, users h
 
 The impact of Bitcoin in society --- and hence in the companies and the government --- has been growing every day. People are increasingly using Bitcoin to exchange money and transfer money overseas. Companies are looking into Bitcoin as an alternative to reduce banking fees. The poor may be included in the finance system through Bitcoin. People may hedge their assets against their governments' money issuance and inflation --- as in the case of Venezuela.
 
-Bitcoin is the first and most famous cryptocurrency, used worldwide, with a highly volatile market cap, as of this writing, of \$ 192 bi. Even so, it faces serious scalability challenges; such as serious quality of service and network congestion when the number of transactions per second is high, and an increase in the transaction fees and uncertain delays in transactions' confirmations.
+Bitcoin is the first and most famous cryptocurrency, used worldwide, with a highly volatile market cap, as of this writing, of \$ 192 B. Even so, it faces serious scalability challenges; such as serious quality of service and network congestion when the number of transactions per second is high, and an increase in the transaction fees and uncertain delays in transactions' confirmations.
 
 Note that these problems have been a deliberate decision from the current developers of the ``bitcoin-core'', which believe that is it risky to increase the blocksize (in which all transactions are stored).  It is not known whether a blocksize, say, of 1GB, would be feasible to sustain the decentralization of the network.
 
-\emph{Iota} is a second cryptocurrency that, instead of using a blockchain, proposes the use of a ``tangle' architecture': a different way to register the currency ledger across thousands of computers. Although it has not been confirmed in practice yet, its architecture seems to be significantly more scalable than Bitcoin's blockchain. As we will see, the problem here is exactly the opposite of Bitcoin's. Iota needs a minimum of transactions per seconds in order to work properly.
+\emph{Iota} is a second cryptocurrency that, instead of using a blockchain, proposes the use of a ``tangle architecture'': a different way to register the currency ledger across thousands of computers. Although it has not been confirmed in practice yet, its architecture seems to be significantly more scalable than Bitcoin's blockchain. As we will see, the problem here is exactly the opposite of Bitcoin's. Iota needs a minimum number of transactions per second in order to work properly.
 
-Our analysis suggests an architecture for a distributed currency which is inspired in both Bitcoin's blockchain and Iota's tangle in order to solve the scalability problems. While Bitcoin's network saturates when it hits a certain number of transactions per second, Iota's does not work properly with less than a certain number of transactions per second. Our proposed architecture seems to work in both scenarios: low and high number of transactions per second.
+Our analysis suggests an architecture for a distributed currency which is inspired by both Bitcoin's blockchain and Iota's tangle in order to solve the scalability problems. While Bitcoin's network saturates when it hits a certain number of transactions per second, Iota's does not work properly with less than a certain number of transactions per second. Our proposed architecture seems to work in both scenarios: low and high number of transactions per second.
 
 In this first study we will investigate some issues regarding this possibility, namely: (i) cryptographic security and game-theoretical attacks; (ii) scalability; (iii) self-governance of the system; (iv) appropriate incentive system to all participants.
 
-A second topic that may have an outsized influence on business and that we will be taking a closer look is a model of artificial intelligence --- and of human decision making.
+A second topic that may have an outsized influence on business and that we will be taking a closer look at is a model of artificial intelligence --- and of human decision making.
 
 \section{Sparse Distributed Memory}
 
@@ -111,21 +111,25 @@ Beyond a formalization of this process of memory recall, Sparse Distributed Memo
 
 % Technology > Computer Science > Artificial Intelligence > Pattern Recognition > SDM.
 
+% Jamil: Se quiser citar algo, tem os papers do Solow (1956, 1957) ou o Advanced Macroeconomics do Romer (2016).
 Technology has been one of the underlying engines behind economic growth. It has been changing the whole society -- people, companies, and governments. Cities and houses had to be rethought when cars became popular. Trains allowed distant places to exchange high volume of goods. Airplanes and boats opened countries to overseas business. And, finally, the internet has had a profound impact in nearly everyone's life, as it changed everything -- from the way we communicate, behave, do business, do shopping, share ideas, and so forth.
 
 One area of technology that has been redefining business is computer science. Together with the internet, computer science has been one of the most important tools to scale a business model -- and create many others which were impossible before. More and more expensive human labor has been replaced by algorithms. Managers are able to make better decisions because they receive real-time information. The supply chain has incredibly evolved thanks to advances in logistics supported by routing algorithms, storage algorithms, and many others optimization algorithms.
 
-Artificial intelligence has been disrupting many businesses. Uber is able to handle hundreds of thousands of requests. Amazon optimizes the location of each product based on demand. Netflix increases the quality of their services offering movies specific to the taste of each customer. Spotify learns which kind of music users like the most and suggests playlists. Banks prevent fraud classifying which patterns seem to be erratic towards their customers' previous behavior.
+Artificial intelligence has been disrupting many businesses. Uber is able to handle hundreds of thousands of requests. Amazon optimizes the location of each product based on demand. Netflix increases the quality of their services offering movies specific to the taste of each customer. Spotify learns which kind of music users like the most and suggests playlists. Banks prevent fraud by classifying which patterns seem to be erratic towards their customers' previous behavior.
 
+% Jamil: Não gosto de parágrafos soltos de uma frase em textos acadêmicos. Questão de estilo, mas comentando por comentar.
 It is gradually becoming impossible to imagine a world without artificial intelligence.
 
-Behind artificial intelligence systems, there is pattern recognition: The capacity to match information from new data with information which has already been seen and is stored in memory. It may be used in classification, face recognition, character recognition, and so forth.  Even if AI cannot yet solve numerous hard problems --- such as the Turing Test, Bongard Problems or simply understanding when `Lawyers are sharks' \citep{french1990subcognition, french2000turing, linhares2000glimpse, french2001co} ---, it is clear that the technology must be taken seriously.
+Behind artificial intelligence systems, there is pattern recognition: the capacity to match information from new data with information which has already been seen and is stored in memory. It may be used in classification, face recognition, character recognition, and so forth.  Even if AI cannot yet solve numerous hard problems --- such as the Turing Test, Bongard Problems or simply understanding when `Lawyers are sharks' \citep{french1990subcognition, french2000turing, linhares2000glimpse, french2001co} --- it is clear that the technology must be taken seriously.
 
 The second paper lies at the intersection of cognitive psychology, computer science, neuroscience, and artificial intelligence.  Sparse Distributed Memory, or SDM for short, is a theoretical mathematical construct that seems to reflect a number of neuroscientific and psychologically plausible characteristics of a human memory. SDM has already been used to different pattern recognition problems, like noise reduction, handwriting recognition, robot automation, and so forth.
 
 We implement a BW-Complete\footnote{`BuzzWord-Complete: the model is (i) Open-Source, (ii) Cross-Platform; (iii) highly parallel; (iv) able to execute on CPUs and/or GPUs; (v) it can be run on the `cloud'; etc.} SDM framework that not only shows small discrepancies from previous theoretical expectations, but also may be of use to other researchers interested in testing their own hypotheses and theories of SDM. The computer code has been used in a previous Ph.D. Thesis; the code has shown some small discrepancies from theoretical expectations; the code has been run on a number of different architectures and information-processing devices (e.g., CPUs, GPUs).  The framework enables us to have a visual exploration previous experiments and new possibilities for SDM.
 
 \section{Diffusion of innovation}
+
+% Jamil: Convém expandir um pouco mais isso aqui. Qualidade muito discrepante com as outras subseções do capítulo.
 
 In 2014, a group of Princeton's researchers predicted that Facebook's users would abandon the platform by 2017 \citep{cannarella2014epidemiological}. The forecast was done applying a disease spreading model which has correctly predicted the abandonment of ``MySpace''. Facebook replied after applying Princeton's methodology:
 
