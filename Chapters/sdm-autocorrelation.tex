@@ -17,6 +17,8 @@ This is an important observation. A hard location is activated because it shares
 %\footnote{If you are a cell I then I have some serious piece of advice to you.  I would strongly suggest avoiding the neighborhood of a neuron. Neurons have serious authoritarian tendencies, bossing around --- generally electrifying --- the hopeless innocent cells around them just because.}
 
 
+
+
 Let $x$ and $y$ be random bitstrings and $n$ be the number of dimensions in the memory; let $x_i$ and $y_i$ be the $i$-th bit of $x$ and $y$, respectively; and $d(x, y)$ be the Hamming distance. Whilst the probability of a shared bit-value between same dimension-bits in two random addresses is $1/2$, an address only activates hard-locations close to it.  Let us call these shared bitvalues a \emph{bitmatch in dimension $i$}.
 
 So, what is the probability of bitmatches given that we know the access radius $r$ between the address and a hard-location?
@@ -60,8 +62,16 @@ $P(x_i = y_i | d(x, y) \le r) = \dfrac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}
 
 \end{proof}
 
-Theorem \ref{T1} is valid for both ``x written at x'' (autoassociative memory) and ``random written at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905$.  Each bit of a hard location does indeed have a small pull bias.  What is meant by this is that each particular dimension has a small preference toward positive values if its address bit is set to 1, and negative values if set to 0.
+Theorem \ref{T1} is valid for both ``x written at x'' (autoassociative memory) and ``random written at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905$.  Each bit of a hard location does indeed have a small pull bias.  What is meant by this is that each particular dimension has a small preference toward positive values if its address bit is set to 1, and negative values if set to 0---an intuition developed in Figure \ref{fig:bitmatchbias}.
 
+\begin{figure}[!h]
+\centering
+
+\includegraphics[width=\textwidth]{images02/autocorrelation/autocorrelation_n=1000_closeview=False.eps}
+
+\caption{The threshold size $r$ of hard-locations bring about the autocorrelation of Theorem \ref{T1}. Consider, for instance, the extremes \{0, $n$\}.  Let us start with $n$ (in our case, $n=1000$ dimensions): given the information that $d(x,y)\le n$, the probability of a bitmatch in dimension $i$ is $1/2$; as $\forall x,y \in \{0, 1\}^N, d(x,y)\le n$. At the other extreme, consider that we have the information that $d(x,y)\le 0$: in this case $x=y$ and the probability of a bitmatch, in any dimension, is 1. The autocorrelation hence drops monotonically until convergence at $1/2$ as the distance grows. Numerically, our results converge to precisely $1/2$ only after $d(x,y)\ge 607$ for $n=1000$; $d(x,y)\ge 5332$ for $n=10000$, and $d(x,y)\ge 83$ for $n=100$. This will be seen in Lemma \ref{thm:sdm-access-radius}.
+\label{fig:bitmatchbias}}
+\end{figure}
 
 \begin{lemma}
 Let $r$ be the access radius given that $f$ percent of the hard locations are activated. Then, $\lim_{n \rightarrow \infty} r/n = 1/2$.
