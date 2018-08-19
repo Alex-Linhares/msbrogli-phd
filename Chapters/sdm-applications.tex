@@ -445,7 +445,7 @@ Let $b_0, b_1, b_2, \dots, b_n$ be the board sequence of the game (see Figure \r
     \caption{Example of a game with 7 movements in which X wins.\label{fig-ttt-example}}
 \end{figure}
 
-The reward bitstring may be a positive, negative, or neutral bitstring. The positive reward bitstring is randomly generated and then only the bits related to the action will be set to 1 (see Figure \ref{fig:ttt-positive-reward-bitstring}). The negative reward bitstring is also randomly generated and then only the bits related to the action will be set to 0. Finally, the neutral reward bitstring is only a random bitstring.
+The reward bitstring may be a positive, negative, or neutral bitstring. The positive reward bitstring is randomly generated and then only the bits related to the action will be set to 1 (see Figure \ref{fig:ttt-positive-reward-bitstrings}). The negative reward bitstring is also randomly generated and then only the bits related to the action will be set to 0. Finally, the neutral reward bitstring is only a random bitstring.
 
 The idea behind these reward bitstrings is to increase the score of positive rewards (all bits set to 1), and to decrease the score of negative rewards (all bits set to 0). The neutral reward will have, on average, half of its bits 1 and the other half 0. Thus, it is in the middle of a positive reward and a negative reward.
 
@@ -514,6 +514,7 @@ node [pos=0.5,anchor=north,yshift=-0.5cm] {random bits};
 
 \caption{Positive reward bitstrings used in our reinforcement learning algorithm.
 \label{fig:ttt-positive-reward-bitstrings}}
+
 \end{figure}
 
 Let the $b$ be the sequence of boards and $a$ be the sequence of actions, then $b_0 \xrightarrow{a_0} b_1 \xrightarrow{a_1} b_2 \xrightarrow{a_2} \cdots \xrightarrow{a_{n-1}} b_n$. Suppose there is a winner, thus the winner's actions will be the sequence $a_{n-1}, a_{n-3}, a_{n-5}, \dots$, while the loser's actions will be the sequence $a_{n-2}, a_{n-4}, a_{n-6}, \dots$.
