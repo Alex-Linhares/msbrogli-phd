@@ -1,0 +1,122 @@
+%% LyX 2.3.0 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+
+\RequirePackage{fix-cm} % fix some latex issues see: http://tug.org/texmf-dist/doc/latex/base/fixltx2e.pdf
+
+\documentclass[twocolumn,journal]{IEEEtran}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{calc}
+\usepackage[unicode=true,
+ bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=1,
+ breaklinks=false,pdfborder={0 0 0},pdfborderstyle={},backref=false,colorlinks=false]
+ {hyperref}
+\hypersetup{pdftitle={Your Title},
+ pdfauthor={Your Name},
+ pdfpagelayout=OneColumn, pdfnewwindow=true, pdfstartview=XYZ, plainpages=false}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+% protect \markboth against an old bug reintroduced in babel >= 3.8g
+\let\oldforeign@language\foreign@language
+\DeclareRobustCommand{\foreign@language}[1]{%
+  \lowercase{\oldforeign@language{#1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+% for subfigures/subtables
+\usepackage[caption=false,font=footnotesize]{subfig}
+
+
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem*{cor}{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\DeclareMathOperator\erfc{erfc}
+\DeclareMathOperator\erf{erf}
+
+
+
+
+\makeatother
+
+\begin{document}
+
+\title{Autocorrelation in Sparse Distributed Memory}
+
+\author{Marcelo S. Brogliato,~\IEEEmembership{Member,~IEEE,} and Alexandre
+Linhares, \IEEEmembership{Member,~IEEE,}\thanks{Dr. Brogliato is with sdm.ai and with Behavioral and Decision Sciences,
+EBAPE, Fundação Getulio Vargas, Rio de Janeiro, Brazil, e-mail: \protect\href{http://msbrogli@sdm.ai}{msbrogli@sdm.ai}.}\thanks{Dr. Linhares is with sdm.ai and with Behavioral and Decision Sciences,
+EBAPE, Fundação Getulio Vargas, Rio de Janeiro, Brazil, e-mail: \protect\href{http://linhares@sdm.ai}{linhares@sdm.ai}.}}
+
+\markboth{Working Paper}{Brogliato and Linhares: Autocorrelation of SDM}
+
+\IEEEpubid{0000\textendash 0000/00\$00.00~\copyright~2012 IEEE}
+\maketitle
+\begin{abstract}
+Sparse Distributed Memory (SDM) is a neuroscientific and psychologically
+plausible model of human memory. In this paper we present an anomaly
+between its previously theoretized behavior and its actual behavior,
+and demonstrate that this anomaly is due to the autocorrelation involved
+in the model. Our findings have systemwide implications for those
+willing to implement and apply SDM in computational intelligence settings.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Sparse Distributed Memory, Autocorrelation, Neural Networks, Memory,
+Systemwide properties.
+\end{IEEEkeywords}
+
+
+\IEEEpeerreviewmaketitle{}
+
+\section{Introduction}
+
+\IEEEPARstart{S}{parse distributed memory} has been shown to be
+fodastic.
+
+In this paragraph we explain what SDM is.
+
+In this other paragraph we explain what the equator distance is. Then,
+this introductory section breaks and moves on to the main findings
+of this paper.
+
+\begin{figure}[!htb]
+\centering\includegraphics{./images02/calculated-table-72.png}
+\caption{Kanerva's original Figure 7.3 generated using the equations from \citet{brogliato2014sparse}.
+\label{fig:kanerva-figure-73-calculated}
+}
+\end{figure}
+
+\input{./Chapters/sdm-autocorrelation.tex}
+
+\section{Conclusions}
+
+bla bla
+
+\appendices{}
+
+\section*{Acknowlegment}
+
+The authors would like to thank Pentti Kanerva, Eric Paul Nichols,
+José Ricardo de Almeida Torreão, Moacyr Alvim Horta Barbosa da Silva,
+Flavio Codeço Coelho, Horacio Hideki Yanasse, and Paulo Murilo Castro
+de Oliveira for their careful, comprehensive, reviews of the first
+author\textquoteright s theses.
+
+\bibliographystyle{plain}
+\bibliography{mybib02}
+
+\begin{IEEEbiography}[{\fbox{\begin{minipage}[t][1.25in]{1in}%
+Replace this box by an image with a width of 1\,in and a height of
+1.25\,in!%
+\end{minipage}}}]{Your Name}
+ All about you and the what your interests are.
+\end{IEEEbiography}
+
+\begin{IEEEbiographynophoto}{Coauthor}
+Same again for the co-author, but without photo
+\end{IEEEbiographynophoto}
+
+
+\end{document}

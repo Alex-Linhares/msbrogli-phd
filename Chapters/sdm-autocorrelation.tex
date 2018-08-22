@@ -1,4 +1,4 @@
-% !TEX root = ../partial-sdm.tex
+% !TEX root = ../paperIEEE.tex
 
 \section{A deviation from the equator distance?}
 
@@ -67,7 +67,7 @@ Theorem \ref{T1} is valid for both ``x written at x'' (autoassociative memory) a
 \begin{figure}[!h]
 \centering
 
-\includegraphics[width=\textwidth]{images02/autocorrelation/autocorrelation_n=1000_closeview=False.eps}
+\includegraphics[width=\textwidth]{./images02/autocorrelation/autocorrelation_n=1000_closeview=False.eps}
 
 \caption{The threshold size $r$ of hard-locations bring about the autocorrelation of Theorem \ref{T1}. Consider, for instance, the extremes \{0, $n$\}.  Let us start with $n$ (in our case, $n=1000$ dimensions): given the information that $d(x,y)\le n$, the probability of a bitmatch in dimension $i$ is $1/2$; as $\forall x,y \in \{0, 1\}^N, d(x,y)\le n$. At the other extreme, consider that we have the information that $d(x,y)\le 0$: in this case $x=y$ and the probability of a bitmatch, in any dimension, is 1. The autocorrelation hence drops monotonically until convergence at $1/2$ as the distance grows. Numerically, our results converge to precisely $1/2$ only after $d(x,y)\ge 607$ for $n=1000$; $d(x,y)\ge 5332$ for $n=10000$, and $d(x,y)\ge 83$ for $n=100$. This will be seen in Lemma \ref{thm:sdm-access-radius}.
 \label{fig:bitmatchbias}}
