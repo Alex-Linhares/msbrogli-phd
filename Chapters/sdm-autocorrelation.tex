@@ -67,7 +67,7 @@ Theorem \ref{T1} is valid for both ``x written at x'' (autoassociative memory) a
 \begin{figure}[!h]
 \centering
 
-\includegraphics[width=\textwidth]{./images02/autocorrelation/autocorrelation_n=1000_closeview=False.eps}
+\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/autocorrelation_n=1000_closeview=False.eps}
 
 \caption{The threshold size $r$ of hard-locations bring about the autocorrelation of Theorem \ref{T1}. Consider, for instance, the extremes \{0, $n$\}.  Let us start with $n$ (in our case, $n=1000$ dimensions): given the information that $d(x,y)\le n$, the probability of a bitmatch in dimension $i$ is $1/2$; as $\forall x,y \in \{0, 1\}^N, d(x,y)\le n$. At the other extreme, consider that we have the information that $d(x,y)\le 0$: in this case $x=y$ and the probability of a bitmatch, in any dimension, is 1. The autocorrelation hence drops monotonically until convergence at $1/2$ as the distance grows. Numerically, our results converge to precisely $1/2$ only after $d(x,y)\ge 607$ for $n=1000$; $d(x,y)\ge 5332$ for $n=10000$, and $d(x,y)\ge 83$ for $n=100$. This will be seen in Lemma \ref{thm:sdm-access-radius}.
 \label{fig:bitmatchbias}}
@@ -163,7 +163,7 @@ In Figure \ref{fig:sdm-10kbits-figure-7-3}, with $n=10,000$ and $r=4,845$, we ca
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.75\textwidth]{./images02/sdm-10000bits-10000w-table-7-2.png}
+  \includegraphics[width=0.5\textwidth]{./images02/sdm-10000bits-10000w-table-7-2.png}
 
   \caption{The same setup as in Figure \ref{fig:sdm-10000w-table-7-2}, but for $n=10,000$. It shows that the interference has almost gone away when $n$ is sufficiently large.}
   \label{fig:sdm-10kbits-figure-7-3}
@@ -193,7 +193,7 @@ See Figure \ref{fig:sdm-same-bit-histogram} for a comparison between the theoret
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.75\textwidth]{./images02/autocorrelation/same-bit-histogram.png}
+  \includegraphics[width=0.5\textwidth]{./images02/autocorrelation/same-bit-histogram.png}
 
   \caption{Given an address $x$ and a dimension $i$, how many hard locations with bitmatches in $i$ are activated by reading at $x$?  The histogram was obtained through numerical simulation. The red curve is the theoretical normal distribution found in Theorem \ref{T2}.}
   \label{fig:sdm-same-bit-histogram}
@@ -263,6 +263,7 @@ In our case, $p=0.5529$, $s=10,000$, and $H=1,000,000$, so $[\text{cnt}_i | \tex
 \begin{figure}[h!]
   \centering
   \subfloat[$\text{addr}_i=1$]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/x_at_x_addr1.png}}
+
   \subfloat[$\text{addr}_i=0$]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/x_at_x_addr0.png}}
 
   \caption{The value of the counters after $s=10,000$ writes shows the autocorrelation in the counters in autoassociative memories (``x at x''). The histogram was obtained through simulation. The red curve is the theoretical normal distribution found in equations (\ref{cntaddr1}) and (\ref{cntaddr0}).}
@@ -289,6 +290,7 @@ Doing the math, $\mathbf{E}[q] = 0.402922$ and $\mathbf{E}[q^2] = 0.634433$. Thu
 \begin{figure}[h!]
   \centering
   \subfloat[``random at x'']{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/random_at_x_counters.png}}
+
   \subfloat[``x at x'']{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/x_at_x_counters.png}}
 
   \caption{Autocorrelation in the counters in autoassociative memories (``x written at x''). The histogram was obtained through simulation. The red curve is the theoretical distribution.}
@@ -323,6 +325,7 @@ In our case, $\sum_{k=1}^{Z} \left[ \text{cnt}_k | \text{addr}_k=1 \right] \sim 
 \begin{figure}[h!]
   \centering
   \subfloat[Equation \ref{eqn:sdm-eta1-addr1}  ($\text{addr}_k=1)$]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/read-counters-eta1_addr1.png}}
+
   \subfloat[Equation \ref{eqn:sdm-eta1-addr0} ($\text{addr}_k=0$)]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/read-counters-eta1_addr0.png}}
 
   \caption{The histogram was obtained through simulation. The red curve is the theoretical normal distribution.}
@@ -341,6 +344,7 @@ In our case, $\left[ \text{acc}_i|\eta_i=1 \right] \sim \mathcal{N}(\mu = 128.62
 \begin{figure}[h!]
   \centering
   \subfloat[Equation \ref{eqn:sdm-eta1}  ($\eta_k=1)$]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/read-counters-eta1.png}}
+
   \subfloat[Equation \ref{eqn:sdm-eta0} ($\eta_k=0$)]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/read-counters-eta0.png}}
 
   \caption{The histogram was obtained through simulation. The red curve is the theoretical normal distribution.}
@@ -365,7 +369,7 @@ Figure \ref{fig:sdm-single-read-dist} shows the new distance between $\eta_d$ an
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.6\textwidth]{./images02/autocorrelation/read-random-bs.png}
+  \includegraphics[width=0.5\textwidth]{./images02/autocorrelation/read-random-bs.png}
 
   \caption{The histogram was obtained through simulation. The red curve is the theoretical normal distribution.}
   \label{fig:sdm-read-random-bs}
@@ -373,7 +377,7 @@ Figure \ref{fig:sdm-single-read-dist} shows the new distance between $\eta_d$ an
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.6\textwidth]{./images02/autocorrelation/single-read-dist.png}
+  \includegraphics[width=0.5\textwidth]{./images02/autocorrelation/single-read-dist.png}
 
   \caption{New distance after a single read operation in a bitstring $\eta_d$, which is $d$ bits away from $\eta$. The new distance was calculated between $\eta_d$ and $\text{read}(\eta_d)$. Notice that when $d \ge 520$, the intersection between $\eta$ and $\eta_d$ is zero, which means there is only random bitstrings written into the activated hard locations. The distance 220 equals $1000 \cdot 0.220$ which is the probability find in Figure \ref{fig:sdm-read-random-bs}.}
   \label{fig:sdm-single-read-dist}

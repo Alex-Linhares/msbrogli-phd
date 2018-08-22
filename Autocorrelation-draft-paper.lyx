@@ -386,6 +386,37 @@ In this paragraph we explain what SDM is.
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float figure
+wide true
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename images02/sdm-10000w-notX-table-7-2.png
+	display false
+	special columnwidth
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 In this other paragraph we explain what the equator distance is.
  
 \end_layout

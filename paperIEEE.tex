@@ -1,12 +1,12 @@
+% Preview source code
+
 %% LyX 2.3.0 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
-
-\RequirePackage{fix-cm} % fix some latex issues see: http://tug.org/texmf-dist/doc/latex/base/fixltx2e.pdf
-
 \documentclass[twocolumn,journal]{IEEEtran}
 \usepackage[T1]{fontenc}
 \usepackage[latin9]{inputenc}
 \usepackage{calc}
+\usepackage{graphicx}
 \usepackage[unicode=true,
  bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=1,
  breaklinks=false,pdfborder={0 0 0},pdfborderstyle={},backref=false,colorlinks=false]
@@ -36,8 +36,11 @@
 \DeclareMathOperator\erf{erf}
 
 
+% !TEX root = ../partial-sdm.tex
 
-
+\@ifundefined{showcaptionsetup}{}{%
+ \PassOptionsToPackage{caption=false}{subfig}}
+\usepackage{subfig}
 \makeatother
 
 \begin{document}
@@ -63,7 +66,7 @@ willing to implement and apply SDM in computational intelligence settings.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Sparse Distributed Memory, Autocorrelation, Neural Networks, Memory,
+Sparse Distributed Memory, Autocorrelation, Theoretical Neuroscience, Memory,
 Systemwide properties.
 \end{IEEEkeywords}
 
@@ -77,18 +80,33 @@ fodastic.
 
 In this paragraph we explain what SDM is.
 
-In this other paragraph we explain what the equator distance is. Then,
-this introductory section breaks and moves on to the main findings
-of this paper.
+\begin{figure}[h!]
+  \centering
+  \subfloat[$\text{addr}_i=1$]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/x_at_x_addr1.png}}
 
-\begin{figure}[!htb]
-\centering\includegraphics{./images02/calculated-table-72.png}
-\caption{Kanerva's original Figure 7.3 generated using the equations from \citet{brogliato2014sparse}.
-\label{fig:kanerva-figure-73-calculated}
-}
+  \subfloat[$\text{addr}_i=0$]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/x_at_x_addr0.png}}
+
+  \caption{The value of the counters after $s=10,000$ writes shows the autocorrelation in the counters in autoassociative memories (``x at x''). The histogram was obtained through simulation. The red curve is the theoretical normal distribution found in equations (\ref{cntaddr1}) and (\ref{cntaddr0}).}
+  \label{fig:DELETE-sdm-corr-counters}
 \end{figure}
 
-\input{./Chapters/sdm-autocorrelation.tex}
+
+\begin{figure}[h!]
+\centering
+
+\includegraphics[width=\columnwidth]{./images02/autocorrelation/autocorrelation_n=1000_closeview=False.eps}
+
+\caption{The threshold size $r$ of hard-locations bring about the autocorrelation of Theorem \ref{T1}. Consider, for instance, the extremes \{0, $n$\}.  Let us start with $n$ (in our case, $n=1000$ dimensions): given the information that $d(x,y)\le n$, the probability of a bitmatch in dimension $i$ is $1/2$; as $\forall x,y \in \{0, 1\}^N, d(x,y)\le n$. At the other extreme, consider that we have the information that $d(x,y)\le 0$: in this case $x=y$ and the probability of a bitmatch, in any dimension, is 1. The autocorrelation hence drops monotonically until convergence at $1/2$ as the distance grows. Numerically, our results converge to precisely $1/2$ only after $d(x,y)\ge 607$ for $n=1000$; $d(x,y)\ge 5332$ for $n=10000$, and $d(x,y)\ge 83$ for $n=100$. This will be seen in Lemma \ref{thm:sdm-access-radius}.
+\label{fig:bitmatchbias}}
+\end{figure}
+
+
+In this other paragraph we explain what the equator distance is.
+
+Then, this introductory section breaks and moves on to the main findings
+of this paper.
+
+\input{Chapters/sdm-autocorrelation.tex}
 
 \section{Conclusions}
 
