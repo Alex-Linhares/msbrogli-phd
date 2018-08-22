@@ -156,7 +156,13 @@
 
 % *** MATH PACKAGES ***
 %
-\usepackage{amsmath}
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem*{cor}{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\DeclareMathOperator\erfc{erfc}
+\DeclareMathOperator\erf{erf}
 % A popular package from the American Mathematical Society that provides
 % many useful and powerful commands for dealing with mathematics.
 %
