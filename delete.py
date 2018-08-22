@@ -63,6 +63,11 @@ cbar.add_lines(CS2)
 
 plt.figure()
 
+λ=1.0
+Ωᵟ = 1
+λ ∈ sdm.ai(Ωᵟ)
+
+
 # Now make a contour plot with the levels specified,
 # and with the colormap generated automatically from a list
 # of colors.
