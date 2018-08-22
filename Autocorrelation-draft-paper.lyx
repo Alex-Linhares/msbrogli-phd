@@ -8,6 +8,18 @@
 \begin_preamble
 % for subfigures/subtables
 \usepackage[caption=false,font=footnotesize]{subfig}
+
+
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem*{cor}{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\DeclareMathOperator\erfc{erfc}
+\DeclareMathOperator\erf{erf}
+
+
+% !TEX root = ../partial-sdm.tex
 \end_preamble
 \options journal
 \use_default_options false
