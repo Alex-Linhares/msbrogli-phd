@@ -150,6 +150,8 @@ For further information about gossip algorithms, see \citet{shah2009gossip}.
 \section{Analysis of network's hash rate change}
 % Análise: Mudança no network's hash rate antes de atualizar o $A$.
 
+Bitcoin network is open and miners can come and go as they wish, and their movements affect the network's total hash rate. From the theorems developed so far, we can predict how the network behaves in a constant hash rate scenario. But how a change in hash rate affects the network is still to be explored, and that is the goal of this section.
+
 The difficulty, given by the number $A$, is adjusted every 2016 blocks. As, $\mathbf{P}(13 \text{ days} < Y_{2016} < 15 \text{ days}) = \mathbf{P}(13 \cdot 24 \cdot 3600 < Y_{2016} < 14 \cdot 24 \cdot 3600) = 0.9986$, it is expected that the total time to find 2016 blocks will be between 13 and 15 days, assuming that the network's hash rate remains constant. If it takes less than the expected time, it means that the network's total hash rate has increased. While if it takes more than the expected time, it means that the network's total hash rate has decreased. So, let's analyze what happens when the network's hash rate changes significantly.
 
 %Let's assume that the network's total hash rate will change only once, from $H$ to $\alpha H$ --- so, if $\alpha = 1$, there would be no change, if $\alpha > 1$, there would be an increase, and if $\alpha < 1$, there would be a decrease. As the time required to find a new block would be $T_\alpha = \frac{X}{\alpha H}$, we got the same random variable as we have gotten when analyzing a miner with $\alpha$ percent of the network's total hash rate. But, the analysis will be different because here $\alpha$ may be greater than one.
@@ -158,7 +160,9 @@ Let $H \cdot u(t)$ be the network's total hash rate over time. So, the number of
 
 \subsection{Hash rate suddenly changing}
 
-Let's say that the network's total hash rate has suddenly multiplied by $\alpha$. So, $u(t) = \alpha$, $\int_0^t u(t) dt = \alpha t$, and $T$ also follows an exponential distribution, but with $\lambda = \frac{\alpha}{\eta}$. Thus, $Y_n^\alpha = \sum_{i=1}^{n} T_i^\alpha \sim \text{Erlang}(n, \frac{\alpha}{\eta})$. Thus, $\mathbf{E}[Y_{n}^\alpha] = \frac{\mathbf{E}[Y_{n}]}{\alpha}$, i.e., the average total time required to find $n$ blocks will be divided by $\alpha$, while $\mathbf{V}[Y_{n}^\alpha] = \frac{\mathbf{V}[Y_n]}{\alpha^2}$ and the variance will be divided by $\alpha^2$. Hence, on one hand, when the network's hash rate increases ($\alpha > 1$), the 2016 blocks will be found earlier. On the other hand, when the network's hash rate decreases ($\alpha < 1$), the 2016 blocks will be found later.
+The most simple model for a change in the network's total hash rate is to consider a sudden shift as if it has jumped to a new value without a continuous transition to it.
+
+Let's say that the network's total hash rate has been suddenly multiplied by $\alpha$. So, $u(t) = \alpha$, $\int_0^t u(t) dt = \alpha t$, and $T$ also follows an exponential distribution, but with $\lambda = \frac{\alpha}{\eta}$. Thus, $Y_n^\alpha = \sum_{i=1}^{n} T_i^\alpha \sim \text{Erlang}(n, \frac{\alpha}{\eta})$. Thus, $\mathbf{E}[Y_{n}^\alpha] = \frac{\mathbf{E}[Y_{n}]}{\alpha}$, i.e., the average total time required to find $n$ blocks will be divided by $\alpha$, while $\mathbf{V}[Y_{n}^\alpha] = \frac{\mathbf{V}[Y_n]}{\alpha^2}$ and the variance will be divided by $\alpha^2$. Hence, on one hand, when the network's hash rate increases ($\alpha > 1$), the 2016 blocks will be found earlier. On the other hand, when the network's hash rate decreases ($\alpha < 1$), the 2016 blocks will be found later.
 
 For example, if the network's total hash rate suddenly doubles ($\alpha = 2$), then $\mathbf{P}(6.5 \text{ days} < Y_{2016} < 7.5 \text{ days}) = 0.9986$, and the time required to find 2016 blocks halved. On the other side, if the network's total hash rate suddenly halves ($\alpha = 0.5$), then $\mathbf{P}(27 \text{ days} < Y_{2016} < 29 \text{ days}) = 0.9469$, and the time required to find 2016 blocks doubled. It is an important conclusion, since it shows that even if half of the network stops mining, it will only double the time to the next difficulty adjustment, i.e., the time between blocks will be 20 minutes for, at most, the next 29 days, at which point the adjustment will occur and everything will be back to the normal 10 minutes between blocks.
 
@@ -166,16 +170,24 @@ For example, if the network's total hash rate suddenly doubles ($\alpha = 2$), t
 
 \subsection{Hash rate smoothly changing}
 
+Now let's model a change in the network's total hash rate using a continuous and smoothly function. In this model, the hash rate is multiplied by a function that continuously goes from $1$ towards a new value $a$ over time. The smoothness of the transition --- or how fast it changes --- is also parameterized.
+
 Let $u(t) = \frac{1+abx}{1+bx}$. It is an useful function because $u(0) = 1$ and $\lim_{t \rightarrow \infty} u(t) = a$. The bigger the $b$, the faster $u(t) \rightarrow a$. For example, if $a=2$, it means $H$ would be smoothly doubling. If $a=0.5$, it means $H$ would be smoothly halving.
 
 It is easy to integrate $u(t)$ because $\frac{1+abx}{1+bx} = \frac{1-a}{1+bx} + a$, which yields $\int_0^t u(x) dx = at + \frac{1-a}{b} \log(1+bt)$. So,
-$$F_T(t) = 1 - (1+bt)^{\frac{\lambda(a-1)}{b}} e^{-\lambda at}.$$
+$$F_T(t) = \mathbf{P}(T \leq t) = 1 - (1+bt)^{\frac{\lambda(a-1)}{b}} e^{-\lambda at}.$$
+
+Let $f_T(t) = \frac{d}{dt} F_T(t)$ be the probability density function, then:
+
 $$f_T(t) = \lambda \left( \frac{1+abt}{1+bt} \right) (1+bt)^{\frac{\lambda(a-1)}{b}} e^{-\lambda at}.$$
 
 Assuming that $n = \frac{\lambda(a-1)}{b}$ is integer, we have:
 $$F_T(t) = 1 - (1+bt)^n e^{-\lambda at}$$
 
-Let $\mathcal{L}$ be the Laplace Transform. Thus,
+To understand how the change in the hash rate affects the time between blocks, we will calculate the average time between blocks, i.e., $\mathbf{E}[T]$. For this, let's use the well-known result that the expected value of a random variable is equal to minus the derivative of the Laplace transformation of its probability density function when $s=0$.
+
+Let $\mathcal{L}$ be the Laplace Transform operator, then $\mathbf{E}[T] = - \frac{d}{ds} \mathcal{L}\{f_T(t)\}|_{s=0}$. First, we will calculate $\mathcal{L}\{F_T(t)\}$, and then we obtain $\mathcal{L}\{f_T(t)\}$ using $\mathcal{L}\{F_T(t)\}$. Thus,
+
 \begin{align*}
 \mathcal{L}\{F_T(t)\} &= \mathcal{L}\{1 - (1+bt)^n e^{-\lambda at}\} \\
 	&= \mathcal{L}\{1\} - \mathcal{L}\{(1+bt)^n e^{-\lambda at}\} \tag{$\mathcal{L}$ is a linear operator} \\
@@ -204,7 +216,7 @@ Then,
 	&= - \frac{1}{a\lambda} \left[ n! \left(\frac{b}{\lambda a}\right)^n \sum_{k=0}^n \frac{1}{k!} \left( \frac{\lambda a}{b} \right)^{k} \right]
 \end{align*}
 
-Finally, as $\mathbf{E}[T] = -\mathcal{L}\{f_T(t)\}|_{s=0}$,
+Finally, as $\mathbf{E}[T] = - \frac{d}{ds} \mathcal{L}\{f_T(t)\}|_{s=0}$,
 $$\mathbf{E}[T] = \frac{1}{\lambda a} \left[ n! \left(\frac{b}{\lambda a}\right)^n \sum_{k=0}^n \frac{1}{k!} \left( \frac{\lambda a}{b} \right)^{k} \right] \text{, where $n = \frac{\lambda(a-1)}{b}$}$$
 
 Let's check this equation for already known scenarios. When $a=1$, then $n=0$ and $\mathbf{E}[T] = 1/\lambda$. When $b \rightarrow +\infty$, it reduces to the case in which the hash rate is multiplied by $a$, which we have already studied. In fact, $b \rightarrow +\infty$ yields $n \rightarrow 0$, $u(t) \rightarrow a$, and $\mathbf{E}[T] = \frac{1}{\lambda a}$.
