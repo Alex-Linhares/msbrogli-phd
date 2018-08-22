@@ -97,7 +97,7 @@
 
 \begin_layout Standard
 \begin_inset Note Note
-status open
+status collapsed
 
 \begin_layout Plain Layout
 This is a template \SpecialChar LyX
@@ -154,7 +154,7 @@ http://mirror.ctan.org/macros/latex/contrib/IEEEtran/IEEEtran_HOWTO.pdf
 \end_layout
 
 \begin_layout Title
-Autocorrelation properties of Sparse Distributed Memory
+Autocorrelation in Sparse Distributed Memory
 \end_layout
 
 \begin_layout Author
@@ -334,7 +334,7 @@ simplicity, beauty, elegance
 
 \begin_layout Peer Review Title
 \begin_inset Note Note
-status open
+status collapsed
 
 \begin_layout Plain Layout
 Don't add text here!
@@ -344,7 +344,7 @@ Don't add text here!
 
 
 \begin_inset Note Note
-status open
+status collapsed
 
 \begin_layout Plain Layout
 required if you use the document class option 
@@ -361,6 +361,72 @@ peerreview
 
 \begin_layout Section
 Introduction
+\end_layout
+
+\begin_layout Standard
+\begin_inset Flex Paragraph Start
+status open
+
+\begin_layout Plain Layout
+\begin_inset Argument 1
+status open
+
+\begin_layout Plain Layout
+S
+\end_layout
+
+\end_inset
+
+parse distributed memory
+\end_layout
+
+\end_inset
+
+
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+The 
+\series bold
+
+\backslash
+IEEEPARstart
+\series default
+ command is needed in the first paragraph of the document.
+\end_layout
+
+\end_inset
+
+ has been shown to be fodastic.
+ 
+\end_layout
+
+\begin_layout Standard
+In this paragraph we explain what SDM is.
+ 
+\end_layout
+
+\begin_layout Standard
+In this other paragraph we explain what the equator distance is.
+ Then, this introductory section breaks and moves on to the main findings
+ of this paper.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand input
+preview true
+filename "Chapters/sdm-autocorrelation.tex"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Previous Work
 \end_layout
 
 \begin_layout Standard
@@ -399,15 +465,8 @@ IEEEPARstart
 \end_inset
 
  is the text text text text text text text text text text text text text
- text text text.
-\end_layout
-
-\begin_layout Section
-Previous Work
-\end_layout
-
-\begin_layout Standard
-text text text text text text text text text text text text text text text
+ text text text text text text text text text text text text text text text
+ text text
 \end_layout
 
 \begin_layout Subsection
@@ -613,7 +672,10 @@ Acknowlegment
 \end_layout
 
 \begin_layout Standard
-bla bla
+The authors would like to thank Pentti Kanerva, Eric Paul Nichols, José
+ Ricardo de Almeida Torreão, Moacyr Alvim Horta Barbosa da Silva, Flavio
+ Codeço Coelho, Horacio Hideki Yanasse, and Paulo Murilo Castro de Oliveira
+ for their careful, comprehensive, reviews of the first author’s theses.
 \end_layout
 
 \begin_layout Standard

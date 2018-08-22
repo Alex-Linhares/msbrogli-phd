@@ -485,70 +485,28 @@ for IEEE journal papers produced under \LaTeX\ using
 IEEEtran.cls version 1.8b and later.
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
-I wish you the best of success.
+I wish you the best of success. Kanerva writes:
+
 
 % !TEX root = ../partial-sdm.tex
 
-\section{A deviation from the equator distance?}
+%\section{A deviation from the equator distance?}
 
-Kanerva writes\footnote{Email thread `SDM: A puzzling issue and an invitation', started March 16th 2018, in which we discussed the aforementioned discrepancy.  To think that some centuries ago, all scientific publishing was the exchange of such letters.}:
+Kanerva writes:
 
-\begin{quote}
-    %You have done an incredibly thorough analysis of SDM. I like the puzzle in your message and believe that your simulations are correct and to be learned from.  So what to make of the difference compared to my Figure 7.3 (and your Figure \ref{fig:kanerva-figure-73-calculated})?  I think the difference comes from my not having accounted fully for the effect of the other 9,999 vectors that are stored in the memory.  You say in it\\
 
-   %``Our results show that the theoretical prediction is not accurate. There are interaction effects from one or more of the attractors created by the 10,000 writes, and these attractors seem to raise the distance beyond 500 bits (Figure \ref{fig:sdm-10000w-table-7-2}).'' \\
+    You have done an incredibly thorough analysis of SDM. I like the puzzle in your message and believe that your simulations are correct and to be learned from.  So what to make of the difference compared to my Figure 7.3 (and your Figure \ref{fig:kanerva-figure-73-calculated})?  I think the difference comes from my not having accounted fully for the effect of the other 9,999 vectors that are stored in the memory.  You say in it\\
+
+   ``Our results show that the theoretical prediction is not accurate. There are interaction effects from one or more of the attractors created by the 10,000 writes, and these attractors seem to raise the distance beyond 500 bits (Figure \ref{fig:sdm-10000w-table-7-2}).'' \\
 
    I think that is correct.  It also brings to mind a comment Louis Jaeckel made when we worked at NASA Ames.  He pointed out that autoassociative storage (each vector is stored with itself as the address) introduces autocorrelation that my formula for Figure 7.2 did not take into account.  When we read from memory, each stored vector exerts a pull toward itself, which also means that each bit of a retrieved vector is slightly biased toward the same bit of the read address, regardless of the read address.  We never worked out the math.
-\end{quote}
+
 
 This is an important observation. A hard location is activated because it shares many dimensions with the items read from or written onto it. Imagine the `counter's eye view':  each individual counter `likes' to write on its own corresponding bit-address value more than it likes the opposite; as each hard-location has a say in its own area --- and nowhere else.
 
 
 
 
-
-Let $x$ and $y$ be random bitstrings and $n$ be the number of dimensions in the memory; let $x_i$ and $y_i$ be the $i$-th bit of $x$ and $y$, respectively; and $d(x, y)$ be the Hamming distance. Whilst the probability of a shared bit-value between same dimension-bits in two random addresses is $1/2$, an address only activates hard-locations close to it.  Let us call these shared bitvalues a \emph{bitmatch in dimension $i$}.
-
-So, what is the probability of bitmatches given that we know the access radius $r$ between the address and a hard-location?
-\bigskip
-
-\begin{theorem}
-\emph{Each dimension $i$ has a small pull bias, which can be measured by}
-\label{T1}
-$P(x_i = y_i | d(x, y) \le r) = \dfrac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}^{r} \binom{n}{k}}.$
-\end{theorem}
-
-\begin{proof}
-    The left-hand expression $P(x_i = y_i | d(x, y) \le r)$ computes the probability of a bitmatch in $i$, given that we know that $x$ and $y$ are in the access radius defined by $r$, i.e., $d(x, y)\le r$.
-
-    Applying the law of total probability to the left-hand expression we obtain
-
-    \begin{align}
-    \sum_{k=0}^{r} P(x_i = y_i | d(x, y) = k \le r) P(d(x, y) = k | d(x, y) \le r)
-    \end{align}
-
-    We also know that
-
-    \begin{align}
-    P(x_i = y_i | d(x, y) = k) &= \frac{n-k}{n} \\
-    P(d(x, y) = k | d(x, y) \le r) &= \frac{\binom{n}{k}}{\sum_{j=0}^{r} \binom{n}{j}}
-    \end{align}
-
-    Hence,
-
-    \begin{align}
-    P(x_i = y_i | d(x, y) \le r) = \frac{\sum_{k=0}^{r} \frac{n-k}{n} \binom{n}{k}}{\sum_{j=0}^{r} \binom{n}{j}}
-    \end{align}
-
-    Finally, the combinatorial identity
-
-    \begin{align}
-    \frac{n-k}{n} \binom{n}{k} = \frac{(n-k)}{n} \frac{n!}{(n-k)! k!} = \frac{(n-1)!}{k! (n-1-k)!} = \binom{n-1}{k}
-    \end{align}
-
-    closes the theorem.
-
-\end{proof}
 
 
 

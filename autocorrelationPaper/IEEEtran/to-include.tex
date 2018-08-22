@@ -1,3 +1,51 @@
+
+
+Let $x$ and $y$ be random bitstrings and $n$ be the number of dimensions in the memory; let $x_i$ and $y_i$ be the $i$-th bit of $x$ and $y$, respectively; and $d(x, y)$ be the Hamming distance. Whilst the probability of a shared bit-value between same dimension-bits in two random addresses is $1/2$, an address only activates hard-locations close to it.  Let us call these shared bitvalues a \emph{bitmatch in dimension $i$}.
+
+So, what is the probability of bitmatches given that we know the access radius $r$ between the address and a hard-location?
+\bigskip
+
+\begin{theorem}
+\emph{Each dimension $i$ has a small pull bias, which can be measured by}
+\label{T1}
+$P(x_i = y_i | d(x, y) \le r) = \dfrac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}^{r} \binom{n}{k}}.$
+\end{theorem}
+
+\begin{proof}
+    The left-hand expression $P(x_i = y_i | d(x, y) \le r)$ computes the probability of a bitmatch in $i$, given that we know that $x$ and $y$ are in the access radius defined by $r$, i.e., $d(x, y)\le r$.
+
+    Applying the law of total probability to the left-hand expression we obtain
+
+    \begin{align}
+    \sum_{k=0}^{r} P(x_i = y_i | d(x, y) = k \le r) P(d(x, y) = k | d(x, y) \le r)
+    \end{align}
+
+    We also know that
+
+    \begin{align}
+    P(x_i = y_i | d(x, y) = k) &= \frac{n-k}{n} \\
+    P(d(x, y) = k | d(x, y) \le r) &= \frac{\binom{n}{k}}{\sum_{j=0}^{r} \binom{n}{j}}
+    \end{align}
+
+    Hence,
+
+    \begin{align}
+    P(x_i = y_i | d(x, y) \le r) = \frac{\sum_{k=0}^{r} \frac{n-k}{n} \binom{n}{k}}{\sum_{j=0}^{r} \binom{n}{j}}
+    \end{align}
+
+    Finally, the combinatorial identity
+
+    \begin{align}
+    \frac{n-k}{n} \binom{n}{k} = \frac{(n-k)}{n} \frac{n!}{(n-k)! k!} = \frac{(n-1)!}{k! (n-1-k)!} = \binom{n-1}{k}
+    \end{align}
+
+    closes the theorem.
+
+\end{proof}
+
+
+
+
 Theorem \ref{T1} is valid for both ``x written at x'' (autoassociative memory) and ``random written at x'' (heteroassociative memory). When $n=1,000$ and $r=451$, $P(x_i = y_i | d(x, y) \le r) = p = 0.552905$.  Each bit of a hard location does indeed have a small pull bias.  What is meant by this is that each particular dimension has a small preference toward positive values if its address bit is set to 1, and negative values if set to 0---an intuition developed in Figure \ref{fig:bitmatchbias}.
 
 \begin{figure}[!h]
