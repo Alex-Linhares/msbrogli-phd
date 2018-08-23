@@ -4,7 +4,7 @@
 %% Do not edit unless you really know what you are doing.
 \documentclass[twocolumn,journal]{IEEEtran}
 \usepackage[T1]{fontenc}
-\usepackage[latin9]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage{calc}
 \usepackage{graphicx}
 \usepackage[unicode=true,
@@ -14,6 +14,16 @@
 \hypersetup{pdftitle={Your Title},
  pdfauthor={Your Name},
  pdfpagelayout=OneColumn, pdfnewwindow=true, pdfstartview=XYZ, plainpages=false}
+
+
+ \makeatletter
+ \def\endthebibliography{%
+   \def\@noitemerr{\@latex@warning{Empty `thebibliography' environment}}%
+   \endlist
+ }
+ \makeatother
+
+ \usepackage[round]{natbib}
 
 \makeatletter
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
@@ -43,6 +53,8 @@
 \usepackage{subfig}
 \makeatother
 
+\setcitestyle{square}
+
 \begin{document}
 
 \title{Autocorrelation in Sparse Distributed Memory}
@@ -56,6 +68,12 @@ EBAPE, Fundação Getulio Vargas, Rio de Janeiro, Brazil, e-mail: \protect\href{
 
 \IEEEpubid{0000\textendash 0000/00\$00.00~\copyright~2012 IEEE}
 \maketitle
+
+
+
+
+
+
 \begin{abstract}
 Sparse Distributed Memory (SDM) is a neuroscientific and psychologically
 plausible model of human memory. In this paper we present an anomaly
@@ -73,22 +91,189 @@ Systemwide properties.
 
 \IEEEpeerreviewmaketitle{}
 
+
+
+
+
+
 \section{Introduction}
 
-\IEEEPARstart{S}{parse distributed memory} has been shown to be
-fodastic.
+\IEEEPARstart{S}{parse distributed memory} (SDM) \citep{Kanerva1988} (see also \citep{denning_sparse_1989,  flynn_sparse_1989, kanerva_sparse_1993, kanerva_parallel_1985, goos_binary_1996, kanerva_hyperdimensional_2009,  keeler_comparison_1988, rwcp_fully_1997, marinaro_spatter_1994, sahlgren_permutations_nodate, uesaka_foundations_2001}) is a mathematical model of long-term memory that has a number of neuroscientific and psychologically plausible dynamics. This model is used in all sort of applications due to its incredible ability to closely reflect the human capacity to remember past experiences from the subtlest of clues. Applications range from call admission control \citep{kwon_atm_1998, hee-yong_kwon_atm_1997}, to behavior-based robotics \citep{Rajesh1998, mendes2008robot, jockel_sparse_2009}, to noise filtering \citep{meng_modified_2009}, etc.
 
-In this paragraph we explain what SDM is.
+
+\subsection{Desiderata for a theory of memory}
+
+SDM reads like a \emph{desiderata} of a theory for human long-term memory.  To understand the breadth of topics that SDM encompasses, consider the following questions:
+
+\begin{enumerate}
+    \item Why are most concepts orthogonal, unrelated to each other?
+    \item Why is there Miller's magic number, i.e., we can't hold too many things in mind at once?
+    \item Why do we at times instantly recall an experience; other times we can't recall anything at all; and still other times we get into this strange tip-of-the-tongue situation... it is clearly `there'... but where?  (and `what' is `there'?\footnote{Psychologists have documented interesting properties about this state:  it happens, for instance, around every 1-week cycle; and it happens mostly over proper names, subjects have access to the first letter and to the number of syllables better than chance, etc. Also interesting is their clever way of triggerring the state: through definitions of rarely-used words.  For some psychological studies about the tip-of-tongue, see \citet{meyer_tip---tongue_1992, brown_review_1991, brown_tip_1966}.}.)
+    \item How does this recall process work?  What is remembering?
+    \item Why do neurons die and we still remember most everything?
+    \item What do neurons actually do?  What is their primary function?
+\end{enumerate}
+
+
+
+These are some of the questions touched by SDM.  It is a theory of long-term memory that constructs the process of recall from a very microscopic level of neuron-firings.
 
 \begin{figure}[h!]
   \centering
-  \subfloat[$\text{addr}_i=1$]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/x_at_x_addr1.png}}
+  \subfloat[$Q_3$]{\includegraphics[width=0.4\columnwidth]{./images02/new-images/qn3.png}}
+  \subfloat[$Q_7$]{\includegraphics[width=0.4\columnwidth]{./images02/new-images/qn7.png}}
 
-  \subfloat[$\text{addr}_i=0$]{\includegraphics[width=0.5\textwidth]{./images02/autocorrelation/x_at_x_addr0.png}}
-
-  \caption{The value of the counters after $s=10,000$ writes shows the autocorrelation in the counters in autoassociative memories (``x at x''). The histogram was obtained through simulation. The red curve is the theoretical normal distribution found in equations (\ref{cntaddr1}) and (\ref{cntaddr0}).}
-  \label{fig:DELETE-sdm-corr-counters}
+  \subfloat[$Q_{10}$]{\includegraphics[width=\columnwidth]{./images02/new-images/qn10.png}}
+  \caption{Kanerva models the space of \emph{possible incoming neural signals} as an $n$-dimensional \emph{hypercube}, or $Q_n$.  Here we have $Q_n$, for $n \in$ \{3, 7, 10\}. Each node corresponds to a bitstring in $\{0,1\}^n$, and two nodes are linked iff the bitstrings differ by a single dimension.  A number of observations can be made here. First, the number of nodes grows as $O(2^n)$; which makes the space rapidly intractable. Another interesting observation is that most of the space lies `at the core' of the hypercube, at a distance of around $n/2$ from any given vantage point.\label{hypercubes}}
 \end{figure}
+
+
+\subsection{Review of the model}
+
+
+
+
+
+
+IN SDM, the data --- and address space on which it is stored --- are represented by large sequences of bits, called \emph{bitstrings}. The \emph{Hamming distance} provides comparisons between bitstrings and is used as a metric for the system. The Hamming distance is defined for two bitstrings of equal length as the number of positions in which bits differ. For example, $00110_{b}$ and $01100_{b}$ are bitstrings of length 5 and their Hamming distance is 2.
+
+The space studied by Kanerva is also called the \emph{hypercube graph}, or $Q_n$, as in Figure \ref{hypercubes}. For a fixed $n \in \mathbb{Z}$, the graph $G = (V, E)$, in which $v \in V$ iff there is a bijective function $b: V\to \{0,1\}^n$ and $(v_i, v_j) \in E$ iff $H(b(v_i), b(v_j))=1$, where $H$ is the Hamming distance. That is, $n$-sized bitstrings correspond to nodes, and edges exist between nodes $iff$ they flip a single bit.  Though Kanerva has derived many combinatorial properties of the space, additional results have been found by the graph-theoretical community: it is a bipartite graph with chromatic number 2, and it is planar only if $n\le3$. The proofs, though elementary, illuminate some of its properties:  vertices connect bitstrings with an even number of 1's with bitstrings with an odd number of 1's, therefore (i) it is \emph{bipartite} and (ii) it \emph{may be colored with two colors}.  As for planarity, the case $n=3$ is the largest planar one.  A good survey is provided by \citep{harary1988survey} --- and some interesting results may be found in \citep{foldes_characterization_1977, wagner_embedding_1990, laborde_another_1982, ruskey_combinatorial_2003}.
+
+One has to be careful when thinking intuitively about distance in SDM because the Hamming distance does not have the same properties of, say, our 3-dimensional space.
+
+A major difference is that in the 3-d world, there exist very far points, while in $Q_n$ the largest possible distance is $n$.  Another one is that the number of directions in $Q_n$ is enormous:  at \emph{every point} there are $n$ directions to choose from.
+
+Though both follow the triangle inequality ($d(A, C) \le d(A, B) + d(B, C)$), which in 3-d Euclidean distance may be loosely interpreted as ``if A is close to B, and B is close to C, then A is also close to C'' --- $d(A, B) \le r \text{ and } d(B, C) \le r \Rightarrow d(A, C) \le 2r$ ---, but in SDM, although the inequality is also valid, two bitstrings would be close when, for instance, $r = 430$, so $2r = 860$ would cover all other bitstrings. Hence, it makes no sense to say that $A$ is also close to $C$.
+
+There are numerous, beautiful, counter-intuitive notions involved in this space. This difference in intuition may trick even experienced researchers when analyzing some situations.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Unlike traditional memory used by computers, SDM performs read and write operations in a multitude of addresses, also called neurons.  That is, the data is not written, or it is not read in a single address spot, but in many addresses. These are called activated addresses, or activated neurons.
+
+The activation of addresses takes place according to their distances from the datum. Suppose one is writing datum $\eta$ at address $\xi$, then all addresses inside a circle with center $\xi$ and radius $r$ are activated. So, $\eta$ will be stored in all these activated addresses, which are around address $\xi$, such as in Figure \ref{fig-addresses-inside-access-radius}.  An address $\xi'$ is inside the circle if its Hamming distance to the center $\xi$ is less than or equal to the radius $r$, i.e. $distance(\xi,\xi')\leq r$.
+
+\begin{figure}[!htb]
+\centering\includegraphics[scale=0.75]{./images02/p_circle_r.pdf}
+
+\caption{Activated addresses inside access \protect \\
+radius $r$ around the center address.\label{fig-addresses-inside-access-radius}}
+\end{figure}
+
+
+
+Every write or read in SDM memory activates a number of addresses with close distance.  The data is written in these activated addresses or read from them.  These issues will be addressed in due detail further on, but a major difference from a traditional computer memory is that the data are always stored and retrieved in a multitude of addresses. This way SDM memory has robustness against loss of addresses (e.g., death of a neuron).
+
+In traditional memory, each datum is stored in an address and every lookup of a specific datum requires a search through the memory. In spite of computer scientists having developed beautiful algorithms to perform fast searches, almost all of them do a precise search. That is, if you have an imprecise clue of what you need, these algorithms will simply fail.
+
+In SDM, the data space is the same as the address space, which amounts to a vectorial, binary space, that is, a $\{0,1\}^{n}$ space. This way, the addresses where the data will be written are the same as the data themselves. For example, the datum $\eta=00101_{b}\in\{0,1\}^{5}$ will be written to the address $\xi=\eta=00101_{b}$. If one chooses a radius of 1, the SDM will activate all addresses one bit away or less from the center address. So, the datum $00101_{b}$ will be written to the addresses $00101_{b}$, $10101_{b}$, $01101_{b}$, $00001_{b}$, $00111_{b}$, and $00100_{b}$.
+
+In this case, when one needs to retrieve the data, one could have an imprecise cue at most one bit away from $\eta$, since all addresses one bit away have $\eta$ stored in themselves.  Extending this train of thought for larger dimensions and radius, exponential numbers of addresses are activated and one can see why SDM is a distributed memory.
+
+When reading a cue $\eta_{x}$ that is $x$ bits away from $\eta$, the cue shares many addresses with $\eta$. The number of shared addresses decreases as the cue's distance to $\eta$ increases, in other words, as $x$ increases. This is shown in Figure \ref{fig-shared-addresses}.  The target datum $\eta$ was written in all shared addresses, thus they will bias the read output in the direction of $\eta$. If the cue is sufficiently near the target datum $\eta$, the read output will be closer to $\eta$ than $\eta_{x}$ was. Repeating the read operation increasingly gets results closer to $\eta$, until it is precisely the same. So, it may be necessary to perform more than one read operation to converge to the target data $\eta$.
+
+\begin{figure}[!htb]
+\centering\includegraphics[scale=0.75]{./images02/p1_inter_p2.pdf}
+
+\caption{Shared addresses between the \protect \\
+target datum $\eta$ and the cue $\eta_{x}$. \label{fig-shared-addresses}}
+\end{figure}
+
+
+The addresses of the $\{0,1\}^{n}$ space grow exponentially with the number of dimensions $n$, i.e., $N=2^{n}$. For $n=100$ we have $N\approx10^{30}$, which is incredibly large when related to computer memory. Furthermore, \citep{Kanerva1988} suggests $n$ between 100 and 10,000.  To solve the feasibility problem of implementing this memory, Kanerva made a random sample of $\{0,1\}^{n}$, in his work, having $N'$ elements. All these addresses in the sample are called hard locations. Other elements of $\{0,1\}^{n}$, not in $N'$, are called virtual neurons. This is represented in Figure \ref{fig-hardlocations}.  All properties of reading and write operations presented before remain valid but limited to hard locations. Kanerva suggests taking a sample of about one million hard locations.
+
+Using this sample of binary space, our data space does not exist completely.  That is, the binary space has $2^{n}$ addresses, but the memory is far away from having these addresses available. In fact, only a fraction of this vectorial space is actually instantiated. Following Kanerva's suggestion of one million hard locations, for $n=100$, only $100\cdot10^{6}/2^{100}=7\cdot10^{-23}$ percent of the whole space exists, and for $n=1,000$ only $100\cdot10^{6}/2^{1000}=7\cdot10^{-294}$ percent.
+
+Kanerva also suggests the selection of a radius that will activate, on average, one-thousandth of the sample, which is 1,000 hard locations for a sample of one million addresses. In order to achieve his suggestion, a 1,000-dimension memory uses an access radius $r=451$, and a 256-dimensional memory, $r=103$. We think that a 256-dimensional memory may be important because it presents conformity to Miller's magic number \citep{Linhares2011}.
+
+\begin{figure}[!htb]
+\centering\includegraphics[scale=0.75]{./images02/hardlocations.pdf}
+
+\caption{Hard-locations randomly sampled from binary space.\label{fig-hardlocations}}
+\end{figure}
+
+
+Since a cue $\eta_{x}$ near the target bitstring $\eta$ shares many hard locations with $\eta$, SDM can retrieve data from imprecise cues. Despite this feature, it is very important to know how imprecise this cue could be while still giving accurate results. What is the maximum distance from our cue to the original data that still retrieves the right answer? An interesting approach is to perform a read operation with a cue $\eta_{x}$, that is $x$ bits away from the target $\eta$.  Then measure the distance from the read output and $\eta$. If this distance is smaller than $x$ we are converging. Convergence is simple to handle, just read again and again, until it converges to the target $\eta$. If this distance is greater than $x$ we are diverging. Finally, if this distance equals $x$ we are in a tip-of-the-tongue process.  A tip-of-the-tongue psychologically happens when you know that you know, but you can't say what exactly it is. In SDM mathematical model, a tip-of-the-tongue process takes infinite time to converge. \citet{Kanerva1988} called this $x$ distance, where the read's output averages $x$, the critical distance. Intuitively, it is the distance from which smaller distances converge and greater distances diverge. In Figure \ref{fig-p1-p2-iterative-read}, the circle has radius equal to the critical distance and every $\eta_{x}$ inside the circle should converge.  The figure also shows convergence in four readings.
+
+\begin{figure}[!htb]
+\centering\includegraphics[scale=0.75]{./images02/p1_p2_iter_read.pdf}
+
+\caption{In this example, four iterative readings were\protect \\
+required to converge from $\eta_{x}$ to $\eta$.\label{fig-p1-p2-iterative-read}}
+\end{figure}
+
+
+The $\{0,1\}^{n}$ space has $N=2^{n}$ locations from which we instantiate $N'$ samples. Each location in our sample is called a hard location.  On these hard locations, we do operations of read and write. One of the insights of SDM is exactly the way we read and write: using data as addresses in a distributed fashion. Each datum $\eta$ is written in every activated hard location inside the access radius centered on the address, that equals datum, $\xi=\eta$. Kanerva suggested using an access radius $r$ having about one-thousandth of $N'$.  As an imprecise cue $\eta_{x}$ shares hard locations with the target bitstring $\eta,$ it is possible to retrieve $\eta$ correctly. (Actually, probably more than one read is necessary to retrieve exactly $\eta.)$.  Moreover, if some neurons are lost, only a fraction of the datum is lost and it is possible that the memory can still retrieve the right datum.
+
+A random bitstring is generated with equal probability of $0$'s and $1$'s for each bit. One can readily see that the average distance between two random bitstrings follows the binomial distribution with mean $n/2$ and standard deviation $\sqrt{n/4}$. For a large $n$, most of the space lies close to the mean and has fewer shared hard locations.  As two bitstrings with distance far from $n/2$ are very improbable, \citet{Kanerva1988} defined that two bitstrings are orthogonal when their distance is $n/2$.
+
+The write operation needs to store, for each dimension bit which happened more ($0$'s or $1$'s). This way, each hard location has $n$ counters, one for each dimension. The counter is incremented for each bit $1$ and decremented for each bit $0$. Thus, if the counter is positive, there have been more $1$'s than $0$'s, if the counter is negative, there have been more $0$'s than $1$'s, and if the counter is zero, there have been an equal number of $1$'s and $0$'s. Table \ref{tab:write operation} shows an example of a write operation being performed in a 7-dimensional memory.
+
+\begin{table}
+\begin{tabular}{c|c|c|c|c|c|c|c|}
+\cline{2-8}
+$\eta$ & 0 & 1 & 1 & 0 & 1 & 0 & 0\tabularnewline
+\cline{2-8}
+$\xi_{\textit{before}}$ & 6 & -3 & 12 & -1 & 0 & 2 & 4\tabularnewline
+\cline{2-8}
+\multicolumn{1}{c}{} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ -1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ +1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ +1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ -1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ +1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ -1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ -1}}\tabularnewline
+\cline{2-8}
+$\xi_{\textit{\textit{after}}}$ & \textbf{5} & \textbf{-2} & \textbf{13} & \textbf{-2} & \textbf{1} & \textbf{1} & \textbf{3}\tabularnewline
+\cline{2-8}
+\end{tabular}
+
+\caption{Write operation example in a 7-dimensional memory of data $\eta$
+being written to $\xi$, one of the activated addresses.\label{tab:write operation}}
+
+
+\end{table}
+
+
+The read is performed polling each activated hard location and statistically choosing the most written bit for each dimension. It consists of adding all $n$ counters from the activated hard locations and, for each bit, choosing bit 1 if the counter is positive, choosing bit 0 if the counter is negative, and randomly choose bit 0 or 1 if the counter is zero.
+
+
+\section{Neurons as pointers}
+
+One interesting view is that neurons in SDM work like pointers. As we write bitstrings in memory, the hard locations' counters are updated and some bits are flipped. Thus, the activated hard locations do not necessarily point individually to the bitstring that activated it, but together they point correctly. In other words, the read operation depends on many hard locations to be successful. This effect is represented in Figure \ref{fig-p1-pointers}: where all hard locations inside the circle are activated and they, individually, do not point to $\eta$.  But, like vectors, adding them up points to $\eta$. If another datum $\nu$ is written into the memory near $\eta$, the shared hard locations will have information from both of them and would not point to either.  All hard locations outside of the circle are also pointing somewhere (possibly other data points). This is not shown, however, in order to keep the picture clean and easily understandable.
+
+\begin{figure}[!htb]
+\centering\includegraphics[scale=0.75]{./images02/p1_after_write.pdf}
+
+\caption{Hard-locations pointing, approximately, to the target bitstring.\label{fig-p1-pointers}}
+\end{figure}
+
+
+
+\section{Concepts}
+
+Although Kanerva does not mention concepts directly in his book \citep{Kanerva1988}, the author's interpretation is that each bitstring may be mapped to a concept. Thus, unrelated concepts are orthogonal and concepts could be linked through a bitstring near both of them. For example, ``beauty'' and ``woman'' have distance $n/2$, but a bitstring that means ``beautiful woman'' could have distance $n/4$ to both of them. As a bitstring with distance $n/4$ is very improbable, it is linking those concepts together. \citet{Linhares2011} approached this concept via ``chunking through averaging''.
+
+Due to the distribution of hard locations between two random bitstrings, the vast majority of concepts is orthogonal to all others. Consider a non-scientific survey during a cognitive science seminar, where students asked to mention ideas unrelated to the course brought up terms like birthdays, boots, dinosaurs, fever, executive order, x-rays, and so on. Not only are the items unrelated to cognitive science, the topic of the seminar, but they are also unrelated to each other.
+
+For any two memory items, one can readily find a stream of thought relating two such items (``Darwin gave dinosaurs the boot''; ``she ran a fever on her birthday''; ``isn't it time for the Supreme Court to x-ray that executive order?'', ... and so forth). Robert French presents an intriguing example in which one suddenly creates a representation linking the otherwise unrelated concepts of ``coffee cups'' and ``old elephants'' \citep{French1997}.
+
+This mapping from concepts to bitstrings brings us two central questions: (i) Suppose we have a bitstring that is linking two major concepts.  How do we know which concepts are linked together? (ii) From a concept bitstring, how can we list all concepts that are somehow linked to it? This second question is called the problem of spreading activation.
+
+
+\section{Read operation}
+
+In his work, Kanerva proposed and analyzed a read algorithm called here Kanerva's read. His read takes all activated hard locations counters and sum them. The resulting bitstring has bit $1$ where the result is positive, bit $0$ where the result is negative, and a random bit where the result is zero. In a word, each bit is chosen according to all written bitstrings in all hard locations, being equal to the bit more appeared. Table \ref{tab:kanerva-read} shows an example of Kanerva's read result bitstring.
 
 
 \begin{figure}[h!]
@@ -108,11 +293,16 @@ of this paper.
 
 \input{Chapters/sdm-autocorrelation.tex}
 
-\section{Conclusions}
+\section{Conclusion}
 
-bla bla
+\subsection{Effects on system-wide properties}
+The skeptical reader may ask: `Beyond theory; what are the consequences of this work?  How does it apply, if at all, to building systems that incorporate SDM?'
 
-\appendices{}
+Our conclusion is that this work is of special relevance as it brings about some \emph{systemwide properties} that models need to take into account.  The first decision choice involved in building a system with SDM regards the size of $n$, the number of dimensions of the memory.  Here, complementing the work of XXXXXXXX, we show that as $n$ grows, autocorrelation tends to $0$.  But recall that as $n$ grows, the size of the critical distance also tends to $0$.  It is therefore crucial to select a value for $n$ in which the model will retain its convergence properties, with the understanding of the possible effects brought about by autocorrelation.   Systemwide properties such as these affect the entire behavior of the model and, as such, should always be taken into account by theoreticians and modelers alike.
+
+\subsection{Future Research}
+
+BPs, System1 vs System2, HRRs, etc.
 
 \section*{Acknowlegment}
 
@@ -124,6 +314,11 @@ author\textquoteright s theses.
 
 \bibliographystyle{plain}
 \bibliography{mybib02}
+
+
+
+
+
 
 \begin{IEEEbiography}[{\fbox{\begin{minipage}[t][1.25in]{1in}%
 Replace this box by an image with a width of 1\,in and a height of
