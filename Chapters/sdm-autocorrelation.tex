@@ -57,7 +57,7 @@ $P(x_i = y_i | d(x, y) \le r) = \dfrac{\sum_{k=0}^{r} \binom{n-1}{k}}{\sum_{k=0}
     Finally, the combinatorial identity
 
     \begin{align}
-    \frac{n-k}{n} \binom{n}{k} = \frac{(n-k)}{n} \frac{n!}{(n-k)! k!} = \frac{(n-1)!}{k! (n-1-k)!} = \binom{n-1}{k}
+    \frac{n-k}{n} \binom{n}{k} = \binom{n-1}{k}
     \end{align}
 
     closes the theorem.
@@ -276,7 +276,8 @@ In our case, $p=0.5529$, $s=10,000$, and $H=1,000,000$, so $[\text{cnt}_i | \tex
 Finally,
 
 \begin{align}
-P(\text{cnt}_i \ge 0 | \text{addr}_i = 1) = P(\text{cnt}_i \le 0 | \text{addr}_i = 0) = 1 - \mathcal{N}.\text{cdf}(0)
+P(\text{cnt}_i \ge 0 | \text{addr}_i = 1) = P(\text{cnt}_i \le 0 | \text{addr}_i = 0) \\
+ = 1 - \mathcal{N}.\text{cdf}(0)
 \end{align}
 
 For ``random written at x'', $p=0.5$ implies $\mu_\text{cnt} = 0$, which implies $P(\text{cnt}_i \ge 0 | \text{addr}_i = 1) = P(\text{cnt}_i \le 0 | \text{addr}_i = 0) = 0.5$, independently of the parameters because they will only affect the variance and the normal distribution is symmetrical around the average.

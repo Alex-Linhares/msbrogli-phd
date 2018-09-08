@@ -101,23 +101,6 @@ Systemwide properties.
 \IEEEPARstart{S}{parse distributed memory} (SDM) \citep{Kanerva1988} (see also \citep{denning_sparse_1989,  flynn_sparse_1989, kanerva_sparse_1993, kanerva_parallel_1985, goos_binary_1996, kanerva_hyperdimensional_2009,  keeler_comparison_1988, rwcp_fully_1997, marinaro_spatter_1994, sahlgren_permutations_nodate, uesaka_foundations_2001}) is a mathematical model of long-term memory that has a number of neuroscientific and psychologically plausible dynamics. This model is used in all sort of applications due to its incredible ability to closely reflect the human capacity to remember past experiences from the subtlest of clues. Applications range from call admission control \citep{kwon_atm_1998, hee-yong_kwon_atm_1997}, to behavior-based robotics \citep{Rajesh1998, mendes2008robot, jockel_sparse_2009}, to noise filtering \citep{meng_modified_2009}, etc.
 
 
-\subsection{Desiderata for a theory of memory}
-
-SDM reads like a \emph{desiderata} of a theory for human long-term memory.  To understand the breadth of topics that SDM encompasses, consider the following questions:
-
-\begin{enumerate}
-    \item Why are most concepts orthogonal, unrelated to each other?
-    \item Why is there Miller's magic number, i.e., we can't hold too many things in mind at once?
-    \item Why do we at times instantly recall an experience; other times we can't recall anything at all; and still other times we get into this strange tip-of-the-tongue situation... it is clearly `there'... but where?  (and `what' is `there'?\footnote{Psychologists have documented interesting properties about this state:  it happens, for instance, around every 1-week cycle; and it happens mostly over proper names, subjects have access to the first letter and to the number of syllables better than chance, etc. Also interesting is their clever way of triggerring the state: through definitions of rarely-used words.  For some psychological studies about the tip-of-tongue, see \citet{meyer_tip---tongue_1992, brown_review_1991, brown_tip_1966}.}.)
-    \item How does this recall process work?  What is remembering?
-    \item Why do neurons die and we still remember most everything?
-    \item What do neurons actually do?  What is their primary function?
-\end{enumerate}
-
-
-
-These are some of the questions touched by SDM.  It is a theory of long-term memory that constructs the process of recall from a very microscopic level of neuron-firings.
-
 \begin{figure}[h!]
   \centering
   \subfloat[$Q_3$]{\includegraphics[width=0.4\columnwidth]{./images02/new-images/qn3.png}}
@@ -135,9 +118,7 @@ These are some of the questions touched by SDM.  It is a theory of long-term mem
 
 
 
-IN SDM, the data --- and address space on which it is stored --- are represented by large sequences of bits, called \emph{bitstrings}. The \emph{Hamming distance} provides comparisons between bitstrings and is used as a metric for the system. The Hamming distance is defined for two bitstrings of equal length as the number of positions in which bits differ. For example, $00110_{b}$ and $01100_{b}$ are bitstrings of length 5 and their Hamming distance is 2.
-
-The space studied by Kanerva is also called the \emph{hypercube graph}, or $Q_n$, as in Figure \ref{hypercubes}. For a fixed $n \in \mathbb{Z}$, the graph $G = (V, E)$, in which $v \in V$ iff there is a bijective function $b: V\to \{0,1\}^n$ and $(v_i, v_j) \in E$ iff $H(b(v_i), b(v_j))=1$, where $H$ is the Hamming distance. That is, $n$-sized bitstrings correspond to nodes, and edges exist between nodes $iff$ they flip a single bit.  Though Kanerva has derived many combinatorial properties of the space, additional results have been found by the graph-theoretical community: it is a bipartite graph with chromatic number 2, and it is planar only if $n\le3$. The proofs, though elementary, illuminate some of its properties:  vertices connect bitstrings with an even number of 1's with bitstrings with an odd number of 1's, therefore (i) it is \emph{bipartite} and (ii) it \emph{may be colored with two colors}.  As for planarity, the case $n=3$ is the largest planar one.  A good survey is provided by \citep{harary1988survey} --- and some interesting results may be found in \citep{foldes_characterization_1977, wagner_embedding_1990, laborde_another_1982, ruskey_combinatorial_2003}.
+IN SDM, the data --- and address space on which it is stored --- are represented by large \emph{bitstrings}. The \emph{Hamming distance} provides comparisons between bitstrings and is used as a metric for the system. This space is also called the \emph{hypercube graph}, or $Q_n$, as in Figure \ref{hypercubes}. For a fixed $n \in \mathbb{Z}$, the graph $G = (V, E)$, in which $v \in V$ iff there is a bijective function $b: V\to \{0,1\}^n$ and $(v_i, v_j) \in E$ iff $H(b(v_i), b(v_j))=1$, where $H$ is the Hamming distance. That is, $n$-sized bitstrings correspond to nodes, and edges exist between nodes $iff$ they flip a single bit.  Though Kanerva has derived many combinatorial properties of the space, additional results have been found by the graph-theoretical community: it is a bipartite graph with chromatic number 2, and it is planar only if $n\le3$. The proofs, though elementary, illuminate some of its properties:  vertices connect bitstrings with an even number of 1's with bitstrings with an odd number of 1's, therefore (i) it is \emph{bipartite} and (ii) it \emph{may be colored with two colors}.  As for planarity, the case $n=3$ is the largest planar one.  A good survey is provided by \citep{harary1988survey} --- and some interesting results may be found in \citep{foldes_characterization_1977, wagner_embedding_1990, laborde_another_1982, ruskey_combinatorial_2003}.
 
 
 
@@ -200,27 +181,7 @@ The $\{0,1\}^{n}$ space has $N=2^{n}$ locations from which we instantiate $N'$ s
 
 A random bitstring is generated with equal probability of $0$'s and $1$'s for each bit. One can readily see that the average distance between two random bitstrings follows the binomial distribution with mean $n/2$ and standard deviation $\sqrt{n/4}$. For a large $n$, most of the space lies close to the mean and has fewer shared hard locations.  As two bitstrings with distance far from $n/2$ are very improbable, \citet{Kanerva1988} defined that two bitstrings are orthogonal when their distance is $n/2$.
 
-The write operation needs to store, for each dimension bit which happened more ($0$'s or $1$'s). This way, each hard location has $n$ counters, one for each dimension. The counter is incremented for each bit $1$ and decremented for each bit $0$. Thus, if the counter is positive, there have been more $1$'s than $0$'s, if the counter is negative, there have been more $0$'s than $1$'s, and if the counter is zero, there have been an equal number of $1$'s and $0$'s. Table \ref{tab:write operation} shows an example of a write operation being performed in a 7-dimensional memory.
-
-\begin{table}
-\begin{tabular}{c|c|c|c|c|c|c|c|}
-\cline{2-8}
-$\eta$ & 0 & 1 & 1 & 0 & 1 & 0 & 0\tabularnewline
-\cline{2-8}
-$\xi_{\textit{before}}$ & 6 & -3 & 12 & -1 & 0 & 2 & 4\tabularnewline
-\cline{2-8}
-\multicolumn{1}{c}{} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ -1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ +1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ +1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ -1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ +1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ -1}} & \multicolumn{1}{c}{\textcolor{red}{\small{}$\Downarrow$ -1}}\tabularnewline
-\cline{2-8}
-$\xi_{\textit{\textit{after}}}$ & \textbf{5} & \textbf{-2} & \textbf{13} & \textbf{-2} & \textbf{1} & \textbf{1} & \textbf{3}\tabularnewline
-\cline{2-8}
-\end{tabular}
-
-\caption{Write operation example in a 7-dimensional memory of data $\eta$
-being written to $\xi$, one of the activated addresses.\label{tab:write operation}}
-
-
-\end{table}
-
+The write operation needs to store, for each dimension bit which happened more ($0$'s or $1$'s). This way, each hard location has $n$ counters, one for each dimension. The counter is incremented for each bit $1$ and decremented for each bit $0$. Thus, if the counter is positive, there have been more $1$'s than $0$'s, if the counter is negative, there have been more $0$'s than $1$'s, and if the counter is zero, there have been an equal number of $1$'s and $0$'s.
 
 The read is performed polling each activated hard location and statistically choosing the most written bit for each dimension. It consists of adding all $n$ counters from the activated hard locations and, for each bit, choosing bit 1 if the counter is positive, choosing bit 0 if the counter is negative, and randomly choose bit 0 or 1 if the counter is zero.
 
@@ -237,30 +198,9 @@ One interesting view is that neurons in SDM work like pointers. As we write bits
 
 
 
-\section{Concepts}
-
-Although Kanerva does not mention concepts directly in his book \citep{Kanerva1988}, the author's interpretation is that each bitstring may be mapped to a concept. Thus, unrelated concepts are orthogonal and concepts could be linked through a bitstring near both of them. For example, ``beauty'' and ``woman'' have distance $n/2$, but a bitstring that means ``beautiful woman'' could have distance $n/4$ to both of them. As a bitstring with distance $n/4$ is very improbable, it is linking those concepts together. \citet{Linhares2011} approached this concept via ``chunking through averaging''.
-
-Due to the distribution of hard locations between two random bitstrings, the vast majority of concepts is orthogonal to all others. Consider a non-scientific survey during a cognitive science seminar, where students asked to mention ideas unrelated to the course brought up terms like birthdays, boots, dinosaurs, fever, executive order, x-rays, and so on. Not only are the items unrelated to cognitive science, the topic of the seminar, but they are also unrelated to each other.
-
-For any two memory items, one can readily find a stream of thought relating two such items (``Darwin gave dinosaurs the boot''; ``she ran a fever on her birthday''; ``isn't it time for the Supreme Court to x-ray that executive order?'', ... and so forth). Robert French presents an intriguing example in which one suddenly creates a representation linking the otherwise unrelated concepts of ``coffee cups'' and ``old elephants'' \citep{French1997}.
-
-This mapping from concepts to bitstrings brings us two central questions: (i) Suppose we have a bitstring that is linking two major concepts.  How do we know which concepts are linked together? (ii) From a concept bitstring, how can we list all concepts that are somehow linked to it? This second question is called the problem of spreading activation.
-
-
 \section{Read operation}
 
 In his work, Kanerva proposed and analyzed a read algorithm called here Kanerva's read. His read takes all activated hard locations counters and sum them. The resulting bitstring has bit $1$ where the result is positive, bit $0$ where the result is negative, and a random bit where the result is zero. In a word, each bit is chosen according to all written bitstrings in all hard locations, being equal to the bit more appeared. Table \ref{tab:kanerva-read} shows an example of Kanerva's read result bitstring.
-
-
-\begin{figure}[h!]
-\centering
-
-\includegraphics[width=\columnwidth]{./images02/autocorrelation/autocorrelation_n=1000_closeview=False.eps}
-
-\caption{The threshold size $r$ of hard-locations bring about the autocorrelation of Theorem \ref{T1}. Consider, for instance, the extremes \{0, $n$\}.  Let us start with $n$ (in our case, $n=1000$ dimensions): given the information that $d(x,y)\le n$, the probability of a bitmatch in dimension $i$ is $1/2$; as $\forall x,y \in \{0, 1\}^N, d(x,y)\le n$. At the other extreme, consider that we have the information that $d(x,y)\le 0$: in this case $x=y$ and the probability of a bitmatch, in any dimension, is 1. The autocorrelation hence drops monotonically until convergence at $1/2$ as the distance grows. Numerically, our results converge to precisely $1/2$ only after $d(x,y)\ge 607$ for $n=1000$; $d(x,y)\ge 5332$ for $n=10000$, and $d(x,y)\ge 83$ for $n=100$. This will be seen in Lemma \ref{thm:sdm-access-radius}.
-\label{fig:bitmatchbias}}
-\end{figure}
 
 
 In this other paragraph we explain what the equator distance is.
@@ -281,17 +221,25 @@ Our conclusion is that this work is of special relevance as it brings about some
 
 BPs, System1 vs System2, HRRs, etc.
 
+\subsection{Availability of the Code}
+
+OpenCL
+python (show example with figure)
+Technical Documentation
+
+Open-source Book
+
+another article with a larger overview of the developed system so far (Reinforcement learning, critical distance, noise filtering and prototype theory, and pattern recognition.)
+This --> transparency --> replicability -> incremental improvement --> parallel explorations by different teams around the world.
+
 \section*{Acknowlegment}
 
 The authors would like to thank Pentti Kanerva, Eric Paul Nichols,
 José Ricardo de Almeida Torreão, Moacyr Alvim Horta Barbosa da Silva,
-Flavio Codeço Coelho, Horacio Hideki Yanasse, and Paulo Murilo Castro
-de Oliveira for their careful, comprehensive, reviews of the first
-author\textquoteright s theses.
+Flavio Codeço Coelho and Paulo Murilo Castro de Oliveira for their careful, comprehensive, reviews of the first author\textquoteright s theses.
 
 \bibliographystyle{plain}
 \bibliography{mybib02}
-
 
 
 
