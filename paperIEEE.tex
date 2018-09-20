@@ -23,7 +23,7 @@
  }
  \makeatother
 
- \usepackage[round]{natbib}
+ \usepackage[round, numbers]{natbib}
 
 \makeatletter
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
@@ -167,7 +167,7 @@ Kanerva also suggests the selection of a radius that will activate, on average, 
 \end{figure}
 
 
-Since a cue $\eta_{x}$ near the target bitstring $\eta$ shares many hard locations with $\eta$, SDM can retrieve data from imprecise cues. Despite this feature, it is very important to know how imprecise this cue could be while still giving accurate results. What is the maximum distance from our cue to the original data that still retrieves the right answer? An interesting approach is to perform a read operation with a cue $\eta_{x}$, that is $x$ bits away from the target $\eta$.  Then measure the distance from the read output and $\eta$. If this distance is smaller than $x$ we are converging. Convergence is simple to handle, just read again and again, until it converges to the target $\eta$. If this distance is greater than $x$ we are diverging. Finally, if this distance equals $x$ we are in a tip-of-the-tongue process.  A tip-of-the-tongue psychologically happens when you know that you know, but you can't say what exactly it is. In SDM mathematical model, a tip-of-the-tongue process takes infinite time to converge. \citet{Kanerva1988} called this $x$ distance, where the read's output averages $x$, the critical distance. Intuitively, it is the distance from which smaller distances converge and greater distances diverge. In Figure \ref{fig-p1-p2-iterative-read}, the circle has radius equal to the critical distance and every $\eta_{x}$ inside the circle should converge.  The figure also shows convergence in four readings.
+Since a cue $\eta_{x}$ near the target bitstring $\eta$ shares many hard locations with $\eta$, SDM can retrieve data from imprecise cues. Despite this feature, it is very important to know how imprecise this cue could be while still giving accurate results. What is the maximum distance from our cue to the original data that still retrieves the right answer? An interesting approach is to perform a read operation with a cue $\eta_{x}$, that is $x$ bits away from the target $\eta$.  Then measure the distance from the read output and $\eta$. If this distance is smaller than $x$ we are converging. Convergence is simple to handle, just read again and again, until it converges to the target $\eta$. If this distance is greater than $x$ we are diverging.   Finally, if this distance equals $x$ we are in a tip-of-the-tongue process.  A tip-of-the-tongue psychologically happens when you know that you know, but you can't say what exactly it is. In SDM mathematical model, a tip-of-the-tongue process takes infinite time to converge. \citet{Kanerva1988} called this $x$ distance, where the read's output averages $x$, the critical distance. Intuitively, it is the distance from which smaller distances converge and greater distances diverge. In Figure \ref{fig-p1-p2-iterative-read}, the circle has radius equal to the critical distance and every $\eta_{x}$ inside the circle should converge.  The figure also shows convergence in four readings.
 
 \begin{figure}[!htb]
 \centering\includegraphics[scale=0.75]{./images02/p1_p2_iter_read.pdf}
@@ -223,7 +223,7 @@ BPs, System1 vs System2, HRRs, etc.
 
 \subsection{Availability of the Code}
 
-OpenCL
+OpenCL for the partial binomail sum (cite `Inference-Based Similarity Search in Randomized Montgomery Domains for Privacy-Preserving Biometric Identification')
 python (show example with figure)
 Technical Documentation
 
@@ -234,9 +234,7 @@ This --> transparency --> replicability -> incremental improvement --> parallel 
 
 \section*{Acknowlegment}
 
-The authors would like to thank Pentti Kanerva, Eric Paul Nichols,
-José Ricardo de Almeida Torreão, Moacyr Alvim Horta Barbosa da Silva,
-Flavio Codeço Coelho and Paulo Murilo Castro de Oliveira for their careful, comprehensive, reviews of the first author\textquoteright s theses.
+The authors would like to thank Pentti Kanerva, Eric Paul Nichols, José Ricardo de Almeida Torreão, Moacyr Alvim Horta Barbosa da Silva, Flavio Codeço Coelho and Paulo Murilo Castro de Oliveira for their careful, comprehensive, reviews of the first author\textquoteright s theses.
 
 \bibliographystyle{plain}
 \bibliography{mybib02}
@@ -248,13 +246,15 @@ Flavio Codeço Coelho and Paulo Murilo Castro de Oliveira for their careful, com
 \begin{IEEEbiography}[{\fbox{\begin{minipage}[t][1.25in]{1in}%
 Replace this box by an image with a width of 1\,in and a height of
 1.25\,in!%
-\end{minipage}}}]{Your Name}
- All about you and the what your interests are.
+\end{minipage}}}]{Marcelo Salhab Brogliato} received the Ph.D. degree from Getulio Vargas Foundation in 2018. Vialink, sdm.ai,
 \end{IEEEbiography}
 
-\begin{IEEEbiographynophoto}{Coauthor}
-Same again for the co-author, but without photo
-\end{IEEEbiographynophoto}
+
+\begin{IEEEbiography}[{\fbox{\begin{minipage}[t][1.25in]{1in}%
+Replace this box by an image with a width of 1\,in and a height of
+1.25\,in!%
+\end{minipage}}}]{Alexandre Linhares} received the Ph.D. degree from the National Institute of Space Research, 2001. He is an Associate Professor at the Center of Behavioral Research, EBAPE / Getulio Vargas Foundation.  He has published circa 30 papers in journals such as \emph{Artificial Intelligence, Biological Cybernetics, Cognitive Science, IEEE Transactions on Evolutionary Computation, Information Sciences, Frontiers in Psychology,} etc.
+\end{IEEEbiography}
 
 
 \end{document}
