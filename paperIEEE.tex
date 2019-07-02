@@ -114,11 +114,6 @@ Systemwide properties.
 
 \subsection{Review of the model}
 
-
-
-
-
-
 IN SDM, the data --- and address space on which it is stored --- are represented by large \emph{bitstrings}. The \emph{Hamming distance} provides comparisons between bitstrings and is used as a metric for the system. This space is also called the \emph{hypercube graph}, or $Q_n$, as in Figure \ref{hypercubes}. For a fixed $n \in \mathbb{Z}$, the graph $G = (V, E)$, in which $v \in V$ iff there is a bijective function $b: V\to \{0,1\}^n$ and $(v_i, v_j) \in E$ iff $H(b(v_i), b(v_j))=1$, where $H$ is the Hamming distance. That is, $n$-sized bitstrings correspond to nodes, and edges exist between nodes $iff$ they flip a single bit.  Though Kanerva has derived many combinatorial properties of the space, additional results have been found by the graph-theoretical community: it is a bipartite graph with chromatic number 2, and it is planar only if $n\le3$. The proofs, though elementary, illuminate some of its properties:  vertices connect bitstrings with an even number of 1's with bitstrings with an odd number of 1's, therefore (i) it is \emph{bipartite} and (ii) it \emph{may be colored with two colors}.  As for planarity, the case $n=3$ is the largest planar one.  A good survey is provided by \citep{harary1988survey} --- and some interesting results may be found in \citep{foldes_characterization_1977, wagner_embedding_1990, laborde_another_1982, ruskey_combinatorial_2003}.
 
 
@@ -187,7 +182,7 @@ The write operation needs to store, for each dimension bit which happened more (
 The read is performed polling each activated hard location and statistically choosing the most written bit for each dimension. It consists of adding all $n$ counters from the activated hard locations and, for each bit, choosing bit 1 if the counter is positive, choosing bit 0 if the counter is negative, and randomly choose bit 0 or 1 if the counter is zero.
 
 
-\section{Neurons as pointers}
+\subsection{Neurons as pointers}
 
 One interesting view is that neurons in SDM work like pointers. As we write bitstrings in memory, the hard locations' counters are updated and some bits are flipped. Thus, the activated hard locations do not necessarily point individually to the bitstring that activated it, but together they point correctly. In other words, the read operation depends on many hard locations to be successful. This effect is represented in Figure \ref{fig-p1-pointers}: where all hard locations inside the circle are activated and they, individually, do not point to $\eta$.  But, like vectors, adding them up points to $\eta$. If another datum $\nu$ is written into the memory near $\eta$, the shared hard locations will have information from both of them and would not point to either.  All hard locations outside of the circle are also pointing somewhere (possibly other data points). This is not shown, however, in order to keep the picture clean and easily understandable.
 
@@ -199,7 +194,7 @@ One interesting view is that neurons in SDM work like pointers. As we write bits
 
 
 
-\section{Read operation}
+\subsection{Read operation}
 
 In his work, Kanerva proposed and analyzed a read algorithm called here Kanerva's read. His read takes all activated hard locations counters and sum them. The resulting bitstring has bit $1$ where the result is positive, bit $0$ where the result is negative, and a random bit where the result is zero. In a word, each bit is chosen according to all written bitstrings in all hard locations, being equal to the bit more appeared. Table \ref{tab:kanerva-read} shows an example of Kanerva's read result bitstring.
 
@@ -216,7 +211,7 @@ of this paper.
 \subsection{Effects on system-wide properties}
 The skeptical reader may ask: `Beyond theory; what are the consequences of this work?  How does it apply, if at all, to building systems that incorporate SDM?'
 
-Our conclusion is that this work is of special relevance as it brings about some \emph{systemwide properties} that models need to take into account.  The first decision choice involved in building a system with SDM regards the size of $n$, the number of dimensions of the memory.  Here, complementing the work of XXXXXXXX, we show that as $n$ grows, autocorrelation tends to $0$.  But recall that as $n$ grows, the size of the critical distance also tends to $0$.  It is therefore crucial to select a value for $n$ in which the model will retain its convergence properties, with the understanding of the possible effects brought about by autocorrelation.   Systemwide properties such as these affect the entire behavior of the model and, as such, should always be taken into account by theoreticians and modelers alike.
+Our conclusion is that this work is of special relevance as it brings about some \emph{systemwide properties} that models need to take into account.  The first decision choice involved in building a system with SDM regards the size of $n$, the number of dimensions of the memory.  Here, complementing the work of XXXXXXXX\footnote{check this}, we show that as $n$ grows, autocorrelation tends to $0$.  But recall that as $n$ grows, the size of the critical distance also tends to $0$.  It is therefore crucial to select a value for $n$ in which the model will retain its convergence properties, with the understanding of the possible effects brought about by autocorrelation.   Systemwide properties such as these affect the entire behavior of the model and, as such, should always be taken into account by theoreticians and modelers alike.
 
 \subsection{Future Research}
 
