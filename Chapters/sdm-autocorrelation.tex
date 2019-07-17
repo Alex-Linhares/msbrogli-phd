@@ -77,6 +77,8 @@ TRANSITION\footnote{Transition to what's coming next.}
 \label{fig:bitmatchbias}}
 \end{figure}
 
+
+
 \begin{lemma}
 Let $r$ be the access radius given that $f$ percent of the hard locations are activated. Then, $\lim_{n \rightarrow \infty} r/n = 1/2$\footnote{AS WRITTEN, this cannot be right.  This is saying that, as the number of dimensions explodes, o raio sobre o número de dimensões converge p/ 1/2?  Não, converge para zero.  Temos que re-escrever.}.
 \label{thm:sdm-access-radius}
@@ -85,7 +87,7 @@ Let $r$ be the access radius given that $f$ percent of the hard locations are ac
 
 As the bits of the hard locations' addresses are randomly chosen, the distance between two hard locations follow a Binomial distribution with $n$ samples and probability 1/2, $B(n, 1/2)$. For $n$ sufficiently large, the Binomial distribution can be approximated by a Normal distribution, i.e., $B(n, 1/2) \rightarrow \mathcal{N}(\mu = n/2, \sigma^2 = n/4)$.
 
-Let $\Phi(x)$ be the cdf of the standard normal distribution. Let $z = \frac{r - n/2}{\sqrt{n}/2}$. \footnote{$z$ is, hence, measuring the number of standard deviations from the average in the Gaussian, as $r$ varies.}  Thus, $P(d(x, y) \le r) = \Phi(z)$. As $f = P(d(x, y) \le r)$, then, $f = \Phi(z)$\footnote{WTF?  $f$ isn't a percentage here, is it?}.
+Let $\Phi(x)$ be the cdf of the standard normal distribution. Let $z = \frac{r - n/2}{\sqrt{n}/2}$. \footnote{$z$ is, hence, measuring the number of standard deviations from the average in the Gaussian, as $r$ varies.}  Thus, $P(d(x, y) \le r) = \Phi(z)$. As $f = P(d(x, y) \le r)$, then, $f = \Phi(z)$\footnote{WTF?  $f$ isn't a percentage here, is it? INSERT: for our fixed $r$}.
 
 Calculating the inverse, $z = \Phi^{-1}(f)$. Then,
 
