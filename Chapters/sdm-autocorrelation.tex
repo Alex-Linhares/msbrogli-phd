@@ -352,7 +352,7 @@ Hence,
 \left[ \text{acc}_i|\eta_i=0 \right] &\sim \mathcal{N}(\mu = -(2p-1)^2 \mu_\theta \mu_h, \sigma^2 = \sigma_\text{cnt}^2 \mu_h + 2 \mu_\text{cnt}^2 \sigma^2_h) \label{eqn:sdm-eta0}
 \end{align}
 
-In our case, $\left[ \text{acc}_i|\eta_i=1 \right] \sim \mathcal{N}(\mu = 128.62, \sigma^2 = 12865.69)$, and $\left[ \text{acc}_i|\eta_i=0 \right] \sim \mathcal{N}(\mu = -128.62, \sigma^2 = 12865.69)$. See Figure \ref{fig:sdm-read} --- we can notice that the variance issue from Figure \ref{fig:sdm-read-sums} has propagated to these images.
+In our case, $\left[ \text{acc}_i|\eta_i=1 \right] \sim \mathcal{N}(\mu = 128.62, \sigma^2 = 12865.69)$, and $\left[ \text{acc}_i|\eta_i=0 \right] \sim \mathcal{N}(\mu = -128.62, \sigma^2 = 12865.69)$. See Figure \ref{fig:sdm-read} --- we can notice that the variance issue from Figure \ref{fig:sdm-read-sums} propagates directly here.
 
 \begin{figure}[h!]
   \centering
@@ -396,7 +396,6 @@ Figure \ref{fig:sdm-single-read-dist} shows the new distance between $\eta_d$ an
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=0.5\textwidth]{./images02/autocorrelation/single-read-dist.png}
-
   \caption{New distance after a single read operation in a bitstring $\eta_d$, which is $d$ bits away from $\eta$. The new distance was calculated between $\eta_d$ and $\text{read}(\eta_d)$. Notice that when $d \ge 520$, the intersection between $\eta$ and $\eta_d$ is zero, which means there is only random bitstrings written into the activated hard locations. The distance 220 equals $1000 \cdot 0.220$ which is the probability find in Figure \ref{fig:sdm-read-random-bs}.}
   \label{fig:sdm-single-read-dist}
 \end{figure}
