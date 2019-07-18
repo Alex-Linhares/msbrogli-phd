@@ -126,8 +126,7 @@ The activation of addresses takes place according to their distances from the da
 \begin{figure}[!htb]
 \centering\includegraphics[scale=0.75]{./images02/p_circle_r.pdf}
 
-\caption{Activated addresses inside access \protect \\
-radius $r$ around the center address.\label{fig-addresses-inside-access-radius}}
+\caption{A planar projection of the space illustrates some of the mechanisms.  Activated addresses inside access radius $r$ around the center address.\label{fig-addresses-inside-access-radius}}
 \end{figure}
 
 
@@ -163,7 +162,7 @@ Kanerva also suggests the selection of a radius that will activate, on average, 
 \end{figure}
 
 
-Since a cue $\eta_{x}$ near the target bitstring $\eta$ shares many hard locations with $\eta$, SDM can retrieve data from imprecise cues. Despite this feature, it is very important to know how imprecise this cue could be while still giving accurate results. What is the maximum distance from our cue to the original data that still retrieves the right answer? An interesting approach is to perform a read operation with a cue $\eta_{x}$, that is $x$ bits away from the target $\eta$.  Then measure the distance from the read output and $\eta$. If this distance is smaller than $x$ we are converging. Convergence is simple to handle, just read again and again, until it converges to the target $\eta$. If this distance is greater than $x$ we are diverging.   Finally, if this distance equals $x$ we are in a tip-of-the-tongue process.  A tip-of-the-tongue psychologically happens when you know that you know, but you can't say what exactly it is. In SDM mathematical model, a tip-of-the-tongue process takes infinite time to converge. \citet{Kanerva1988} called this $x$ distance, where the read's output averages $x$, the critical distance. Intuitively, it is the distance from which smaller distances converge and greater distances diverge. In Figure \ref{fig-p1-p2-iterative-read}, the circle has radius equal to the critical distance and every $\eta_{x}$ inside the circle should converge.  The figure also shows convergence in four readings.
+Since a cue $\eta_{x}$ near the target bitstring $\eta$ shares many hard locations with $\eta$, SDM can retrieve data from imprecise cues. Despite this feature, it is very important to know how imprecise this cue could be while still giving accurate results. What is the maximum distance from our cue to the original data that still retrieves the right answer? An interesting approach is to perform a read operation with a cue $\eta_{x}$, that is $x$ bits away from the target $\eta$.  Then measure the distance from the read output and $\eta$. If this distance is smaller than $x$ we are converging. Convergence is simple to handle, just read again and again, until it converges to the target $\eta$. If this distance is greater than $x$ we are diverging.   Finally, if this distance equals $x$ we are in a tip-of-the-tongue process.  A tip-of-the-tongue psychologically happens when you know that you know, but you can't say what exactly it is. In SDM's mathematical model, a tip-of-the-tongue process takes infinite time to converge. \citet{Kanerva1988} called the distance in which the read's output averages $x$, the critical distance. Intuitively, it is the distance from which smaller distances converge and greater distances diverge. In Figure \ref{fig-p1-p2-iterative-read}, the circle has radius equal to the critical distance and every $\eta_{x}$ inside the circle should converge.  The figure also shows convergence in four readings.
 
 \begin{figure}[!htb]
 \centering\includegraphics[scale=0.75]{./images02/p1_p2_iter_read.pdf}
@@ -205,16 +204,106 @@ of this paper.
 
 \input{Chapters/sdm-autocorrelation.tex}
 
+
+
+
+
+
+
+
+
+
+
+
+
 \section{Conclusion}
+
+It was previously believed that reading at a distance $d=n/2$ would retrieve items at the equator distance, but this is not necessarily true. We have shown the subtle, but previously unnoticed, effect of autocorrelation in sparse distributed memory.  We have also derived excellent analytical approximations of the system's behavior. In this concluding section, some comments i) on the implications of this work, on ii) Future research, and iii) on the availability of the code are offered.
 
 \subsection{Effects on system-wide properties}
 The skeptical reader may ask: `Beyond theory; what are the consequences of this work?  How does it apply, if at all, to building systems that incorporate SDM?'
 
-Our conclusion is that this work is of special relevance as it brings about some \emph{systemwide properties} that models need to take into account.  The first decision choice involved in building a system with SDM regards the size of $n$, the number of dimensions of the memory.  Here, complementing the work of XXXXXXXX\footnote{check this}, we show that as $n$ grows, autocorrelation tends to $0$.  But recall that as $n$ grows, the size of the critical distance also tends to $0$.  It is therefore crucial to select a value for $n$ in which the model will retain its convergence properties, with the understanding of the possible effects brought about by autocorrelation.   Systemwide properties such as these affect the entire behavior of the model and, as such, should always be taken into account by theoreticians and modelers alike.
+Our conclusion is that this work is of special relevance as it brings about some \emph{systemwide properties} that models need to take into account.  The first decision choice involved in building a system with SDM regards the size of $n$, the number of dimensions of the memory.  Here, complementing the work of \cite{sjodin_improving_1995, sjodin_convergence_1998} in Jaeckel's SDM design\cite{jaeckel1989class}, we show that as $n$ grows, autocorrelation tends to $0$.  But recall that as $n$ grows, the size of the critical distance also tends to $0$.  It is therefore crucial to select a value for $n$ in which the model will retain its convergence properties, with the understanding of the possible effects brought about by autocorrelation.   Systemwide properties such as these affect the entire behavior of the model and, as such, should always be taken into account by theoreticians and modelers alike.
 
 \subsection{Future Research}
 
 BPs, System1 vs System2, HRRs, etc.
+
+\begin{table}[ht]
+\begin{tabular}{|p{3.5cm}|p{4cm}|}  %{|c|c|}
+\hline
+System 1	& System 2\tabularnewline
+\hline
+\hline
+Unconscious Reasoning	& Conscious Reasoning\tabularnewline
+\hline
+Implicit	& Explicit\tabularnewline
+\hline
+Automatic	& Controlled\tabularnewline
+\hline
+Low Effort	& High Effort\tabularnewline
+\hline
+Large Capacity	& Small Capacity\tabularnewline
+\hline
+Rapid	& Slow\tabularnewline
+\hline
+Default Process	& Inhibitory\tabularnewline
+\hline
+Associative	& Rule-Based\tabularnewline
+\hline
+Contextualized	& Abstract\tabularnewline
+\hline
+Domain Specific	& Domain General\tabularnewline
+\hline
+Evolutionarily Old	& Evolutionarily Recent\tabularnewline
+\hline
+Nonverbal	& Linked to language\tabularnewline
+\hline
+Includes recognition, perception, orientation	& Includes rule following, comparisons, weighing of options\tabularnewline
+\hline
+Modular Cognition	& Fluid Intelligence\tabularnewline
+\hline
+Independent of working memory	& Limited by working memory capacity\tabularnewline
+\hline
+Non-Logical	& Logical\tabularnewline
+\hline
+Parallel	& Serial\tabularnewline
+\hline
+\end{tabular}
+
+\caption{Dual process theories.}
+
+\label{table:twosys}
+
+\end{table}
+
+
+
+
+\begin{figure}[ht!]
+  \centering
+
+  \subfloat[Bongard problem 71]{\includegraphics[width=0.35\textwidth]{./images02/Bongard-problemp071.png}}
+
+  \subfloat[Bongard problem 72]{\includegraphics[width=0.35\textwidth]{./images02/Bongard-problemp072.png}}
+
+  \subfloat[Bongard problem 73]{\includegraphics[width=0.35\textwidth]{./images02/Bongard-problemp073.png}}
+
+  \subfloat[Bongard problem 74]{\includegraphics[width=0.35\textwidth]{./images02/Bongard-problemp074.png}}
+
+%  \subfloat[Bongard problem 75]{\includegraphics[width=0.35\textwidth]{./images02/Bongard-problemp075.png}}
+
+%  \subfloat[Bongard problem 76]{\includegraphics[width=0.35\textwidth]{./images02/Bongard-problemp076.png}}
+
+  \caption{Bongard problems 71 - 74, courtesy of Dr. Harry Foundalis\cite{foundalis_phaeaco:_2006, douglas1980godel, bongard_recognition_1968, Linhares2000}.  What distinguishes the boxes on the left hand side to those on the right hand side?  This is the quintessential `system-2' type of problem that current lies beyond AI's capabilities. The reader should note that here, for each class, $n=6$, a hard task for Machine Learning.}
+
+  \label{fig:bongard-problems-74}
+\end{figure}
+
+
+
+
+
 
 \subsection{Availability of the Code}
 
@@ -235,15 +324,11 @@ The authors would like to thank Pentti Kanerva, Eric Paul Nichols, José Ricardo
 \bibliography{mybib02}
 
 
-
-
 \begin{IEEEbiography}[{\fbox{\begin{minipage}[t][1.25in]{1in}%
 Replace this box by an image with a width of 1\,in and a height of
 1.25\,in!%
 \end{minipage}}}]{Marcelo Salhab Brogliato} received the Ph.D. degree from Getulio Vargas Foundation in 2018. Vialink, sdm.ai,
 \end{IEEEbiography}
-
-
 
 
 %\begin{IEEEbiography}[{\fbox{\begin{minipage}[t][1.25in]{1in}{Linhares.jpg}
@@ -252,8 +337,7 @@ Replace this box by an image with a width of 1\,in and a height of
   {
   \includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{./Chapters/Linhares.jpg}
   }
-  ]
-{Alexandre Linhares} received the Ph.D. degree from the National Institute of Space Research, 2001. He is an Associate Professor at the Center of Behavioral Research, EBAPE / Getulio Vargas Foundation.  He has published ~30 papers in journals such as \emph{Artificial Intelligence, Applied Intelligence, Biological Cybernetics, Cognitive Science, Cognitive Systems Research, Computers & Operations Research, IEEE Transactions on Evolutionary Computation, Information Sciences, Frontiers in Human Neuroscience,} among others.
+  ]{Alexandre Linhares} received the Ph.D. degree from the National Institute of Space Research, 2001. He is an Associate Professor at the Center of Behavioral Research, EBAPE / Getulio Vargas Foundation.  He has published ~30 papers in journals such as \emph{Artificial Intelligence, Applied Intelligence, Biological Cybernetics, Cognitive Science, Cognitive Systems Research, Computers & Operations Research, IEEE Transactions on Evolutionary Computation, Information Sciences, Frontiers in Human Neuroscience,} among others.
 \end{IEEEbiography}
 
 
