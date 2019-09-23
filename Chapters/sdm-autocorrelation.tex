@@ -87,7 +87,7 @@ Let $r$ be the access radius given that $f$ is the ratio of the hard locations a
 
 As the bits of the hard locations' addresses are randomly chosen, the distance between two hard locations follow a Binomial distribution with $n$ samples and probability 1/2, $B(n, 1/2)$. For $n$ sufficiently large, the Binomial distribution can be approximated by a Normal distribution, i.e., $B(n, 1/2) \rightarrow \mathcal{N}(\mu = n/2, \sigma^2 = n/4)$.
 
-Let $\Phi(x)$ be the cdf of the standard normal distribution. Let $z = \frac{r - n/2}{\sqrt{n}/2}$. $z$ is, hence, measuring the number of standard deviations from the average in the Gaussian, as $r$ varies\footnote{MARCELO, CHEQUE ESTA ULTIMA FRASE PLEASE?}.  Thus, $P(d(x, y) \le r) = \Phi(z)$. As $f = P(d(x, y) \le r)$, then, $f = \Phi(z)$ for our fixed $r$}.
+Let $\Phi(x)$ be the cdf of the standard normal distribution. If $z = \frac{r - n/2}{\sqrt{n}/2}$, $z$ is, hence, measuring the number of standard deviations from the average in the Gaussian\footnote{MARCELO, CHEQUE ESTA ULTIMA FRASE PLEASE?}.  Thus, $P(d(x, y) \le r) = \Phi(z)$. As $f = P(d(x, y) \le r)$, then, $f = \Phi(z)$ for our fixed $r$}.
 
 Calculating the inverse, $z = \Phi^{-1}(f)$. Then,
 
